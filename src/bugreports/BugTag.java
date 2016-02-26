@@ -1,6 +1,6 @@
 package bugreports;
 
-public enum Tag {
+public enum BugTag {
 	RESOLVED,
 	CLOSED,
 	ASSIGNED,
