@@ -1,4 +1,4 @@
-package bugreport;
+package bugs;
 
 public class Bugreport {
 	
