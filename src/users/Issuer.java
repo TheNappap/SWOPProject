@@ -7,7 +7,7 @@ public class Issuer extends User {
 	}
 
 	@Override
-	UserCategory getCategory() {
+	public UserCategory getCategory() {
 		return UserCategory.ISSUER;
 	}
 }

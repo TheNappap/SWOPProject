@@ -14,7 +14,7 @@ public abstract class User {
 		setUserName(userName);
 	}
 	
-	abstract UserCategory getCategory();
+	public abstract UserCategory getCategory();
 	
 	//Getters and Setters
 	
