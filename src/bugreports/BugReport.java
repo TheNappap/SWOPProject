@@ -6,6 +6,7 @@ import java.util.Date;
 import bugreports.forms.BugReportAssignForm;
 import bugreports.forms.BugReportUpdateForm;
 import bugreports.forms.CommentCreationForm;
+import projects.Subsystem;
 import users.*;
 
 public class BugReport {
@@ -14,7 +15,7 @@ public class BugReport {
 	private String title;
 	private String description;
 	private Date creationDate;
-	private String subsystem;
+	private Subsystem subsystem;
 	private BugTag bugTag;
 	private ArrayList<Developer> assignees;
 	private ArrayList<BugReport> dependsOn;
@@ -22,7 +23,7 @@ public class BugReport {
 	private Issuer issuedBy;
 	private ArrayList<InitialComment> comments;
 
-	BugReport(int id, String title, String description, Date creationDate, String subsystem, BugTag bugTag, ArrayList<Developer> assignees, ArrayList<BugReport> dependsOn, BugReport duplicate, Issuer issuedBy, ArrayList<InitialComment> comments) {
+	BugReport(int id, String title, String description, Date creationDate, Subsystem subsystem, BugTag bugTag, ArrayList<Developer> assignees, ArrayList<BugReport> dependsOn, BugReport duplicate, Issuer issuedBy, ArrayList<InitialComment> comments) {
 		setId(id);
 		setTitle(title);
 		setDescription(description);
@@ -97,11 +98,11 @@ public class BugReport {
 		this.creationDate = creationDate;
 	}
 
-	public String getSubsystem() {
+	public Subsystem getSubsystem() {
 		return subsystem;
 	}
 
-	void setSubsystem(String subsystem) {
+	void setSubsystem(Subsystem subsystem) {
 		this.subsystem = subsystem;
 	}
 

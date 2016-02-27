@@ -6,8 +6,8 @@ public class CommentCreationForm {
 	private String text;
 	
 	CommentCreationForm() {
-		setInitialOrReply(null);
-		setText(null);
+		this.initialOrReply = null;
+		this.text			= null;
 	}
 
 	//Getters and Setters

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import bugreports.BugReport;
 import bugreports.BugTag;
 import projects.Project;
+import projects.Subsystem;
 import users.Developer;
 
 public class BugReportCreationForm {
@@ -14,7 +15,7 @@ public class BugReportCreationForm {
 	private String title;
 	
 	private String description;
-	private String subsystem;
+	private Subsystem subsystem;
 	private BugTag tag;
 	private ArrayList<Developer> assignees;
 	private ArrayList<BugReport> dependsOn;
@@ -59,11 +60,11 @@ public class BugReportCreationForm {
 		this.description = description;
 	}
 
-	public String getSubsystem() {
+	public Subsystem getSubsystem() {
 		return subsystem;
 	}
 
-	public void setSubsystem(String subsystem) {
+	public void setSubsystem(Subsystem subsystem) {
 		if (subsystem == null) throw new NullPointerException("Given Subsystem is null");
 		
 		this.subsystem = subsystem;
