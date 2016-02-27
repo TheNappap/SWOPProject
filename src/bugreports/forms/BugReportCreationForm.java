@@ -8,7 +8,7 @@ import projects.Project;
 import projects.Subsystem;
 import users.Developer;
 
-public class BugReportCreationForm {
+public class BugReportCreationForm implements Form {
 
 	private Project project;
 	
@@ -20,7 +20,7 @@ public class BugReportCreationForm {
 	private ArrayList<Developer> assignees;
 	private ArrayList<BugReport> dependsOn;
 	
-	BugReportCreationForm() {
+	public BugReportCreationForm() {
 		this.project 		= null;
 		this.title			= null;
 		this.description 	= null;
@@ -28,6 +28,17 @@ public class BugReportCreationForm {
 		this.tag			= null;
 		this.assignees		= null;
 		this.dependsOn		= null;
+	}
+
+	@Override
+	public boolean allVarsFilledIn() {
+		return getProject() != null &&
+				getTitle() != null &&
+				getDescription() != null &&
+				getSubsystem() != null &&
+				getTag() != null &&
+				getAssignees() != null &&
+				getDependsOn() != null;
 	}
 
 	public Project getProject() {

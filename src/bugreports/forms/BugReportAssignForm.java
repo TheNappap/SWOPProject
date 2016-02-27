@@ -5,17 +5,23 @@ import java.util.ArrayList;
 import bugreports.BugReport;
 import users.*;
 
-public class BugReportAssignForm {
+public class BugReportAssignForm implements Form {
 
 	private BugReport bugReport;
 	private ArrayList<Developer> developers;
 
-	BugReportAssignForm() {
+	public BugReportAssignForm() {
 		//Explicitly setting this to null.
 		this.bugReport = null;
 		this.developers = null;
 	}
 	
+	@Override
+	public boolean allVarsFilledIn() {
+		return getBugReport() != null &&
+				getDevelopers() != null;
+	}
+
 	public BugReport getBugReport() {
 		return bugReport;
 	}

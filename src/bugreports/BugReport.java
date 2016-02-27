@@ -23,18 +23,18 @@ public class BugReport {
 	private Issuer issuedBy;
 	private ArrayList<InitialComment> comments;
 
-	BugReport(int id, String title, String description, Date creationDate, Subsystem subsystem, BugTag bugTag, ArrayList<Developer> assignees, ArrayList<BugReport> dependsOn, BugReport duplicate, Issuer issuedBy, ArrayList<InitialComment> comments) {
+	BugReport(int id, String title, String description, Date creationDate, Subsystem subsystem, BugTag bugTag, ArrayList<BugReport> dependsOn, BugReport duplicate, Issuer issuedBy) {
 		setId(id);
 		setTitle(title);
 		setDescription(description);
 		setCreationDate(creationDate);
 		setSubsystem(subsystem);
 		setBugTag(bugTag);
-		setAssignees(assignees);
+		setAssignees(new ArrayList<Developer>());
 		setDependsOn(dependsOn);
 		setDuplicate(duplicate);
 		setIssuedBy(issuedBy);
-		setComments(comments);
+		setComments(new ArrayList<InitialComment>());
 	}
 	
 	/**
@@ -42,8 +42,18 @@ public class BugReport {
 	 * @param form
 	 */
 	public void createComment(CommentCreationForm form) {
-		// TODO - implement BugReport.createComment
-		throw new UnsupportedOperationException();
+		
+		switch (form.getInitialOrReply()) {
+		case "initial":
+			getComments().add(new InitialComment(form.getText(), this, new Date()));
+			break;
+		case "reply":
+			if (form.getComment() == null) throw new NullPointerException("comment is null.");
+			form.getComment().createComment(form);
+			break;
+		default:
+			throw new IllegalArgumentException("initialOrReply isn't \"initial\" or \"reply\". It is: " + form.getInitialOrReply());
+		}
 	}
 
 	/**

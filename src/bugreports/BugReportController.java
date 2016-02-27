@@ -15,13 +15,11 @@ public class BugReportController {
 	}
 
 	public CommentCreationForm getCommentCreationForm() {
-		// TODO - implement BugReportController.getCommentCreationForm
-		throw new UnsupportedOperationException();
+		return new CommentCreationForm();
 	}
 
 	public BugReportAssignForm getBugReportAssignForm() {
-		// TODO - implement BugReportController.getBugReportAssignForm
-		throw new UnsupportedOperationException();
+		return new BugReportAssignForm();
 	}
 
 	public ArrayList<BugReport> getBugReportList() {
@@ -43,7 +41,8 @@ public class BugReportController {
 	 * @param form
 	 */
 	public void createBugReport(BugReportCreationForm form) {
-		
+		if (!form.allVarsFilledIn()) throw new IllegalArgumentException("Not all vars in the form are filled in.");
+		BugReportManager.createBugReport(form);
 	}
 
 	/**
@@ -51,8 +50,8 @@ public class BugReportController {
 	 * @param form
 	 */
 	public void createComment(CommentCreationForm form) {
-		// TODO - implement BugReportController.createComment
-		throw new UnsupportedOperationException();
+		if (!form.allVarsFilledIn()) throw new IllegalArgumentException("Not all vars in the form are filled in.");
+		BugReportManager.createComment(form);
 	}
 
 	/**
