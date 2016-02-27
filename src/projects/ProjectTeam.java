@@ -6,6 +6,6 @@ import users.*;
 
 public class ProjectTeam {
 
-	private ArrayList<Tuple<User, Role>> team;
+	private ArrayList<UserRoleRelation> team;
 
 }
