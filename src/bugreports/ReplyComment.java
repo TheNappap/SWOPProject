@@ -1,20 +1,21 @@
 package bugreports;
 
-import java.util.Date;
-
 public class ReplyComment extends Comment {
 
 	private Comment commentOn;
 
-	ReplyComment(String text, Date creationDate) {
-		super(text, creationDate);
+	ReplyComment(String text, Comment commentOn) {
+		super(text);
+		setCommentOn(commentOn);
 	}
+	
+	//Getters and Setters
 	
 	public Comment getCommentOn() {
 		return commentOn;
 	}
 	
-	void setComment(Comment commentOn) {
+	void setCommentOn(Comment commentOn) {
 		this.commentOn = commentOn;
 	}
 }

@@ -9,52 +9,49 @@ import bugreports.forms.CommentCreationForm;
 
 public class BugReportManager {
 
-	private ArrayList<BugReport> bugReportList;
+	private static ArrayList<BugReport> bugReportList;
 
 	/**
 	 * 
 	 * @param form
 	 */
-	public void createBugReport(BugReportCreationForm form) {
-		throw new UnsupportedOperationException();
+	static void createBugReport(BugReportCreationForm form) {
+		BugReport bugReport = new BugReport(form.getTitle(), form.getDescription(), form.getSubsystem(), form.getDependsOn(), form.getIssuer());
+		
+		getBugReportList().add(bugReport);
 	}
 
 	/**
 	 * 
 	 * @param form
 	 */
-	public void updateBugReport(BugReportUpdateForm form) {
+	static void updateBugReport(BugReportUpdateForm form) {
 		// TODO - implement BugReportManager.updateBugReport
 		throw new UnsupportedOperationException();
 	}
 
-	public ArrayList<BugReport> getBugReportList() {
-		return this.bugReportList;
+	static ArrayList<BugReport> getBugReportList() {
+		return BugReportManager.bugReportList;
 	}
 
 	/**
 	 * 
 	 * @param mode
 	 */
-	public ArrayList<BugReport> getOrderedList(SearchMode mode) {
+	static ArrayList<BugReport> getOrderedList(SearchMode mode) {
 		// TODO - implement BugReportManager.getOrderedList
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * 
-	 * @param form
-	 */
-	public void createComment(CommentCreationForm form) {
-		// TODO - implement BugReportManager.createComment
-		throw new UnsupportedOperationException();
+	static void createComment(CommentCreationForm form) {
+		form.getCommentOn().createComment(form);
 	}
 
 	/**
 	 * 
 	 * @param form
 	 */
-	public void assignToBugReport(BugReportAssignForm form) {
+	static void assignToBugReport(BugReportAssignForm form) {
 		// TODO - implement BugReportManager.assignToBugReport
 		throw new UnsupportedOperationException();
 	}

@@ -1,13 +1,12 @@
 package bugreports;
 
-import java.util.Date;
-
 public class InitialComment extends Comment {
 
 	private BugReport commentOn;
 	
-	InitialComment(String text, Date creationDate) {
-		super(text, creationDate);
+	InitialComment(String text, BugReport commentOn) {
+		super(text);
+		setCommentOn(commentOn);
 	}
 	
 	//Getters and Setters
@@ -16,7 +15,7 @@ public class InitialComment extends Comment {
 		return commentOn;
 	}
 	
-	void setBugReport(BugReport bugReport) {
+	void setCommentOn(BugReport bugReport) {
 		this.commentOn = bugReport;
 	}
 }

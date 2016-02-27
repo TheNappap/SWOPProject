@@ -3,19 +3,25 @@ package bugreports.forms;
 import bugreports.BugReport;
 import bugreports.BugTag;
 
-public class BugReportUpdateForm {
+public class BugReportUpdateForm implements Form{
 
 	private BugReport bugReport;
 	private BugTag bugTag;
 
 	
-	BugReportUpdateForm() {
+	public BugReportUpdateForm() {
 		this.bugReport 	= null;
 		this.bugTag		= null;
 	}
 	
 	//Getters and Setters
 	
+	@Override
+	public boolean allVarsFilledIn() {
+		return getBugReport() != null &&
+				getBugTag() != null;
+	}
+
 	public void setBugReport(BugReport bugReport) {
 		if (bugReport == null) throw new NullPointerException("Given BugReport is null.");
 		

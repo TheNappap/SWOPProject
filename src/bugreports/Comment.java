@@ -1,5 +1,6 @@
 package bugreports;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import bugreports.forms.CommentCreationForm;
@@ -8,19 +9,20 @@ public abstract class Comment {
 
 	private String text;
 	private Date creationDate;
+	private ArrayList<Comment> comments;
 
-	Comment(String text, Date creationDate) {
+	Comment(String text) {
 		setText(text);
-		setCreationDate(creationDate);
+		setCreationDate(new Date());
+		setComments(new ArrayList<Comment>());
 	}
 	
 	/**
-	 * 
-	 * @param form
+	 * Creates and adds a ReplyComment to this Comment.
+	 * @param form The CommentCreationForm that contains information to create a new Comment.
 	 */
 	public void createComment(CommentCreationForm form) {
-		// TODO - implement Comment.createComment
-		throw new UnsupportedOperationException();
+		getComments().add(new ReplyComment(form.getText(), this));
 	}
 	
 	//Getters and Setters
@@ -39,6 +41,14 @@ public abstract class Comment {
 	
 	void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	public ArrayList<Comment> getComments() {
+		return comments;
+	}
+
+	void setComments(ArrayList<Comment> comments) {
+		this.comments = comments;
 	}
 
 }
