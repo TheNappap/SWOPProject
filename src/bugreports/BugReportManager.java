@@ -16,7 +16,9 @@ public class BugReportManager {
 	 * @param form
 	 */
 	static void createBugReport(BugReportCreationForm form) {
-		throw new UnsupportedOperationException();
+		BugReport bugReport = new BugReport(form.getTitle(), form.getDescription(), form.getSubsystem(), form.getDependsOn(), form.getIssuer());
+		
+		getBugReportList().add(bugReport);
 	}
 
 	/**
@@ -41,10 +43,6 @@ public class BugReportManager {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * 
-	 * @param form
-	 */
 	static void createComment(CommentCreationForm form) {
 		form.getCommentOn().createComment(form);
 	}

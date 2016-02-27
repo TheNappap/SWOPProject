@@ -11,18 +11,18 @@ public abstract class Comment {
 	private Date creationDate;
 	private ArrayList<Comment> comments;
 
-	Comment(String text, Date creationDate) {
+	Comment(String text) {
 		setText(text);
-		setCreationDate(creationDate);
+		setCreationDate(new Date());
 		setComments(new ArrayList<Comment>());
 	}
 	
 	/**
-	 * 
-	 * @param form
+	 * Creates and adds a ReplyComment to this Comment.
+	 * @param form The CommentCreationForm that contains information to create a new Comment.
 	 */
 	public void createComment(CommentCreationForm form) {
-		getComments().add(new ReplyComment(form.getText(), this, new Date()));
+		getComments().add(new ReplyComment(form.getText(), this));
 	}
 	
 	//Getters and Setters

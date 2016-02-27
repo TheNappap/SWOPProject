@@ -1,13 +1,11 @@
 package bugreports;
 
-import java.util.Date;
-
 public class InitialComment extends Comment {
 
 	private BugReport commentOn;
 	
-	InitialComment(String text, BugReport commentOn, Date creationDate) {
-		super(text, creationDate);
+	InitialComment(String text, BugReport commentOn) {
+		super(text);
 		setCommentOn(commentOn);
 	}
 	

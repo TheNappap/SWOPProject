@@ -3,53 +3,36 @@ package bugreports.forms;
 import java.util.ArrayList;
 
 import bugreports.BugReport;
-import bugreports.BugTag;
-import projects.Project;
 import projects.Subsystem;
-import users.Developer;
+import users.Issuer;
 
 public class BugReportCreationForm implements Form {
 
-	private Project project;
-	
-	private String title;
-	
-	private String description;
-	private Subsystem subsystem;
-	private BugTag tag;
-	private ArrayList<Developer> assignees;
-	private ArrayList<BugReport> dependsOn;
+	//Information needed to create a BugReport.
+	private Issuer issuer;	//Issuer who issues a BugReport.
+	private String title;	//A Title for the BugReport.
+	private String description;	//A description for the BugReport.
+	private Subsystem subsystem;	//The Subsystem the BugReport is about.
+	private ArrayList<BugReport> dependsOn;	//List of BugReports the BugReport depends on.
 	
 	public BugReportCreationForm() {
-		this.project 		= null;
+		this.issuer			= null;
 		this.title			= null;
 		this.description 	= null;
 		this.subsystem		= null;
-		this.tag			= null;
-		this.assignees		= null;
 		this.dependsOn		= null;
 	}
 
 	@Override
 	public boolean allVarsFilledIn() {
-		return getProject() != null &&
+		return getIssuer() != null &&
 				getTitle() != null &&
 				getDescription() != null &&
 				getSubsystem() != null &&
-				getTag() != null &&
-				getAssignees() != null &&
 				getDependsOn() != null;
 	}
 
-	public Project getProject() {
-		return project;
-	}
-
-	public void setProject(Project project) {
-		if (project == null) throw new NullPointerException("Given project is null.");
-		
-		this.project = project;
-	}
+	//Getters and Setters
 
 	public String getTitle() {
 		return title;
@@ -81,26 +64,6 @@ public class BugReportCreationForm implements Form {
 		this.subsystem = subsystem;
 	}
 
-	public BugTag getTag() {
-		return tag;
-	}
-
-	public void setTag(BugTag tag) {
-		if (tag == null) throw new NullPointerException("Given Tag is null.");
-		
-		this.tag = tag;
-	}
-
-	public ArrayList<Developer> getAssignees() {
-		return assignees;
-	}
-
-	public void setAssignees(ArrayList<Developer> assignees) {
-		if (assignees == null) throw new NullPointerException("Given Developer ArrayList is null.");
-		
-		this.assignees = assignees;
-	}
-
 	public ArrayList<BugReport> getDependsOn() {
 		return dependsOn;
 	}
@@ -109,5 +72,15 @@ public class BugReportCreationForm implements Form {
 		if (dependsOn == null) throw new NullPointerException("Given BugReport ArrayList is null."); 
 		
 		this.dependsOn = dependsOn;
+	}
+
+	public Issuer getIssuer() {
+		return issuer;
+	}
+
+	public void setIssuer(Issuer issuer) {
+		if (issuer == null) throw new NullPointerException("Given Issuer is null.");
+		
+		this.issuer = issuer;
 	}
 }

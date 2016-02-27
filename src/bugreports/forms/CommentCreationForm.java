@@ -5,10 +5,11 @@ import bugreports.Comment;
 
 public class CommentCreationForm implements Form {
 
-	private String initialOrReply;
-	private BugReport commentOn;
-	private Comment comment;
-	private String text;
+	//Information needed to create a Comment.
+	private String initialOrReply;	//Is the comment a reply to an existing comment or a fresh one?
+	private BugReport commentOn;	//About what BugReport is this comment about.
+	private Comment comment;	//If it's a reply, what Comment does it reply to?
+	private String text;	//Comment text.
 	
 	public CommentCreationForm() {
 		this.initialOrReply = null;
@@ -16,17 +17,17 @@ public class CommentCreationForm implements Form {
 		this.comment 		= null;
 		this.text			= null;
 	}
-
-	//Getters and Setters
 	
 	@Override
 	public boolean allVarsFilledIn() {
-		return getInitialOrReply() == null &&
-				getCommentOn() == null &&
-				getComment() == null &&
-				getText() == null;
+		return getInitialOrReply() != null &&
+				getCommentOn() != null &&
+				getComment() != null &&
+				getText() != null;
 	}
 
+	//Getters and Setters
+	
 	public String getInitialOrReply() {
 		return initialOrReply;
 	}

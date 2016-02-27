@@ -9,29 +9,27 @@ import bugreports.forms.CommentCreationForm;
 
 public class BugReportController {
 
-	public BugReportCreationForm getBugReportCreationForm() {
-		// TODO - implement BugReportController.getBugReportCreationForm
-		throw new UnsupportedOperationException();
+	public static BugReportCreationForm getBugReportCreationForm() {
+		return new BugReportCreationForm();
 	}
 
-	public CommentCreationForm getCommentCreationForm() {
+	public static CommentCreationForm getCommentCreationForm() {
 		return new CommentCreationForm();
 	}
 
-	public BugReportAssignForm getBugReportAssignForm() {
+	public static BugReportAssignForm getBugReportAssignForm() {
 		return new BugReportAssignForm();
 	}
 
-	public ArrayList<BugReport> getBugReportList() {
-		// TODO - implement BugReportController.getBugReportList
-		throw new UnsupportedOperationException();
+	public static ArrayList<BugReport> getBugReportList() {
+		return BugReportManager.getBugReportList();
 	}
 
 	/**
 	 * 
 	 * @param mode
 	 */
-	public void getOrderedList(SearchMode mode) {
+	public static void getOrderedList(SearchMode mode) {
 		// TODO - implement BugReportController.getOrderedList
 		throw new UnsupportedOperationException();
 	}
@@ -40,8 +38,9 @@ public class BugReportController {
 	 * 
 	 * @param form
 	 */
-	public void createBugReport(BugReportCreationForm form) {
+	public static void createBugReport(BugReportCreationForm form) {
 		if (!form.allVarsFilledIn()) throw new IllegalArgumentException("Not all vars in the form are filled in.");
+		
 		BugReportManager.createBugReport(form);
 	}
 
@@ -49,8 +48,9 @@ public class BugReportController {
 	 * 
 	 * @param form
 	 */
-	public void createComment(CommentCreationForm form) {
+	public static void createComment(CommentCreationForm form) {
 		if (!form.allVarsFilledIn()) throw new IllegalArgumentException("Not all vars in the form are filled in.");
+		
 		BugReportManager.createComment(form);
 	}
 
@@ -58,7 +58,7 @@ public class BugReportController {
 	 * 
 	 * @param form
 	 */
-	public void updateBugReport(BugReportUpdateForm form) {
+	public static void updateBugReport(BugReportUpdateForm form) {
 		// TODO - implement BugReportController.updateBugReport
 		throw new UnsupportedOperationException();
 	}
@@ -67,7 +67,7 @@ public class BugReportController {
 	 * 
 	 * @param form
 	 */
-	public void assignToBugReport(BugReportAssignForm form) {
+	public static void assignToBugReport(BugReportAssignForm form) {
 		// TODO - implement BugReportController.assignToBugReport
 		throw new UnsupportedOperationException();
 	}
@@ -76,7 +76,7 @@ public class BugReportController {
 	 * 
 	 * @param bugReport
 	 */
-	public void inspectBugReport(BugReport bugReport) {
+	public static void inspectBugReport(BugReport bugReport) {
 		// TODO - implement BugReportController.inspectBugReport
 		throw new UnsupportedOperationException();
 	}
