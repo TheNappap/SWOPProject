@@ -43,8 +43,7 @@ public class BugReportController {
 	 * @param form
 	 */
 	public void createBugReport(BugReportCreationForm form) {
-		// TODO - implement BugReportController.createBugReport
-		throw new UnsupportedOperationException();
+		
 	}
 
 	/**

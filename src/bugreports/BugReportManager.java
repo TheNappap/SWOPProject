@@ -16,7 +16,6 @@ public class BugReportManager {
 	 * @param form
 	 */
 	public void createBugReport(BugReportCreationForm form) {
-		// TODO - implement BugReportManager.createBugReport
 		throw new UnsupportedOperationException();
 	}
 
