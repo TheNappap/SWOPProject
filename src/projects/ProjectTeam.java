@@ -7,5 +7,4 @@ import users.*;
 public class ProjectTeam {
 
 	private ArrayList<UserRoleRelation> team;
-
 }
