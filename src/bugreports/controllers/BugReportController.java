@@ -3,7 +3,6 @@ package bugreports.controllers;
 import java.util.ArrayList;
 
 import bugreports.BugReport;
-import bugreports.BugReportManager;
 import bugreports.filters.FilterType;
 import bugreports.forms.BugReportAssignForm;
 import bugreports.forms.BugReportCreationForm;
@@ -29,13 +28,13 @@ public class BugReportController {
 	}
 
 	public ArrayList<BugReport> getBugReportList() {
-		return BugReportManager.getBugReportList();
+		return getBugReportList();
 	}
 
 	public void createBugReport(BugReportCreationForm form) {
 		form.allVarsFilledIn();
 		
-		BugReportManager.createBugReport(form);
+		createBugReport(form);
 	}
 
 	public void createComment(CommentCreationForm form) {
@@ -56,8 +55,8 @@ public class BugReportController {
 		form.getBugReport().assignDeveloper(form.getDeveloper());
 	}
 	
-	public void getOrderedList(FilterType[] types, String[] arguments) {
-		BugReportManager.getOrderedList(types, arguments);
+	public ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) {
+		return getOrderedList(types, arguments);
 	}
 
 }
