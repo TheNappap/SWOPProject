@@ -40,7 +40,7 @@ public class BugReportCreationForm implements Form {
 	}
 
 	public void setTitle(String title) {
-		if (title == null) throw new NullPointerException("Given title is null.");
+		assert (title != null) : "Title is null.";
 		
 		this.title = title;
 	}
@@ -50,7 +50,7 @@ public class BugReportCreationForm implements Form {
 	}
 
 	public void setDescription(String description) {
-		if (description == null) throw new NullPointerException("Given Description is null.");
+		assert (description != null) : "Description is null.";
 		
 		this.description = description;
 	}
@@ -60,7 +60,7 @@ public class BugReportCreationForm implements Form {
 	}
 
 	public void setSubsystem(Subsystem subsystem) {
-		if (subsystem == null) throw new NullPointerException("Given Subsystem is null");
+		assert (subsystem != null) : "Subsystem is null.";
 		
 		this.subsystem = subsystem;
 	}
@@ -70,7 +70,7 @@ public class BugReportCreationForm implements Form {
 	}
 
 	public void setDependsOn(ArrayList<BugReport> dependsOn) {
-		if (dependsOn == null) throw new NullPointerException("Given BugReport ArrayList is null."); 
+		assert (dependsOn != null) : "DependsOn is null.";
 		
 		this.dependsOn = dependsOn;
 	}
@@ -80,7 +80,7 @@ public class BugReportCreationForm implements Form {
 	}
 
 	public void setIssuer(Issuer issuer) {
-		if (issuer == null) throw new NullPointerException("Given Issuer is null.");
+		assert (issuer != null) : "Issuer is null.";
 		
 		this.issuer = issuer;
 	}

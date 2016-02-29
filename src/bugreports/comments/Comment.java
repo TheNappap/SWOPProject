@@ -5,14 +5,16 @@ import java.util.Date;
 
 public abstract class Comment implements Commentable {
 
+	private final Date creationDate;
+	private final ArrayList<ReplyComment> comments;
+	
 	private String text;
-	private Date creationDate;
-	private ArrayList<ReplyComment> comments;
 
 	public Comment(String text) {
+		this.creationDate = new Date();
+		this.comments = new ArrayList<ReplyComment>();
+		
 		setText(text);
-		setCreationDate(new Date());
-		setComments(new ArrayList<ReplyComment>());
 	}
 	
 	public void addComment(String commentText) {
@@ -32,17 +34,9 @@ public abstract class Comment implements Commentable {
 	public Date getCreationDate() {
 		return creationDate;
 	}
-	
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
 
 	public ArrayList<ReplyComment> getComments() {
 		return comments;
-	}
-
-	public void setComments(ArrayList<ReplyComment> comments) {
-		this.comments = comments;
 	}
 
 }

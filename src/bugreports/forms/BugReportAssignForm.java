@@ -27,7 +27,7 @@ public class BugReportAssignForm implements Form {
 	}
 	
 	public void setBugReport(BugReport bugReport) {
-		if (bugReport == null) throw new NullPointerException("Given BugReport is null.");
+		assert (bugReport != null) : "BugReport is null.";
 		
 		this.bugReport = bugReport;
 	}
@@ -37,7 +37,7 @@ public class BugReportAssignForm implements Form {
 	}
 	
 	public void setDeveloper(Developer developer) {
-		if (developer == null) throw new NullPointerException("Given Developer is null.");
+		assert (developer != null) : "Developer is null.";
 		
 		this.developer = developer;
 	}

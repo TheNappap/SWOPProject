@@ -2,11 +2,12 @@ package bugreports.comments;
 
 public class ReplyComment extends Comment {
 
-	private Comment commentOn;
+	private final Comment commentOn;
 
 	public ReplyComment(String text, Comment commentOn) {
 		super(text);
-		setCommentOn(commentOn);
+
+		this.commentOn = commentOn;
 	}
 	
 	//Getters and Setters
@@ -14,8 +15,5 @@ public class ReplyComment extends Comment {
 	public Comment getCommentOn() {
 		return commentOn;
 	}
-	
-	public void setCommentOn(Comment commentOn) {
-		this.commentOn = commentOn;
-	}
+
 }
