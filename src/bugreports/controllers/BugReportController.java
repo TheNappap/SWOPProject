@@ -1,7 +1,10 @@
-package bugreports;
+package bugreports.controllers;
 
 import java.util.ArrayList;
 
+import bugreports.BugReport;
+import bugreports.BugReportManager;
+import bugreports.filters.FilterType;
 import bugreports.forms.BugReportAssignForm;
 import bugreports.forms.BugReportCreationForm;
 import bugreports.forms.BugReportUpdateForm;
@@ -25,59 +28,36 @@ public class BugReportController {
 		return BugReportManager.getBugReportList();
 	}
 
-	/**
-	 * 
-	 * @param mode
-	 */
-	public static void getOrderedList(SearchMode mode) {
-		// TODO - implement BugReportController.getOrderedList
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param form
-	 */
 	public static void createBugReport(BugReportCreationForm form) {
-		if (!form.allVarsFilledIn()) throw new IllegalArgumentException("Not all vars in the form are filled in.");
+		form.allVarsFilledIn();
 		
 		BugReportManager.createBugReport(form);
 	}
 
-	/**
-	 * 
-	 * @param form
-	 */
 	public static void createComment(CommentCreationForm form) {
-		if (!form.allVarsFilledIn()) throw new IllegalArgumentException("Not all vars in the form are filled in.");
-		
-		BugReportManager.createComment(form);
+		form.allVarsFilledIn();
+
+		form.getCommentable().addComment(form.getText());
 	}
 
-	/**
-	 * 
-	 * @param form
-	 */
 	public static void updateBugReport(BugReportUpdateForm form) {
-		// TODO - implement BugReportController.updateBugReport
-		throw new UnsupportedOperationException();
+		form.allVarsFilledIn();
+		
+		form.getBugReport().updateBugTag(form.getBugTag());
 	}
 
-	/**
-	 * 
-	 * @param form
-	 */
 	public static void assignToBugReport(BugReportAssignForm form) {
-		// TODO - implement BugReportController.assignToBugReport
-		throw new UnsupportedOperationException();
+		form.allVarsFilledIn();
+		
+		form.getBugReport().assignDeveloper(form.getDeveloper());
 	}
-
+	
 	/**
 	 * 
-	 * @param bugReport
+	 * @param mode
 	 */
-	public static void inspectBugReport(BugReport bugReport) {
-		// TODO - implement BugReportController.inspectBugReport
+	public static void getOrderedList(FilterType[] mode, String[] arguments) {
+		// TODO - implement BugReportController.getOrderedList
 		throw new UnsupportedOperationException();
 	}
 

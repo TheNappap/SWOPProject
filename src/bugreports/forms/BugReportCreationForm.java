@@ -16,6 +16,7 @@ public class BugReportCreationForm implements Form {
 	private ArrayList<BugReport> dependsOn;	//List of BugReports the BugReport depends on.
 	
 	public BugReportCreationForm() {
+		//Explicitly settings this to null.
 		this.issuer			= null;
 		this.title			= null;
 		this.description 	= null;
@@ -24,12 +25,12 @@ public class BugReportCreationForm implements Form {
 	}
 
 	@Override
-	public boolean allVarsFilledIn() {
-		return getIssuer() != null &&
-				getTitle() != null &&
-				getDescription() != null &&
-				getSubsystem() != null &&
-				getDependsOn() != null;
+	public void allVarsFilledIn() {
+		assert (getIssuer() != null) : "Issuer is null.";
+		assert (getTitle() != null)  : "Title is null.";
+		assert (getDescription() != null) 	: "Description is null.";
+		assert (getSubsystem() != null)		: "Subsystem is null.";
+		assert (getDependsOn() != null)		: "DependsOn is null.";
 	}
 
 	//Getters and Setters

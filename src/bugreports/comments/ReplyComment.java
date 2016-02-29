@@ -1,10 +1,10 @@
-package bugreports;
+package bugreports.comments;
 
 public class ReplyComment extends Comment {
 
 	private Comment commentOn;
 
-	ReplyComment(String text, Comment commentOn) {
+	public ReplyComment(String text, Comment commentOn) {
 		super(text);
 		setCommentOn(commentOn);
 	}
@@ -15,7 +15,7 @@ public class ReplyComment extends Comment {
 		return commentOn;
 	}
 	
-	void setCommentOn(Comment commentOn) {
+	public void setCommentOn(Comment commentOn) {
 		this.commentOn = commentOn;
 	}
 }

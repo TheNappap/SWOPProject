@@ -1,59 +1,39 @@
 package bugreports;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-import bugreports.forms.BugReportAssignForm;
+import bugreports.builders.BugReportBuilder;
+import bugreports.filters.BugReportFilter;
+import bugreports.filters.FilterType;
 import bugreports.forms.BugReportCreationForm;
-import bugreports.forms.BugReportUpdateForm;
-import bugreports.forms.CommentCreationForm;
 
 public class BugReportManager {
 
 	private static ArrayList<BugReport> bugReportList;
 
-	/**
-	 * 
-	 * @param form
-	 */
-	static void createBugReport(BugReportCreationForm form) {
-		BugReport bugReport = new BugReport(form.getTitle(), form.getDescription(), form.getSubsystem(), form.getDependsOn(), form.getIssuer());
-		
-		getBugReportList().add(bugReport);
+	public static void createBugReport(BugReportCreationForm form) {
+		getBugReportList().add((new BugReportBuilder()).setTitle(form.getTitle())
+								.setDescription(form.getDescription())
+								.setSubsystem(form.getSubsystem())
+								.setIssuer(form.getIssuer())
+								.getBugReport());
 	}
 
-	/**
-	 * 
-	 * @param form
-	 */
-	static void updateBugReport(BugReportUpdateForm form) {
-		// TODO - implement BugReportManager.updateBugReport
-		throw new UnsupportedOperationException();
-	}
-
-	static ArrayList<BugReport> getBugReportList() {
+	public static ArrayList<BugReport> getBugReportList() {
 		return BugReportManager.bugReportList;
 	}
 
-	/**
-	 * 
-	 * @param mode
-	 */
-	static ArrayList<BugReport> getOrderedList(SearchMode mode) {
-		// TODO - implement BugReportManager.getOrderedList
-		throw new UnsupportedOperationException();
-	}
-
-	static void createComment(CommentCreationForm form) {
-		form.getCommentOn().createComment(form);
-	}
-
-	/**
-	 * 
-	 * @param form
-	 */
-	static void assignToBugReport(BugReportAssignForm form) {
-		// TODO - implement BugReportManager.assignToBugReport
-		throw new UnsupportedOperationException();
+	public static ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) {
+		ArrayList<BugReport> filteredList = getBugReportList();
+		BugReportFilter filter = new BugReportFilter(filteredList);
+		
+		for (int index = 0; index < types.length; index++)
+			filter.filter(types[index], arguments[index]);
+		
+		Collections.sort(filteredList);
+		
+		return filteredList;
 	}
 
 }

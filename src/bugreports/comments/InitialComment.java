@@ -1,10 +1,12 @@
-package bugreports;
+package bugreports.comments;
+
+import bugreports.BugReport;
 
 public class InitialComment extends Comment {
 
 	private BugReport commentOn;
 	
-	InitialComment(String text, BugReport commentOn) {
+	public InitialComment(String text, BugReport commentOn) {
 		super(text);
 		setCommentOn(commentOn);
 	}
@@ -15,7 +17,8 @@ public class InitialComment extends Comment {
 		return commentOn;
 	}
 	
-	void setCommentOn(BugReport bugReport) {
+	public void setCommentOn(BugReport bugReport) {
 		this.commentOn = bugReport;
 	}
+
 }
