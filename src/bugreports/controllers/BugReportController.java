@@ -31,6 +31,10 @@ public class BugReportController {
 		return getBugReportList();
 	}
 
+	public ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) {
+		return getOrderedList(types, arguments);
+	}
+
 	public void createBugReport(BugReportCreationForm form) {
 		form.allVarsFilledIn();
 		
@@ -53,10 +57,6 @@ public class BugReportController {
 		form.allVarsFilledIn();
 		
 		form.getBugReport().assignDeveloper(form.getDeveloper());
-	}
-	
-	public ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) {
-		return getOrderedList(types, arguments);
 	}
 
 }
