@@ -5,11 +5,11 @@ import bugreports.BugTag;
 
 public class BugReportUpdateForm implements Form{
 
-	private BugReport bugReport;
-	private BugTag bugTag;
+	private BugReport bugReport;	//The BugReport to update.
+	private BugTag bugTag;			//The new BugTag.
 
-	
-	public BugReportUpdateForm() {
+	BugReportUpdateForm() {
+		//Explicitly setting this to null.
 		this.bugReport 	= null;
 		this.bugTag		= null;
 	}
@@ -17,9 +17,9 @@ public class BugReportUpdateForm implements Form{
 	//Getters and Setters
 	
 	@Override
-	public boolean allVarsFilledIn() {
-		return getBugReport() != null &&
-				getBugTag() != null;
+	public void allVarsFilledIn() {
+		assert (getBugReport() != null) : "BugReport is null.";
+		assert (getBugTag() != null)	: "BugTag is null";
 	}
 
 	public void setBugReport(BugReport bugReport) {

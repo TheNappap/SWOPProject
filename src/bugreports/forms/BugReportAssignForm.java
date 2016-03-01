@@ -1,25 +1,23 @@
 package bugreports.forms;
 
-import java.util.ArrayList;
-
 import bugreports.BugReport;
-import users.*;
+import users.Developer;
 
 public class BugReportAssignForm implements Form {
 
 	private BugReport bugReport;
-	private ArrayList<Developer> developers;
+	private Developer developer;
 
 	public BugReportAssignForm() {
 		//Explicitly setting this to null.
 		this.bugReport = null;
-		this.developers = null;
+		this.developer = null;
 	}
 	
 	@Override
-	public boolean allVarsFilledIn() {
-		return getBugReport() != null &&
-				getDevelopers() != null;
+	public void allVarsFilledIn() {
+		assert (getBugReport() != null) : "BugReport is null.";
+		assert (getDeveloper() != null) : "Developer is null.";
 	}
 
 	//Getters and Setters
@@ -29,19 +27,19 @@ public class BugReportAssignForm implements Form {
 	}
 	
 	public void setBugReport(BugReport bugReport) {
-		if (bugReport == null) throw new NullPointerException("Given BugReport is null.");
+		assert (bugReport != null) : "BugReport is null.";
 		
 		this.bugReport = bugReport;
 	}
 	
-	public ArrayList<Developer> getDevelopers() {
-		return developers;
+	public Developer getDeveloper() {
+		return developer;
 	}
 	
-	public void setDevelopers(ArrayList<Developer> developers) {
-		if (developers == null) throw new NullPointerException("Given Developer List is null.");
+	public void setDeveloper(Developer developer) {
+		assert (developer != null) : "Developer is null.";
 		
-		this.developers = developers;
+		this.developer = developer;
 	}
 	
 }

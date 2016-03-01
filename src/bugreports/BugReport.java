@@ -3,24 +3,27 @@ package bugreports;
 import java.util.ArrayList;
 import java.util.Date;
 
-import bugreports.forms.BugReportAssignForm;
-import bugreports.forms.BugReportUpdateForm;
-import bugreports.forms.CommentCreationForm;
+import bugreports.builders.BugReportBuilder;
+import bugreports.comments.Commentable;
+import bugreports.comments.InitialComment;
 import projects.Subsystem;
 import users.*;
 
-public class BugReport {
+public class BugReport implements Comparable<BugReport>, Cloneable, Commentable {
 
-	private String title;		//Title of the BugReport.
-	private String description;	//Description of the BugReport.
-	private Date creationDate;	//Creation Date of the BugReport.
-	private Subsystem subsystem;	//Subsystem to which this BugReport is attached.
+	//Immutable
+	private final Date creationDate;	//Creation Date of the BugReport.
+	private final ArrayList<Developer> assignees;	//List of Developers assigned to this BugReport.
+	private final ArrayList<BugReport> dependsOn;	//List of BugReports on which this BugReport depends.
+	private final ArrayList<InitialComment> comments;	//Comments on this BugReport.
+	private final Issuer issuedBy;		//The Issuer who issued this BugReport.
+	private final Subsystem subsystem;	//Subsystem to which this BugReport is attached.
+	
+	//Mutable
+	private String title;			//Title of the BugReport.
+	private String description;		//Description of the BugReport.
 	private BugTag bugTag;			//BugTag that is attached to this BugReport.
-	private ArrayList<Developer> assignees;	//List of Developers assigned to this BugReport.
-	private ArrayList<BugReport> dependsOn;	//List of BugReports on which this BugReport depends.
 	private BugReport duplicate;	//The duplicate of this BugReport, if any.
-	private Issuer issuedBy;		//The Issuer who issued this BugReport.
-	private ArrayList<InitialComment> comments;	//Comments on this BugReport.
 
 	/**
 	 * BugReport Constructor. 
@@ -30,56 +33,64 @@ public class BugReport {
 	 * @param dependsOn	List of BugReports on which this BugReport depends.
 	 * @param issuedBy Issued who issued this BugReport.
 	 */
-	BugReport(String title, String description, Subsystem subsystem, ArrayList<BugReport> dependsOn, Issuer issuedBy) {
+	public BugReport(String title, String description, Subsystem subsystem, ArrayList<BugReport> dependsOn, Issuer issuedBy) {
 		//Variables on instantiation.
+		this.dependsOn 	= dependsOn;
+		this.issuedBy 	= issuedBy;
+		this.subsystem	= subsystem;
 		setTitle(title);
 		setDescription(description);
-		setSubsystem(subsystem);
-		setDependsOn(dependsOn);
-		setIssuedBy(issuedBy);
 		
 		//Non-variables on instantiation.
-		setAssignees(new ArrayList<Developer>()); //No assignees yet on fresh BugReport.
-		setBugTag(BugTag.NEW);	//Fresh BugReport.
-		setDuplicate(null);		//No reported Duplicate yet.
-		setCreationDate(new Date());	//This BugReport is created NOW.
-		setComments(new ArrayList<InitialComment>());	//No comments yet on fresh BugReport.
+		this.assignees 		= new ArrayList<Developer>();		//No assignees yet on fresh BugReport.
+		this.comments 		= new ArrayList<InitialComment>();	//No comments yet on fresh BugReport.
+		this.creationDate 	= new Date();				//This BugReport is created NOW.
+		setBugTag(BugTag.NEW);							//Fresh BugReport.
+		setDuplicate(null);								//No reported Duplicate yet.
 	}
 	
 	/**
 	 * Create and add an InitialComment to this BugReport.
 	 * @param form The CommentCreationForm that contains all necessary details to create a Comment.
 	 */
-	public void createComment(CommentCreationForm form) {
-		switch (form.getInitialOrReply()) {
-		case "initial":
-			getComments().add(new InitialComment(form.getText(), this));
-			break;
-		case "reply":
-			if (form.getComment() == null) throw new NullPointerException("comment is null.");
-			form.getComment().createComment(form);
-			break;
-		default:
-			throw new IllegalArgumentException("initialOrReply isn't \"initial\" or \"reply\". It is: " + form.getInitialOrReply());
-		}
+	//TO-DO : Factory pattern?
+	public void addComment(String commentText) {
+		getComments().add(new InitialComment(commentText, this));
+	}
+	
+	/**
+	 * Adds the given Developer to the assignees list.
+	 * @param developer The Developer to add.
+	 * @post The Developer is part of the assignees list.
+	 * 		| getAssignees().contains(developer);
+	 */
+	public void assignDeveloper(Developer developer) {
+		getAssignees().add(developer);
 	}
 
 	/**
-	 * 
-	 * @param form
+	 * Changes the current BugTag to the given BugTag.
+	 * @param bugTag The new BugTag
+	 * @post The given BugTag will be the new BugTag.
+	 * 		| getBugTag() == bugTag
 	 */
-	public void assignDeveloper(BugReportAssignForm form) {
-		// TODO - implement BugReport.assignDeveloper
-		throw new UnsupportedOperationException();
+	public void updateBugTag(BugTag bugTag) {
+		setBugTag(bugTag);
 	}
-
-	/**
-	 * 
-	 * @param form
-	 */
-	public void update(BugReportUpdateForm form) {
-		// TODO - implement BugReport.update
-		throw new UnsupportedOperationException();
+	
+	@Override
+	public int compareTo(BugReport otherBugReport) {
+		return getTitle().compareTo(otherBugReport.getTitle());
+	}
+	
+	@Override
+	public BugReport clone() { //All variables are REFERENCES.
+		return (new BugReportBuilder())
+					.setTitle(getTitle())
+					.setSubsystem(getSubsystem())
+					.setIssuer(getIssuedBy())
+					.setDescription(getDescription())
+					.getBugReport();
 	}
 	
 	//Getters and Setters
@@ -88,7 +99,7 @@ public class BugReport {
 		return title;
 	}
 	
-	void setTitle(String title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
 	
@@ -96,31 +107,23 @@ public class BugReport {
 		return description;
 	}
 	
-	void setDescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 	
 	public Date getCreationDate() {
 		return creationDate;
 	}
-	
-	void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
 
 	public Subsystem getSubsystem() {
 		return subsystem;
-	}
-
-	void setSubsystem(Subsystem subsystem) {
-		this.subsystem = subsystem;
 	}
 
 	public BugTag getBugTag() {
 		return bugTag;
 	}
 
-	void setBugTag(BugTag bugTag) {
+	public void setBugTag(BugTag bugTag) {
 		this.bugTag = bugTag;
 	}
 
@@ -128,23 +131,15 @@ public class BugReport {
 		return assignees;
 	}
 
-	void setAssignees(ArrayList<Developer> assignees) {
-		this.assignees = assignees;
-	}
-
 	public ArrayList<BugReport> getDependsOn() {
 		return dependsOn;
-	}
-
-	void setDependsOn(ArrayList<BugReport> dependsOn) {
-		this.dependsOn = dependsOn;
 	}
 
 	public BugReport getDuplicate() {
 		return duplicate;
 	}
 
-	void setDuplicate(BugReport duplicate) {
+	public void setDuplicate(BugReport duplicate) {
 		this.duplicate = duplicate;
 	}
 
@@ -152,17 +147,8 @@ public class BugReport {
 		return issuedBy;
 	}
 
-	void setIssuedBy(Issuer issuedBy) {
-		this.issuedBy = issuedBy;
-	}
-
 	public ArrayList<InitialComment> getComments() {
 		return comments;
 	}
-
-	void setComments(ArrayList<InitialComment> comments) {
-		this.comments = comments;
-	}
-	
 	
 }
