@@ -5,64 +5,118 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import users.User;
+import users.Administrator;
+import users.Developer;
+import users.Issuer;
+import users.NotUniqueUserNameException;
 import users.UserCategory;
 import users.UserController;
 import users.UserManager;
 
 public class UserTests {
+	
+	private UserManager userManager;
+	private UserController userController;
+	private Administrator admin;
+	private Issuer issuer;
+	private Developer dev;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		UserManager.addUser(UserCategory.ADMIN, "Richard", "Rosie", "Reese", "RRR");
-		UserManager.addUser(UserCategory.ISSUER, "Lindsey", "Lida", "Linkovic", "LLL");
-		UserManager.addUser(UserCategory.DEVELOPER, "Carl", "Casey", "Carver", "CCC");
 	}
 
 	@Before
 	public void setUp() throws Exception {
+		userManager = new UserManager();
+		userController = new UserController(userManager);
+		
+		userManager.createUser(UserCategory.ADMIN, "Richard", "Rosie", "Reese", "RRR");
+		userManager.createUser(UserCategory.ISSUER, "Lindsey", "Lida", "Linkovic", "LLL");
+		userManager.createUser(UserCategory.DEVELOPER, "Carl", "Casey", "Carver", "CCC");
+		
+		admin = (Administrator) userController.getUserList(UserCategory.ADMIN).get(0);
+		issuer = (Issuer) userController.getUserList(UserCategory.ISSUER).get(0);
+		dev = (Developer) userController.getUserList(UserCategory.DEVELOPER).get(0);
 	}
 
 	@Test
 	public void adminTest() {
-		User user = UserController.getUserList(UserCategory.ADMIN).get(0);
-		Assert.assertEquals(user.getCategory(), UserCategory.ADMIN);
-		Assert.assertEquals(user.getFirstName(), "Richard");
-		Assert.assertEquals(user.getMiddleName(), "Rosie");
-		Assert.assertEquals(user.getLastName(), "Reese");
-		Assert.assertEquals(user.getUserName(), "RRR");
+		Assert.assertEquals(admin.getCategory(), UserCategory.ADMIN);
+		Assert.assertEquals(admin.getFirstName(), "Richard");
+		Assert.assertEquals(admin.getMiddleName(), "Rosie");
+		Assert.assertEquals(admin.getLastName(), "Reese");
+		Assert.assertEquals(admin.getUserName(), "RRR");
 	}
 	
 	@Test
 	public void issuerTest() {
-		User user = UserController.getUserList(UserCategory.ISSUER).get(0);
-		Assert.assertEquals(user.getCategory(), UserCategory.ISSUER);
-		Assert.assertEquals(user.getFirstName(), "Lindsey");
-		Assert.assertEquals(user.getMiddleName(), "Lida");
-		Assert.assertEquals(user.getLastName(), "Linkovic");
-		Assert.assertEquals(user.getUserName(), "LLL");
+		Assert.assertEquals(issuer.getCategory(), UserCategory.ISSUER);
+		Assert.assertEquals(issuer.getFirstName(), "Lindsey");
+		Assert.assertEquals(issuer.getMiddleName(), "Lida");
+		Assert.assertEquals(issuer.getLastName(), "Linkovic");
+		Assert.assertEquals(issuer.getUserName(), "LLL");
 	}
 	
 	@Test
 	public void devTest() {
-		User user = UserController.getUserList(UserCategory.DEVELOPER).get(0);
-		Assert.assertEquals(user.getCategory(), UserCategory.DEVELOPER);
-		Assert.assertEquals(user.getFirstName(), "Carl");
-		Assert.assertEquals(user.getMiddleName(), "Casey");
-		Assert.assertEquals(user.getLastName(), "Carver");
-		Assert.assertEquals(user.getUserName(), "CCC");
+		Assert.assertEquals(dev.getCategory(), UserCategory.DEVELOPER);
+		Assert.assertEquals(dev.getFirstName(), "Carl");
+		Assert.assertEquals(dev.getMiddleName(), "Casey");
+		Assert.assertEquals(dev.getLastName(), "Carver");
+		Assert.assertEquals(dev.getUserName(), "CCC");
+	}
+	
+	@Test (expected = NotUniqueUserNameException.class)
+	public void createUserFailUserNameExistsTest() {
+		userManager.createUser(UserCategory.DEVELOPER, "", "", "", "RRR");
+	}
+	
+	@Test
+	public void removeUserTest() {
+		userController.loginAs(admin);
+		userManager.removeUser(admin);
+		userManager.removeUser(issuer);
 	}
 	
 	@Test
 	public void loginSuccesTest() {
-		User user = UserController.getUserList(UserCategory.ADMIN).get(0);
-		Assert.assertFalse(UserController.isLoggedIn(user));
-		String message = UserController.loginAs(user);
+		Assert.assertFalse(userController.isLoggedIn(admin));
+		String message = userController.loginAs(admin);
 		Assert.assertEquals("User: RRR successfully logged in.", message);
-		Assert.assertTrue(UserController.isLoggedIn(user));
-		message = UserController.loginAs(user);
+		Assert.assertTrue(userController.isLoggedIn(admin));
+		message = userController.loginAs(admin);
 		Assert.assertEquals("User: RRR is already logged in.", message);
-		Assert.assertTrue(UserController.isLoggedIn(user));
+		Assert.assertTrue(userController.isLoggedIn(admin));
 	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void loginFailTest() {
+		userManager.removeUser(admin);
+		userController.loginAs(admin);
+	}
+	
+	@Test
+	public void logoffSuccesTest() {
+		Assert.assertFalse(userController.isLoggedIn(admin));
+		String message = userController.loginAs(admin);
+		Assert.assertEquals("User: RRR successfully logged in.", message);
+		Assert.assertTrue(userController.isLoggedIn(admin));
+		
+		message = userController.logOff(admin);
+		Assert.assertEquals("User: RRR successfully logged off.", message);
+		Assert.assertFalse(userController.isLoggedIn(admin));
+
+		message = userController.logOff(admin);
+		Assert.assertEquals("User: RRR is already logged off.", message);
+		Assert.assertFalse(userController.isLoggedIn(admin));
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void logoffFailTest() {
+		userController.loginAs(admin);
+		userManager.removeUser(admin);
+		userController.logOff(admin);
+	}
+
 
 }
