@@ -5,13 +5,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import users.Administrator;
-import users.Developer;
-import users.Issuer;
-import users.NotUniqueUserNameException;
-import users.UserCategory;
-import users.UserController;
-import users.UserManager;
+import controllers.UserController;
+import model.users.Administrator;
+import model.users.Developer;
+import model.users.Issuer;
+import model.users.UserCategory;
+import model.users.UserManager;
 
 public class UserTests {
 	
