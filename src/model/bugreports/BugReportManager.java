@@ -13,7 +13,7 @@ import model.bugreports.forms.BugReportCreationForm;
  * Class that stores and manages BugReports.
  *
  */
-public class BugReportManager {
+public class BugReportManager implements BugReportDAO {
 
 	private final ArrayList<BugReport> bugReportList; //List that keeps BugReports.
 
@@ -23,18 +23,6 @@ public class BugReportManager {
 	public BugReportManager() {
 		this.bugReportList = new ArrayList<BugReport>();
 	}
-	
-	/**
-	 * Creates and adds a new BugReport to the list.
-	 * @param form The information for the new BugReport.
-	 */
-	public void createBugReport(BugReportCreationForm form) {
-		getBugReportList().add((new BugReportBuilder()).setTitle(form.getTitle())
-								.setDescription(form.getDescription())
-								.setSubsystem(form.getSubsystem())
-								.setIssuer(form.getIssuer())
-								.getBugReport());
-	}
 
 	/**
 	 * Returns a COPY of the BugReport list with given filters applied.
@@ -42,6 +30,7 @@ public class BugReportManager {
 	 * @param arguments The arguments for the FilterTypes
 	 * @return A filtered, ordered BugReport list.
 	 */
+	@Override
 	public ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) {
 		ArrayList<BugReport> filteredList = cloneList();
 		BugReportFilter filter = new BugReportFilter(filteredList);
@@ -54,10 +43,25 @@ public class BugReportManager {
 		return filteredList;
 	}
 
+	@Override
 	public ArrayList<BugReport> getBugReportList() {
 		return bugReportList;
 	}
 	
+	/**
+	 * Creates and adds a new BugReport to the list.
+	 * @param form The information for the new BugReport.
+	 */
+	@Override
+	public void addBugReport(BugReportCreationForm form) {
+		getBugReportList().add((new BugReportBuilder()).setTitle(form.getTitle())
+				.setDescription(form.getDescription())
+				.setSubsystem(form.getSubsystem())
+				.setIssuer(form.getIssuer())
+				.getBugReport());
+	}
+
+
 	private ArrayList<BugReport> cloneList() {
 		ArrayList<BugReport> clonedList = new ArrayList<BugReport>();
 		

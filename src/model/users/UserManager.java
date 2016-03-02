@@ -2,17 +2,18 @@ package model.users;
 
 import java.util.ArrayList;
 
-public class UserManager {
+public class UserManager implements UserDAO {
 
-	private static ArrayList<User> userList;
-	private static ArrayList<User> loggedInUsers;
+	private ArrayList<User> userList;
+	private ArrayList<User> loggedInUsers;
 	
 	/**
 	 * Checks if the given User is logged in or not.
 	 * @param user The user to check.
 	 * @return true if the given User is logged in, false if (s)he's not.
 	 */
-	public static boolean isLoggedIn(User user) {
+	@Override
+	public boolean isLoggedIn(User user) {
 		for (User loggedInUser : getLoggedInUsers())
 			if (loggedInUser.getUserName() == user.getUserName())
 				return true;
@@ -24,7 +25,8 @@ public class UserManager {
 	 * @param userCategory The UserCategory for which to make the user list.
 	 * @return An ArrayList containing the Users from userList that are from the given UserCategory.
 	 */
-	public static ArrayList<User> getUserList(UserCategory userCategory) {
+	@Override
+	public ArrayList<User> getUserList(UserCategory userCategory) {
 		ArrayList<User> userList = new ArrayList<User>();
 		
 		for (User user : getUserList()) 
@@ -40,7 +42,8 @@ public class UserManager {
 	 * @throws IllegalArgumentException If the given User doesn't exist in the system.
 	 * @return A message specifying if the given User is logged in or that (s)he was already logged in.
 	 */
-	public static String loginAs(User loggingUser) {
+	@Override
+	public String loginAs(User loggingUser) {
 		if (isLoggedIn(loggingUser))
 			return "User: " + loggingUser.getUserName() + " is already logged in.";
 		
@@ -55,11 +58,11 @@ public class UserManager {
 	
 	//Getters and setters.
 	
-	public static ArrayList<User> getUserList() {
+	public ArrayList<User> getUserList() {
 		return userList;
 	}
 	
-	public static ArrayList<User> getLoggedInUsers() {
+	public ArrayList<User> getLoggedInUsers() {
 		return loggedInUsers;
 	}
 }
