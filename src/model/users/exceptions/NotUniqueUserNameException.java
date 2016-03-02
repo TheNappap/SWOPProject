@@ -1,4 +1,4 @@
-package users;
+package model.users.exceptions;
 
 public class NotUniqueUserNameException extends RuntimeException {
 
