@@ -10,8 +10,8 @@ public abstract class System {
 	private ArrayList<Subsystem> subsystems;
 	private Version version;
 	
-	System(String name, String description, System parent, ArrayList<Subsystem> subsystems, Version version) {
-		subsystems = new ArrayList<Subsystem>();
+	System(String name, String description, System parent, Version version) {
+		this.subsystems = new ArrayList<Subsystem>();
 		
 		setName(name);
 		setDescription(description);

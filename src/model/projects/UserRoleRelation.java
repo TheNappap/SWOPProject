@@ -32,4 +32,12 @@ public class UserRoleRelation {
 	public Role getRole() {
 		return role;
 	}
+	
+	/**
+	 * Set the role involved in this relation
+	 * @param role The new role for this relation
+	 */
+	void setRole(Role role) {
+		this.role = role; 
+	}
 }

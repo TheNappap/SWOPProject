@@ -1,11 +1,9 @@
 package model.projects.builders;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import model.projects.Project;
 import model.projects.ProjectTeam;
-import model.projects.Subsystem;
 import model.projects.Version;
 
 public class ProjectBuilder {
@@ -17,10 +15,8 @@ public class ProjectBuilder {
 	private double budgetEstimate;
 	private ProjectTeam team;
 	
-	private ArrayList<Subsystem> subsystems;
-	
 	public ProjectBuilder() {
-		subsystems = new ArrayList<Subsystem>();
+		
 	}
 	
 	public ProjectBuilder setName(String name) {
@@ -60,7 +56,7 @@ public class ProjectBuilder {
 	
 	public Project getProject() {
 		validate();
-		return new Project(name, description, null, subsystems, version, creationDate, startDate, budgetEstimate, team);
+		return new Project(name, description, null, version, creationDate, startDate, budgetEstimate, team);
 	}
 	
 	private void validate() {
@@ -71,6 +67,5 @@ public class ProjectBuilder {
 		assert (startDate != null) : "Project start date is null";
 		assert (budgetEstimate > 0) : "Project budget estimate should be strictly positive";
 		assert (team != null) : "Project team is null";
-		assert (subsystems != null) : "Project list of subsystems is null";
 	}
 }

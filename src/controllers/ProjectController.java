@@ -7,6 +7,7 @@ import model.projects.Project;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectUpdateForm;
+import model.projects.forms.SubsystemCreationForm;
 import model.users.Developer;
 
 public class ProjectController extends Controller {
@@ -70,4 +71,12 @@ public class ProjectController extends Controller {
 		getBugTrap().getProjectDAO().deleteProject(project);
 	}
 
+	public SubsystemCreationForm getSubsystemCreationForm() {
+		return new SubsystemCreationForm();
+	}
+	
+	public void createSubsystem(SubsystemCreationForm form) {
+		form.allVarsFilledIn();
+		getBugTrap().getProjectDAO().createSubsystem(form);
+	}
 }

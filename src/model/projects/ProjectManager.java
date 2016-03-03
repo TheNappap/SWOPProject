@@ -15,6 +15,10 @@ public class ProjectManager implements ProjectDAO {
 
 	private ArrayList<Project> projectList;
 
+	public ProjectManager() {
+		projectList = new ArrayList<Project>();
+	}
+	
 	/**
 	 * Create and add a new project to the list.
 	 * @param form The filled in form with the details about the project to be created.
@@ -48,6 +52,7 @@ public class ProjectManager implements ProjectDAO {
 				p.setName(form.getName());
 				p.setStartDate(form.getStartDate());
 				p.setVersion(form.getVersion());
+				p.getTeam().setLeadDeveloper(form.getLeadDeveloper());
 			}
 		}
 	}
@@ -94,7 +99,6 @@ public class ProjectManager implements ProjectDAO {
 
 	@Override
 	public void createSubsystem(SubsystemCreationForm form) {
-		Project project = form.getProject();
 		Subsystem sub = (new SubsystemBuilder())
 							.setDescription(form.getDescription())
 							.setName(form.getName())
@@ -102,9 +106,6 @@ public class ProjectManager implements ProjectDAO {
 							.setVersion(new Version(1, 0 ,0))
 							.setParent(form.getParent())
 							.getSubsystem();
-		for (Project p : projectList) {
-			if (p == project) 
-				p.addSubsystem(sub);
-		}
+		form.getParent().addSubsystem(sub);
 	}
 }
