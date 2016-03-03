@@ -91,6 +91,7 @@ public class BugReport implements Comparable<BugReport>, Cloneable, Commentable 
 					.setSubsystem(getSubsystem())
 					.setIssuer(getIssuedBy())
 					.setDescription(getDescription())
+					.setDependsOn(getDependsOn())
 					.getBugReport();
 	}
 	
