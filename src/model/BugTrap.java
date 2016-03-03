@@ -2,6 +2,7 @@ package model;
 
 import model.bugreports.BugReportDAO;
 import model.bugreports.BugReportManager;
+import model.projects.ProjectDAO;
 import model.projects.ProjectManager;
 import model.users.UserDAO;
 import model.users.UserManager;
@@ -9,13 +10,13 @@ import model.users.UserManager;
 public class BugTrap {
 
 	private final UserDAO userDAO;
-	private final ProjectManager projectManager;
+	private final ProjectDAO projectDAO;
 	private final BugReportDAO bugReportDAO;
 	
 	
 	public BugTrap() {
 		this.userDAO = new UserManager();
-		this.projectManager = new ProjectManager();
+		this.projectDAO = new ProjectManager();
 		this.bugReportDAO = new BugReportManager();
 	}
 
@@ -25,8 +26,8 @@ public class BugTrap {
 	}
 
 
-	public ProjectManager getProjectManager() {
-		return projectManager;
+	public ProjectDAO getProjectDAO() {
+		return projectDAO;
 	}
 
 

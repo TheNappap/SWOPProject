@@ -60,7 +60,17 @@ public abstract class System {
 		this.version = version;
 	}
 	
-	void addSubsystem(Subsystem sub) {
-		this.subsystems.add(sub);
+	void addSubsystem(Subsystem sub) throws UnsupportedOperationException {
+		// Travel the path to the root. The subsystem being added should not be one of the parents
+		System parent = this.getParent();
+		boolean canAdd = true;
+		while (parent != null && canAdd) {
+			if (parent == sub) 
+				canAdd = false;
+			parent = parent.getParent();
+		}
+		
+		if (canAdd)
+			this.subsystems.add(sub);
 	}
 }

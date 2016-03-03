@@ -13,7 +13,7 @@ public class ProjectAssignForm implements Form {
 	private Developer developer;
 	private Role role;
 
-	ProjectAssignForm() {
+	public ProjectAssignForm() {
 		project = null;
 		developer = null;
 		role = null;
@@ -51,7 +51,8 @@ public class ProjectAssignForm implements Form {
 
 	@Override
 	public void allVarsFilledIn() {
-		// TODO Auto-generated method stub
-		
+		assert(project != null) : "Project is null";
+		assert(developer != null) : "Developer is null";
+		assert(role != null) : "Role is null";
 	}
 }

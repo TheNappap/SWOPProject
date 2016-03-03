@@ -10,14 +10,14 @@ public class ProjectCreationForm implements Form {
 	private String name;
 	private String description;
 	private double budgetEstimate;
-	private Date startingDate;
+	private Date startDate;
 	private Developer leadDeveloper;
 
-	ProjectCreationForm() {
+	public ProjectCreationForm() {
 		name = null;
 		description = null;
 		budgetEstimate = 0;
-		startingDate = null;
+		startDate = null;
 		leadDeveloper = null;
 	}
 
@@ -51,14 +51,14 @@ public class ProjectCreationForm implements Form {
 		this.budgetEstimate = budgetEstimate;
 	}
 
-	public Date getStartingDate() {
-		return startingDate;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setStartingDate(Date startingDate) {
-		if (startingDate == null) throw new NullPointerException("Given starting date is null.");
+	public void setStartDate(Date startDate) {
+		if (startDate == null) throw new NullPointerException("Given starting date is null.");
 		
-		this.startingDate = startingDate;
+		this.startDate = startDate;
 	}
 
 	public Developer getLeadDeveloper() {
@@ -73,7 +73,10 @@ public class ProjectCreationForm implements Form {
 
 	@Override
 	public void allVarsFilledIn() {
-		// TODO Auto-generated method stub
-		
+		assert(name != null) : "Name is null";
+		assert(description != null) : "Description is null";
+		assert(budgetEstimate > 0) : "Budget estimate is not strictly positive";
+		assert(startDate != null) : "Starting date is null";
+		assert(leadDeveloper != null) : "Lead developer is null";
 	}
 }
