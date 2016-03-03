@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import model.projects.builders.ProjectBuilder;
+import model.projects.builders.SubsystemBuilder;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectUpdateForm;
+import model.projects.forms.SubsystemCreationForm;
+import model.users.Developer;
 
 public class ProjectManager implements ProjectDAO {
 
 	private ArrayList<Project> projectList;
-
-	public ArrayList<Project> getProjectList() {
-		return this.projectList;
-	}
 
 	/**
 	 * Create and add a new project to the list.
@@ -26,7 +25,7 @@ public class ProjectManager implements ProjectDAO {
 		Project p = (new ProjectBuilder())
 						.setName(form.getName())
 						.setCreationDate(new Date())
-						.setStartDate(form.getStartingDate())
+						.setStartDate(form.getStartDate())
 						.setDescription(form.getDescription())
 						.setTeam(team)
 						.setVersion(new Version(1, 0, 0))
@@ -41,8 +40,16 @@ public class ProjectManager implements ProjectDAO {
 	 */
 	@Override
 	public void updateProject(ProjectUpdateForm form) {
-		// TODO - implement ProjectManager.updateProject
-		throw new UnsupportedOperationException();
+		Project project = form.getProject();
+		for (Project p : projectList) {
+			if (p == project) {
+				p.setBudgetEstimate(form.getBudgetEstimate());
+				p.setDescription(form.getDescription());
+				p.setName(form.getName());
+				p.setStartDate(form.getStartDate());
+				p.setVersion(form.getVersion());
+			}
+		}
 	}
 
 	/**
@@ -51,8 +58,10 @@ public class ProjectManager implements ProjectDAO {
 	 */
 	@Override
 	public void deleteProject(Project project) {
-		// TODO - implement ProjectManager.deleteProject
-		throw new UnsupportedOperationException();
+		for (int i = 0; i < projectList.size(); i++) {
+			if (projectList.get(i) == project) 
+				projectList.remove(i);
+		}
 	}
 
 	/**
@@ -61,8 +70,41 @@ public class ProjectManager implements ProjectDAO {
 	 */
 	@Override
 	public void assignToProject(ProjectAssignForm form) {
-		// TODO - implement ProjectManager.assignToProject
-		throw new UnsupportedOperationException();
+		Project project = form.getProject();
+		for (Project p : projectList) {
+			if (p == project) 
+				p.getTeam().addMember(form.getDeveloper(), form.getRole());
+		}
 	}
 
+	@Override
+	public ArrayList<Project> getProjects() {
+		return projectList;
+	}
+
+	@Override
+	public ArrayList<Project> getProjectsForDeveloper(Developer dev) {
+		ArrayList<Project> projs = new ArrayList<Project>();
+		for (Project p : projectList) {
+			if (p.getTeam().getLeadDeveloper() == dev) 
+				projs.add(p);
+		}
+		return projs;
+	}
+
+	@Override
+	public void createSubsystem(SubsystemCreationForm form) {
+		Project project = form.getProject();
+		Subsystem sub = (new SubsystemBuilder())
+							.setDescription(form.getDescription())
+							.setName(form.getName())
+							.setProject(form.getProject())
+							.setVersion(new Version(1, 0 ,0))
+							.setParent(form.getParent())
+							.getSubsystem();
+		for (Project p : projectList) {
+			if (p == project) 
+				p.addSubsystem(sub);
+		}
+	}
 }

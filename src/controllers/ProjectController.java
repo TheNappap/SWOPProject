@@ -7,6 +7,7 @@ import model.projects.Project;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectUpdateForm;
+import model.users.Developer;
 
 public class ProjectController extends Controller {
 
@@ -15,23 +16,23 @@ public class ProjectController extends Controller {
 	}
 
 	public ArrayList<Project> getProjectList() {
-		// TODO - implement ProjectController.getProjectList
-		throw new UnsupportedOperationException();
+		return getBugTrap().getProjectDAO().getProjects();
+	}
+	
+	public ArrayList<Project> getProjectsForDeveloper(Developer dev) {
+		return getBugTrap().getProjectDAO().getProjectsForDeveloper(dev);
 	}
 
 	public ProjectCreationForm getProjectCreationForm() {
-		// TODO - implement ProjectController.getProjectCreationForm
-		throw new UnsupportedOperationException();
+		return new ProjectCreationForm();
 	}
 
 	public ProjectUpdateForm getProjectUpdateForm() {
-		// TODO - implement ProjectController.getProjectUpdateForm
-		throw new UnsupportedOperationException();
+		return new ProjectUpdateForm();
 	}
 
 	public ProjectAssignForm getProjectAssignForm() {
-		// TODO - implement ProjectController.getProjectAssignForm
-		throw new UnsupportedOperationException();
+		return new ProjectAssignForm();
 	}
 
 	/**
@@ -39,8 +40,8 @@ public class ProjectController extends Controller {
 	 * @param form
 	 */
 	public void createProject(ProjectCreationForm form) {
-		// TODO - implement ProjectController.createProject
-		throw new UnsupportedOperationException();
+		form.allVarsFilledIn();
+		getBugTrap().getProjectDAO().createProject(form);
 	}
 
 	/**
@@ -48,8 +49,8 @@ public class ProjectController extends Controller {
 	 * @param form
 	 */
 	public void updateProject(ProjectUpdateForm form) {
-		// TODO - implement ProjectController.updateProject
-		throw new UnsupportedOperationException();
+		form.allVarsFilledIn();
+		getBugTrap().getProjectDAO().updateProject(form);
 	}
 
 	/**
@@ -57,8 +58,8 @@ public class ProjectController extends Controller {
 	 * @param form
 	 */
 	public void assignToProject(ProjectAssignForm form) {
-		// TODO - implement ProjectController.assignToProject
-		throw new UnsupportedOperationException();
+		form.allVarsFilledIn();
+		getBugTrap().getProjectDAO().assignToProject(form);
 	}
 
 	/**
@@ -66,8 +67,7 @@ public class ProjectController extends Controller {
 	 * @param project
 	 */
 	public void deleteProject(Project project) {
-		// TODO - implement ProjectController.deleteProject
-		throw new UnsupportedOperationException();
+		getBugTrap().getProjectDAO().deleteProject(project);
 	}
 
 }

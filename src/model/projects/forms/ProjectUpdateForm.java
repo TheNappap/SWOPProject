@@ -15,14 +15,11 @@ public class ProjectUpdateForm implements Form {
 	private Date startDate;
 	private Developer leadDeveloper;
 	private Version version;
+	
+	private Project project;
 
-	ProjectUpdateForm(Project project) {
-		setName(project.getName());
-		setDescription(project.getDescription());
-		setBudgetEstimate(project.getBudgetEstimate());
-		setLeadDeveloper(project.getTeam().getLeadDeveloper());
-		setVersion(project.getVersion());
-		setStartDate(project.getStartDate());
+	public ProjectUpdateForm() {
+		
 	}
 
 	public String getName() {
@@ -85,10 +82,25 @@ public class ProjectUpdateForm implements Form {
 		
 		this.version = version;
 	}
+	
+	public Project getProject() {
+		return project;
+	}
+	
+	public void setProject(Project project) {
+		if (project == null) throw new NullPointerException("Given project is null.");
+		
+		this.project = project;
+	}
 
 	@Override
 	public void allVarsFilledIn() {
-		// TODO Auto-generated method stub
-		
+		assert(name != null) : "Name is null";
+		assert(description != null) : "Description is null";
+		assert(budgetEstimate > 0) : "Budget estimate is not strictly positive";
+		assert(startDate != null) : "Starting date is null";
+		assert(leadDeveloper != null) : "Lead developer is null";
+		assert(project != null) : "Project is null";
+		assert(version != null) : "Version is null";
 	}
 }
