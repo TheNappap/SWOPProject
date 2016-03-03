@@ -6,7 +6,7 @@ public class Subsystem extends System {
 
 	private Project project;
 	
-	Subsystem(String name, String description, System parent, ArrayList<Subsystem> subsystems, Version version, Project project) {
+	public Subsystem(String name, String description, System parent, ArrayList<Subsystem> subsystems, Version version, Project project) {
 		super(name, description, parent, subsystems, version);
 		setProject(project);
 	}

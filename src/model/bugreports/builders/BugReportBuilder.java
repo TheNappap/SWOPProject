@@ -27,6 +27,11 @@ public class BugReportBuilder {
 		this.description = description;
 		return this;
 	}
+	
+	public BugReportBuilder setDependsOn(ArrayList<BugReport> dependsOn) {
+		this.dependsOn = dependsOn;
+		return this;
+	}
 
 	public BugReportBuilder setSubsystem(Subsystem subsystem) {
 		this.subsystem = subsystem;

@@ -58,6 +58,7 @@ public class BugReportManager implements BugReportDAO {
 				.setDescription(form.getDescription())
 				.setSubsystem(form.getSubsystem())
 				.setIssuer(form.getIssuer())
+				.setDependsOn(form.getDependsOn())
 				.getBugReport());
 	}
 
