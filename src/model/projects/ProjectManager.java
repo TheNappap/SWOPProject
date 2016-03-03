@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import model.projects.builders.ProjectBuilder;
+import model.projects.builders.SubsystemBuilder;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectUpdateForm;
+import model.projects.forms.SubsystemCreationForm;
 import model.users.Developer;
 
 public class ProjectManager implements ProjectDAO {
@@ -88,5 +90,21 @@ public class ProjectManager implements ProjectDAO {
 				projs.add(p);
 		}
 		return projs;
+	}
+
+	@Override
+	public void createSubsystem(SubsystemCreationForm form) {
+		Project project = form.getProject();
+		Subsystem sub = (new SubsystemBuilder())
+							.setDescription(form.getDescription())
+							.setName(form.getName())
+							.setProject(form.getProject())
+							.setVersion(new Version(1, 0 ,0))
+							.setParent(form.getParent())
+							.getSubsystem();
+		for (Project p : projectList) {
+			if (p == project) 
+				p.addSubsystem(sub);
+		}
 	}
 }
