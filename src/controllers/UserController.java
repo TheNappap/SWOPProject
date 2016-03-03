@@ -11,20 +11,19 @@ public class UserController extends Controller{
 	
 	public UserController(BugTrap bugTrap) {
 		super(bugTrap);
-		userManager = getBugTrap().getUserDAO();
 	}
 	
 	private UserDAO userManager;
 	
 	public ArrayList<User> getUserList(UserCategory userCategory) {
-		return userManager.getUserList(userCategory);
+		return getBugTrap().getUserDAO().getUserList(userCategory);
 	}
 	
 	public String loginAs(User loggingUser) {
-		return userManager.loginAs(loggingUser);
+		return getBugTrap().getUserDAO().loginAs(loggingUser);
 	}
 	
 	public boolean isLoggedIn(User user) {
-		return userManager.isLoggedIn(user);
+		return getBugTrap().getUserDAO().isLoggedIn(user);
 	}
 }
