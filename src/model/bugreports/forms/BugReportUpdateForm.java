@@ -9,7 +9,7 @@ public class BugReportUpdateForm implements Form{
 	private BugReport bugReport;	//The BugReport to update.
 	private BugTag bugTag;			//The new BugTag.
 
-	BugReportUpdateForm() {
+	public BugReportUpdateForm() {
 		//Explicitly setting this to null.
 		this.bugReport 	= null;
 		this.bugTag		= null;

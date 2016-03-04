@@ -27,6 +27,10 @@ public class BugReportController extends Controller {
 	public BugReportAssignForm getBugReportAssignForm() {
 		return new BugReportAssignForm();
 	}
+	
+	public BugReportUpdateForm getBugReportUpdateForm() {
+		return new BugReportUpdateForm();
+	}
 
 	public ArrayList<BugReport> getBugReportList() {
 		return getBugReportList();
