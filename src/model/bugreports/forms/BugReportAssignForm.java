@@ -17,8 +17,8 @@ public class BugReportAssignForm implements Form {
 	
 	@Override
 	public void allVarsFilledIn() {
-		if (getBugReport() == null) throw new NullPointerException();
-		if (getDeveloper() == null) throw new NullPointerException();
+		if (getBugReport() == null) throw new NullPointerException("Bugreport is null");
+		if (getDeveloper() == null) throw new NullPointerException("Developer is null");
 	}
 
 	//Getters and Setters

@@ -17,8 +17,8 @@ public class CommentCreationForm implements Form {
 	
 	@Override
 	public void allVarsFilledIn() {
-		if (getCommentable() == null) throw new NullPointerException();
-		if (getText() == null) throw new NullPointerException();
+		if (getCommentable() == null) throw new NullPointerException("Commentable is null");
+		if (getText() == null) throw new NullPointerException("Text is null");
 	}
 
 	//Getters and Setters
