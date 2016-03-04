@@ -35,7 +35,7 @@ public class SubsystemUsecaseTests {
 		form.setDescription("This is a very descriptive description!");
 		form.setLeadDeveloper(lead);
 		form.setName("Project X");
-		form.setStartDate(new Date(2016, 8, 23));
+		form.setStartDate(new Date(1302));
 		controller.createProject(form);
 		emptyProject = controller.getProjectList().get(0);
 		
@@ -44,7 +44,7 @@ public class SubsystemUsecaseTests {
 		form.setDescription("This is a somewhat descriptive description!");
 		form.setLeadDeveloper(lead);
 		form.setName("Project Y");
-		form.setStartDate(new Date(2016, 8, 24));
+		form.setStartDate(new Date(1302));
 		controller.createProject(form);
 		subbedProject = controller.getProjectList().get(1);
 		
