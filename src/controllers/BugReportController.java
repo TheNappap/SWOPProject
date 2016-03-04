@@ -27,19 +27,23 @@ public class BugReportController extends Controller {
 	public BugReportAssignForm getBugReportAssignForm() {
 		return new BugReportAssignForm();
 	}
+	
+	public BugReportUpdateForm getBugReportUpdateForm() {
+		return new BugReportUpdateForm();
+	}
 
 	public ArrayList<BugReport> getBugReportList() {
-		return getBugReportList();
+		return getBugTrap().getBugReportDAO().getBugReportList();
 	}
 
 	public ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) {
-		return getOrderedList(types, arguments);
+		return getBugTrap().getBugReportDAO().getOrderedList(types, arguments);
 	}
 
 	public void createBugReport(BugReportCreationForm form) {
 		form.allVarsFilledIn();
 		
-		createBugReport(form);
+		getBugTrap().getBugReportDAO().addBugReport(form);
 	}
 
 	public void createComment(CommentCreationForm form) {

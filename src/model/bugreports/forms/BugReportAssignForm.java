@@ -17,8 +17,8 @@ public class BugReportAssignForm implements Form {
 	
 	@Override
 	public void allVarsFilledIn() {
-		assert (getBugReport() != null) : "BugReport is null.";
-		assert (getDeveloper() != null) : "Developer is null.";
+		if (getBugReport() == null) throw new NullPointerException("Bugreport is null");
+		if (getDeveloper() == null) throw new NullPointerException("Developer is null");
 	}
 
 	//Getters and Setters
@@ -28,7 +28,7 @@ public class BugReportAssignForm implements Form {
 	}
 	
 	public void setBugReport(BugReport bugReport) {
-		assert (bugReport != null) : "BugReport is null.";
+		if (bugReport == null) throw new NullPointerException("Bugreport is null");
 		
 		this.bugReport = bugReport;
 	}
@@ -38,7 +38,7 @@ public class BugReportAssignForm implements Form {
 	}
 	
 	public void setDeveloper(Developer developer) {
-		assert (developer != null) : "Developer is null.";
+		if (developer == null) throw new NullPointerException("Developer is null");
 		
 		this.developer = developer;
 	}

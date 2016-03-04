@@ -1,6 +1,6 @@
 package model.projects;
 
-public class Version {
+public class Version implements Comparable<Version> {
 
 	private int major;
 	private int minor;
@@ -31,6 +31,7 @@ public class Version {
 	 * 			0 if this == version
 	 * 			1 if this > version
 	 */
+	@Override
 	public int compareTo(Version version) {
 		if (this.major < version.major)
 			return -1;

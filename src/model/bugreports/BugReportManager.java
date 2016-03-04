@@ -66,7 +66,7 @@ public class BugReportManager implements BugReportDAO {
 	private ArrayList<BugReport> cloneList() {
 		ArrayList<BugReport> clonedList = new ArrayList<BugReport>();
 		
-		for (BugReport bugReport : getBugReportList()) clonedList.add(bugReport.clone());
+		for (BugReport bugReport : getBugReportList()) clonedList.add(bugReport);
 		
 		return clonedList;
 	}
