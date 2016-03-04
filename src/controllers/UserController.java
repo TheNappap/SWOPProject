@@ -5,15 +5,12 @@ import java.util.ArrayList;
 import model.BugTrap;
 import model.users.User;
 import model.users.UserCategory;
-import model.users.UserDAO;
 
 public class UserController extends Controller{
 	
 	public UserController(BugTrap bugTrap) {
 		super(bugTrap);
 	}
-	
-	private UserDAO userManager;
 	
 	public ArrayList<User> getUserList(UserCategory userCategory) {
 		return getBugTrap().getUserDAO().getUserList(userCategory);
@@ -25,5 +22,13 @@ public class UserController extends Controller{
 	
 	public boolean isLoggedIn(User user) {
 		return getBugTrap().getUserDAO().isLoggedIn(user);
+	}
+	
+	public boolean userNameExists(String userName) {
+		return getBugTrap().getUserDAO().userNameExists(userName);
+	}
+	
+	public boolean userExists(User user) {
+		return getBugTrap().getUserDAO().userExists(user);
 	}
 }

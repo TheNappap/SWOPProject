@@ -20,8 +20,8 @@ public class ProjectController extends Controller {
 		return getBugTrap().getProjectDAO().getProjects();
 	}
 	
-	public ArrayList<Project> getProjectsForDeveloper(Developer dev) {
-		return getBugTrap().getProjectDAO().getProjectsForDeveloper(dev);
+	public ArrayList<Project> getProjectsForLeadDeveloper(Developer dev) {
+		return getBugTrap().getProjectDAO().getProjectsForLeadDeveloper(dev);
 	}
 
 	public ProjectCreationForm getProjectCreationForm() {

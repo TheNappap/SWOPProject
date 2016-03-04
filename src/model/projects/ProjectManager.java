@@ -88,7 +88,7 @@ public class ProjectManager implements ProjectDAO {
 	}
 
 	@Override
-	public ArrayList<Project> getProjectsForDeveloper(Developer dev) {
+	public ArrayList<Project> getProjectsForLeadDeveloper(Developer dev) {
 		ArrayList<Project> projs = new ArrayList<Project>();
 		for (Project p : projectList) {
 			if (p.getTeam().getLeadDeveloper() == dev) 

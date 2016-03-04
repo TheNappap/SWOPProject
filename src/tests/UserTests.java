@@ -43,7 +43,7 @@ public class UserTests {
 	}
 
 	@Test
-	public void adminTest() {
+	public void adminCreateTest() {
 		Assert.assertEquals(admin.getCategory(), UserCategory.ADMIN);
 		Assert.assertEquals(admin.getFirstName(), "Richard");
 		Assert.assertEquals(admin.getMiddleName(), "Rosie");
@@ -52,7 +52,7 @@ public class UserTests {
 	}
 	
 	@Test
-	public void issuerTest() {
+	public void issuerCreateTest() {
 		Assert.assertEquals(issuer.getCategory(), UserCategory.ISSUER);
 		Assert.assertEquals(issuer.getFirstName(), "Lindsey");
 		Assert.assertEquals(issuer.getMiddleName(), "Lida");
@@ -61,7 +61,7 @@ public class UserTests {
 	}
 	
 	@Test
-	public void devTest() {
+	public void devCreateTest() {
 		Assert.assertEquals(dev.getCategory(), UserCategory.DEVELOPER);
 		Assert.assertEquals(dev.getFirstName(), "Carl");
 		Assert.assertEquals(dev.getMiddleName(), "Casey");
@@ -72,13 +72,6 @@ public class UserTests {
 	@Test (expected = NotUniqueUserNameException.class)
 	public void createUserFailUserNameExistsTest() {
 		userManager.createUser(UserCategory.DEVELOPER, "", "", "", "RRR");
-	}
-	
-	@Test
-	public void removeUserTest() {
-		userController.loginAs(admin);
-		userManager.removeUser(admin);
-		userManager.removeUser(issuer);
 	}
 	
 	@Test
@@ -94,32 +87,34 @@ public class UserTests {
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void loginFailTest() {
-		userManager.removeUser(admin);
-		userController.loginAs(admin);
+		Developer d = new Developer("", "", "", "");
+		userController.loginAs(d);
 	}
 	
 	@Test
-	public void logoffSuccesTest() {
-		Assert.assertFalse(userController.isLoggedIn(admin));
-		String message = userController.loginAs(admin);
-		Assert.assertEquals("User: RRR successfully logged in.", message);
-		Assert.assertTrue(userController.isLoggedIn(admin));
-		
-		message = userManager.logOff(admin);
-		Assert.assertEquals("User: RRR successfully logged off.", message);
-		Assert.assertFalse(userController.isLoggedIn(admin));
-
-		message = userManager.logOff(admin);
-		Assert.assertEquals("User: RRR is already logged off.", message);
-		Assert.assertFalse(userController.isLoggedIn(admin));
+	public void userNameExistsTest() {
+		boolean succes = userController.userNameExists("RRR");
+		boolean fail = userController.userNameExists("NotExistingUser");
+		Assert.assertTrue(succes);
+		Assert.assertFalse(fail);
 	}
 	
-	@Test (expected = IllegalArgumentException.class)
-	public void logoffFailTest() {
-		userController.loginAs(admin);
-		userManager.removeUser(admin);
-		userManager.logOff(admin);
+	@Test
+	public void userExistsTest() {
+		boolean succes = userController.userExists(admin);
+		boolean fail = userController.userExists(new Developer("", "", "",""));
+		Assert.assertTrue(succes);
+		Assert.assertFalse(fail);
 	}
-
+	
+	@Test
+	public void getUserListTest() {
+		int nbAdmins = userController.getUserList(UserCategory.ADMIN).size();
+		Assert.assertEquals(1, nbAdmins);
+		
+		userManager.createUser(UserCategory.ADMIN, "", "", "", "");
+		nbAdmins = userController.getUserList(UserCategory.ADMIN).size();
+		Assert.assertEquals(2, nbAdmins);
+	}
 
 }

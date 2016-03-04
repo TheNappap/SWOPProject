@@ -9,25 +9,65 @@ public class UserManager  implements UserDAO {
 	
 	public UserManager(){
 		userList = new ArrayList<User>();
-		loggedInUsers = new ArrayList<User>();
+		setLoggedInUser(null);
 	}
 	
 	private ArrayList<User> userList;
-	private ArrayList<User> loggedInUsers;
+	private User loggedInUser;
 	
 	/**
 	 * Checks if the given User is logged in or not.
 	 * @param user The user to check.
 	 * @return true if the given User is logged in, false if (s)he's not.
 	 */
-	
 	@Override
 	public boolean isLoggedIn(User user) {
-		for (User loggedInUser : getLoggedInUsers())
-			if (loggedInUser.getUserName().equals(user.getUserName()))
-				return true;
+		if(getLoggedInUser() == null)
+			return false;
+		if (getLoggedInUser().equals(user))
+			return true;
 		return false;
 	}
+
+	/**
+	 * Log the given User in the system.
+	 * @param loggingUser The User to log in
+	 * @throws IllegalArgumentException If the given User doesn't exist in the system.
+	 * @return A message specifying if the given User is logged in or that (s)he was already logged in.
+	 */
+	public String loginAs(User loggingUser) {
+		if(!userExists(loggingUser)) 
+			throw new IllegalArgumentException("the given user does not exist in the system");
+
+		if (isLoggedIn(loggingUser))
+			return "User: " + loggingUser.getUserName() + " is already logged in.";
+
+		logOff();
+		setLoggedInUser(loggingUser);
+		return "User: " + loggingUser.getUserName() + " successfully logged in.";
+	}
+	
+	/**
+	 * Log the current user off 
+	 */
+	private void logOff(){
+		setLoggedInUser(null);
+	}
+	
+	//USERS
+	
+	public ArrayList<User> getUserList() {
+		return userList;
+	}
+	
+	public User getLoggedInUser() {
+		return loggedInUser;
+	}
+	
+	private void setLoggedInUser(User user){
+		loggedInUser = user;
+	}
+	
 	
 	/**
 	 * Create, fill and return an ArrayList containing all Users from userList that are from the given UserCategory.
@@ -45,77 +85,6 @@ public class UserManager  implements UserDAO {
 		
 		return userList;
 	}
-
-	/**
-	 * Log the given User in the system.
-	 * @param loggingUser The User to log in
-	 * @throws IllegalArgumentException If the given User doesn't exist in the system.
-	 * @return A message specifying if the given User is logged in or that (s)he was already logged in.
-	 */
-	public String loginAs(User loggingUser) {
-		if(!userNameExists(loggingUser)) 
-			throw new IllegalArgumentException("the given user does not exist in the system");
-
-		if (isLoggedIn(loggingUser))
-			return "User: " + loggingUser.getUserName() + " is already logged in.";
-		
-		for (User user : getUserList()) 
-			if (user.getUserName().equals(loggingUser.getUserName())) {
-				getLoggedInUsers().add(loggingUser);
-				return "User: " + loggingUser.getUserName() + " successfully logged in.";
-			}
-		
-		throw new IllegalArgumentException("something went wrong");
-	}
-	
-	/**
-	 * Log the given User off 
-	 * @param loggingUser The User to log in
-	 * @throws IllegalArgumentException If the given User doesn't exist in the system.
-	 * @return A message specifying if the given User is logged off or that (s)he was already logged off.
-	 */
-	public String logOff(User loggingUser){
-		if(!userNameExists(loggingUser)) 
-			throw new IllegalArgumentException("the given user does not exist in the system");
-		
-		if(isLoggedIn(loggingUser)){
-			for (User user : getLoggedInUsers()) 
-				if (user.getUserName().equals(loggingUser.getUserName())) {
-					getLoggedInUsers().remove(loggingUser);
-					return "User: " + loggingUser.getUserName() + " successfully logged off.";
-				}
-		}
-		else{
-			return "User: " + loggingUser.getUserName() + " is already logged off.";
-		}
-		
-		throw new IllegalArgumentException("something went wrong");
-	}
-	
-	//Getters and setters.
-	
-	public ArrayList<User> getUserList() {
-		return userList;
-	}
-	
-	public ArrayList<User> getLoggedInUsers() {
-		return loggedInUsers;
-	}
-	
-	/**
-	 * returns true if a given user name exists in the system
-	 * @param user
-	 * @return true if the given user name exists
-	 */
-	public boolean userNameExists(User user){
-		for (User u : getUserList()) 
-			if (u.getUserName().equals(user.getUserName())) {
-				return true;
-			}
-		return false;
-	}
-	
-	//ADDING USERS
 	
 	/**
 	 * Creates a user
@@ -152,17 +121,6 @@ public class UserManager  implements UserDAO {
 	}
 	
 	/**
-	 * removes a user
-	 * @param user
-	 */
-	public void removeUser(User user){
-		if(isLoggedIn(user)){
-			logOff(user);
-		}
-		getUserList().remove(user);
-	}
-	
-	/**
 	 * Checks if a given username is unique
 	 * @param userName
 	 * @return if the given username exists
@@ -173,6 +131,20 @@ public class UserManager  implements UserDAO {
 				return true;
 			}
 		}
+		return false;
+	}
+	
+
+	/**
+	 * returns true if a given user exists in the system
+	 * @param user
+	 * @return true if the given user exists
+	 */
+	public boolean userExists(User user){
+		for (User u : getUserList()) 
+			if (u == user) {
+				return true;
+			}
 		return false;
 	}
 	

@@ -10,7 +10,7 @@ import model.users.Developer;
 
 public interface ProjectDAO {
 	public ArrayList<Project> getProjects();
-	public ArrayList<Project> getProjectsForDeveloper(Developer dev);
+	public ArrayList<Project> getProjectsForLeadDeveloper(Developer dev);
 	
 	public void createProject(ProjectCreationForm form);
 	public void updateProject(ProjectUpdateForm form);

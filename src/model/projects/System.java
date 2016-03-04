@@ -17,11 +17,7 @@ public abstract class System {
 		setDescription(description);
 		setVersion(version);
 		setParent(parent);
-		
-		if (subsystems != null) {
-			for (Subsystem sub : subsystems)
-				addSubsystem(sub);
-		}
+
 	}
 	
 	public String getName() {
@@ -72,5 +68,7 @@ public abstract class System {
 		
 		if (canAdd)
 			this.subsystems.add(sub);
+		else
+			throw new UnsupportedOperationException("the given subsystem is parent of this subsystem");
 	}
 }
