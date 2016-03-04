@@ -109,7 +109,7 @@ public class BugReportTests {
 	
 		assertEquals(5, filteredDesc.size());
 	}
-	
+		
 	@Test
 	public void getOrderedListIssuedByTest() {
 		fillWithBugReports();
