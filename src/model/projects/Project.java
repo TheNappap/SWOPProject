@@ -51,14 +51,4 @@ public class Project extends System {
 	void setTeam(ProjectTeam team) {
 		this.team = team;
 	}
-
-	/**
-	 * 
-	 * @param form
-	 */
-	public void assignDeveloper(ProjectAssignForm form) {
-		// TODO - implement Project.assignDeveloper
-		throw new UnsupportedOperationException();
-	}
-
 }

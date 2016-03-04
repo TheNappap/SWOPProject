@@ -96,11 +96,24 @@ public class ProjectTests {
 	}
 	
 	@Test
-	public void testAssignToProject() {
+	public void testAssignTesterToProject() {
 		ProjectAssignForm form = controller.getProjectAssignForm();
 		form.setDeveloper(colleague);
 		form.setRole(Role.TESTER);
 		form.setProject(project);
 		controller.assignToProject(form);
+		
+		Assert.assertTrue(project.getTeam().getTesters().contains(colleague));
+	}
+	
+	@Test
+	public void testAssignProgrammerToProject() {
+		ProjectAssignForm form = controller.getProjectAssignForm();
+		form.setDeveloper(colleague);
+		form.setRole(Role.PROGRAMMER);
+		form.setProject(project);
+		controller.assignToProject(form);
+		
+		Assert.assertTrue(project.getTeam().getProgrammers().contains(colleague));
 	}
 }
