@@ -60,6 +60,7 @@ public class UserManager  implements UserDAO {
 		return userList;
 	}
 	
+	@Override
 	public User getLoggedInUser() {
 		return loggedInUser;
 	}
