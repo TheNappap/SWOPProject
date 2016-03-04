@@ -33,11 +33,11 @@ public class BugReportController extends Controller {
 	}
 
 	public ArrayList<BugReport> getBugReportList() {
-		return getBugReportList();
+		return getBugTrap().getBugReportDAO().getBugReportList();
 	}
 
 	public ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) {
-		return getOrderedList(types, arguments);
+		return getBugTrap().getBugReportDAO().getOrderedList(types, arguments);
 	}
 
 	public void createBugReport(BugReportCreationForm form) {
