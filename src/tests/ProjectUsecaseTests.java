@@ -126,4 +126,5 @@ public class ProjectUsecaseTests {
 		//not lead
 		Assert.assertEquals(0, controller.getProjectsForLeadDeveloper(colleague).size());
 	}
+	
 }
