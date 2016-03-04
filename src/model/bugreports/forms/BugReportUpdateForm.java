@@ -19,8 +19,8 @@ public class BugReportUpdateForm implements Form{
 	
 	@Override
 	public void allVarsFilledIn() {
-		assert (getBugReport() != null) : "BugReport is null.";
-		assert (getBugTag() != null)	: "BugTag is null";
+		if (getBugReport() == null) throw new NullPointerException();
+		if (getBugTag() == null) throw new NullPointerException();
 	}
 
 	public void setBugReport(BugReport bugReport) {
