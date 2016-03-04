@@ -42,6 +42,13 @@ public class SubsystemCreationForm implements Form {
 	public void setParent(System parent) {
 		if (parent == null) throw new NullPointerException("Given parent is null.");
 		
+		// The project is the root
+		System p = parent;
+		while (p.getParent() != null)
+			p = p.getParent();
+		
+		this.project = (Project)p;
+		
 		this.parent = parent;
 	}
 
@@ -49,15 +56,12 @@ public class SubsystemCreationForm implements Form {
 		return project;
 	}
 
-	public void setProject(Project project) {
-		if (project == null) throw new NullPointerException("Given project is null.");
-		
-		this.project = project;
-	}
-
 	@Override
 	public void allVarsFilledIn() {
-		
+		assert(name != null) : "Given name is null";
+		assert(description != null) : "Given description is null";
+		assert(parent != null) : "Given parent is null";
+		assert(project != null) : "Given project is null";
 	}
 
 }

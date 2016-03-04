@@ -15,10 +15,8 @@ public class SubsystemBuilder {
 	Project project;
 	Version version;
 	
-	private ArrayList<Subsystem> subsystems;
-	
 	public SubsystemBuilder() {
-		subsystems = new ArrayList<Subsystem>();
+		
 	}
 
 	public SubsystemBuilder setName(String name) {
@@ -47,6 +45,6 @@ public class SubsystemBuilder {
 	}
 	
 	public Subsystem getSubsystem() {
-		return new Subsystem(name, description, parent, subsystems, version, project);
+		return new Subsystem(name, description, parent, version, project);
 	}
 }

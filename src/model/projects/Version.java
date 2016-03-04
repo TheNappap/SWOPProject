@@ -6,7 +6,7 @@ public class Version {
 	private int minor;
 	private int revision;
 	
-	Version(int major, int minor, int revision) {
+	public Version(int major, int minor, int revision) {
 		
 	}
 	
@@ -14,24 +14,12 @@ public class Version {
 		return major;
 	}
 
-	void setMajor(int major) {
-		this.major = major;
-	}
-
 	public int getMinor() {
 		return minor;
 	}
 
-	void setMinor(int minor) {
-		this.minor = minor;
-	}
-
 	public int getRevision() {
 		return revision;
-	}
-
-	void setRevision(int revision) {
-		this.revision = revision;
 	}
 
 	/**
@@ -58,5 +46,14 @@ public class Version {
 			return 1;
 		
 		return 0;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Version))
+			return false;
+		
+		Version v = (Version)obj;
+		return (this.major == v.major && this.minor == v.minor && this.revision == v.revision);
 	}
 }
