@@ -35,25 +35,25 @@ public class BugReportTests {
 		try{
 			bugReportBuilder.getBugReport();
 			fail();
-		} catch (AssertionError e) { }
+		} catch (NullPointerException e) { }
 		try{
 			bugReportBuilder.setTitle("Project")
 							.getBugReport();
 			fail();
-		} catch (AssertionError e) { }
+		} catch (NullPointerException e) { }
 		try{
 			bugReportBuilder.setTitle("Project")
 							.setDescription("Very long description.")
 							.getBugReport();
 			fail();
-		} catch (AssertionError e) { }
+		} catch (NullPointerException e) { }
 		try{
 			bugReportBuilder.setTitle("Project")
 			.setDescription("Very long description.")
 			.setSubsystem(new Subsystem(null, null, null, null, null))
 			.getBugReport();
 			fail();
-		} catch (AssertionError e) { }
+		} catch (NullPointerException e) { }
 		try{
 			bugReportBuilder.setTitle("Project")
 			.setDescription("Very long description.")
@@ -61,7 +61,7 @@ public class BugReportTests {
 			.setDependsOn(new ArrayList<BugReport>())
 			.getBugReport();
 			fail();
-		} catch (AssertionError e) { }
+		} catch (NullPointerException e) { }
 		try{
 			bugReportBuilder.setTitle("Project")
 			.setDescription("Very long description.")
@@ -69,7 +69,7 @@ public class BugReportTests {
 			.setDependsOn(new ArrayList<BugReport>())
 			.setIssuer(new Issuer(null, null, null, null))
 			.getBugReport();
-		} catch (AssertionError e) { 
+		} catch (NullPointerException e) { 
 			fail();
 		}
 	}
