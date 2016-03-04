@@ -7,18 +7,17 @@ import model.users.User;
 import model.users.UserCategory;
 
 public class ProjectTeam {
-	// TODO - Gebruikmaken van Developer objecten overal
-	private final ArrayList<UserRoleRelation> team;
+	private final ArrayList<DeveloperRoleRelation> team;
 
 	ProjectTeam() {
-		team = new ArrayList<UserRoleRelation>();
+		team = new ArrayList<DeveloperRoleRelation>();
 	}
 	
-	void addMember(User user, Role role) {
+	void addMember(Developer user, Role role) {
 		if (user == null) throw new NullPointerException("Given user is null.");
 		
 		boolean alreadyExists = false;
-		for (UserRoleRelation rel : team) {
+		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.LEAD && role == Role.LEAD && !rel.getUser().getUserName().equals(user.getUserName()))
 				throw new UnsupportedOperationException("Can not add a lead developer, because another developer is lead!");
 			
@@ -29,13 +28,13 @@ public class ProjectTeam {
 		}
 		
 		if (!alreadyExists)
-			team.add(new UserRoleRelation(user, role));
+			team.add(new DeveloperRoleRelation(user, role));
 	}
 	
 	public Developer getLeadDeveloper() {
-		for (UserRoleRelation rel : team) {
+		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.LEAD && rel.getUser().getCategory() == UserCategory.DEVELOPER) {
-				return (Developer)rel.getUser();
+				return rel.getUser();
 			}
 		}
 		return null;
@@ -43,7 +42,7 @@ public class ProjectTeam {
 	
 	void setLeadDeveloper(Developer dev) {
 		// Make previous lead a programmer
-		for (UserRoleRelation rel : team) {
+		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.LEAD && rel.getUser() == dev)
 				return; // Current lead = new lead
 			
@@ -52,5 +51,23 @@ public class ProjectTeam {
 		}
 		
 		addMember(dev, Role.LEAD);
+	}
+	
+	public ArrayList<Developer> getProgrammers() {
+		ArrayList<Developer> programmers = new ArrayList<Developer>();
+		for (DeveloperRoleRelation rel : team) {
+			if (rel.getRole() == Role.PROGRAMMER)
+				programmers.add(rel.getUser());
+		}
+		return programmers;
+	}
+	
+	public ArrayList<Developer> getTesters() {
+		ArrayList<Developer> testers = new ArrayList<Developer>();
+		for (DeveloperRoleRelation rel : team) {
+			if (rel.getRole() == Role.TESTER)
+				testers.add(rel.getUser());
+		}
+		return testers;
 	}
 }

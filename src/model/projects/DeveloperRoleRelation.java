@@ -1,6 +1,6 @@
 package model.projects;
 
-import model.users.User;
+import model.users.Developer;
 
 /**
  * This class describes a relation between users and their role
@@ -8,11 +8,11 @@ import model.users.User;
  * one user can occur in multiple UserRoleRelation objects.
  * @author Matthieu De Laere
  */
-public class UserRoleRelation {
-	private User user;
+public class DeveloperRoleRelation {
+	private Developer user;
 	private Role role;
 	
-	UserRoleRelation(User user, Role role) {
+	DeveloperRoleRelation(Developer user, Role role) {
 		this.user = user;
 		this.role = role;
 	}
@@ -21,7 +21,7 @@ public class UserRoleRelation {
 	 * Get the user involved in this relation.
 	 * @return The user involved in this relation.
 	 */
-	public User getUser() {
+	public Developer getUser() {
 		return user;
 	}
 	
