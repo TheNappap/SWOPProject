@@ -56,7 +56,7 @@ public class ProjectBuilder {
 	
 	public Project getProject() {
 		validate();
-		return new Project(name, description, null, version, creationDate, startDate, budgetEstimate, team);
+		return new Project(name, description, version, creationDate, startDate, budgetEstimate, team);
 	}
 	
 	private void validate() {

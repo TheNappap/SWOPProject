@@ -7,8 +7,8 @@ import model.projects.forms.ProjectAssignForm;
 
 public class Project extends System {
 
-	public Project(String name, String description, System parent, Version version, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam team) {
-		super(name, description, parent, version);
+	public Project(String name, String description, Version version, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam team) {
+		super(name, description, null, version);
 		setCreationDate(creationDate);
 		setStartDate(startDate);
 		setBudgetEstimate(budgetEstimate);

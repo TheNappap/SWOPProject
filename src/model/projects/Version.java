@@ -7,7 +7,9 @@ public class Version {
 	private int revision;
 	
 	public Version(int major, int minor, int revision) {
-		
+		this.major = major;
+		this.minor = minor;
+		this.revision =  revision;
 	}
 	
 	public int getMajor() {
