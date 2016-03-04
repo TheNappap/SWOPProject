@@ -43,7 +43,7 @@ public class BugReportController extends Controller {
 	public void createBugReport(BugReportCreationForm form) {
 		form.allVarsFilledIn();
 		
-		createBugReport(form);
+		getBugTrap().getBugReportDAO().addBugReport(form);
 	}
 
 	public void createComment(CommentCreationForm form) {
