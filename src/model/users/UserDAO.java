@@ -7,7 +7,6 @@ public interface UserDAO {
 	public ArrayList<User> getUserList(UserCategory userCategory);
 	public boolean isLoggedIn(User user);
 	public String loginAs(User user);
-	public void logOff();
 	public boolean userNameExists(String userName);
 	public boolean userExists(User user);
 	public User getLoggedInUser();

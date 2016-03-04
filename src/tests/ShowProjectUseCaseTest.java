@@ -1,6 +1,6 @@
 package tests;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,29 +14,27 @@ import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.Project;
+import model.projects.Subsystem;
 import model.projects.Version;
 import model.projects.forms.ProjectCreationForm;
-import model.projects.forms.ProjectUpdateForm;
 import model.users.Administrator;
 import model.users.Developer;
 import model.users.UserCategory;
 import model.users.UserManager;
 
-public class UpdateProjectUseCaseTest {
-
+public class ShowProjectUseCaseTest {
+	
 	private ProjectController projectController;
 	private UserController userController;
 	private BugTrap bugTrap;
 	private Developer lead;
-	private Developer colleague;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		bugTrap = new BugTrap();
 		projectController = new ProjectController(bugTrap);
 		userController = new UserController(bugTrap);
 		lead = new Developer("John", "Johnny", "Johnson", "Boss");
-		colleague = new Developer("Donald", "D", "Duck", "Quack!");
 		
 		//add user
 		UserManager userMan = (UserManager) userController.getBugTrap().getUserDAO();
@@ -53,39 +51,31 @@ public class UpdateProjectUseCaseTest {
 		form.setStartDate(new Date(12));
 		
 		projectController.createProject(form);
-		
 	}
 
 	@Test
-	public void updateProjectTest() {
-		try{
+	public void test() {
+		
+		ArrayList<Project> list;
+		try {
 			//step 1
-			ProjectUpdateForm form = projectController.getProjectUpdateForm();
+			//user indicates he wants to inspect a project
 			//step 2
-			ArrayList<Project> list = projectController.getProjectList();
+			list = projectController.getProjectList();
 			//step 3
 			Project project = list.get(0);
 			//step 4
-			form.setProject(project);
-			//step 5
-			form.setBudgetEstimate(10000);
-			form.setDescription("project");
-			form.setName("Project S");
-			form.setStartDate(new Date(1302));
-			form.setVersion(new Version(2, 0, 0));
-			form.setLeadDeveloper(colleague);
-			//step 6
-			projectController.updateProject(form);	
+			ArrayList<Subsystem> subsystems = project.getSubsystems();
 			
-			Assert.assertEquals("Project S", project.getName());
-			Assert.assertEquals("project", project.getDescription());
-			Assert.assertEquals(new Date(1302), project.getStartDate());
-			Assert.assertEquals(10000, project.getBudgetEstimate(), 0.001);
-			Assert.assertEquals(new Version(2, 0, 0), project.getVersion());
-			Assert.assertEquals(colleague, project.getTeam().getLeadDeveloper());
-		}
-		catch(UnauthorizedAccessException eo){
-			fail("admin not logged in");
+			Assert.assertEquals("Project X", project.getName());
+			Assert.assertEquals("Setup project", project.getDescription());
+			Assert.assertEquals(new Date(12), project.getStartDate());
+			Assert.assertEquals(5000, project.getBudgetEstimate(), 0.001);
+			Assert.assertEquals(new Version(1, 0, 0), project.getVersion());
+			Assert.assertEquals(lead, project.getTeam().getLeadDeveloper());
+			Assert.assertEquals(0, subsystems.size());
+		} catch (UnauthorizedAccessException e) {
+			fail("no user logged in");
 		}
 	}
 

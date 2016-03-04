@@ -14,21 +14,20 @@ import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.Project;
-import model.projects.Version;
+import model.projects.Subsystem;
 import model.projects.forms.ProjectCreationForm;
-import model.projects.forms.ProjectUpdateForm;
+import model.projects.forms.SubsystemCreationForm;
 import model.users.Administrator;
 import model.users.Developer;
 import model.users.UserCategory;
 import model.users.UserManager;
 
-public class UpdateProjectUseCaseTest {
+public class CreateSubsystemUserCaseTest {
 
 	private ProjectController projectController;
 	private UserController userController;
 	private BugTrap bugTrap;
 	private Developer lead;
-	private Developer colleague;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -36,7 +35,6 @@ public class UpdateProjectUseCaseTest {
 		projectController = new ProjectController(bugTrap);
 		userController = new UserController(bugTrap);
 		lead = new Developer("John", "Johnny", "Johnson", "Boss");
-		colleague = new Developer("Donald", "D", "Duck", "Quack!");
 		
 		//add user
 		UserManager userMan = (UserManager) userController.getBugTrap().getUserDAO();
@@ -53,39 +51,31 @@ public class UpdateProjectUseCaseTest {
 		form.setStartDate(new Date(12));
 		
 		projectController.createProject(form);
-		
 	}
 
 	@Test
-	public void updateProjectTest() {
-		try{
+	public void createSubsystemTest() {
+		try {
 			//step 1
-			ProjectUpdateForm form = projectController.getProjectUpdateForm();
+			SubsystemCreationForm form =  projectController.getSubsystemCreationForm();
 			//step 2
 			ArrayList<Project> list = projectController.getProjectList();
 			//step 3
-			Project project = list.get(0);
+			Project system = list.get(0);
 			//step 4
-			form.setProject(project);
+			form.setParent(system);
 			//step 5
-			form.setBudgetEstimate(10000);
-			form.setDescription("project");
-			form.setName("Project S");
-			form.setStartDate(new Date(1302));
-			form.setVersion(new Version(2, 0, 0));
-			form.setLeadDeveloper(colleague);
+			form.setDescription("Subsystem");
+			form.setName("sub X");
 			//step 6
-			projectController.updateProject(form);	
+			projectController.createSubsystem(form);;
 			
-			Assert.assertEquals("Project S", project.getName());
-			Assert.assertEquals("project", project.getDescription());
-			Assert.assertEquals(new Date(1302), project.getStartDate());
-			Assert.assertEquals(10000, project.getBudgetEstimate(), 0.001);
-			Assert.assertEquals(new Version(2, 0, 0), project.getVersion());
-			Assert.assertEquals(colleague, project.getTeam().getLeadDeveloper());
-		}
-		catch(UnauthorizedAccessException eo){
-			fail("admin not logged in");
+			Subsystem subsystem = system.getSubsystems().get(0);
+			Assert.assertTrue(subsystem.getName().equals("sub X"));
+			Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
+			Assert.assertEquals(system, subsystem.getParent());
+		} catch (UnauthorizedAccessException e) {
+			fail("not logged in as admin");
 		}
 	}
 

@@ -19,7 +19,11 @@ public class ProjectController extends Controller {
 		super(bugTrap);
 	}
 
-	public ArrayList<Project> getProjectList() {
+	public ArrayList<Project> getProjectList() throws UnauthorizedAccessException{
+
+		if (getBugTrap().getUserDAO().getLoggedInUser() == null)
+			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
+		
 		return getBugTrap().getProjectDAO().getProjects();
 	}
 	
@@ -48,7 +52,11 @@ public class ProjectController extends Controller {
 		return new ProjectDeleteForm();
 	}
 
-	public ProjectAssignForm getProjectAssignForm() {
+	public ProjectAssignForm getProjectAssignForm() throws UnauthorizedAccessException{
+
+		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.DEVELOPER)
+			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
+		
 		return new ProjectAssignForm();
 	}
 
@@ -87,7 +95,8 @@ public class ProjectController extends Controller {
 		getBugTrap().getProjectDAO().deleteProject(form);
 	}
 
-	public SubsystemCreationForm getSubsystemCreationForm() throws UnauthorizedAccessException {
+	public SubsystemCreationForm getSubsystemCreationForm() throws UnauthorizedAccessException{
+
 		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ADMIN)
 			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
 		

@@ -50,8 +50,7 @@ public class UserManager  implements UserDAO {
 	/**
 	 * Log the current user off 
 	 */
-	@Override
-	public void logOff(){
+	private void logOff(){
 		setLoggedInUser(null);
 	}
 	

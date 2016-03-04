@@ -71,14 +71,4 @@ public abstract class System {
 		else
 			throw new UnsupportedOperationException("the given subsystem is parent of this subsystem");
 	}
-	
-	public ArrayList<Subsystem> getAllDirectOrIndirectSubsystems() {
-		ArrayList<Subsystem> subs = new ArrayList<Subsystem>();
-		for (Subsystem s : subsystems) {
-			subs.add(s);
-			for (Subsystem ss : s.getSubsystems())
-				subs.add(ss);
-		}
-		return subs;
-	}
 }

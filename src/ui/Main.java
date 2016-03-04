@@ -74,7 +74,7 @@ public class Main {
 		userController = new UserController(bugTrap);
 		projectController = new ProjectController(bugTrap);
 		bugReportController = new BugReportController(bugTrap);
-				
+		
 		// Create users
 		UserManager userManager = (UserManager)bugTrap.getUserDAO();
 		userManager.createUser(UserCategory.ADMIN, "Frederick", "Sam", "Curtis", "curt");
@@ -87,9 +87,6 @@ public class Main {
 		Developer major = (Developer) userManager.getUserList().get(3);
 		userManager.createUser(UserCategory.DEVELOPER, "Maria", "", "Carney", "maria");
 		Developer maria = (Developer) userManager.getUserList().get(4);
-		
-		// Login as admin to do the initialisation
-		userController.loginAs(curt);
 		
 		// ProjectA
 		ProjectCreationForm form = projectController.getProjectCreationForm();
@@ -227,8 +224,6 @@ public class Main {
 		bugForm.setSubsystem(subSystemA2);
 		bugForm.setDependsOn(new ArrayList<BugReport>());
 		bugReportController.createBugReport(bugForm);
-		
-		userManager.logOff();
 	}
 
 	public static void processCommand(String command) {
@@ -324,8 +319,7 @@ public class Main {
 		while (!valid) {
 			try {
 				System.out.println("Enter the start date for the project (dd/mm/yyyy):");
-				String date = input.nextLine();
-				form.setStartDate((new SimpleDateFormat("dd/mm/yyyy")).parse(date));
+				form.setStartDate((new SimpleDateFormat("dd/mm/yyyy")).parse(input.nextLine()));
 				valid = true;
 			} catch (Exception e) { }
 		}
@@ -359,13 +353,11 @@ public class Main {
 		while (!valid) {
 			try {
 				System.out.println("Enter the start date for the project (dd/mm/yyyy):");
-				String date = input.nextLine();
-				form.setStartDate((new SimpleDateFormat("dd/mm/yyyy")).parse(date));
+				form.setStartDate((new SimpleDateFormat("dd/mm/yyyy")).parse(input.nextLine()));
 				valid = true;
 			} catch (Exception e) { }
 		}
 		
-		System.out.println("Enter the lead developer for the project (dd/mm/yyyy):");
 		User lead = selectUser(userController.getUserList(UserCategory.DEVELOPER));
 		form.setLeadDeveloper((Developer)lead);
 		
@@ -387,47 +379,14 @@ public class Main {
 		projectController.deleteProject(form);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static void showProject() {
 		Project project = selectProject(projectController.getProjectList());
 		
-		System.out.println(" -- " + project.getName() + " -- ");
-		System.out.println(" Description: " + project.getDescription());
-		System.out.println(" Budget estimate: " + project.getBudgetEstimate());
-		System.out.println(" Creation date: " + project.getCreationDate().getDay() + "/" + project.getCreationDate().getMonth() + "/" + project.getCreationDate().getYear());
-		System.out.println(" Start date: " + project.getStartDate().getDay() + "/" + project.getStartDate().getMonth() + "/" + project.getStartDate().getYear());
-		System.out.println(" Version: " + project.getVersion());
-		
-		for (System : project.getAllDirectOrIndirectSubsystems())
-			// TODO - PRINT DETAILS OF SUBSYSTEM
+		// TODO - output all details (for every subsystem as well!)
 	}
 	
 	public static void createSubSystem() {
-		SubsystemCreationForm form;
-		try {
-			form = projectController.getSubsystemCreationForm();
-		} catch (UnauthorizedAccessException e) {
-			System.out.println(e.getMessage());
-			return;
-		}
 		
-		ArrayList<model.projects.System> allSystems = new ArrayList<model.projects.System>();
-		for (Project project : projectController.getProjectList()) {
-			allSystems.add(project);
-			for (model.projects.System sys : project.getAllDirectOrIndirectSubsystems()) { 
-				allSystems.add(sys);
-			}
-		}
-		
-		model.projects.System selectedSystem = selectSystem(allSystems);
-		form.setParent(selectedSystem);
-		
-		System.out.println("Enter the name of the subsystem:");
-		form.setName(input.nextLine());
-		System.out.println("Enter the description of the subsystem:");
-		form.setDescription(input.nextLine());
-		
-		projectController.createSubsystem(form);
 	}
 	
 	public static void createBugReport() {
@@ -495,21 +454,6 @@ public class Main {
 			int selected = input.nextInt();
 			if (selected <= projects.size())
 				return projects.get(selected - 1);
-		}
-	}
-	
-	private static model.projects.System selectSystem(ArrayList<model.projects.System> systems) {
-		while (true) {
-			System.out.println("Select a project or subsystem by entering its number: ");
-			int number = 1;
-			for (model.projects.System sys : systems) {
-				System.out.println(number + ". " + sys.getName());
-				number++;
-			}
-			
-			int selected = input.nextInt();
-			if (selected <= systems.size())
-				return systems.get(selected - 1);
 		}
 	}
 }

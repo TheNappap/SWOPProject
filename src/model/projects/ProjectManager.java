@@ -3,7 +3,6 @@ package model.projects;
 import java.util.ArrayList;
 import java.util.Date;
 
-import controllers.exceptions.UnauthorizedAccessException;
 import model.projects.builders.ProjectBuilder;
 import model.projects.builders.SubsystemBuilder;
 import model.projects.forms.ProjectAssignForm;
