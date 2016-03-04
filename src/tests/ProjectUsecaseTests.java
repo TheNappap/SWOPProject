@@ -1,7 +1,6 @@
 package tests;
 
-import static org.junit.Assert.*;
-
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.junit.Assert;
@@ -13,10 +12,12 @@ import model.BugTrap;
 import model.projects.Project;
 import model.projects.Role;
 import model.projects.Version;
-import model.projects.forms.*;
+import model.projects.forms.ProjectAssignForm;
+import model.projects.forms.ProjectCreationForm;
+import model.projects.forms.ProjectUpdateForm;
 import model.users.Developer;
 
-public class ProjectTests {
+public class ProjectUsecaseTests {
 
 	private ProjectController controller;
 	private BugTrap bugTrap;
@@ -57,11 +58,11 @@ public class ProjectTests {
 		
 		Assert.assertTrue(project.getName().equals("Project X"));
 		Assert.assertTrue(project.getDescription().equals("This is a very descriptive description!"));
-		Assert.assertTrue(project.getBudgetEstimate() == 5000);
+		Assert.assertEquals(5000, project.getBudgetEstimate(), 0.001);
 		Assert.assertTrue(project.getCreationDate().equals(cd));
-		Assert.assertTrue(project.getParent() == null);
+		Assert.assertNull(project.getParent());
 		Assert.assertTrue(project.getStartDate().equals(new Date(2016, 8, 23)));
-		Assert.assertTrue(project.getTeam().getLeadDeveloper() == lead);
+		Assert.assertEquals(lead,project.getTeam().getLeadDeveloper());
 		Assert.assertTrue (project.getVersion().equals(new Version(1, 0, 0)));
 	}
 	
@@ -82,17 +83,17 @@ public class ProjectTests {
 		
 		Assert.assertTrue(project.getName().equals("Project Y"));
 		Assert.assertTrue(project.getDescription().equals("Updated!"));
-		Assert.assertTrue(project.getBudgetEstimate() == 10000);
-		Assert.assertTrue(project.getParent() == null);
+		Assert.assertEquals(10000, project.getBudgetEstimate(), 0.001);
+		Assert.assertNull(project.getParent());
 		Assert.assertTrue(project.getStartDate().equals(d));
-		Assert.assertTrue(project.getTeam().getLeadDeveloper() == colleague);
+		Assert.assertEquals(colleague, project.getTeam().getLeadDeveloper());
 		Assert.assertTrue(project.getVersion().equals(new Version(2, 1, 0)));
 	}
 	
 	@Test
 	public void testDeleteProject() {
 		controller.deleteProject(project);
-		Assert.assertTrue(controller.getProjectList().size() == 0);
+		Assert.assertEquals(0, controller.getProjectList().size());
 	}
 	
 	@Test
@@ -115,5 +116,15 @@ public class ProjectTests {
 		controller.assignToProject(form);
 		
 		Assert.assertTrue(project.getTeam().getProgrammers().contains(colleague));
+	}
+	
+	@Test
+	public void testgetProjectsForDeveloper() {
+		//lead
+		for(Project project: controller.getProjectsForLeadDeveloper(lead)){
+			Assert.assertEquals(lead, project.getTeam().getLeadDeveloper());
+		}
+		//not lead
+		Assert.assertEquals(0, controller.getProjectsForLeadDeveloper(colleague).size());
 	}
 }

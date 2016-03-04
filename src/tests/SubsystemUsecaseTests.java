@@ -1,7 +1,5 @@
 package tests;
 
-import static org.junit.Assert.*;
-
 import java.util.Date;
 
 import org.junit.Assert;
@@ -17,7 +15,7 @@ import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.SubsystemCreationForm;
 import model.users.Developer;
 
-public class SubsystemTests {
+public class SubsystemUsecaseTests {
 
 	private ProjectController controller;
 	private BugTrap bugTrap;
@@ -67,32 +65,32 @@ public class SubsystemTests {
 		form.setParent(emptyProject);
 		controller.createSubsystem(form);
 		
-		Assert.assertTrue(emptyProject.getSubsystems().size() == 1);
+		Assert.assertEquals(1, emptyProject.getSubsystems().size());
 		Subsystem sub = emptyProject.getSubsystems().get(0);
 		
 		Assert.assertTrue(sub.getDescription().equals("A test subsystem"));
 		Assert.assertTrue(sub.getName().equals("Sub"));
-		Assert.assertTrue(sub.getParent() == emptyProject);
-		Assert.assertTrue(sub.getProject() == emptyProject);
-		Assert.assertTrue(sub.getSubsystems().size() == 0);
+		Assert.assertEquals(emptyProject, sub.getParent());
+		Assert.assertEquals(emptyProject, sub.getProject());
+		Assert.assertEquals(0, sub.getSubsystems().size());
 		Assert.assertTrue(sub.getVersion().equals(new Version(1, 0, 0)));
 	}
 
 	@Test
 	public void testCreateSubsystemInNonEmptyProject() {
-		Assert.assertTrue(sub.getSubsystems().size() == 0);
+		Assert.assertEquals(0, sub.getSubsystems().size());
 		
 		SubsystemCreationForm form = controller.getSubsystemCreationForm();
 		form.setName("Sub");
 		form.setDescription("A test subsystem");
 		form.setParent(sub);
-		Assert.assertTrue(form.getProject() == subbedProject);
+		Assert.assertEquals(subbedProject, form.getProject());
 		controller.createSubsystem(form);
 		
-		Assert.assertTrue(sub.getSubsystems().size() == 1);
+		Assert.assertEquals(1, sub.getSubsystems().size());
 		
 		Subsystem created = sub.getSubsystems().get(0);
-		Assert.assertTrue(created.getParent() == sub);
-		Assert.assertTrue(created.getProject() == subbedProject);
+		Assert.assertEquals(sub, created.getParent());
+		Assert.assertEquals(subbedProject, created.getProject());
 	}
 }
