@@ -13,7 +13,10 @@ import model.bugreports.BugReport;
 import model.bugreports.BugTag;
 import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.filters.FilterType;
+import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
+import model.bugreports.forms.BugReportUpdateForm;
+import model.bugreports.forms.CommentCreationForm;
 import model.projects.Subsystem;
 import model.users.Developer;
 import model.users.Issuer;
@@ -195,6 +198,162 @@ public class BugReportTests {
 		assertEquals(dev, bugReport0.getAssignees().get(0));
 	}
 
+	@Test
+	public void BugReportAssignFormTest() {
+		BugReportAssignForm form = new BugReportAssignForm();
+		
+		try {
+			form.setBugReport(null);
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setDeveloper(null);
+			fail();
+		} catch (NullPointerException e) { }
+		
+		try {
+			form.allVarsFilledIn();
+			fail();
+		} catch (NullPointerException e ) { }
+		try {
+			form.setBugReport(new BugReport(null, null, null, null, null));
+			form.allVarsFilledIn();
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setBugReport(new BugReport(null, null, null, null, null));
+			form.setDeveloper(new Developer(null, null, null, null));
+			form.allVarsFilledIn();
+		} catch (NullPointerException e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void BugReportCreationFormTest() {
+		BugReportCreationForm form = new BugReportCreationForm();
+		
+		try {
+			form.setDependsOn(null);
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setDescription(null);
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setIssuer(null);
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setSubsystem(null);
+		} catch (NullPointerException e) { }
+		try {
+			form.setTitle(null);
+		} catch (NullPointerException e) { }
+		try {
+			form.allVarsFilledIn();
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setDependsOn(new ArrayList<BugReport>());
+			form.allVarsFilledIn();
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setDependsOn(new ArrayList<BugReport>());
+			form.setDescription("Very long description");
+			form.allVarsFilledIn();
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setDependsOn(new ArrayList<BugReport>());
+			form.setDescription("Very long description");
+			form.setTitle("Some title");
+			form.allVarsFilledIn();
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setDependsOn(new ArrayList<BugReport>());
+			form.setDescription("Very long description");
+			form.setTitle("Some title");
+			form.setIssuer(new Issuer(null, null, null, null));
+			form.allVarsFilledIn();
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setDependsOn(new ArrayList<BugReport>());
+			form.setDescription("Very long description");
+			form.setTitle("Some title");
+			form.setIssuer(new Issuer(null, null, null, null));
+			form.setSubsystem(new Subsystem(null, null, null, null, null));
+			form.allVarsFilledIn();
+		} catch (NullPointerException e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void BugReportUpdateFormTest() {
+		BugReportUpdateForm form = new BugReportUpdateForm();
+		try {
+			form.setBugReport(null);
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setBugTag(null);
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.allVarsFilledIn();
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setBugReport(new BugReport(null, null, null, null, null));
+			form.allVarsFilledIn();
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setBugReport(new BugReport(null, null, null, null, null));
+			form.setBugTag(BugTag.NEW);
+			form.allVarsFilledIn();
+		} catch (NullPointerException e) {
+			fail();
+		}
+		
+	}
+	
+	@Test
+	public void CommentCreationFormTest() {
+		CommentCreationForm form = new CommentCreationForm();
+		
+		try {
+			form.setCommentable(null);
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setText(null);
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.allVarsFilledIn();
+			fail();
+		} catch (NullPointerException e) { }
+		
+		try {
+			form.setCommentable(new BugReport(null, null, null, null, null));
+			form.allVarsFilledIn();
+			fail();
+		} catch (NullPointerException e) { }
+		try {
+			form.setCommentable(new BugReport(null, null, null, null, null));
+			form.setText("Nice!");
+			form.allVarsFilledIn();
+		} catch (NullPointerException e) {
+			fail();
+		}
+	}
+	
 	private void fillWithBugReports() {
 		for (int i = 0; i < 5; i++) {
 			BugReportCreationForm form = new BugReportCreationForm();

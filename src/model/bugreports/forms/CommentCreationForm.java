@@ -28,7 +28,7 @@ public class CommentCreationForm implements Form {
 	}
 
 	public void setText(String text) {
-		assert (text != null) : "Text is null.";
+		if (text == null) throw new NullPointerException("Text is null.");
 		
 		this.text = text;
 	}
@@ -38,7 +38,7 @@ public class CommentCreationForm implements Form {
 	}
 
 	public void setCommentable(Commentable commentable) {
-		assert (commentable != null) : "Commentable is null.";
+		if (commentable == null) throw new NullPointerException("Commentable is null");
 		
 		this.commentable = commentable;
 	}
