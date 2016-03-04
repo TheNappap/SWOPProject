@@ -31,7 +31,7 @@ public class LoginUseCaseTest {
 		//step 3
 		String message = controller.loginAs(list.get(0));
 		//step 4
-		Assert.assertEquals("User: ADMIN successfully logged in.O",message);
+		Assert.assertEquals("User: ADMIN successfully logged in.",message);
 	}
 
 }
