@@ -17,8 +17,8 @@ public class BugReportAssignForm implements Form {
 	
 	@Override
 	public void allVarsFilledIn() {
-		assert (getBugReport() != null) : "BugReport is null.";
-		assert (getDeveloper() != null) : "Developer is null.";
+		if (getBugReport() == null) throw new NullPointerException();
+		if (getDeveloper() == null) throw new NullPointerException();
 	}
 
 	//Getters and Setters
