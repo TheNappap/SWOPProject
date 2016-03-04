@@ -78,7 +78,7 @@ public class ProjectUpdateForm implements Form {
 
 	public void setVersion(Version version) {
 		if (version == null) throw new NullPointerException("Given version is null.");
-		if (this.version != null && this.version.compareTo(version) == -1) throw new IllegalArgumentException("New version can not be less than previous version.");
+		if (this.project != null && this.getProject().getVersion().compareTo(version) == 1) throw new IllegalArgumentException("New version can not be less than previous version.");
 		
 		this.version = version;
 	}
