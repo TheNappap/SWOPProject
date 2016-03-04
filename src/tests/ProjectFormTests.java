@@ -1,6 +1,5 @@
 package tests;
 
-import static org.junit.Assert.*;
 
 import java.util.Date;
 
@@ -46,7 +45,7 @@ public class ProjectFormTests {
 		form.setDescription("Setup project");
 		form.setLeadDeveloper(new Developer("", "", "", ""));
 		form.setName("Project S");
-		form.setStartDate(new Date(2016, 4, 1));
+		form.setStartDate(new Date(1302));
 		
 		controller.createProject(form);
 		project = controller.getProjectList().get(0);
@@ -59,14 +58,14 @@ public class ProjectFormTests {
 		form.setDescription("This is a very descriptive description!");
 		form.setLeadDeveloper(dev);
 		form.setName("Project X");
-		form.setStartDate(new Date(2016, 8, 23));
+		form.setStartDate(new Date(1302));
 		
 		controller.createProject(form);
 		
 		Assert.assertEquals("Project X", form.getName());
 		Assert.assertEquals("This is a very descriptive description!", form.getDescription());
 		Assert.assertEquals(5000, form.getBudgetEstimate(), 0.001);
-		Assert.assertEquals(new Date(2016, 8, 23), form.getStartDate());
+		Assert.assertEquals(new Date(1302), form.getStartDate());
 		Assert.assertEquals(dev, form.getLeadDeveloper());
 	}
 	

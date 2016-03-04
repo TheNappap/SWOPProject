@@ -43,6 +43,15 @@ public class SubsystemBuilder {
 	}
 	
 	public Subsystem getSubsystem() {
+		validate();
 		return new Subsystem(name, description, parent, version, project);
+	}
+	
+	private void validate() {
+		if (name == null) throw new NullPointerException("Name is null");
+		if (description == null) throw new NullPointerException("Description is null");
+		if (parent == null) throw new NullPointerException("Parent is null");
+		if (project == null) throw new NullPointerException("Project is null");
+		if (version == null) throw new NullPointerException("Version is null");
 	}
 }
