@@ -1,7 +1,5 @@
 package model.projects.builders;
 
-import java.util.ArrayList;
-
 import model.projects.Project;
 import model.projects.Subsystem;
 import model.projects.System;
@@ -9,11 +7,11 @@ import model.projects.Version;
 
 public class SubsystemBuilder {
 	
-	String name;
-	String description;
-	System parent;
-	Project project;
-	Version version;
+	private String name;
+	private String description;
+	private System parent;
+	private Project project;
+	private Version version;
 	
 	public SubsystemBuilder() {
 		

@@ -49,8 +49,8 @@ public class ProjectAssignForm implements Form {
 
 	@Override
 	public void allVarsFilledIn() {
-		assert(project != null) : "Project is null";
-		assert(developer != null) : "Developer is null";
-		assert(role != null) : "Role is null";
+		if (getProject() == null) 	throw new NullPointerException("Project is null");
+		if (getDeveloper() == null) throw new NullPointerException("Developer is null");
+		if (getRole() == null)		throw new NullPointerException("Role is null");
 	}
 }

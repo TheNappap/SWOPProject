@@ -3,7 +3,6 @@ package model.projects;
 import java.util.ArrayList;
 
 import model.users.Developer;
-import model.users.User;
 import model.users.UserCategory;
 
 public class ProjectTeam {
