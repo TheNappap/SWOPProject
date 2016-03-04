@@ -59,4 +59,9 @@ public class Version implements Comparable<Version> {
 		Version v = (Version)obj;
 		return (this.major == v.major && this.minor == v.minor && this.revision == v.revision);
 	}
+	
+	@Override
+	public String toString() {
+		return getMajor() + "." + getMinor() + "." + getRevision();
+	}
 }

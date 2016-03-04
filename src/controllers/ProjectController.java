@@ -87,7 +87,10 @@ public class ProjectController extends Controller {
 		getBugTrap().getProjectDAO().deleteProject(form);
 	}
 
-	public SubsystemCreationForm getSubsystemCreationForm() {
+	public SubsystemCreationForm getSubsystemCreationForm() throws UnauthorizedAccessException {
+		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
+		
 		return new SubsystemCreationForm();
 	}
 	
