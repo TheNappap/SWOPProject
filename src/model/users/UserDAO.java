@@ -9,5 +9,6 @@ public interface UserDAO {
 	public String loginAs(User user);
 	public boolean userNameExists(String userName);
 	public boolean userExists(User user);
+	public User getLoggedInUser();
 	
 }

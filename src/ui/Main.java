@@ -1,11 +1,14 @@
 package ui;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
 import controllers.BugReportController;
 import controllers.ProjectController;
 import controllers.UserController;
+import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.BugReport;
 import model.bugreports.BugTag;
@@ -17,10 +20,13 @@ import model.projects.Role;
 import model.projects.Subsystem;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
+import model.projects.forms.ProjectDeleteForm;
+import model.projects.forms.ProjectUpdateForm;
 import model.projects.forms.SubsystemCreationForm;
 import model.users.Administrator;
 import model.users.Developer;
 import model.users.Issuer;
+import model.users.User;
 import model.users.UserCategory;
 import model.users.UserManager;
 
@@ -31,6 +37,7 @@ public class Main {
 	private static UserController userController;
 	private static ProjectController projectController;
 	private static BugReportController bugReportController; 
+	private static Scanner input;
 	
 	public static void main(String[] args) {
 		// Initialize BugTrap
@@ -43,14 +50,18 @@ public class Main {
 		System.out.println("");
 		System.out.println("Type help to see a list of all possible commands.");
 		
-		Scanner input = new Scanner(System.in);
+		input = new Scanner(System.in);
 		
 		while (!quit) {
+			User user = userController.getLoggedInUser();
+			if (user != null)
+				System.out.print("[" + user.getUserName() + "] ");
 			String line = input.nextLine();
-			
+			processCommand(line);
 		}
 		
 		input.close();
+		System.out.println("Goodbye.");
 	}
 	
 	public static void init() {
@@ -166,6 +177,7 @@ public class Main {
 		bugForm.setTitle("The function parse ewd returns unexpected results");
 		bugForm.setIssuer(maria);
 		bugForm.setSubsystem(subSystemB1);
+		bugForm.setDependsOn(new ArrayList<BugReport>());
 		bugReportController.createBugReport(bugForm);
 		BugReport report1 = bugReportController.getBugReportList().get(0);
 		BugReportAssignForm bugAssign = bugReportController.getBugReportAssignForm();
@@ -183,6 +195,7 @@ public class Main {
 		bugForm.setTitle("Crash while processing user input");
 		bugForm.setIssuer(major);
 		bugForm.setSubsystem(subSystemA31);
+		bugForm.setDependsOn(new ArrayList<BugReport>());
 		bugReportController.createBugReport(bugForm);
 		BugReport report2 = bugReportController.getBugReportList().get(1);
 		bugAssign = bugReportController.getBugReportAssignForm();
@@ -204,6 +217,238 @@ public class Main {
 		bugForm.setTitle("SubsystemA2 feezes");
 		bugForm.setIssuer(major);
 		bugForm.setSubsystem(subSystemA2);
+		bugForm.setDependsOn(new ArrayList<BugReport>());
 		bugReportController.createBugReport(bugForm);
+	}
+
+	public static void processCommand(String command) {
+		String cmd = command.trim().toLowerCase();
+		
+		if (cmd.equals("login")) {
+			login();
+		} else if (cmd.equals("help")) {
+			help();
+		} else if (cmd.equals("exit")) {
+			quit = true;
+		} else if (cmd.equals("createproject")) {
+			createProject();
+		} else if (cmd.equals("updateproject")) {
+			updateProject();
+		} else if (cmd.equals("deleteproject")) {
+			deleteProject();
+		} else if (cmd.equals("showproject")) {
+			showProject();
+		} else if (cmd.equals("createsubsystem")) {
+			createSubSystem();
+		} else if (cmd.equals("createbugreport")) {
+			createBugReport();
+		} else if (cmd.equals("inspectbugreport")) {
+			inspectBugReport();
+		} else if (cmd.equals("createcomment")) {
+			createComment();
+		} else if (cmd.equals("assignproject")) {
+			assignToProject();
+		} else if (cmd.equals("assignbugreport")) {
+			assignToBugReport();
+		} else if (cmd.equals("updatebugreport")) {
+			updateBugReport();
+		}
+	}
+	
+	public static void login() {
+		boolean valid = false;
+		int category = 0;
+		ArrayList<User> users = new ArrayList<User>();
+		User selectedUser = null;
+		while (!valid) {
+			valid = true;
+			System.out.println("Select a user cateogry by entering the number: ");
+			System.out.println(" 1. Administrator");
+			System.out.println(" 2. Issuer");
+			System.out.println(" 3. Developer");
+			category = input.nextInt();
+					
+			switch (category) {
+				case 1:
+					users = userController.getUserList(UserCategory.ADMIN);
+					break;
+				case 2:
+					users = userController.getUserList(UserCategory.ISSUER);
+					break;
+				case 3:
+					users = userController.getUserList(UserCategory.DEVELOPER);
+					break;
+				default:
+					valid = false;
+					continue;
+			}
+		}
+		
+		selectedUser = selectUser(users);
+		
+		String greeting = userController.loginAs(selectedUser);
+		System.out.println(greeting);
+	}
+	
+	public static void help() {
+		
+	}
+	
+	public static void createProject() {
+		ProjectCreationForm form;
+		try {
+			 form = projectController.getProjectCreationForm();
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+		
+		System.out.println("Enter the name of the project:");
+		form.setName(input.nextLine());
+		System.out.println("Enter the description of the project:");
+		form.setDescription(input.nextLine());
+		System.out.println("Enter the budget estimate for the project:");
+		form.setBudgetEstimate(input.nextDouble());
+		
+		boolean valid = false;
+		while (!valid) {
+			try {
+				System.out.println("Enter the start date for the project (dd/mm/yyyy):");
+				form.setStartDate((new SimpleDateFormat("dd/mm/yyyy")).parse(input.nextLine()));
+				valid = true;
+			} catch (Exception e) { }
+		}
+		
+		User lead = selectUser(userController.getUserList(UserCategory.DEVELOPER));
+		form.setLeadDeveloper((Developer)lead);
+		
+		projectController.createProject(form);
+	}
+	
+	public static void updateProject() {
+		ProjectUpdateForm form;
+		try {
+			 form = projectController.getProjectUpdateForm();
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+		
+		Project project = selectProject(projectController.getProjectList());
+		form.setProject(project);
+		
+		System.out.println("Enter the name of the project:");
+		form.setName(input.nextLine());
+		System.out.println("Enter the description of the project:");
+		form.setDescription(input.nextLine());
+		System.out.println("Enter the budget estimate for the project:");
+		form.setBudgetEstimate(input.nextDouble());
+		
+		boolean valid = false;
+		while (!valid) {
+			try {
+				System.out.println("Enter the start date for the project (dd/mm/yyyy):");
+				form.setStartDate((new SimpleDateFormat("dd/mm/yyyy")).parse(input.nextLine()));
+				valid = true;
+			} catch (Exception e) { }
+		}
+		
+		User lead = selectUser(userController.getUserList(UserCategory.DEVELOPER));
+		form.setLeadDeveloper((Developer)lead);
+		
+		projectController.updateProject(form);
+	}
+	
+	public static void deleteProject() {
+		ProjectDeleteForm form;
+		try {
+			form = projectController.getProjectDeleteForm();
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+		
+		Project project = selectProject(projectController.getProjectList());
+		form.setProject(project);
+		
+		projectController.deleteProject(form);
+	}
+	
+	public static void showProject() {
+		Project project = selectProject(projectController.getProjectList());
+		
+		// TODO - output all details (for every subsystem as well!)
+	}
+	
+	public static void createSubSystem() {
+		
+	}
+	
+	public static void createBugReport() {
+		
+	}
+	
+	public static void inspectBugReport() {
+		
+	}
+	
+	public static void createComment() {
+		
+	}
+	
+	public static void assignToProject() {
+		
+	}
+	
+	public static void assignToBugReport() {
+		
+	}
+	
+	public static void updateBugReport() {
+		
+	}
+	
+	private static User selectUser(ArrayList<User> users) {
+		while (true) {
+			System.out.println("Select a user by entering the username: ");
+			for (User user : users)
+				System.out.println(user.getUserName() + " (" + user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName() + ")");
+			
+			String name = input.nextLine();
+			for (User user : users) {
+				if (user.getUserName().equals(name))
+					return user;
+			}
+		}
+	}
+	
+	private static BugReport selectBugReport(ArrayList<BugReport> reports) {
+		while (true) {
+			System.out.println("Select a bug report by entering its number: ");
+			int number = 1;
+			for (BugReport report : reports) {
+				System.out.println(number + ". " + report.getTitle());
+				number++;
+			}
+			
+			int selected = input.nextInt();
+			if (selected <= reports.size())
+				return reports.get(selected - 1);
+		}
+	}
+	
+	private static Project selectProject(ArrayList<Project> projects) {
+		while (true) {
+			System.out.println("Select a project by entering its number: ");
+			int number = 1;
+			for (Project project : projects) {
+				System.out.println(number + ". " + project.getName());
+				number++;
+			}
+			
+			int selected = input.nextInt();
+			if (selected <= projects.size())
+				return projects.get(selected - 1);
+		}
 	}
 }

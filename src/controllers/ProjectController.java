@@ -2,13 +2,16 @@ package controllers;
 
 import java.util.ArrayList;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.Project;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
+import model.projects.forms.ProjectDeleteForm;
 import model.projects.forms.ProjectUpdateForm;
 import model.projects.forms.SubsystemCreationForm;
 import model.users.Developer;
+import model.users.UserCategory;
 
 public class ProjectController extends Controller {
 
@@ -24,12 +27,25 @@ public class ProjectController extends Controller {
 		return getBugTrap().getProjectDAO().getProjectsForLeadDeveloper(dev);
 	}
 
-	public ProjectCreationForm getProjectCreationForm() {
+	public ProjectCreationForm getProjectCreationForm() throws UnauthorizedAccessException {
+		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
+		
 		return new ProjectCreationForm();
 	}
 
-	public ProjectUpdateForm getProjectUpdateForm() {
+	public ProjectUpdateForm getProjectUpdateForm() throws UnauthorizedAccessException {
+		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
+		
 		return new ProjectUpdateForm();
+	}
+	
+	public ProjectDeleteForm getProjectDeleteForm() throws UnauthorizedAccessException {
+		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
+		
+		return new ProjectDeleteForm();
 	}
 
 	public ProjectAssignForm getProjectAssignForm() {
@@ -67,8 +83,8 @@ public class ProjectController extends Controller {
 	 * 
 	 * @param project
 	 */
-	public void deleteProject(Project project) {
-		getBugTrap().getProjectDAO().deleteProject(project);
+	public void deleteProject(ProjectDeleteForm form) {
+		getBugTrap().getProjectDAO().deleteProject(form);
 	}
 
 	public SubsystemCreationForm getSubsystemCreationForm() {

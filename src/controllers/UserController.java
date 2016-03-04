@@ -31,4 +31,8 @@ public class UserController extends Controller{
 	public boolean userExists(User user) {
 		return getBugTrap().getUserDAO().userExists(user);
 	}
+	
+	public User getLoggedInUser() {
+		return getBugTrap().getUserDAO().getLoggedInUser();
+	}
 }
