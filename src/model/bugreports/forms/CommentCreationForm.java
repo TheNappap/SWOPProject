@@ -17,8 +17,8 @@ public class CommentCreationForm implements Form {
 	
 	@Override
 	public void allVarsFilledIn() {
-		assert (getCommentable() != null) : "Commentable is null";
-		assert (getText() != null) : "Text is null";
+		if (getCommentable() == null) throw new NullPointerException();
+		if (getText() == null) throw new NullPointerException();
 	}
 
 	//Getters and Setters
