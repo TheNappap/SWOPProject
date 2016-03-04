@@ -49,11 +49,11 @@ public class BugReportBuilder {
 	}
 
 	private void validate() {
-		assert (title != null) 			: "Bugreport title is null";
-		assert (description != null) 	: "Bugreport description is null";
-		assert (subsystem != null) 		: "Bugreport subsystem is null";
-		assert (dependsOn != null) 		: "Bugreport dependencies is null";
-		assert (issuedBy != null) 		: "Bugreport issuer is null";
+		if (title == null) 			throw new NullPointerException("Bugreport title is null");
+		if (description == null) 	throw new NullPointerException("Bugreport description is null");
+		if (subsystem == null) 		throw new NullPointerException("Bugreport subsystem is null");
+		if (dependsOn == null) 		throw new NullPointerException("Bugreport dependsOn is null");
+		if (issuedBy == null) 		throw new NullPointerException("Bugreport issuedBy is null");
 	}
 
 }
