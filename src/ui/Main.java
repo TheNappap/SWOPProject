@@ -41,7 +41,12 @@ public class Main {
 	
 	public static void main(String[] args) {
 		// Initialize BugTrap
-		init();
+		try {
+			init();
+		} catch (UnauthorizedAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// Initialize CLI
 		quit = false;
@@ -64,7 +69,7 @@ public class Main {
 		System.out.println("Goodbye.");
 	}
 	
-	public static void init() {
+	public static void init() throws UnauthorizedAccessException {
 		bugTrap = new BugTrap();
 		userController = new UserController(bugTrap);
 		projectController = new ProjectController(bugTrap);
