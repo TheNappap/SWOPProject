@@ -58,10 +58,10 @@ public class SubsystemCreationForm implements Form {
 
 	@Override
 	public void allVarsFilledIn() {
-		assert(name != null) : "Given name is null";
-		assert(description != null) : "Given description is null";
-		assert(parent != null) : "Given parent is null";
-		assert(project != null) : "Given project is null";
+		if (getName() == null) throw new NullPointerException("Name is null");
+		if (getDescription() == null) throw new NullPointerException("Description is null");
+		if (getParent() == null) throw new NullPointerException("Parent is null");
+		if (getProject() == null) throw new NullPointerException("Project is null");
 	}
 
 }

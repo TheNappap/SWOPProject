@@ -7,6 +7,7 @@ import model.projects.ProjectTeam;
 import model.projects.Version;
 
 public class ProjectBuilder {
+	
 	private String name;
 	private String description;
 	private Version version;
@@ -60,12 +61,11 @@ public class ProjectBuilder {
 	}
 	
 	private void validate() {
-		assert (name != null) : "Project name is null";
-		assert (description != null) : "Project description is null";
-		assert (version != null) : "Project version is null";
-		assert (creationDate != null) : "Project creation date is null";
-		assert (startDate != null) : "Project start date is null";
-		assert (budgetEstimate > 0) : "Project budget estimate should be strictly positive";
-		assert (team != null) : "Project team is null";
+		if (name == null) throw new NullPointerException("Name is null.");
+		if (description == null) throw new NullPointerException("Description is null.");
+		if (version == null) throw new NullPointerException("Version is null.");
+		if (creationDate == null) throw new NullPointerException("CreationDate is null");
+		if (startDate == null) throw new NullPointerException("StartDate is null");
+		if (budgetEstimate <= 0) throw new IllegalArgumentException("Budget estimate must be strictly positive.");
 	}
 }
