@@ -27,11 +27,11 @@ public class BugReportCreationForm implements Form {
 
 	@Override
 	public void allVarsFilledIn() {
-		assert (getIssuer() != null) : "Issuer is null.";
-		assert (getTitle() != null)  : "Title is null.";
-		assert (getDescription() != null) 	: "Description is null.";
-		assert (getSubsystem() != null)		: "Subsystem is null.";
-		assert (getDependsOn() != null)		: "DependsOn is null.";
+		if (getIssuer() == null) throw new NullPointerException("Issuer is null");
+		if (getTitle() == null) throw new NullPointerException("Title is null");
+		if (getDescription() == null) throw new NullPointerException("Description is null");
+		if (getSubsystem() == null) throw new NullPointerException("Subsystem is null");
+		if (getDependsOn() == null) throw new NullPointerException("DependsOn is null");
 	}
 
 	//Getters and Setters
