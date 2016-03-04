@@ -1,6 +1,5 @@
 package tests;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.junit.Assert;

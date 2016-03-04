@@ -3,14 +3,13 @@ package model.bugreports;
 import java.util.ArrayList;
 import java.util.Date;
 
-import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.comments.Commentable;
 import model.bugreports.comments.InitialComment;
 import model.projects.Subsystem;
 import model.users.Developer;
 import model.users.Issuer;
 
-public class BugReport implements Comparable<BugReport>, Cloneable, Commentable {
+public class BugReport implements Comparable<BugReport>, Commentable {
 
 	//Immutable
 	private final Date creationDate;	//Creation Date of the BugReport.
@@ -82,17 +81,6 @@ public class BugReport implements Comparable<BugReport>, Cloneable, Commentable 
 	@Override
 	public int compareTo(BugReport otherBugReport) {
 		return getTitle().compareTo(otherBugReport.getTitle());
-	}
-	
-	@Override
-	public BugReport clone() { //All variables are REFERENCES.
-		return (new BugReportBuilder())
-					.setTitle(getTitle())
-					.setSubsystem(getSubsystem())
-					.setIssuer(getIssuedBy())
-					.setDescription(getDescription())
-					.setDependsOn(getDependsOn())
-					.getBugReport();
 	}
 	
 	//Getters and Setters
