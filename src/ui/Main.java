@@ -12,9 +12,14 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.BugReport;
 import model.bugreports.BugTag;
+import model.bugreports.comments.Comment;
+import model.bugreports.comments.InitialComment;
+import model.bugreports.comments.ReplyComment;
+import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
+import model.bugreports.forms.CommentCreationForm;
 import model.projects.Project;
 import model.projects.Role;
 import model.projects.Subsystem;
@@ -372,6 +377,19 @@ public class Main {
 		projectController.updateProject(form);
 	}
 	
+	public static void assignToProject() {
+		ProjectAssignForm form = projectController.getProjectAssignForm();
+		
+		Project project = selectProject(projectController.getProjectList());
+		form.setProject(project);
+		Developer dev = (Developer) selectUser(userController.getUserList(UserCategory.DEVELOPER));
+		form.setDeveloper(dev);
+		Role role = selectRole();
+		form.setRole(role);
+		
+		projectController.assignToProject(form);
+	}
+
 	public static void deleteProject() {
 		ProjectDeleteForm form;
 		try {
@@ -398,8 +416,11 @@ public class Main {
 		System.out.println(" Start date: " + project.getStartDate().getDay() + "/" + project.getStartDate().getMonth() + "/" + project.getStartDate().getYear());
 		System.out.println(" Version: " + project.getVersion());
 		
-		for (System : project.getAllDirectOrIndirectSubsystems())
-			// TODO - PRINT DETAILS OF SUBSYSTEM
+		for (Subsystem system : project.getAllDirectOrIndirectSubsystems()) {
+			System.out.println(" -- " + system.getName() + " -- ");
+			System.out.println(" Description: " + system.getDescription());
+			System.out.println(" Version: " + system.getVersion());
+		}
 	}
 	
 	public static void createSubSystem() {
@@ -431,19 +452,63 @@ public class Main {
 	}
 	
 	public static void createBugReport() {
+		BugReportCreationForm form = bugReportController.getBugReportCreationForm();
 		
+		Project chosenProject = selectProject(projectController.getProjectList());
+		Subsystem chosenSubsystem = selectSubsystem(chosenProject.getSubsystems());
+		
+		form.setIssuer((Issuer) userController.getLoggedInUser());
+		form.setSubsystem(chosenSubsystem);
+		System.out.println("Enter the title of the BugReport:");
+		form.setTitle(input.nextLine());
+		System.out.println("Enter a description:");
+		form.setDescription(input.next());
+		
+		//TO DO
+		form.setDependsOn(new ArrayList<BugReport>());
+		
+		bugReportController.createBugReport(form);
 	}
 	
 	public static void inspectBugReport() {
+		BugReport bugReport = selectBugReport(bugReportController.getBugReportList());
 		
+		System.out.println(" -- " + bugReport.getTitle() + " -- ");
+		System.out.println(" Description: " + bugReport.getDescription());
+		System.out.println(" BugTag: " + bugReport.getBugTag().toString());
+		System.out.println(" Creation Date: " + bugReport.getCreationDate());
+		System.out.println(" Issued by: " + bugReport.getIssuedBy().getUserName());
+		System.out.println(" Subsystem: " + bugReport.getSubsystem().getName());
+		if (bugReport.getBugTag() == BugTag.DUPLICATE) System.out.println(" Duplicate: " + bugReport.getDuplicate().getTitle());
+		System.out.println(" Assignees: ");
+		for (Developer dev : bugReport.getAssignees())
+			System.out.println(" -" + dev.getUserName());
+		System.out.println(" Depends on: ");
+		for (BugReport bug : bugReport.getDependsOn())
+			System.out.println(" -" + bug.getTitle());
+		System.out.println(" Comments: ");
+		printComments(bugReport.getComments());
 	}
 	
 	public static void createComment() {
-		
-	}
-	
-	public static void assignToProject() {
-		
+		throw new UnsupportedOperationException();
+//		CommentCreationForm form = bugReportController.getCommentCreationForm();
+//		
+//		BugReport chosenBugReport = selectBugReport(bugReportController.getBugReportList());
+//	
+//		System.out.println("Comment directly on this bugReport or on one of its comments?");
+//		System.out.println("1. Directly");
+//		System.out.println("2. Comments");
+//		int selected = input.nextInt();
+//		
+//		if (selected == 1) {
+//			form.setCommentable(chosenBugReport);
+//		}
+//		else { //selected == 2
+//			ReplyComment chosenReplyComment;
+//			boolean deeper = true;
+			
+//		}
 	}
 	
 	public static void assignToBugReport() {
@@ -468,18 +533,102 @@ public class Main {
 		}
 	}
 	
+	private static void printComments(ArrayList<InitialComment> comments) {
+		for (int index = 0; index < comments.size(); index++) {
+			String level = " " + (index+1);
+			System.out.println(level + ". " + comments.get(index).getText());
+			printComments(comments.get(index).getComments(), level);
+		}
+	}
+
+	private static void printComments(ArrayList<ReplyComment> comments, String string) {
+		for (int index = 0; index < comments.size(); index++) {
+			String level = string + (index+1);
+			System.out.println(level + ". " + comments.get(index).getText());
+			printComments(comments.get(index).getComments(), level);
+		}
+	}
+	
+
 	private static BugReport selectBugReport(ArrayList<BugReport> reports) {
+		FilterType type = selectFilterType();
+		System.out.println("Enter the search parameter: ");
+		String parameter = input.nextLine();
+		
+		ArrayList<BugReport> filtered = bugReportController.getOrderedList(new FilterType[]{type}, new String[]{parameter});
+		
 		while (true) {
-			System.out.println("Select a bug report by entering its number: ");
+			System.out.println("Select a bugreport by entering its number: ");
 			int number = 1;
-			for (BugReport report : reports) {
-				System.out.println(number + ". " + report.getTitle());
+			for (BugReport bugReport : filtered) {
+				System.out.println(number + ". " + bugReport.getTitle());
 				number++;
 			}
 			
 			int selected = input.nextInt();
-			if (selected <= reports.size())
-				return reports.get(selected - 1);
+			if (selected <= filtered.size())
+				return filtered.get(selected - 1);
+		}
+	}
+	
+	private static InitialComment selectInitialComment(ArrayList<InitialComment> comments) {
+		while (true) {
+			System.out.println("Select a comment by entering its number: ");
+			int number = 1;
+			for (InitialComment comment : comments) {
+				System.out.println(number + ". " + comment.getText());
+				number++;
+			}
+			
+			int selected = input.nextInt();
+			if (selected <= comments.size())
+				return comments.get(selected - 1);		
+		}
+	}
+	
+	private static ReplyComment selectReplyComment(ArrayList<ReplyComment> comments) {
+		while (true) {
+			System.out.println("Select a comment by entering its number: ");
+			int number = 1;
+			for (ReplyComment comment : comments) {
+				System.out.println(number + ". " + comment.getText());
+				number++;
+			}
+			
+			int selected = input.nextInt();
+			if (selected <= comments.size())
+				return comments.get(selected - 1);
+		}
+	}
+
+	private static Role selectRole() {
+		while (true) {
+			System.out.println("Select a role by entering its numner");
+			
+			int number = 1;
+			for (Role role : Role.values()) {
+				System.out.println(number + ". " + role.toString());
+				number++;
+			}
+			
+			int selected = input.nextInt();
+			if (selected <= Role.values().length)
+				return Role.values()[selected-1];
+		}
+	}
+
+	private static FilterType selectFilterType() {
+		while(true) {
+			System.out.println("Select a search mode by entering its number: ");
+			int number = 1;
+			for (FilterType type : FilterType.values()) {
+				System.out.println(number + ". " + type.toString());
+				number++;
+			}
+			
+			int selected = input.nextInt();
+			if (selected <= FilterType.values().length)
+				return FilterType.values()[selected - 1];
 		}
 	}
 	
@@ -510,6 +659,21 @@ public class Main {
 			int selected = input.nextInt();
 			if (selected <= systems.size())
 				return systems.get(selected - 1);
+		}
+	}
+	
+	private static Subsystem selectSubsystem(ArrayList<Subsystem> subsystems) {
+		while (true) {
+			System.out.println("Select a subsystem by entering its number: ");
+			int number = 1;
+			for (Subsystem sub : subsystems) {
+				System.out.println(number + ". " + sub.getName());
+				number++;
+			}
+			
+			int selected = input.nextInt();
+			if (selected <= subsystems.size())
+				return subsystems.get(selected - 1);
 		}
 	}
 }
