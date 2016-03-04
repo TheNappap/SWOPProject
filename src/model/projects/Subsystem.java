@@ -1,7 +1,5 @@
 package model.projects;
 
-import java.util.ArrayList;
-
 public class Subsystem extends System {
 
 	private Project project;

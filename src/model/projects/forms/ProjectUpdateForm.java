@@ -95,12 +95,12 @@ public class ProjectUpdateForm implements Form {
 
 	@Override
 	public void allVarsFilledIn() {
-		assert(name != null) : "Name is null";
-		assert(description != null) : "Description is null";
-		assert(budgetEstimate > 0) : "Budget estimate is not strictly positive";
-		assert(startDate != null) : "Starting date is null";
-		assert(leadDeveloper != null) : "Lead developer is null";
-		assert(project != null) : "Project is null";
-		assert(version != null) : "Version is null";
+		if (getName() == null) throw new NullPointerException("Name is null");
+		if (getDescription() == null) throw new NullPointerException("Description is null");
+		if (getBudgetEstimate() <= 0) throw new IllegalArgumentException("Budget estimate is null");
+		if (getStartDate() == null) throw new NullPointerException("Start Date is null");
+		if (getLeadDeveloper() == null) throw new NullPointerException("Developer is null");
+		if (getProject() == null) throw new NullPointerException("Project is null");
+		if (getVersion() == null) throw new NullPointerException("Version is null");
 	}
 }
