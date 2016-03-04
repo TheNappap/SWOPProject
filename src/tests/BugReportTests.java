@@ -8,6 +8,7 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
+import controllers.BugReportController;
 import model.BugTrap;
 import model.bugreports.BugReport;
 import model.bugreports.BugTag;
@@ -23,12 +24,11 @@ import model.users.Issuer;
 
 public class BugReportTests {
 
-	private BugTrap bugTrap;
+	private BugReportController controller;
 	
 	@Before
 	public void setUp() throws Exception {
-		bugTrap = new BugTrap();
-		
+		controller = new BugReportController(new BugTrap());
 	}
 
 	@Test
@@ -87,9 +87,9 @@ public class BugReportTests {
 		form.setSubsystem(new Subsystem(null, null, null, null, null));
 		form.setDependsOn(new ArrayList<BugReport>());
 		
-		bugTrap.getBugReportDAO().addBugReport(form);
+		controller.createBugReport(form);
 		
-		BugReport bugReport = bugTrap.getBugReportDAO().getBugReportList().get(0);
+		BugReport bugReport = controller.getBugReportList().get(0);
 		
 		assertNotNull(bugReport.getCreationDate());
 		assertNotNull(bugReport.getComments());
@@ -103,12 +103,12 @@ public class BugReportTests {
 	public void getOrderedListTitleDescTest() {
 		fillWithBugReports();
 		
-		ArrayList<BugReport> filteredTitle = bugTrap.getBugReportDAO().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING}, new String[]{"0"});
+		ArrayList<BugReport> filteredTitle = controller.getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING}, new String[]{"0"});
 		
 		assertEquals(1, filteredTitle.size());
 		assertEquals("Project title 0", filteredTitle.get(0).getTitle());
 		
-		ArrayList<BugReport> filteredDesc = bugTrap.getBugReportDAO().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING}, new String[]{"Very"});
+		ArrayList<BugReport> filteredDesc = controller.getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING}, new String[]{"Very"});
 	
 		assertEquals(5, filteredDesc.size());
 	}
@@ -117,7 +117,7 @@ public class BugReportTests {
 	public void getOrderedListIssuedByTest() {
 		fillWithBugReports();
 		
-		ArrayList<BugReport> filtered = bugTrap.getBugReportDAO().getOrderedList(new FilterType[]{FilterType.FILED_BY_USER}, new String[]{"Mathijs"});
+		ArrayList<BugReport> filtered = controller.getOrderedList(new FilterType[]{FilterType.FILED_BY_USER}, new String[]{"Mathijs"});
 		
 		assertEquals(2, filtered.size());
 	}
@@ -129,12 +129,12 @@ public class BugReportTests {
 		Developer dev1 = new Developer(null,null,null, "John");
 		Developer dev2 = new Developer(null,null,null, "Doe");
 		
-		bugTrap.getBugReportDAO().getBugReportList().get(0).assignDeveloper(dev1);
-		bugTrap.getBugReportDAO().getBugReportList().get(0).assignDeveloper(dev2);
-		bugTrap.getBugReportDAO().getBugReportList().get(1).assignDeveloper(dev1);
-		bugTrap.getBugReportDAO().getBugReportList().get(2).assignDeveloper(dev2);
+		controller.getBugReportList().get(0).assignDeveloper(dev1);
+		controller.getBugReportList().get(0).assignDeveloper(dev2);
+		controller.getBugReportList().get(1).assignDeveloper(dev1);
+		controller.getBugReportList().get(2).assignDeveloper(dev2);
 		
-		ArrayList<BugReport> filtered = bugTrap.getBugReportDAO().getOrderedList(new FilterType[]{FilterType.ASSIGNED_TO_USER}, new String[]{"John"});
+		ArrayList<BugReport> filtered = controller.getOrderedList(new FilterType[]{FilterType.ASSIGNED_TO_USER}, new String[]{"John"});
 		
 		assertEquals(2, filtered.size());
 	}
@@ -143,10 +143,15 @@ public class BugReportTests {
 	public void initialCommentsTest() {
 		fillWithBugReports();
 		
-		BugReport bugReport0 = bugTrap.getBugReportDAO().getBugReportList().get(0);
-		BugReport bugReport1 = bugTrap.getBugReportDAO().getBugReportList().get(1);
+		CommentCreationForm form = controller.getCommentCreationForm();
 		
-		bugReport0.addComment("Nice project!");
+		BugReport bugReport0 = controller.getBugReportList().get(0);
+		BugReport bugReport1 = controller.getBugReportList().get(1);
+		
+		form.setCommentable(bugReport0);
+		form.setText("Nice project!");
+		
+		controller.createComment(form);
 		
 		assertTrue(bugReport0.getComments().get(0).getCreationDate() instanceof Date);
 
@@ -159,7 +164,7 @@ public class BugReportTests {
 	public void ReplyCommentsTest() {
 		fillWithBugReports();
 		
-		BugReport bugReport0 = bugTrap.getBugReportDAO().getBugReportList().get(0);
+		BugReport bugReport0 = controller.getBugReportList().get(0);
 		
 		bugReport0.addComment("Nice project!");
 		bugReport0.getComments().get(0).addComment("Thanks for feedback.");
@@ -173,11 +178,15 @@ public class BugReportTests {
 	public void updateBugReport() {
 		fillWithBugReports();
 		
-		BugReport bugReport0 = bugTrap.getBugReportDAO().getBugReportList().get(0);
+		BugReportUpdateForm form = new BugReportUpdateForm();
 		
+		BugReport bugReport0 = controller.getBugReportList().get(0);
 		assertEquals(BugTag.NEW, bugReport0.getBugTag());
 		
-		bugReport0.updateBugTag(BugTag.NOT_A_BUG);
+		form.setBugReport(bugReport0);
+		form.setBugTag(BugTag.NOT_A_BUG);
+		
+		controller.updateBugReport(form);
 		
 		assertEquals(BugTag.NOT_A_BUG, bugReport0.getBugTag());
 		
@@ -187,12 +196,18 @@ public class BugReportTests {
 	public void assignDeveloper() {
 		fillWithBugReports();
 		
-		BugReport bugReport0 = bugTrap.getBugReportDAO().getBugReportList().get(0);
+		BugReportAssignForm form = controller.getBugReportAssignForm();
+		
+		BugReport bugReport0 = controller.getBugReportList().get(0);
 		
 		assertEquals(0, bugReport0.getAssignees().size());
 		
 		Developer dev = new Developer(null, null, null, null);
-		bugReport0.assignDeveloper(dev);
+		
+		form.setBugReport(bugReport0);
+		form.setDeveloper(dev);
+		
+		controller.assignToBugReport(form);
 		
 		assertEquals(1, bugReport0.getAssignees().size());
 		assertEquals(dev, bugReport0.getAssignees().get(0));
@@ -200,7 +215,7 @@ public class BugReportTests {
 
 	@Test
 	public void BugReportAssignFormTest() {
-		BugReportAssignForm form = new BugReportAssignForm();
+		BugReportAssignForm form = controller.getBugReportAssignForm();
 		
 		try {
 			form.setBugReport(null);
@@ -231,7 +246,7 @@ public class BugReportTests {
 	
 	@Test
 	public void BugReportCreationFormTest() {
-		BugReportCreationForm form = new BugReportCreationForm();
+		BugReportCreationForm form = controller.getBugReportCreationForm();
 		
 		try {
 			form.setDependsOn(null);
@@ -295,7 +310,8 @@ public class BugReportTests {
 	
 	@Test
 	public void BugReportUpdateFormTest() {
-		BugReportUpdateForm form = new BugReportUpdateForm();
+		BugReportUpdateForm form = controller.getBugReportUpdateForm();
+		
 		try {
 			form.setBugReport(null);
 			fail();
@@ -325,7 +341,7 @@ public class BugReportTests {
 	
 	@Test
 	public void CommentCreationFormTest() {
-		CommentCreationForm form = new CommentCreationForm();
+		CommentCreationForm form = controller.getCommentCreationForm();
 		
 		try {
 			form.setCommentable(null);
@@ -354,6 +370,11 @@ public class BugReportTests {
 		}
 	}
 	
+	@Test
+	public void BugReportControllerTest() {
+
+	}
+	
 	private void fillWithBugReports() {
 		for (int i = 0; i < 5; i++) {
 			BugReportCreationForm form = new BugReportCreationForm();
@@ -369,7 +390,8 @@ public class BugReportTests {
 			if (i == 0 || i == 3) 	form.setIssuer(issuer1);
 			else					form.setIssuer(issuer2);
 			
-			bugTrap.getBugReportDAO().addBugReport(form);
+			controller.createBugReport(form);
 		}
 	}
+	
 }
