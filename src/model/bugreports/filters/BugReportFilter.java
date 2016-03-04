@@ -55,9 +55,10 @@ public class BugReportFilter {
 			BugReport bugReport = iter.next();
 			
 			boolean remove = true;
-			for (Developer assignee : bugReport.getAssignees())
+			for (Developer assignee : bugReport.getAssignees()) {
 				if (assignee.getUserName().equals(string))
 					remove = false;
+			}
 			
 			if (remove) iter.remove();
 		}
