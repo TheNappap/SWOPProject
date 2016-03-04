@@ -49,14 +49,14 @@ public class BugReportTests {
 		try{
 			bugReportBuilder.setTitle("Project")
 			.setDescription("Very long description.")
-			.setSubsystem(new Subsystem(null, null, null, null, null, null))
+			.setSubsystem(new Subsystem(null, null, null, null, null))
 			.getBugReport();
 			fail();
 		} catch (AssertionError e) { }
 		try{
 			bugReportBuilder.setTitle("Project")
 			.setDescription("Very long description.")
-			.setSubsystem(new Subsystem(null, null, null, null, null, null))
+			.setSubsystem(new Subsystem(null, null, null, null, null))
 			.setDependsOn(new ArrayList<BugReport>())
 			.getBugReport();
 			fail();
@@ -64,7 +64,7 @@ public class BugReportTests {
 		try{
 			bugReportBuilder.setTitle("Project")
 			.setDescription("Very long description.")
-			.setSubsystem(new Subsystem(null, null, null, null, null, null))
+			.setSubsystem(new Subsystem(null, null, null, null, null))
 			.setDependsOn(new ArrayList<BugReport>())
 			.setIssuer(new Issuer(null, null, null, null))
 			.getBugReport();
@@ -80,7 +80,7 @@ public class BugReportTests {
 		form.setTitle("Project title");
 		form.setDescription("Very long description.");
 		form.setIssuer(new Issuer(null, null, null, null));
-		form.setSubsystem(new Subsystem(null, null, null, null, null, null));
+		form.setSubsystem(new Subsystem(null, null, null, null, null));
 		form.setDependsOn(new ArrayList<BugReport>());
 		
 		bugTrap.getBugReportDAO().addBugReport(form);
@@ -116,7 +116,7 @@ public class BugReportTests {
 			form.setTitle("Project title " + i);
 			form.setDescription("Very long description " + i);
 			form.setIssuer(new Issuer(null, null, null, null));
-			form.setSubsystem(new Subsystem(null, null, null, null, null, null));
+			form.setSubsystem(new Subsystem(null, null, null, null, null));
 			form.setDependsOn(new ArrayList<BugReport>());
 			
 			bugTrap.getBugReportDAO().addBugReport(form);
