@@ -3,17 +3,16 @@ package model.projects;
 import java.util.ArrayList;
 
 import model.users.Developer;
-import model.users.User;
 import model.users.UserCategory;
 
 public class ProjectTeam {
 	private final ArrayList<DeveloperRoleRelation> team;
 
-	ProjectTeam() {
+	public ProjectTeam() {
 		team = new ArrayList<DeveloperRoleRelation>();
 	}
 	
-	void addMember(Developer user, Role role) {
+	public void addMember(Developer user, Role role) {
 		if (user == null) throw new NullPointerException("Given user is null.");
 		
 		boolean alreadyExists = false;
@@ -40,7 +39,7 @@ public class ProjectTeam {
 		return null;
 	}
 	
-	void setLeadDeveloper(Developer dev) {
+	public void setLeadDeveloper(Developer dev) {
 		// Make previous lead a programmer
 		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.LEAD && rel.getUser() == dev)

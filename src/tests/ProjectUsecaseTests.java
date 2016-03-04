@@ -36,7 +36,7 @@ public class ProjectUsecaseTests {
 		form.setDescription("Setup project");
 		form.setLeadDeveloper(lead);
 		form.setName("Project S");
-		form.setStartDate(new Date(2016, 4, 1));
+		form.setStartDate(new Date(1302));
 		
 		controller.createProject(form);
 		project = controller.getProjectList().get(0);
@@ -49,7 +49,7 @@ public class ProjectUsecaseTests {
 		form.setDescription("This is a very descriptive description!");
 		form.setLeadDeveloper(lead);
 		form.setName("Project X");
-		form.setStartDate(new Date(2016, 8, 23));
+		form.setStartDate(new Date(1302));
 		
 		Date cd = new Date();
 		controller.createProject(form);
@@ -60,7 +60,7 @@ public class ProjectUsecaseTests {
 		Assert.assertEquals(5000, project.getBudgetEstimate(), 0.001);
 		Assert.assertTrue(project.getCreationDate().equals(cd));
 		Assert.assertNull(project.getParent());
-		Assert.assertTrue(project.getStartDate().equals(new Date(2016, 8, 23)));
+		Assert.assertTrue(project.getStartDate().equals(new Date(1302)));
 		Assert.assertEquals(lead,project.getTeam().getLeadDeveloper());
 		Assert.assertTrue (project.getVersion().equals(new Version(1, 0, 0)));
 	}
@@ -126,4 +126,5 @@ public class ProjectUsecaseTests {
 		//not lead
 		Assert.assertEquals(0, controller.getProjectsForLeadDeveloper(colleague).size());
 	}
+	
 }

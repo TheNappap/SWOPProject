@@ -1,9 +1,6 @@
 package model.projects;
 
-import java.util.ArrayList;
 import java.util.Date;
-
-import model.projects.forms.ProjectAssignForm;
 
 public class Project extends System {
 
