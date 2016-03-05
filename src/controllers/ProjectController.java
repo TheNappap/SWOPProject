@@ -20,7 +20,6 @@ public class ProjectController extends Controller {
 	}
 
 	public ArrayList<Project> getProjectList() throws UnauthorizedAccessException{
-
 		if (getBugTrap().getUserDAO().getLoggedInUser() == null)
 			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
 		

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportCreationForm;
+import model.projects.Project;
 
 public interface BugReportDAO {
 

@@ -35,4 +35,8 @@ public class UserController extends Controller{
 	public User getLoggedInUser() {
 		return getBugTrap().getUserDAO().getLoggedInUser();
 	}
+	
+	public void logOff() {
+		getBugTrap().getUserDAO().logOff();
+	}
 }
