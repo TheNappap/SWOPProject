@@ -29,7 +29,7 @@ public class AssignProjectUseCaseTest {
 	private UserController userController;
 	private BugTrap bugTrap;
 	private Developer lead;
-	private Project project;
+//	private Project project; Not used?
 	
 	@Before
 	public void setUp() throws Exception {
@@ -54,7 +54,7 @@ public class AssignProjectUseCaseTest {
 		form.setStartDate(new Date(1302));
 		
 		projectController.createProject(form);
-		project = projectController.getProjectList().get(0);
+//		project = projectController.getProjectList().get(0); Not used?
 		
 		lead = projectController.getProjectList().get(0).getTeam().getLeadDeveloper();
 		userController.loginAs(lead);

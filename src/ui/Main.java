@@ -86,7 +86,7 @@ public class Main {
 		userManager.createUser(UserCategory.ISSUER, "John", "", "Doctor", "doc");
 		Issuer doc = (Issuer) userManager.getUserList().get(1);
 		userManager.createUser(UserCategory.ISSUER, "Charles", "Arnold", "Berg", "charlie");
-		Issuer charlie = (Issuer) userManager.getUserList().get(2);
+//		Issuer charlie = (Issuer) userManager.getUserList().get(2); Not used?
 		userManager.createUser(UserCategory.DEVELOPER, "Joseph", "", "Mays", "major");
 		Developer major = (Developer) userManager.getUserList().get(3);
 		userManager.createUser(UserCategory.DEVELOPER, "Maria", "", "Carney", "maria");
