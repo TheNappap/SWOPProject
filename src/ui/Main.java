@@ -86,7 +86,7 @@ public class Main {
 		userManager.createUser(UserCategory.ISSUER, "John", "", "Doctor", "doc");
 		Issuer doc = (Issuer) userManager.getUserList().get(1);
 		userManager.createUser(UserCategory.ISSUER, "Charles", "Arnold", "Berg", "charlie");
-		Issuer charlie = (Issuer) userManager.getUserList().get(2);
+//		Issuer charlie = (Issuer) userManager.getUserList().get(2); Not used?
 		userManager.createUser(UserCategory.DEVELOPER, "Joseph", "", "Mays", "major");
 		Developer major = (Developer) userManager.getUserList().get(3);
 		userManager.createUser(UserCategory.DEVELOPER, "Maria", "", "Carney", "maria");
@@ -250,7 +250,9 @@ public class Main {
 	public static void processCommand(String command) {
 		String cmd = command.trim().toLowerCase();
 		
-		if (cmd.equals("login")) {
+		if (cmd.equals("help")) {
+			help();
+		} else if (cmd.equals("login")) {
 			login();
 		} else if (cmd.equals("exit")) {
 			quit = true;
@@ -276,7 +278,25 @@ public class Main {
 			assignToBugReport();
 		} else if (cmd.equals("updatebugreport")) {
 			updateBugReport();
-		}
+		} else
+			System.out.println("Command not recognized.");
+	}
+	
+	public static void help() {
+		System.out.println("Available commands: ");
+		
+		System.out.println("exit : End the application.");
+		System.out.println("login : Log into the system.");
+		System.out.println("createproject : Create a Project.");
+		System.out.println("deleteproject : Remove a Project from the system.");
+		System.out.println("showproject : Show the details of a Project.");
+		System.out.println("createsubsystem : Create a new Subsystem for a Project.");
+		System.out.println("createbugreport : Create a new BugReport for a Subsystem.");
+		System.out.println("inspectbugreport : Show the details of a BugReport.");
+		System.out.println("createcomment : Write a comment about a BugReport or some other comment." );
+		System.out.println("assignproject : Assign a Developer to a Project.");
+		System.out.println("assignbugreport : Assign a Developer to a BugReport.");
+		System.out.println("updatebugreport : Update the details of a BugReport.");
 	}
 	
 	public static void login() {
@@ -622,16 +642,16 @@ public class Main {
 	
 	private static void printComments(ArrayList<InitialComment> comments) {
 		for (int index = 0; index < comments.size(); index++) {
-			String level = " " + (index+1);
-			System.out.println(level + ". " + comments.get(index).getText());
+			String level = " " + (index+1) + ".";
+			System.out.println(level + comments.get(index).getText());
 			printComments(comments.get(index).getComments(), level);
 		}
 	}
 
 	private static void printComments(ArrayList<ReplyComment> comments, String string) {
 		for (int index = 0; index < comments.size(); index++) {
-			String level = string + (index+1);
-			System.out.println(level + ". " + comments.get(index).getText());
+			String level = string + (index+1) + ".";
+			System.out.println(level + comments.get(index).getText());
 			printComments(comments.get(index).getComments(), level);
 		}
 	}
@@ -713,7 +733,7 @@ public class Main {
 			if (selected > 0 && currentlySelected != null && selected <= currentlySelected.getComments().size())
 				currentlySelected = currentlySelected.getComments().get(selected - 1);
 			
-			if (selected > 0 && report != null && selected <= report.getComments().size())
+			else if (selected > 0 && report != null && selected <= report.getComments().size())
 				currentlySelected = report.getComments().get(selected - 1);
 		}
 	}
