@@ -20,7 +20,7 @@ public class BugReportFilter {
 	public BugReportFilter(ArrayList<BugReport> bugReportList) {
 		this.filteredList = bugReportList;
 	}
-	
+
 	/**  
 	 * Filter the list according to given FilterType and argument (of type String).  
 	 * @param type FilterType to filter by.  

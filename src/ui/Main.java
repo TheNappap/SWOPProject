@@ -2,7 +2,6 @@ package ui;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
 
 import controllers.BugReportController;
@@ -29,12 +28,10 @@ import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectDeleteForm;
 import model.projects.forms.ProjectUpdateForm;
 import model.projects.forms.SubsystemCreationForm;
-import model.users.Administrator;
 import model.users.Developer;
 import model.users.Issuer;
 import model.users.User;
 import model.users.UserCategory;
-import model.users.UserManager;
 
 public class Main {
 

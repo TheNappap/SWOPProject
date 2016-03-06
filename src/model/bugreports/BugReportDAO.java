@@ -12,6 +12,7 @@ public interface BugReportDAO {
 	 * @return The BugReport list.  
 	 */
 	public ArrayList<BugReport> getBugReportList();
+	
 	/**  
 	 * Returns a COPY of the BugReport list with given filters applied.  
 	 * @param types The FilterTypes  
@@ -19,6 +20,7 @@ public interface BugReportDAO {
 	 * @return A filtered, ordered BugReport list.  
 	 */
 	public ArrayList<BugReport> getOrderedList(FilterType[] type, String[] arguments);
+	
 	/**  
 	 * Add a BugReport to the list according to given BugReportCreationForm.   
 	 * @param form The BugReportCreationForm containing the information for the new BugReport.  

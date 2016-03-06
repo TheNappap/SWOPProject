@@ -1,5 +1,6 @@
 package model.bugreports;
 
+
 /**  
  * Enumeration of possible BugTags.  
  */

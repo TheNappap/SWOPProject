@@ -8,6 +8,11 @@ import model.bugreports.BugTag;
 import model.projects.Subsystem;
 import model.users.Issuer;
 
+/**
+ * Builder pattern.
+ * Use setters to set variables for a new BugReport.
+ * Use getter to validate variables, build BugReport and return BugReport.
+ */
 public class BugReportBuilder {
 
 	private String title; //Title of the BugReport. 
@@ -55,21 +60,21 @@ public class BugReportBuilder {
 		return this;
 	}
 
-	/**  
-	 * Set the Subsystem the BugReport belongs to.  
-	 * @param subsystem The Subsystem the BugReport belongs to.  
-	 * @return this.  
+	/**
+	 * Set the Subsystem the BugReport belongs to.
+	 * @param subsystem The Subsystem the BugReport belongs to.
+	 * @return this.
 	 */
 	public BugReportBuilder setSubsystem(Subsystem subsystem) {
 		this.subsystem = subsystem;
 		return this;
 	}
-
-	/**  
-	 * Set the Issuer who creates the BugReport.  
-	 * @param issuedBy The Issuer who creates the BugReport  
-	 * @return this.  
-	 */  
+	
+	/**
+	 * Set the Issuer who creates the BugReport.
+	 * @param issuedBy The Issuer who creates the BugReport
+	 * @return this.
+	 */
 	public BugReportBuilder setIssuer(Issuer issuedBy) {
 		this.issuedBy = issuedBy;
 		return this;
@@ -95,16 +100,17 @@ public class BugReportBuilder {
 		return this;
 	}
 
-	/**  
-	 * Build and return a BugReport with set variables.  
-	 * @throws NullPointerException if one of variables is null.  
-	 * @return A BugReport with set variables.  
-	 */ 
+	/**
+	 * Build and return a BugReport with set variables.
+	 * @throws NullPointerException if one of variables is null.
+	 * @return A BugReport with set variables.
+	 */
 	public BugReport getBugReport() {
 		validate();
 		return new BugReport(title, description, subsystem, dependsOn, issuedBy, creationDate, tag);
 	}
 
+	//Assure all variables are not null.
 	private void validate() {
 		if (title == null) 			throw new NullPointerException("Bugreport title is null");
 		if (description == null) 	throw new NullPointerException("Bugreport description is null");
