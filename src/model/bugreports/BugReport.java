@@ -31,9 +31,11 @@ public class BugReport implements Comparable<BugReport>, Commentable {
 	 * @param description Description of the BugReport.
 	 * @param subsystem Subsystem this BugReport is attached to.
 	 * @param dependsOn	List of BugReports on which this BugReport depends.
-	 * @param issuedBy Issued who issued this BugReport.
+	 * @param issuedBy Issuer who issued this BugReport.
+	 * @param creationDate The date the BugReport was created.
+	 * @param tag The tag to assign to the BugReport
 	 */
-	public BugReport(String title, String description, Subsystem subsystem, ArrayList<BugReport> dependsOn, Issuer issuedBy) {
+	public BugReport(String title, String description, Subsystem subsystem, ArrayList<BugReport> dependsOn, Issuer issuedBy, Date creationDate, BugTag tag) {
 		//Variables on instantiation.
 		this.dependsOn 	= dependsOn;
 		this.issuedBy 	= issuedBy;
@@ -44,8 +46,8 @@ public class BugReport implements Comparable<BugReport>, Commentable {
 		//Non-variables on instantiation.
 		this.assignees 		= new ArrayList<Developer>();		//No assignees yet on fresh BugReport.
 		this.comments 		= new ArrayList<InitialComment>();	//No comments yet on fresh BugReport.
-		this.creationDate 	= new Date();				//This BugReport is created NOW.
-		setBugTag(BugTag.NEW);							//Fresh BugReport.
+		this.creationDate 	= creationDate;				
+		setBugTag(tag);							
 		setDuplicate(null);								//No reported Duplicate yet.
 	}
 	

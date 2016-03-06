@@ -27,18 +27,29 @@ public class ProjectManager implements ProjectDAO {
 	public void createProject(ProjectCreationForm form) {
 		ProjectTeam team = new ProjectTeam();
 		team.addMember(form.getLeadDeveloper(), Role.LEAD);
-		Project p = (new ProjectBuilder())
-						.setName(form.getName())
-						.setCreationDate(new Date())
-						.setStartDate(form.getStartDate())
-						.setDescription(form.getDescription())
-						.setTeam(team)
-						.setVersion(new Version(1, 0, 0))
-						.setBudgetEstimate(form.getBudgetEstimate())
-						.getProject();
-		projectList.add(p);
+		createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), team, new Version(1, 0, 0));
 	}
 
+	public Project createProject(String name, String description, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam team, Version version) {
+		if (version == null)
+			version = new Version(1, 0, 0);
+		if (team == null)
+			team = new ProjectTeam();
+		
+		Project p = (new ProjectBuilder())
+				.setName(name)
+				.setCreationDate(creationDate)
+				.setStartDate(startDate)
+				.setDescription(description)
+				.setTeam(team)
+				.setVersion(version)
+				.setBudgetEstimate(budgetEstimate)
+				.getProject();
+		projectList.add(p);
+		
+		return p;
+	}
+	
 	/**
 	 * 
 	 * @param form
@@ -101,13 +112,31 @@ public class ProjectManager implements ProjectDAO {
 
 	@Override
 	public void createSubsystem(SubsystemCreationForm form) {
+		createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), new Version(1, 0, 0));
+	}
+	
+	public Subsystem createSubsystem(String name, String description, Project project, System parent, Version version) {
+		if (version == null)
+			version = new Version(1, 0, 0);
+		
 		Subsystem sub = (new SubsystemBuilder())
-							.setDescription(form.getDescription())
-							.setName(form.getName())
-							.setProject(form.getProject())
-							.setVersion(new Version(1, 0 ,0))
-							.setParent(form.getParent())
-							.getSubsystem();
-		form.getParent().addSubsystem(sub);
+				.setDescription(description)
+				.setName(name)
+				.setProject(project)
+				.setVersion(version)
+				.setParent(parent)
+				.getSubsystem();
+		parent.addSubsystem(sub);
+		return sub;
+	}
+	
+	public Subsystem getSubsystemWithName(String name) {
+		for (Project p : projectList) {
+			for (Subsystem s : p.getAllDirectOrIndirectSubsystems()) {
+				if (s.getName().equals(name))
+					return s;
+			}
+		}
+		return null;
 	}
 }
