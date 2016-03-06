@@ -79,172 +79,7 @@ public class Main {
 		projectController = new ProjectController(bugTrap);
 		bugReportController = new BugReportController(bugTrap);
 		
-		// Create users
-		UserManager userManager = (UserManager)bugTrap.getUserDAO();
-		userManager.createUser(UserCategory.ADMIN, "Frederick", "Sam", "Curtis", "curt");
-		Administrator curt = (Administrator) userManager.getUserList().get(0);
-		userManager.createUser(UserCategory.ISSUER, "John", "", "Doctor", "doc");
-		Issuer doc = (Issuer) userManager.getUserList().get(1);
-		userManager.createUser(UserCategory.ISSUER, "Charles", "Arnold", "Berg", "charlie");
-//		Issuer charlie = (Issuer) userManager.getUserList().get(2); Not used?
-		userManager.createUser(UserCategory.DEVELOPER, "Joseph", "", "Mays", "major");
-		Developer major = (Developer) userManager.getUserList().get(3);
-		userManager.createUser(UserCategory.DEVELOPER, "Maria", "", "Carney", "maria");
-		Developer maria = (Developer) userManager.getUserList().get(4);
-		
-		userController.loginAs(curt);
-		
-		// ProjectA
-		ProjectCreationForm form = projectController.getProjectCreationForm();
-		form.setBudgetEstimate(10000);
-		form.setDescription("This is Project A");
-		form.setLeadDeveloper(major);
-		form.setName("ProjectA");
-		form.setStartDate(new Date());
-		projectController.createProject(form);
-		Project projectA = projectController.getProjectList().get(0);
-		userController.logOff();
-		userController.loginAs(maria);
-		ProjectAssignForm assignForm = projectController.getProjectAssignForm();
-		assignForm.setDeveloper(major);
-		assignForm.setProject(projectA);
-		assignForm.setRole(Role.PROGRAMMER);
-		projectController.assignToProject(assignForm);
-		assignForm = projectController.getProjectAssignForm();
-		assignForm.setDeveloper(maria);
-		assignForm.setProject(projectA);
-		assignForm.setRole(Role.TESTER);
-		projectController.assignToProject(assignForm);
-		// Subsystem A1
-		userController.logOff();
-		userController.loginAs(curt);
-		SubsystemCreationForm subForm = projectController.getSubsystemCreationForm();
-		subForm.setDescription("Sub A1");
-		subForm.setName("SubsystemA1");
-		subForm.setParent(projectA);
-		projectController.createSubsystem(subForm);
-		// Subsystem A2
-		subForm = projectController.getSubsystemCreationForm();
-		subForm.setDescription("Sub A2");
-		subForm.setName("SubsystemA2");
-		subForm.setParent(projectA);
-		projectController.createSubsystem(subForm);
-		Subsystem subSystemA2 = projectA.getSubsystems().get(1);
-		// Subsystem A3
-		subForm = projectController.getSubsystemCreationForm();
-		subForm.setDescription("Sub A3");
-		subForm.setName("SubsystemA3");
-		subForm.setParent(projectA);
-		projectController.createSubsystem(subForm);
-		Subsystem subSystemA3 = projectA.getSubsystems().get(2);
-		// Subsystem A3.1
-		subForm = projectController.getSubsystemCreationForm();
-		subForm.setDescription("Sub A3.1");
-		subForm.setName("SubsystemA3.1");
-		subForm.setParent(subSystemA3);
-		projectController.createSubsystem(subForm);
-		Subsystem subSystemA31 = subSystemA3.getSubsystems().get(0);
-		// Subsystem A3.2
-		subForm = projectController.getSubsystemCreationForm();
-		subForm.setDescription("Sub A3.2");
-		subForm.setName("SubsystemA3.2");
-		subForm.setParent(subSystemA3);
-		projectController.createSubsystem(subForm);
-		
-		// ProjectB
-		form = projectController.getProjectCreationForm();
-		form.setBudgetEstimate(10000);
-		form.setDescription("This is Project B");
-		form.setLeadDeveloper(maria);
-		form.setName("ProjectB");
-		form.setStartDate(new Date());
-		projectController.createProject(form);
-		Project projectB = projectController.getProjectList().get(1);
-		userController.logOff();
-		userController.loginAs(maria);
-		assignForm = projectController.getProjectAssignForm();
-		assignForm.setDeveloper(major);
-		assignForm.setProject(projectB);
-		assignForm.setRole(Role.PROGRAMMER);
-		projectController.assignToProject(assignForm);
-		
-		userController.logOff();
-		userController.loginAs(curt);
-		// Subsystem B1
-		subForm = projectController.getSubsystemCreationForm();
-		subForm.setDescription("Sub B1");
-		subForm.setName("SubsystemB1");
-		subForm.setParent(projectB);
-		projectController.createSubsystem(subForm);
-		Subsystem subSystemB1 = projectB.getSubsystems().get(0);
-		// Subsystem B2
-		subForm = projectController.getSubsystemCreationForm();
-		subForm.setDescription("Sub B2");
-		subForm.setName("SubsystemB2");
-		subForm.setParent(projectB);
-		projectController.createSubsystem(subForm);
-		Subsystem subSystemB2 = projectB.getSubsystems().get(1);
-		// Subsystem B2.1
-		subForm = projectController.getSubsystemCreationForm();
-		subForm.setDescription("Sub B2.1");
-		subForm.setName("SubsystemB2.1");
-		subForm.setParent(subSystemB2);
-		projectController.createSubsystem(subForm);
-		
-		// Bugreport 1
-		userController.logOff();
-		userController.loginAs(doc);
-		BugReportCreationForm bugForm = bugReportController.getBugReportCreationForm();
-		bugForm.setDescription("If the function parse ewd is invoked while ...");
-		bugForm.setTitle("The function parse ewd returns unexpected results");
-		bugForm.setIssuer(maria);
-		bugForm.setSubsystem(subSystemB1);
-		bugForm.setDependsOn(new ArrayList<BugReport>());
-		bugReportController.createBugReport(bugForm);
-		BugReport report1 = bugReportController.getBugReportList().get(0);
-		userController.logOff();
-		userController.loginAs(maria);
-		BugReportAssignForm bugAssign = bugReportController.getBugReportAssignForm();
-		bugAssign.setBugReport(report1);
-		bugAssign.setDeveloper(maria);
-		bugReportController.assignToBugReport(bugAssign);
-		BugReportUpdateForm bugUpdate = bugReportController.getBugReportUpdateForm();
-		bugUpdate.setBugReport(report1);
-		bugUpdate.setBugTag(BugTag.CLOSED);
-		bugReportController.updateBugReport(bugUpdate);
-				
-		// Bugreport 2
-		bugForm = bugReportController.getBugReportCreationForm();
-		bugForm.setDescription("If incorrect user input is entered into the system ...");
-		bugForm.setTitle("Crash while processing user input");
-		bugForm.setIssuer(major);
-		bugForm.setSubsystem(subSystemA31);
-		bugForm.setDependsOn(new ArrayList<BugReport>());
-		bugReportController.createBugReport(bugForm);
-		BugReport report2 = bugReportController.getBugReportList().get(1);
-		bugAssign = bugReportController.getBugReportAssignForm();
-		bugAssign.setBugReport(report2);
-		bugAssign.setDeveloper(major);
-		bugReportController.assignToBugReport(bugAssign);
-		bugAssign = bugReportController.getBugReportAssignForm();
-		bugAssign.setBugReport(report2);
-		bugAssign.setDeveloper(maria);
-		bugReportController.assignToBugReport(bugAssign);
-		bugUpdate = bugReportController.getBugReportUpdateForm();
-		bugUpdate.setBugReport(report2);
-		bugUpdate.setBugTag(BugTag.ASSIGNED);
-		bugReportController.updateBugReport(bugUpdate);
-		
-		// Bugreport 3
-		bugForm = bugReportController.getBugReportCreationForm();
-		bugForm.setDescription("“If the function process dfe is invoked with ...");
-		bugForm.setTitle("SubsystemA2 feezes");
-		bugForm.setIssuer(major);
-		bugForm.setSubsystem(subSystemA2);
-		bugForm.setDependsOn(new ArrayList<BugReport>());
-		bugReportController.createBugReport(bugForm);
-		
-		userController.logOff();
+		bugTrap.initialize();
 	}
 
 	public static void processCommand(String command) {
@@ -356,7 +191,7 @@ public class Main {
 		while (!valid) {
 			try {
 				System.out.println("Enter the start date for the project (dd/mm/yyyy):");
-				form.setStartDate((new SimpleDateFormat("dd/mm/yyyy")).parse(input.nextLine()));
+				form.setStartDate((new SimpleDateFormat("dd/MM/yyyy")).parse(input.nextLine()));
 				valid = true;
 			} catch (Exception e) { }
 		}
@@ -396,7 +231,7 @@ public class Main {
 		while (!valid) {
 			try {
 				System.out.println("Enter the start date for the project (dd/mm/yyyy):");
-				form.setStartDate((new SimpleDateFormat("dd/mm/yyyy")).parse(input.nextLine()));
+				form.setStartDate((new SimpleDateFormat("dd/MM/yyyy")).parse(input.nextLine()));
 				valid = true;
 			} catch (Exception e) { }
 		}
@@ -453,7 +288,6 @@ public class Main {
 		System.out.println("Project is deleted.");
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static void showProject() {
 		Project project = null;
 		try {
@@ -461,8 +295,8 @@ public class Main {
 			System.out.println(" -- " + project.getName() + " -- ");
 			System.out.println(" Description: " + project.getDescription());
 			System.out.println(" Budget estimate: " + project.getBudgetEstimate());
-			System.out.println(" Creation date: " + project.getCreationDate().getDay() + "/" + project.getCreationDate().getMonth() + "/" + project.getCreationDate().getYear());
-			System.out.println(" Start date: " + project.getStartDate().getDay() + "/" + project.getStartDate().getMonth() + "/" + project.getStartDate().getYear());
+			System.out.println(" Creation date: " + project.getCreationDate().toString());
+			System.out.println(" Start date: " + project.getStartDate().toString());
 			System.out.println(" Version: " + project.getVersion());
 			
 			for (Subsystem system : project.getAllDirectOrIndirectSubsystems()) {
@@ -661,7 +495,6 @@ public class Main {
 		FilterType type = selectFilterType();
 		System.out.println("Enter the search parameter: ");
 		String parameter = input.nextLine();
-		System.out.println(parameter);
 		ArrayList<BugReport> filtered;
 		try {
 			filtered = bugReportController.getOrderedList(new FilterType[]{type}, new String[]{parameter});

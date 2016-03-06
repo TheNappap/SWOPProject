@@ -64,7 +64,7 @@ public class BugReportController extends Controller {
 
 		if (getBugTrap().getUserDAO().getLoggedInUser() == null || (getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ISSUER
 																&& getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.DEVELOPER))
-			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
+			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
 		return getBugTrap().getBugReportDAO().getOrderedList(types, arguments);
 	}
