@@ -31,7 +31,7 @@ public class BugReport implements Comparable<BugReport>, Commentable {
 	 * @param description Description of the BugReport.
 	 * @param subsystem Subsystem this BugReport is attached to.
 	 * @param dependsOn	List of BugReports on which this BugReport depends.
-	 * @param issuedBy Issued who issued this BugReport.
+	 * @param issuedBy Issuer who issued this BugReport.
 	 */
 	public BugReport(String title, String description, Subsystem subsystem, ArrayList<BugReport> dependsOn, Issuer issuedBy) {
 		//Variables on instantiation.

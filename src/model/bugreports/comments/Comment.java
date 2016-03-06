@@ -5,18 +5,21 @@ import java.util.Date;
 
 public abstract class Comment implements Commentable {
 
-	private final Date creationDate;
-	private final ArrayList<ReplyComment> comments;
-	
-	private String text;
+	private final Date creationDate;	//Creation Date of the Comment.
+	private final ArrayList<ReplyComment> comments;	//Comments to this Comment.
+	private String text;	//Text.
 
+	/**
+	 * Constructor.
+	 * @param text The text of this Comment.
+	 */
 	public Comment(String text) {
 		this.creationDate = new Date();
 		this.comments = new ArrayList<ReplyComment>();
-		
-		setText(text);
+		this.text = text;
 	}
-	
+
+	@Override
 	public void addComment(String commentText) {
 		getComments().add(new ReplyComment(commentText, this));
 	}

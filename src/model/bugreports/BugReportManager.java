@@ -18,18 +18,12 @@ public class BugReportManager implements BugReportDAO {
 	private final ArrayList<BugReport> bugReportList; //List that keeps BugReports.
 
 	/**
-	 * BugReportManager Constructor.
+	 * Constructor.
 	 */
 	public BugReportManager() {
 		this.bugReportList = new ArrayList<BugReport>();
 	}
 
-	/**
-	 * Returns a COPY of the BugReport list with given filters applied.
-	 * @param types The FilterTypes
-	 * @param arguments The arguments for the FilterTypes
-	 * @return A filtered, ordered BugReport list.
-	 */
 	@Override
 	public ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) {
 		ArrayList<BugReport> filteredList = cloneList();
