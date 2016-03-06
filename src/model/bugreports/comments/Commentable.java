@@ -5,5 +5,9 @@ package model.bugreports.comments;
  */
 public interface Commentable { 
 	
+	/**
+	 * Add a Comment to this Commentable with given text.
+	 * @param text The text of the comment.
+	 */
 	public void addComment(String text);
 }

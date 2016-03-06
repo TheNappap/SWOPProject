@@ -6,14 +6,27 @@ import java.util.Iterator;
 import model.bugreports.BugReport;
 import model.users.Developer;
 
+/**
+ * Class dedicated to filtering BugReport lists according to FilterTypes.
+ */
 public class BugReportFilter {
 
-	private final ArrayList<BugReport> filteredList;
+	private final ArrayList<BugReport> filteredList; //List to filter.
 	
+	/**
+	 * Constructor.
+	 * @param bugReportList The BugReport list to filter.
+	 */
 	public BugReportFilter(ArrayList<BugReport> bugReportList) {
 		this.filteredList = bugReportList;
 	}
 	
+	/**
+	 * Filter the list according to given FilterType and argument (of type String).
+	 * @param type FilterType to filter by.
+	 * @param string Argument to filter by.
+	 * @return The list with given filter applied.
+	 */
 	public ArrayList<BugReport> filter(FilterType type, String string) {
 		switch (type) {
 		case CONTAINS_STRING:
