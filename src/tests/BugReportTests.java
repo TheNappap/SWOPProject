@@ -131,7 +131,7 @@ public class BugReportTests {
 			assertEquals("Project title 0", filteredTitle.get(0).getTitle());
 			
 			ArrayList<BugReport> filteredDesc = controller.getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING}, new String[]{"Very"});
-			
+		
 			assertEquals(5, filteredDesc.size());
 		} catch (UnauthorizedAccessException e) {
 			fail("not logged in as issuer");
