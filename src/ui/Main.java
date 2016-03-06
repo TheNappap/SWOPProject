@@ -495,7 +495,6 @@ public class Main {
 		FilterType type = selectFilterType();
 		System.out.println("Enter the search parameter: ");
 		String parameter = input.nextLine();
-		System.out.println(parameter);
 		ArrayList<BugReport> filtered;
 		try {
 			filtered = bugReportController.getOrderedList(new FilterType[]{type}, new String[]{parameter});
