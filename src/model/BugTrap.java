@@ -9,9 +9,9 @@ import model.users.UserManager;
 
 public class BugTrap {
 
-	private final UserDAO userDAO;
-	private final ProjectDAO projectDAO;
-	private final BugReportDAO bugReportDAO;
+	final UserManager userDAO;
+	final ProjectManager projectDAO;
+	final BugReportManager bugReportDAO;
 	
 	
 	public BugTrap() {
@@ -19,7 +19,6 @@ public class BugTrap {
 		this.projectDAO = new ProjectManager();
 		this.bugReportDAO = new BugReportManager();
 	}
-
 
 	public UserDAO getUserDAO() {
 		return userDAO;
@@ -33,5 +32,10 @@ public class BugTrap {
 
 	public BugReportDAO getBugReportDAO() {
 		return bugReportDAO;
+	}
+	
+	public void initialize() {
+		BugTrapInitializer initializer = new BugTrapInitializer(this);
+		initializer.init();
 	}
 }

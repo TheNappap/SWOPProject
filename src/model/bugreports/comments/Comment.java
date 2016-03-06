@@ -9,10 +9,10 @@ public abstract class Comment implements Commentable {
 	private final ArrayList<ReplyComment> comments;	//Comments to this Comment.
 	private String text;	//Text.
 
-	/**
-	 * Constructor.
-	 * @param text The text of this Comment.
-	 */
+	/**  
+	 * Constructor.  
+	 * @param text The text of this Comment.  
+	 */  
 	public Comment(String text) {
 		this.creationDate = new Date();
 		this.comments = new ArrayList<ReplyComment>();

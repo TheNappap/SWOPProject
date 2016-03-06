@@ -1,7 +1,8 @@
 package model.bugreports;
 
-/**
- * Enumeration of possible BugTags.
+
+/**  
+ * Enumeration of possible BugTags.  
  */
 public enum BugTag {
 	RESOLVED,		//Issuer is satisfied by bug fix.

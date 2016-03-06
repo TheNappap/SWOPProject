@@ -150,4 +150,17 @@ public class UserManager  implements UserDAO {
 		return false;
 	}
 	
+	/**
+	 * Gets the user with given username
+	 * @param userName
+	 * @return The user with the given username. Null if no such user exists.
+	 */
+	public User getUser(String userName) {
+		for(User user: getUserList()){
+			if(user.getUserName().equals(userName)){
+				return user;
+			}
+		}
+		return null;
+	}
 }

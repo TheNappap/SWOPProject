@@ -2,11 +2,14 @@ package model.bugreports;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportCreationForm;
+import model.projects.Subsystem;
+import model.users.Issuer;
 
 /**
  * 
@@ -48,14 +51,19 @@ public class BugReportManager implements BugReportDAO {
 	 */
 	@Override
 	public void addBugReport(BugReportCreationForm form) {
-		getBugReportList().add((new BugReportBuilder()).setTitle(form.getTitle())
-				.setDescription(form.getDescription())
-				.setSubsystem(form.getSubsystem())
-				.setIssuer(form.getIssuer())
-				.setDependsOn(form.getDependsOn())
+		addBugReport(form.getTitle(), form.getDescription(), new Date(), form.getSubsystem(), form.getIssuer(), form.getDependsOn(), BugTag.NEW);
+	}
+	
+	public void addBugReport(String title, String description, Date creationDate, Subsystem subsystem, Issuer issuer, ArrayList<BugReport> dependencies, BugTag tag) {
+		getBugReportList().add((new BugReportBuilder()).setTitle(title)
+				.setDescription(description)
+				.setSubsystem(subsystem)
+				.setIssuer(issuer)
+				.setDependsOn(dependencies)
+				.setCreationDate(creationDate)
+				.setBugTag(tag)
 				.getBugReport());
 	}
-
 
 	private ArrayList<BugReport> cloneList() {
 		ArrayList<BugReport> clonedList = new ArrayList<BugReport>();
