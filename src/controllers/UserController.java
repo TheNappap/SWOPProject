@@ -6,7 +6,7 @@ import model.BugTrap;
 import model.users.User;
 import model.users.UserCategory;
 
-public class UserController extends Controller{
+public class UserController extends Controller {
 	
 	public UserController(BugTrap bugTrap) {
 		super(bugTrap);

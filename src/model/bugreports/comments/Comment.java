@@ -2,12 +2,18 @@ package model.bugreports.comments;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public abstract class Comment implements Commentable {
+/**
+ * Class that represents a Comment.
+ * 
+ */
+public abstract class Comment implements Commentable { //A Comment can be commented on.
 
-	private final Date creationDate;	//Creation Date of the Comment.
-	private final ArrayList<ReplyComment> comments;	//Comments to this Comment.
-	private String text;	//Text.
+	//All immutable.
+	private final Date creationDate;				//Creation Date of the Comment.
+	private final List<ReplyComment> comments;		//Comments to this Comment.
+	private final String text;						//Text.
 
 	/**  
 	 * Constructor.  
@@ -15,13 +21,13 @@ public abstract class Comment implements Commentable {
 	 */  
 	public Comment(String text) {
 		this.creationDate = new Date();
-		this.comments = new ArrayList<ReplyComment>();
-		this.text = text;
+		this.comments 	  = new ArrayList<ReplyComment>();
+		this.text 		  = text;
 	}
 
 	@Override
 	public void addComment(String commentText) {
-		getComments().add(new ReplyComment(commentText, this));
+		comments.add(new ReplyComment(commentText, this));
 	}
 	
 	//Getters and Setters
@@ -30,16 +36,16 @@ public abstract class Comment implements Commentable {
 		return text;
 	}
 	
-	public void setText(String text) {
-		this.text = text;
-	}
-	
 	public Date getCreationDate() {
 		return creationDate;
 	}
 
-	public ArrayList<ReplyComment> getComments() {
-		return comments;
+	public List<ReplyComment> getComments() {
+		List<ReplyComment> returnComments = new ArrayList<ReplyComment>(comments.size());
+		
+		for (ReplyComment replyComment : comments) returnComments.add(replyComment);
+		
+		return returnComments;
 	}
 
 }
