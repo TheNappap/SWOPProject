@@ -10,7 +10,6 @@ import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
-import model.users.UserCategory;
 
 public class BugReportController extends Controller {
 

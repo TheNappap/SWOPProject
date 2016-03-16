@@ -188,9 +188,9 @@ public class Main {
 		ProjectForkForm form;
 		Project project;
 		try {
-			form = projectController.getProjectForkForm();
+			form = projectController.getProjectForkForm(); 
 			project = selectProject(projectController.getProjectList());
-
+			form.setProject(project);
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
 			return;
