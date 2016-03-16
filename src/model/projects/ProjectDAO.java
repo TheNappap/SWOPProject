@@ -1,6 +1,5 @@
 package model.projects;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import model.projects.forms.*;
