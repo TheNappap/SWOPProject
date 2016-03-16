@@ -9,7 +9,7 @@ import model.projects.builders.SubsystemBuilder;
 import model.projects.forms.*;
 import model.users.Developer;
 
-public class ProjectManager implements ProjectDAO {
+public class ProjectManager {
 
 	private ArrayList<Project> projectList;
 
@@ -21,7 +21,6 @@ public class ProjectManager implements ProjectDAO {
 	 * Create and add a new project to the list.
 	 * @param form The filled in form with the details about the project to be created.
 	 */
-	@Override
 	public void createProject(ProjectCreationForm form) {
 		ProjectTeam team = new ProjectTeam();
 		team.addMember(form.getLeadDeveloper(), Role.LEAD);
@@ -52,7 +51,6 @@ public class ProjectManager implements ProjectDAO {
 	 * Fork an existing project and add it to the projects list.
 	 * @param form The ProjectForkForm containing all the details about the project to be forked.
      */
-	@Override
 	public void createFork(ProjectForkForm form) {
 		Project fork = new Project(form.getProject());
 		fork.setBudgetEstimate(form.getBudgetEstimate());
@@ -65,7 +63,6 @@ public class ProjectManager implements ProjectDAO {
 	 * Method to update a project.
 	 * @param form The ProjectUpdateForm containing all the details about the project to update.
 	 */
-	@Override
 	public void updateProject(ProjectUpdateForm form) {
 		Project project = form.getProject();
 		for (Project p : projectList) {
@@ -84,7 +81,6 @@ public class ProjectManager implements ProjectDAO {
 	 * Method to delete a project.
 	 * @param form The ProjectDeleteForm containing all the details about the project to delete.
 	 */
-	@Override
 	public void deleteProject(ProjectDeleteForm form) {
 		Project project = form.getProject();
 		for (int i = 0; i < projectList.size(); i++) {
@@ -97,7 +93,6 @@ public class ProjectManager implements ProjectDAO {
 	 * Method to assign a developer to a project.
 	 * @param form The ProjectAssignForm containing all the details about the assignment.
 	 */
-	@Override
 	public void assignToProject(ProjectAssignForm form) {
 		Project project = form.getProject();
 		for (Project p : projectList) {
@@ -110,7 +105,6 @@ public class ProjectManager implements ProjectDAO {
 	 * Method to get all the projects in the system.
 	 * @return List containing all the projects in the system.
      */
-	@Override
 	public List<Project> getProjects() {
 		ArrayList<Project> projects = new ArrayList<Project>();
 		for (Project p : projectList)
@@ -123,7 +117,6 @@ public class ProjectManager implements ProjectDAO {
 	 * @param dev The developer for who to find the projects he/she leads.
 	 * @return List containing all the projects for which the given developer is lead.
      */
-	@Override
 	public List<Project> getProjectsForLeadDeveloper(Developer dev) {
 		ArrayList<Project> projs = new ArrayList<Project>();
 		for (Project p : projectList) {
@@ -137,7 +130,6 @@ public class ProjectManager implements ProjectDAO {
 	 * Method to create a subsystem.
 	 * @param form The SubsystemCreationForm containing all the data needed to create the subsystem.
      */
-	@Override
 	public void createSubsystem(SubsystemCreationForm form) {
 		createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), new Version(1, 0, 0));
 	}

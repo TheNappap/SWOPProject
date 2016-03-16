@@ -77,7 +77,7 @@ public class ProjectController extends Controller {
      */
 	public void forkProject(ProjectForkForm form) {
 		form.allVarsFilledIn();
-		getBugTrap().getProjectDAO().createFork(form);
+		getBugTrap().getProjectManager().createFork(form);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class ProjectController extends Controller {
 	 */
 	public void updateProject(ProjectUpdateForm form) {
 		form.allVarsFilledIn();
-		getBugTrap().getProjectDAO().updateProject(form);
+		getBugTrap().getProjectManager().updateProject(form);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class ProjectController extends Controller {
 	 */
 	public void assignToProject(ProjectAssignForm form) {
 		form.allVarsFilledIn();
-		getBugTrap().getProjectDAO().assignToProject(form);
+		getBugTrap().getProjectManager().assignToProject(form);
 	}
 
 	/**
@@ -116,6 +116,6 @@ public class ProjectController extends Controller {
 	
 	public void createSubsystem(SubsystemCreationForm form) {
 		form.allVarsFilledIn();
-		getBugTrap().getProjectDAO().createSubsystem(form);
+		getBugTrap().getProjectManager().createSubsystem(form);
 	}
 }
