@@ -5,6 +5,9 @@ import java.util.Date;
 import model.Form;
 import model.users.Developer;
 
+/**
+ * Form used to store temporary data to create a project.
+ */
 public class ProjectCreationForm implements Form {
 
 	private String name;

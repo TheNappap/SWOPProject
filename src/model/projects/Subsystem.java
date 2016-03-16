@@ -1,5 +1,8 @@
 package model.projects;
 
+/**
+ * This class represents a subsystem in a system.
+ */
 public class Subsystem extends System {
 
 	private Project project;

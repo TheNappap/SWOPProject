@@ -4,6 +4,9 @@ import model.Form;
 import model.projects.System;
 import model.projects.Project;
 
+/**
+ * Form used to store temporary data to create a subsystem.
+ */
 public class SubsystemCreationForm implements Form {
 
 	private String name;

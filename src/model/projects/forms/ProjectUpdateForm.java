@@ -7,6 +7,9 @@ import model.projects.Project;
 import model.projects.Version;
 import model.users.Developer;
 
+/**
+ * Form used to store temporary data to update a project.
+ */
 public class ProjectUpdateForm implements Form {
 
 	private String name;
