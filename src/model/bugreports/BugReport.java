@@ -5,7 +5,7 @@ import java.util.List;
 
 import model.bugreports.comments.Commentable;
 import model.bugreports.comments.InitialComment;
-import model.bugtag.BugTag;
+import model.bugreports.bugtag.BugTag;
 import model.projects.Subsystem;
 import model.users.Developer;
 import model.users.Issuer;

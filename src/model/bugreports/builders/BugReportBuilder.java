@@ -6,9 +6,9 @@ import java.util.List;
 
 import model.bugreports.BugReport;
 import model.bugreports.comments.InitialComment;
-import model.bugtag.BugTag;
-import model.bugtag.BugTagEnum;
-import model.bugtag.New;
+import model.bugreports.bugtag.BugTag;
+import model.bugreports.bugtag.BugTagEnum;
+import model.bugreports.bugtag.New;
 import model.projects.Subsystem;
 import model.users.Developer;
 import model.users.Issuer;

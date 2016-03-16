@@ -1,5 +1,4 @@
-package model.bugtag;
-
+package model.bugreports.bugtag;
 /**
  * Class representing a BugTag
  *
