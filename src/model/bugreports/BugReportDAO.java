@@ -1,9 +1,9 @@
 package model.bugreports;
 
-import java.util.ArrayList;
-
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportCreationForm;
+
+import java.util.ArrayList;
 
 public interface BugReportDAO {
 

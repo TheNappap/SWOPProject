@@ -1,10 +1,10 @@
 package model.bugreports.filters;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import model.bugreports.BugReport;
 import model.users.Developer;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**  
  * Class dedicated to filtering BugReport lists according to FilterTypes.  

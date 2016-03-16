@@ -1,10 +1,5 @@
 package ui;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import controllers.BugReportController;
 import controllers.ProjectController;
 import controllers.UserController;
@@ -29,6 +24,11 @@ import model.users.Developer;
 import model.users.Issuer;
 import model.users.User;
 import model.users.UserCategory;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -406,7 +406,7 @@ public class Main {
 			System.out.println("Enter a description:");
 			form.setDescription(input.nextLine());
 			
-			ArrayList<BugReport> allReports = bugReportController.getBugReportList();
+			List<BugReport> allReports = bugReportController.getBugReportList();
 			ArrayList<BugReport> projectReports = new ArrayList<BugReport>();
 			ArrayList<Subsystem> projectSubs = chosenProject.getAllDirectOrIndirectSubsystems();
 			for (BugReport r : allReports) 
@@ -550,7 +550,7 @@ public class Main {
 		FilterType type = selectFilterType();
 		System.out.println("Enter the search parameter: ");
 		String parameter = input.nextLine();
-		ArrayList<BugReport> filtered;
+		List<BugReport> filtered;
 		try {
 			filtered = bugReportController.getOrderedList(new FilterType[]{type}, new String[]{parameter});
 			while (true) {

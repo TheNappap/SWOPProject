@@ -1,17 +1,16 @@
 package tests;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Date;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import model.BugTrap;
 import model.projects.Project;
 import model.projects.ProjectManager;
 import model.projects.ProjectTeam;
 import model.projects.Version;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
 
 public class CreateProjectUseCaseTest {
 

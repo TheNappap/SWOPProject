@@ -1,7 +1,5 @@
 package controllers;
 
-import java.util.ArrayList;
-
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.BugReport;
@@ -10,6 +8,8 @@ import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
+
+import java.util.List;
 
 public class BugReportController extends Controller {
 
@@ -48,7 +48,7 @@ public class BugReportController extends Controller {
 		return new BugReportUpdateForm();
 	}
 
-	public ArrayList<BugReport> getBugReportList() throws UnauthorizedAccessException{
+	public List<BugReport> getBugReportList() throws UnauthorizedAccessException{
 
 		if (!getBugTrap().isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
@@ -56,7 +56,7 @@ public class BugReportController extends Controller {
 		return getBugTrap().getBugReportDAO().getBugReportList();
 	}
 
-	public ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
+	public List<BugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
 
 		if (!getBugTrap().isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
