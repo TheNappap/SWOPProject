@@ -51,8 +51,7 @@ public class ProjectController extends Controller {
 		return new ProjectDeleteForm();
 	}
 
-	public ProjectAssignForm getProjectAssignForm() throws UnauthorizedAccessException{
-
+	public ProjectAssignForm getProjectAssignForm() throws UnauthorizedAccessException {
 		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.DEVELOPER)
 			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
 		
