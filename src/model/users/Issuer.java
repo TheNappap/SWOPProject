@@ -7,7 +7,7 @@ public class Issuer extends UserImpl {
 	}
 
 	@Override
-	public UserCategory getCategory() {
+	protected UserCategory getCategory() {
 		return UserCategory.ISSUER;
 	}
 }

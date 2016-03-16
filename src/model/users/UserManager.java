@@ -38,7 +38,7 @@ public class UserManager{
 	 */
 	public String loginAs(User loggingUser) {
 		if(!userExists(loggingUser)) 
-			throw new IllegalArgumentException("the given user does not exist in the system");
+			throw new NoUserWithUserNameException();
 
 		if (isLoggedIn(loggingUser))
 			return "User: " + loggingUser.getUserName() + " is already logged in.";
@@ -92,12 +92,8 @@ public class UserManager{
 	/**
 	 * sets the logged in user to the given user
 	 * @param user to set as logged in
-	 * @throws NoUserWithUserNameException if the given username does not exist
 	 */
 	private void setLoggedInUser(User user){
-		if(!userNameExists(user.getUserName()))
-			throw new NoUserWithUserNameException();
-		
 		UserImpl userImpl = null;
 		for (UserImpl u : userList) {
 			if(u.getUserName().equals(user.getUserName())){
@@ -189,6 +185,7 @@ public class UserManager{
 	 * Gets the user with given username
 	 * @param userName
 	 * @return The user with the given username. Null if no such user exists.
+	 * @throws NoUserWithUserNameException
 	 */
 	public User getUser(String userName) {
 		for(User user: getUserList()){
@@ -196,6 +193,6 @@ public class UserManager{
 				return user;
 			}
 		}
-		return null;
+		throw new NoUserWithUserNameException();
 	}
 }

@@ -8,8 +8,10 @@ import org.junit.Test;
 import model.users.Administrator;
 import model.users.Developer;
 import model.users.Issuer;
+import model.users.User;
 import model.users.UserCategory;
 import model.users.UserManager;
+import model.users.exceptions.NoUserWithUserNameException;
 import model.users.exceptions.NotUniqueUserNameException;
 
 public class UserManagerTests {
@@ -38,7 +40,7 @@ public class UserManagerTests {
 
 	@Test
 	public void adminCreateTest() {
-		Assert.assertEquals(admin.getCategory(), UserCategory.ADMIN);
+		Assert.assertTrue(admin.isAdmin());
 		Assert.assertEquals(admin.getFirstName(), "Richard");
 		Assert.assertEquals(admin.getMiddleName(), "Rosie");
 		Assert.assertEquals(admin.getLastName(), "Reese");
@@ -47,7 +49,7 @@ public class UserManagerTests {
 	
 	@Test
 	public void issuerCreateTest() {
-		Assert.assertEquals(issuer.getCategory(), UserCategory.ISSUER);
+		Assert.assertTrue(issuer.isIssuer());
 		Assert.assertEquals(issuer.getFirstName(), "Lindsey");
 		Assert.assertEquals(issuer.getMiddleName(), "Lida");
 		Assert.assertEquals(issuer.getLastName(), "Linkovic");
@@ -56,7 +58,7 @@ public class UserManagerTests {
 	
 	@Test
 	public void devCreateTest() {
-		Assert.assertEquals(dev.getCategory(), UserCategory.DEVELOPER);
+		Assert.assertTrue(dev.isDeveloper());
 		Assert.assertEquals(dev.getFirstName(), "Carl");
 		Assert.assertEquals(dev.getMiddleName(), "Casey");
 		Assert.assertEquals(dev.getLastName(), "Carver");
@@ -80,7 +82,7 @@ public class UserManagerTests {
 		Assert.assertFalse(userManager.isLoggedIn(dev));
 	}
 	
-	@Test (expected = IllegalArgumentException.class)
+	@Test (expected = NoUserWithUserNameException.class)
 	public void loginFailTest() {
 		Developer d = new Developer("", "", "", "");
 		userManager.loginAs(d);
@@ -110,6 +112,21 @@ public class UserManagerTests {
 		userManager.createUser(UserCategory.ADMIN, "", "", "", "");
 		nbAdmins = userManager.getUserList(UserCategory.ADMIN).size();
 		Assert.assertEquals(2, nbAdmins);
+	}
+	
+	@Test
+	public void getUserSuccesTest() {
+		User user = userManager.getUser("RRR");
+		Assert.assertEquals(admin, user);
+		user = userManager.getUser("LLL");
+		Assert.assertEquals(issuer, user);
+		user = userManager.getUser("CCC");
+		Assert.assertEquals(dev, user);
+	}
+	
+	@Test (expected = NoUserWithUserNameException.class)
+	public void getUserFailTest() {
+		userManager.getUser("NotAUser");
 	}
 
 }

@@ -7,7 +7,7 @@ public class Administrator extends UserImpl{
 	}
 
 	@Override
-	public UserCategory getCategory() {
+	protected UserCategory getCategory() {
 		return UserCategory.ADMIN;
 	}
 }
