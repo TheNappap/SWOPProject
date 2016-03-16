@@ -14,6 +14,16 @@ public class Version implements Comparable<Version> {
 		this.minor = minor;
 		this.revision =  revision;
 	}
+
+	/**
+	 * Copy constructor.
+	 * @param version The Version object to copy.
+     */
+	Version(Version version) {
+		this.major = version.getMajor();
+		this.minor = version.getMinor();
+		this.revision = version.getRevision();
+	}
 	
 	public int getMajor() {
 		return major;

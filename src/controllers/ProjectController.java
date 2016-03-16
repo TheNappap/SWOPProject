@@ -1,15 +1,12 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.Project;
-import model.projects.forms.ProjectAssignForm;
-import model.projects.forms.ProjectCreationForm;
-import model.projects.forms.ProjectDeleteForm;
-import model.projects.forms.ProjectUpdateForm;
-import model.projects.forms.SubsystemCreationForm;
+import model.projects.forms.*;
 import model.users.Developer;
 import model.users.UserCategory;
 
@@ -19,48 +16,55 @@ public class ProjectController extends Controller {
 		super(bugTrap);
 	}
 
-	public ArrayList<Project> getProjectList() throws UnauthorizedAccessException{
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null)
+	public List<Project> getProjectList() throws UnauthorizedAccessException{
+		if (getBugTrap().getUserManager().getLoggedInUser() == null)
 			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
 		
 		return getBugTrap().getProjectDAO().getProjects();
 	}
 	
-	public ArrayList<Project> getProjectsForLeadDeveloper(Developer dev) {
+	public List<Project> getProjectsForLeadDeveloper(Developer dev) {
 		return getBugTrap().getProjectDAO().getProjectsForLeadDeveloper(dev);
 	}
 
 	public ProjectCreationForm getProjectCreationForm() throws UnauthorizedAccessException {
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.ADMIN)
 			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
 		
 		return new ProjectCreationForm();
 	}
 
+	public ProjectForkForm getProjectForkForm() throws UnauthorizedAccessException {
+		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
+
+		return new ProjectForkForm();
+	}
+
 	public ProjectUpdateForm getProjectUpdateForm() throws UnauthorizedAccessException {
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.ADMIN)
 			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
 		
 		return new ProjectUpdateForm();
 	}
 	
 	public ProjectDeleteForm getProjectDeleteForm() throws UnauthorizedAccessException {
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.ADMIN)
 			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
 		
 		return new ProjectDeleteForm();
 	}
 
 	public ProjectAssignForm getProjectAssignForm() throws UnauthorizedAccessException {
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.DEVELOPER)
+		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.DEVELOPER)
 			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
 		
 		return new ProjectAssignForm();
 	}
 
 	/**
-	 * 
-	 * @param form
+	 * Create a project with the information provided in the form.
+	 * @param form ProjectCreationForm containing all the details about the project to be created.
 	 */
 	public void createProject(ProjectCreationForm form) {
 		form.allVarsFilledIn();
@@ -68,8 +72,17 @@ public class ProjectController extends Controller {
 	}
 
 	/**
-	 * 
-	 * @param form
+	 * Fork a project with the information provided in the form.
+	 * @param form ProjectForkForm containing all the details about the fork.
+     */
+	public void forkProject(ProjectForkForm form) {
+		form.allVarsFilledIn();
+		getBugTrap().getProjectDAO().createFork(form);
+	}
+
+	/**
+	 * Update a project with the information provided in the form.
+	 * @param form ProjectUpdateForm containing all the details about the update.
 	 */
 	public void updateProject(ProjectUpdateForm form) {
 		form.allVarsFilledIn();
@@ -77,8 +90,8 @@ public class ProjectController extends Controller {
 	}
 
 	/**
-	 * 
-	 * @param form
+	 * Assign a developer to the project with the information provided in the form.
+	 * @param form ProjectAssignForm containing the details about the assignment.
 	 */
 	public void assignToProject(ProjectAssignForm form) {
 		form.allVarsFilledIn();
@@ -86,8 +99,8 @@ public class ProjectController extends Controller {
 	}
 
 	/**
-	 * 
-	 * @param project
+	 * Delete a project with the information provided in the form.
+	 * @param form ProjectDeleteForm containing the details about the project to be deleted.
 	 */
 	public void deleteProject(ProjectDeleteForm form) {
 		getBugTrap().getProjectDAO().deleteProject(form);
@@ -95,7 +108,7 @@ public class ProjectController extends Controller {
 
 	public SubsystemCreationForm getSubsystemCreationForm() throws UnauthorizedAccessException{
 
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.ADMIN)
 			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
 		
 		return new SubsystemCreationForm();

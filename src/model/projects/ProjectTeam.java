@@ -17,6 +17,16 @@ public class ProjectTeam {
 	}
 
 	/**
+	 * Copy constructor.
+	 * @param pteam The team to copy.
+     */
+	ProjectTeam(ProjectTeam pteam) {
+		this.team = new ArrayList<DeveloperRoleRelation>();
+		for (DeveloperRoleRelation rel : pteam.team)
+			this.team.add(new DeveloperRoleRelation(rel));
+	}
+
+	/**
 	 * Method to add a member to the team. The member is assigned a certain role.
 	 * If this member with this role is already in the team, nothing is added.
 	 * @param user The user for which to add a role.
