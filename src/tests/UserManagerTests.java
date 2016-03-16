@@ -5,8 +5,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import controllers.UserController;
-import model.BugTrap;
 import model.users.Administrator;
 import model.users.Developer;
 import model.users.Issuer;
@@ -14,11 +12,9 @@ import model.users.UserCategory;
 import model.users.UserManager;
 import model.users.exceptions.NotUniqueUserNameException;
 
-public class UserTests {
+public class UserManagerTests {
 	
-	private BugTrap bugTrap;
 	private UserManager userManager;
-	private UserController userController;
 	private Administrator admin;
 	private Issuer issuer;
 	private Developer dev;
@@ -29,17 +25,15 @@ public class UserTests {
 
 	@Before
 	public void setUp() throws Exception {
-		bugTrap = new BugTrap();
-		userManager = (UserManager) bugTrap.getUserManager();
-		userController = new UserController(bugTrap);
+		userManager = new UserManager();
 		
 		userManager.createUser(UserCategory.ADMIN, "Richard", "Rosie", "Reese", "RRR");
 		userManager.createUser(UserCategory.ISSUER, "Lindsey", "Lida", "Linkovic", "LLL");
 		userManager.createUser(UserCategory.DEVELOPER, "Carl", "Casey", "Carver", "CCC");
 		
-		admin = (Administrator) userController.getUserList(UserCategory.ADMIN).get(0);
-		issuer = (Issuer) userController.getUserList(UserCategory.ISSUER).get(0);
-		dev = (Developer) userController.getUserList(UserCategory.DEVELOPER).get(0);
+		admin = (Administrator) userManager.getUserList(UserCategory.ADMIN).get(0);
+		issuer = (Issuer) userManager.getUserList(UserCategory.ISSUER).get(0);
+		dev = (Developer) userManager.getUserList(UserCategory.DEVELOPER).get(0);
 	}
 
 	@Test
@@ -76,44 +70,45 @@ public class UserTests {
 	
 	@Test
 	public void loginSuccesTest() {
-		Assert.assertFalse(userController.isLoggedIn(admin));
-		String message = userController.loginAs(admin);
+		Assert.assertFalse(userManager.isLoggedIn(admin));
+		String message = userManager.loginAs(admin);
 		Assert.assertEquals("User: RRR successfully logged in.", message);
-		Assert.assertTrue(userController.isLoggedIn(admin));
-		message = userController.loginAs(admin);
+		Assert.assertTrue(userManager.isLoggedIn(admin));
+		message = userManager.loginAs(admin);
 		Assert.assertEquals("User: RRR is already logged in.", message);
-		Assert.assertTrue(userController.isLoggedIn(admin));
+		Assert.assertTrue(userManager.isLoggedIn(admin));
+		Assert.assertFalse(userManager.isLoggedIn(dev));
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void loginFailTest() {
 		Developer d = new Developer("", "", "", "");
-		userController.loginAs(d);
+		userManager.loginAs(d);
 	}
 	
 	@Test
 	public void userNameExistsTest() {
-		boolean succes = userController.userNameExists("RRR");
-		boolean fail = userController.userNameExists("NotExistingUser");
+		boolean succes = userManager.userNameExists("RRR");
+		boolean fail = userManager.userNameExists("NotExistingUser");
 		Assert.assertTrue(succes);
 		Assert.assertFalse(fail);
 	}
 	
 	@Test
 	public void userExistsTest() {
-		boolean succes = userController.userExists(admin);
-		boolean fail = userController.userExists(new Developer("", "", "",""));
+		boolean succes = userManager.userExists(admin);
+		boolean fail = userManager.userExists(new Developer("", "", "",""));
 		Assert.assertTrue(succes);
 		Assert.assertFalse(fail);
 	}
 	
 	@Test
 	public void getUserListTest() {
-		int nbAdmins = userController.getUserList(UserCategory.ADMIN).size();
+		int nbAdmins = userManager.getUserList(UserCategory.ADMIN).size();
 		Assert.assertEquals(1, nbAdmins);
 		
 		userManager.createUser(UserCategory.ADMIN, "", "", "", "");
-		nbAdmins = userController.getUserList(UserCategory.ADMIN).size();
+		nbAdmins = userManager.getUserList(UserCategory.ADMIN).size();
 		Assert.assertEquals(2, nbAdmins);
 	}
 
