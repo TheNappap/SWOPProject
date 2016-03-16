@@ -3,7 +3,7 @@ package tests;
 import controllers.ProjectController;
 import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
+import model.*;
 import model.projects.Project;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectDeleteForm;
@@ -66,5 +66,4 @@ public class DeleteProjectUseCaseTest {
 			fail("admin not logged in");
 		}
 	}
-
 }

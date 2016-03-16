@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -120,14 +121,14 @@ public class BugReportTests {
 	public void getOrderedListTitleDescTest() {
 		fillWithBugReports();
 		
-		ArrayList<BugReport> filteredTitle;
+		List<BugReport> filteredTitle;
 		try {
 			filteredTitle = controller.getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING}, new String[]{"0"});
 			
 			assertEquals(1, filteredTitle.size());
 			assertEquals("Project title 0", filteredTitle.get(0).getTitle());
 			
-			ArrayList<BugReport> filteredDesc = controller.getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING}, new String[]{"Very"});
+			List<BugReport> filteredDesc = controller.getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING}, new String[]{"Very"});
 		
 			assertEquals(5, filteredDesc.size());
 		} catch (UnauthorizedAccessException e) {
@@ -139,7 +140,7 @@ public class BugReportTests {
 	public void getOrderedListIssuedByTest() {
 		fillWithBugReports();
 		
-		ArrayList<BugReport> filtered;
+		List<BugReport> filtered;
 		try {
 			filtered = controller.getOrderedList(new FilterType[]{FilterType.FILED_BY_USER}, new String[]{"Mathijs"});
 			
@@ -162,7 +163,7 @@ public class BugReportTests {
 			controller.getBugReportList().get(1).assignDeveloper(dev1);
 			controller.getBugReportList().get(2).assignDeveloper(dev2);
 			
-			ArrayList<BugReport> filtered = controller.getOrderedList(new FilterType[]{FilterType.ASSIGNED_TO_USER}, new String[]{"John"});
+			List<BugReport> filtered = controller.getOrderedList(new FilterType[]{FilterType.ASSIGNED_TO_USER}, new String[]{"John"});
 			
 			assertEquals(2, filtered.size());
 		} catch (UnauthorizedAccessException e) {

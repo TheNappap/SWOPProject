@@ -24,6 +24,7 @@ public class CreateProjectUseCaseTest {
 		projectManager = bugTrap.getProjectManager();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void createNewProjectTest() {
 		projectManager.createProject("name", "descr", new Date(2003, 4, 2), new Date(2005, 2, 12), 1234, new ProjectTeam(), new Version(1, 0, 0));
@@ -37,6 +38,7 @@ public class CreateProjectUseCaseTest {
 		assertEquals(p.getVersion(), new Version(1, 0, 0));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void createForkProjectTest() {
 		Project project = projectManager.createProject("name", "descr", new Date(2003, 4, 2), new Date(2005, 2, 12), 1234, new ProjectTeam(), new Version(1, 0, 0));
@@ -48,6 +50,6 @@ public class CreateProjectUseCaseTest {
 		assertEquals(fork.getVersion(), new Version(2, 0, 1));
 		assertEquals(fork.getCreationDate(), project.getCreationDate());
 		assertEquals(fork.getStartDate(), new Date(2010, 3, 21));
-		assertEquals(fork.getBudgetEstimate(), 346);
+		assertEquals(fork.getBudgetEstimate(), 346, 0.01);
 	}
 }
