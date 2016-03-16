@@ -69,7 +69,7 @@ public class AssignProjectUseCaseTest {
 			//step 1
 			ProjectAssignForm form = projectController.getProjectAssignForm();
 			//step 2
-			ArrayList<Project> list =  projectController.getProjectsForLeadDeveloper(lead);
+			List<Project> list =  projectController.getProjectsForLeadDeveloper(lead);
 			//step 3
 			Project  project = list.get(0);
 			form.setProject(project);

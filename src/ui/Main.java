@@ -14,8 +14,6 @@ import model.bugreports.BugReport;
 import model.bugreports.bugtag.BugTagEnum;
 import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
-import model.bugreports.comments.InitialComment;
-import model.bugreports.comments.ReplyComment;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
@@ -530,7 +528,7 @@ public class Main {
 		}
 	}
 	
-	private static void printComments(List<InitialComment> comments) {
+	private static void printComments(List<Comment> comments) {
 		for (int index = 0; index < comments.size(); index++) {
 			String level = " " + (index+1) + ".";
 			System.out.println(level + comments.get(index).getText());
@@ -538,7 +536,7 @@ public class Main {
 		}
 	}
 
-	private static void printComments(List<ReplyComment> comments, String string) {
+	private static void printComments(List<Comment> comments, String string) {
 		for (int index = 0; index < comments.size(); index++) {
 			String level = string + (index+1) + ".";
 			System.out.println(level + comments.get(index).getText());
