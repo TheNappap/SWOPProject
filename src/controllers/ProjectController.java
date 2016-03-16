@@ -17,7 +17,7 @@ public class ProjectController extends Controller {
 	}
 
 	public List<Project> getProjectList() throws UnauthorizedAccessException{
-		if (getBugTrap().getUserManager().getLoggedInUser() == null)
+		if (!getBugTrap().isLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
 		
 		return getBugTrap().getProjectDAO().getProjects();
@@ -28,35 +28,35 @@ public class ProjectController extends Controller {
 	}
 
 	public ProjectCreationForm getProjectCreationForm() throws UnauthorizedAccessException {
-		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+		if (!getBugTrap().isAdminLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
 		
 		return new ProjectCreationForm();
 	}
 
 	public ProjectForkForm getProjectForkForm() throws UnauthorizedAccessException {
-		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+		if (!getBugTrap().isAdminLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
 
 		return new ProjectForkForm();
 	}
 
 	public ProjectUpdateForm getProjectUpdateForm() throws UnauthorizedAccessException {
-		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+		if (!getBugTrap().isAdminLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
 		
 		return new ProjectUpdateForm();
 	}
 	
 	public ProjectDeleteForm getProjectDeleteForm() throws UnauthorizedAccessException {
-		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+		if (!getBugTrap().isAdminLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
 		
 		return new ProjectDeleteForm();
 	}
 
 	public ProjectAssignForm getProjectAssignForm() throws UnauthorizedAccessException {
-		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.DEVELOPER)
+		if (!getBugTrap().isDeveloperLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
 		
 		return new ProjectAssignForm();
@@ -108,7 +108,7 @@ public class ProjectController extends Controller {
 
 	public SubsystemCreationForm getSubsystemCreationForm() throws UnauthorizedAccessException{
 
-		if (getBugTrap().getUserManager().getLoggedInUser() == null || getBugTrap().getUserManager().getLoggedInUser().getCategory() != UserCategory.ADMIN)
+		if (!getBugTrap().isAdminLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
 		
 		return new SubsystemCreationForm();

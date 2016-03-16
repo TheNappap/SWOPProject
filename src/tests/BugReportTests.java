@@ -17,7 +17,6 @@ import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.BugReport;
-import model.bugreports.BugTag;
 import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportAssignForm;
