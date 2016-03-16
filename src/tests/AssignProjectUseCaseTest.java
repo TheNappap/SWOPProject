@@ -4,9 +4,9 @@ package tests;
 import model.BugTrap;
 import model.projects.*;
 import model.users.Developer;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 import java.util.Date;
 

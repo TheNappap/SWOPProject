@@ -1,7 +1,5 @@
 package tests;
 
-import static org.junit.Assert.fail;
-
 import controllers.ProjectController;
 import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;

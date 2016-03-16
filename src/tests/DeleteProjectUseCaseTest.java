@@ -3,7 +3,7 @@ package tests;
 import controllers.ProjectController;
 import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
-import model.*;
+import model.BugTrap;
 import model.projects.Project;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectDeleteForm;
