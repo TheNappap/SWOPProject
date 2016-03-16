@@ -5,6 +5,10 @@ import model.projects.Project;
 import model.projects.Role;
 import model.users.Developer;
 
+/**
+ * Form used to store temporary data to assign a developer to a
+ * project.
+ */
 public class ProjectAssignForm implements Form {
 
 	private Project project;
