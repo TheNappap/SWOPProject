@@ -61,7 +61,7 @@ public class ProjectManagerTests {
         Project project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, new ProjectTeam(), new Version(1, 0, 0));
         UserManager um = new UserManager();
         um.createDeveloper("", "", "", "D");
-        Developer d = um.getDeveloper("D");
+        Developer d = um.getDevelopers().get(0);
         projectManager.updateProject(project, "nn", "dd", 3883, new Date(2015, 11, 1), d, new Version(2, 1, 4));
 
         Assert.assertEquals(project.getName(), "nn");
@@ -70,6 +70,5 @@ public class ProjectManagerTests {
         Assert.assertEquals(project.getStartDate(), new Date(2015, 11, 1));
         Assert.assertEquals(project.getVersion(), new Version(2, 1, 4));
         Assert.assertEquals(project.getBudgetEstimate(), 3883, 0.0000001);
-        
     }
 }
