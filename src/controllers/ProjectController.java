@@ -20,11 +20,11 @@ public class ProjectController extends Controller {
 		if (!getBugTrap().isLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
 		
-		return getBugTrap().getProjectDAO().getProjects();
+		return getBugTrap().getProjectManager().getProjects();
 	}
 	
 	public List<Project> getProjectsForLeadDeveloper(Developer dev) {
-		return getBugTrap().getProjectDAO().getProjectsForLeadDeveloper(dev);
+		return getBugTrap().getProjectManager().getProjectsForLeadDeveloper(dev);
 	}
 
 	public ProjectCreationForm getProjectCreationForm() throws UnauthorizedAccessException {
@@ -68,7 +68,7 @@ public class ProjectController extends Controller {
 	 */
 	public void createProject(ProjectCreationForm form) {
 		form.allVarsFilledIn();
-		getBugTrap().getProjectDAO().createProject(form);
+		getBugTrap().getProjectManager().createProject(form);
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class ProjectController extends Controller {
 	 * @param form ProjectDeleteForm containing the details about the project to be deleted.
 	 */
 	public void deleteProject(ProjectDeleteForm form) {
-		getBugTrap().getProjectDAO().deleteProject(form);
+		getBugTrap().getProjectManager().deleteProject(form);
 	}
 
 	public SubsystemCreationForm getSubsystemCreationForm() throws UnauthorizedAccessException{

@@ -1,10 +1,14 @@
 package tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
 
+import model.projects.ProjectManager;
+import model.projects.ProjectTeam;
+import model.projects.Version;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,51 +27,39 @@ import model.users.UserManager;
 
 public class CreateProjectUseCaseTest {
 
-	private ProjectController projectController;
-	private UserController userController;
 	private BugTrap bugTrap;
-	
+	private ProjectManager projectManager;
+
 	@Before
 	public void setUp() throws Exception {
 		bugTrap = new BugTrap();
-		projectController = new ProjectController(bugTrap);
-		userController = new UserController(bugTrap);
-		
-		//add user
-		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
-		userMan.createUser(UserCategory.DEVELOPER, "", "", "", "Dev");
-		userMan.createUser(UserCategory.ADMIN, "", "", "", "ADMIN");
-		Administrator admin =  (Administrator) userController.getUserList(UserCategory.ADMIN).get(0);
-		userController.loginAs(admin);
+		projectManager = bugTrap.getProjectManager();
 	}
 
 	@Test
-	public void createProjectTest() {
-		
-		try {
-			//step 1
-			ProjectCreationForm form = projectController.getProjectCreationForm();
-			//step 2 & 3
-			form.setBudgetEstimate(5000);
-			form.setDescription("Setup project");
-			form.setName("Project S");
-			form.setStartDate(new Date(1302));
-			//step 4
-			List<User> list = userController.getUserList(UserCategory.DEVELOPER);
-			//step 5
-			Developer lead = (Developer) list.get(0);
-			form.setLeadDeveloper(lead);
-			//step 6
-			projectController.createProject(form);
+	public void createNewProjectTest() {
+		projectManager.createProject("name", "descr", new Date(2003, 4, 2), new Date(2005, 2, 12), 1234, new ProjectTeam(), new Version(1, 0, 0));
 
-			Project project = projectController.getProjectList().get(0);
-			Assert.assertEquals("Project S", project.getName());
-			Assert.assertEquals("Setup project", project.getDescription());
-			Assert.assertEquals(new Date(1302), project.getStartDate());
-			Assert.assertEquals(5000, project.getBudgetEstimate(), 0.001);
-		} catch (UnauthorizedAccessException e) {
-			fail("admin not logged in");
-		}
+		Project p = projectManager.getProjects().get(0);
+		assertEquals(p.getName(), "name");
+		assertEquals(p.getDescription(), "descr");
+		assertEquals(p.getCreationDate(), new Date(2003, 4, 2));
+		assertEquals(p.getStartDate(), new Date(2005, 2, 12));
+		assertEquals(p.getTeam(), new ProjectTeam());
+		assertEquals(p.getVersion(), new Version(1, 0, 0));
 	}
 
+	@Test
+	public void createForkProjectTest() {
+		Project project = projectManager.createProject("name", "descr", new Date(2003, 4, 2), new Date(2005, 2, 12), 1234, new ProjectTeam(), new Version(1, 0, 0));
+
+		Project fork = projectManager.createFork(project, 346, new Version(2, 0, 1), new Date(2010, 3, 21));
+		assertEquals(fork.getName(), project.getName());
+		assertEquals(fork.getDescription(), project.getDescription());
+		assertEquals(fork.getTeam(), project.getTeam());
+		assertEquals(fork.getVersion(), new Version(2, 0, 1));
+		assertEquals(fork.getCreationDate(), project.getCreationDate());
+		assertEquals(fork.getStartDate(), new Date(2010, 3, 21));
+		assertEquals(fork.getBudgetEstimate(), 346);
+	}
 }
