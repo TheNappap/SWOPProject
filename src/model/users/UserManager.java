@@ -10,12 +10,12 @@ public class UserManager{
 	
 	
 	public UserManager(){
-		userList = new ArrayList<UserImpl>();
+		userList = new ArrayList<User>();
 		loggedInUser = null;
 	}
 	
-	private List<UserImpl> userList;
-	private UserImpl loggedInUser;
+	private List<User> userList;
+	private User loggedInUser;
 	
 	/**
 	 * Checks if the given User is logged in or not.
@@ -70,18 +70,6 @@ public class UserManager{
 	}
 	
 	/**
-	 * returns a copy of the user implementation list
-	 * @return user list
-	 */
-	private List<UserImpl> getUserImplList() {
-		List<UserImpl> users = new ArrayList<UserImpl>();
-		for (UserImpl s : userList) {
-			users.add(s);
-		}
-		return users;
-	}
-	
-	/**
 	 * gets the currently logged in user
 	 * @return logged in user
 	 */
@@ -94,8 +82,8 @@ public class UserManager{
 	 * @param user to set as logged in
 	 */
 	private void setLoggedInUser(User user){
-		UserImpl userImpl = null;
-		for (UserImpl u : userList) {
+		User userImpl = null;
+		for (User u : userList) {
 			if(u.getUserName().equals(user.getUserName())){
 				userImpl = u;
 			}
@@ -112,7 +100,7 @@ public class UserManager{
 	public List<User> getUserList(UserCategory userCategory) {
 		List<User> userList = new ArrayList<User>();
 		
-		for (UserImpl user : getUserImplList()) 
+		for (User user : getUserList()) 
 			if (user.getCategory() == userCategory)
 				userList.add(user);
 		
@@ -134,7 +122,7 @@ public class UserManager{
 			throw new NotUniqueUserNameException();
 		}
 		
-		UserImpl user;
+		User user;
 		switch (uc) {
 		case ADMIN:
 			user = new Administrator(fn, mn, ln, un);

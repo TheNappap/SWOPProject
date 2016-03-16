@@ -1,6 +1,6 @@
 package model.users;
 
-public class Issuer extends UserImpl {
+public class Issuer extends User {
 
 	public Issuer(String firstName, String middleName, String lastName, String userName) {
 		super(firstName, middleName, lastName, userName);

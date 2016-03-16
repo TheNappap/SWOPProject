@@ -1,19 +1,66 @@
 package model.users;
 
-public interface User {
+public abstract class User {
 	
-	public abstract String getFirstName();
+	private String firstName;
+	private String middleName;
+	private String lastName;
+	private String userName;
 	
-	public abstract String getMiddleName();
+	public User(String firstName, String middleName, String lastName, String userName) {
+		setFirstName(firstName);
+		setMiddleName(middleName);
+		setLastName(lastName);
+		setUserName(userName);
+	}
 	
-	public abstract String getLastName();
+	protected abstract UserCategory getCategory();
 	
-	public abstract String getUserName();
+	public boolean isAdmin(){
+		return getCategory() == UserCategory.ADMIN;
+	}
 	
-	public abstract boolean isAdmin();
+	public boolean isIssuer(){
+		return getCategory() == UserCategory.ISSUER || getCategory() == UserCategory.DEVELOPER;
+	}
 	
-	public abstract boolean isIssuer();
+	public boolean isDeveloper(){
+		return getCategory() == UserCategory.DEVELOPER;
+	}
+		
 	
-	public abstract boolean isDeveloper();
+	//Getters and Setters
+	
+	public String getFirstName() {
+		return firstName;
+	}
+	
+	private void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	
+	public String getMiddleName() {
+		return middleName;
+	}
+	
+	private void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+	
+	public String getLastName() {
+		return lastName;
+	}
+	
+	private void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
+	
+	private void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 }
