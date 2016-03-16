@@ -7,7 +7,7 @@ public class Developer extends Issuer {
 	}
 
 	@Override
-	public UserCategory getCategory() {
+	protected UserCategory getCategory() {
 		return UserCategory.DEVELOPER;
 	}
 }

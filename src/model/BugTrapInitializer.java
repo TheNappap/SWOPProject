@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import model.bugreports.bugtag.BugTagEnum;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -96,7 +97,7 @@ class BugTrapInitializer {
 			team.addMember((Developer)bugTrap.getUserManager().getUser(role.getAttribute("user")), Role.valueOf(role.getAttribute("role")));
 		}
 			
-		Project project = bugTrap.projectDAO.createProject(name, descr,creation, start, budgetEstimate, team, null);
+		Project project = bugTrap.getProjectManager().createProject(name, descr,creation, start, budgetEstimate, team, null);
 		
 		ArrayList<Node> subsystems = getDirectElementsWithTagName((Element)getFirstDirectElementWithTagName(node, "subsystems"), "subsystem");
 		for (int i = 0; i < subsystems.size(); i++) {
@@ -112,7 +113,7 @@ class BugTrapInitializer {
 		String name = node.getAttribute("name");
 		String descr = node.getAttribute("description");
 		
-		Subsystem sub = bugTrap.projectDAO.createSubsystem(name, descr, project, parent, null);
+		Subsystem sub = bugTrap.getProjectManager().createSubsystem(name, descr, project, parent, null);
 		
 		ArrayList<Node> subsystems = getDirectElementsWithTagName((Element)getFirstDirectElementWithTagName(node, "subsystems"), "subsystem");
 		for (int i = 0; i < subsystems.size(); i++) {
@@ -128,8 +129,8 @@ class BugTrapInitializer {
 		String title = node.getAttribute("title");
 		String descr = node.getAttribute("description");
 		Date creation = (new SimpleDateFormat("dd/MM/yyyy")).parse(node.getAttribute("creationDate"));
-		Subsystem sub = bugTrap.projectDAO.getSubsystemWithName(node.getAttribute("subsystem"));
-		BugTag tag = BugTag.valueOf(node.getAttribute("tag"));
+		Subsystem sub = bugTrap.getProjectManager().getSubsystemWithName(node.getAttribute("subsystem"));
+		BugTagEnum tag = BugTagEnum.valueOf(node.getAttribute("tag"));
 		Issuer issuer = (Issuer)bugTrap.getUserManager().getUser(node.getAttribute("issuer"));
 		
 		bugTrap.bugReportDAO.addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), tag);
