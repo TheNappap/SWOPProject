@@ -1,5 +1,8 @@
 package model.projects;
 
+/**
+ * This class represents version numbers in BugTrap.
+ */
 public class Version implements Comparable<Version> {
 
 	private int major;

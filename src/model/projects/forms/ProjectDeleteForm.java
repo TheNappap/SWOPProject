@@ -3,6 +3,9 @@ package model.projects.forms;
 import model.Form;
 import model.projects.Project;
 
+/**
+ * Form used to store temporary data to delete a project.
+ */
 public class ProjectDeleteForm implements Form {
 	private Project project;
 	

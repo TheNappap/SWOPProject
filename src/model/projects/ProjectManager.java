@@ -2,6 +2,7 @@ package model.projects;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import model.projects.builders.ProjectBuilder;
 import model.projects.builders.SubsystemBuilder;
@@ -51,8 +52,8 @@ public class ProjectManager implements ProjectDAO {
 	}
 	
 	/**
-	 * 
-	 * @param form
+	 * Method to update a project.
+	 * @param form The ProjectUpdateForm containing all the details about the project to update.
 	 */
 	@Override
 	public void updateProject(ProjectUpdateForm form) {
@@ -70,8 +71,8 @@ public class ProjectManager implements ProjectDAO {
 	}
 
 	/**
-	 * 
-	 * @param project
+	 * Method to delete a project.
+	 * @param form The ProjectDeleteForm containing all the details about the project to delete.
 	 */
 	@Override
 	public void deleteProject(ProjectDeleteForm form) {
@@ -83,8 +84,8 @@ public class ProjectManager implements ProjectDAO {
 	}
 
 	/**
-	 * 
-	 * @param form
+	 * Method to assign a developer to a project.
+	 * @param form The ProjectAssignForm containing all the details about the assignment.
 	 */
 	@Override
 	public void assignToProject(ProjectAssignForm form) {
@@ -95,13 +96,25 @@ public class ProjectManager implements ProjectDAO {
 		}
 	}
 
+	/**
+	 * Method to get all the projects in the system.
+	 * @return List containing all the projects in the system.
+     */
 	@Override
-	public ArrayList<Project> getProjects() {
-		return projectList;
+	public List<Project> getProjects() {
+		ArrayList<Project> projects = new ArrayList<Project>();
+		for (Project p : projectList)
+			projects.add(p);
+		return projects;
 	}
 
+	/**
+	 * Method to get all the projects for which a given developer is lead.
+	 * @param dev The developer for who to find the projects he/she leads.
+	 * @return List containing all the projects for which the given developer is lead.
+     */
 	@Override
-	public ArrayList<Project> getProjectsForLeadDeveloper(Developer dev) {
+	public List<Project> getProjectsForLeadDeveloper(Developer dev) {
 		ArrayList<Project> projs = new ArrayList<Project>();
 		for (Project p : projectList) {
 			if (p.getTeam().getLeadDeveloper() == dev) 
@@ -110,6 +123,10 @@ public class ProjectManager implements ProjectDAO {
 		return projs;
 	}
 
+	/**
+	 * Method to create a subsystem.
+	 * @param form The SubsystemCreationForm containing all the data needed to create the subsystem.
+     */
 	@Override
 	public void createSubsystem(SubsystemCreationForm form) {
 		createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), new Version(1, 0, 0));
@@ -129,7 +146,12 @@ public class ProjectManager implements ProjectDAO {
 		parent.addSubsystem(sub);
 		return sub;
 	}
-	
+
+	/**
+	 * Method to get the subsystem in BugTrap with the given name.
+	 * @param name The name for which to search.
+	 * @return Subsystem with the given name.
+     */
 	public Subsystem getSubsystemWithName(String name) {
 		for (Project p : projectList) {
 			for (Subsystem s : p.getAllDirectOrIndirectSubsystems()) {

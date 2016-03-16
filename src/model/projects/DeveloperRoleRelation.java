@@ -6,7 +6,6 @@ import model.users.Developer;
  * This class describes a relation between users and their role
  * in a certain project. One user can have multiple roles, and thus
  * one user can occur in multiple UserRoleRelation objects.
- * @author Matthieu De Laere
  */
 public class DeveloperRoleRelation {
 	private Developer user;

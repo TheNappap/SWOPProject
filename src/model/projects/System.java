@@ -2,6 +2,9 @@ package model.projects;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a system in BugTrap.
+ */
 public abstract class System {
 
 	private String name;
@@ -76,7 +79,7 @@ public abstract class System {
 		ArrayList<Subsystem> subs = new ArrayList<Subsystem>();
 		for (Subsystem s : subsystems) {
 			subs.add(s);
-			for (Subsystem ss : s.getSubsystems())
+			for (Subsystem ss : s.getAllDirectOrIndirectSubsystems())
 				subs.add(ss);
 		}
 		return subs;
