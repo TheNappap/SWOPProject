@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.projects.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,8 +15,6 @@ import controllers.ProjectController;
 import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
-import model.projects.Project;
-import model.projects.Role;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.users.Administrator;
@@ -26,70 +25,39 @@ import model.users.UserManager;
 
 public class AssignProjectUseCaseTest {
 
-	private ProjectController projectController;
-	private UserController userController;
 	private BugTrap bugTrap;
-	private Developer lead;
-//	private Project project; Not used?
-	
+	private ProjectManager projectManager;
+
 	@Before
 	public void setUp() throws Exception {
 		bugTrap = new BugTrap();
-		projectController = new ProjectController(bugTrap);
-		userController = new UserController(bugTrap);
-		
-		//add user
-		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
-		userMan.createUser(UserCategory.ADMIN, "", "", "", "ADMIN");
-		userMan.createUser(UserCategory.DEVELOPER, "", "", "", "Dev");
-		Administrator admin =  (Administrator) userController.getUserList(UserCategory.ADMIN).get(0);
-		userController.loginAs(admin);
-		
-		lead = (Developer) userController.getUserList(UserCategory.DEVELOPER).get(0);
-		
-		ProjectCreationForm form = projectController.getProjectCreationForm();
-		form.setBudgetEstimate(5000);
-		form.setDescription("Setup project");
-		form.setLeadDeveloper(lead);
-		form.setName("Project S");
-		form.setStartDate(new Date(1302));
-		
-		projectController.createProject(form);
-//		project = projectController.getProjectList().get(0); Not used?
-		
-		lead = projectController.getProjectList().get(0).getTeam().getLeadDeveloper();
-		userController.loginAs(lead);
-		
+		projectManager = bugTrap.getProjectManager();
 	}
 
 	@Test
-	public void assignToProjectTest() {
-		
-		try {
-			//step 1
-			ProjectAssignForm form = projectController.getProjectAssignForm();
-			//step 2
-			List<Project> list =  projectController.getProjectsForLeadDeveloper(lead);
-			//step 3
-			Project  project = list.get(0);
-			form.setProject(project);
-			//step 4
-			List<User> devs = userController.getUserList(UserCategory.DEVELOPER);
-			//step 5
-			Developer dev = (Developer) devs.get(0);
-			form.setDeveloper(dev);
-			//step 6
-			Role[] roles = Role.values();
-			//step 7
-			Role role = roles[2];
-			form.setRole(role);
-			//step 8
-			projectController.assignToProject(form);
-			
-			assertEquals(1, project.getTeam().getTesters().size());
-		} catch (UnauthorizedAccessException e) {
-			fail("developer not logged in");
-		}
+	public void assignProgrammerToProjectTest() {
+		Project project = projectManager.createProject("", "", new Date(), new Date(), 123, new ProjectTeam(), new Version(1, 0, 0));
+		Developer dev = new Developer("", "", "", "");
+		projectManager.assignToProject(project, dev, Role.PROGRAMMER);
+
+		assertEquals(project.getTeam().getProgrammers().get(0), dev);
 	}
 
+	@Test
+	public void assignLeadToProjectTest() {
+		Project project = projectManager.createProject("", "", new Date(), new Date(), 123, new ProjectTeam(), new Version(1, 0, 0));
+		Developer dev = new Developer("", "", "", "");
+		projectManager.assignToProject(project, dev, Role.LEAD);
+
+		assertEquals(project.getTeam().getLeadDeveloper(), dev);
+	}
+
+	@Test
+	public void assignTesterToProjectTest() {
+		Project project = projectManager.createProject("", "", new Date(), new Date(), 123, new ProjectTeam(), new Version(1, 0, 0));
+		Developer dev = new Developer("", "", "", "");
+		projectManager.assignToProject(project, dev, Role.LEAD);
+
+		assertEquals(project.getTeam().getLeadDeveloper(), dev);
+	}
 }

@@ -18,23 +18,36 @@ public class Comment implements Commentable { //A Comment can be commented on.
 	/**  
 	 * Constructor.  
 	 * @param text The text of this Comment.
-	 **/  
+	 */  
 	public Comment(String text) {
 		this.creationDate = new Date();
 		this.comments 	  = new ArrayList<Comment>();
 		this.text 		  = text;
 	}
 	
+	/**
+	 * Copy constructor.
+	 * @param other To be copied object.
+	 */
 	protected Comment(Comment other) {
-		this.creationDate 	= new Date(other.getCreationDate().getTime());
+		this.creationDate 	= other.getCreationDate();
 		this.comments		= other.getComments();
 		this.text			= other.getText();
 	}
 
+	/**
+	 * Create a copy of this Comment.
+	 * @return A copy of this Comment.
+	 */
+	public Comment copy() {
+		return new Comment(this);
+	}
+	
 	@Override
 	public void addComment(String commentText) {
 		comments.add(new Comment(commentText));
 	}
+	
 	
 	//Getters and Setters
 
@@ -47,11 +60,13 @@ public class Comment implements Commentable { //A Comment can be commented on.
 	}
 
 	public List<Comment> getComments() {
-		List<Comment> returnComments = new ArrayList<Comment>(comments.size());
+		return comments;
 		
-		for (Comment replyComment : comments) returnComments.add(replyComment);
-		
-		return returnComments;
+//		List<Comment> returnComments = new ArrayList<Comment>(comments.size());
+//		
+//		for (Comment comment : comments) returnComments.add(comment.copy());
+//		
+//		return returnComments;
 	}
 
 }

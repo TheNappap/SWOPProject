@@ -31,8 +31,8 @@ public class BugReportBuilder {
 	private Date creationDate 	= new Date();	//The day this BugReport was created.
 	private BugTag bugTag		= new New(); 	//The tag assigned to the BugReport.
 	private BugReport duplicate;				//Duplicate of the BugReport, if any.
-	private List<Developer> assignees 		= new ArrayList<Developer>();		//Developers assigned to the BugReport.
-	private List<Comment> comments 	= new ArrayList<Comment>();	//Comments on the BugReport.
+	private List<Comment> comments 		= new ArrayList<Comment>();		//Comments on the BugReport.
+	private List<Developer> assignees 	= new ArrayList<Developer>();	//Developers assigned to the BugReport.
 	
 	/**  
 	 * Empty constructor.  
