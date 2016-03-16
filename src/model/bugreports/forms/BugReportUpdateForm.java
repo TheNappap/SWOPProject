@@ -2,7 +2,7 @@ package model.bugreports.forms;
 
 import model.Form;
 import model.bugreports.BugReport;
-import model.bugreports.BugTag;
+import model.bugtag.BugTag;
 
 public class BugReportUpdateForm implements Form{
 

@@ -8,6 +8,8 @@ import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportCreationForm;
+import model.bugtag.BugTag;
+import model.bugtag.BugTagEnum;
 import model.projects.Subsystem;
 import model.users.Issuer;
 
@@ -51,7 +53,7 @@ public class BugReportManager implements BugReportDAO {
 	 */
 	@Override
 	public void addBugReport(BugReportCreationForm form) {
-		addBugReport(form.getTitle(), form.getDescription(), new Date(), form.getSubsystem(), form.getIssuer(), form.getDependsOn(), BugTag.NEW);
+		addBugReport(form.getTitle(), form.getDescription(), new Date(), form.getSubsystem(), form.getIssuer(), form.getDependsOn(), BugTagEnum.NEW);
 	}
 	
 	public void addBugReport(String title, String description, Date creationDate, Subsystem subsystem, Issuer issuer, ArrayList<BugReport> dependencies, BugTag tag) {

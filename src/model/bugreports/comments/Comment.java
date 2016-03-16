@@ -17,7 +17,7 @@ public abstract class Comment implements Commentable { //A Comment can be commen
 
 	/**  
 	 * Constructor.  
-	 * @param text The text of this Comment.  
+	 * @param text The text of this Comment.  z
 	 */  
 	public Comment(String text) {
 		this.creationDate = new Date();
