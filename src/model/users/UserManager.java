@@ -11,7 +11,7 @@ public class UserManager{
 	
 	public UserManager(){
 		userList = new ArrayList<UserImpl>();
-		setLoggedInUser(null);
+		loggedInUser = null;
 	}
 	
 	private List<UserImpl> userList;
@@ -52,7 +52,7 @@ public class UserManager{
 	 * Log the current user off 
 	 */
 	public void logOff(){
-		setLoggedInUser(null);
+		loggedInUser = null;
 	}
 	
 	//USERS
@@ -81,10 +81,19 @@ public class UserManager{
 		return users;
 	}
 	
+	/**
+	 * gets the currently logged in user
+	 * @return logged in user
+	 */
 	public UserImpl getLoggedInUser() {
 		return loggedInUser;
 	}
 	
+	/**
+	 * sets the logged in user to the given user
+	 * @param user to set as logged in
+	 * @throws NoUserWithUserNameException if the given username does not exist
+	 */
 	private void setLoggedInUser(User user){
 		if(!userNameExists(user.getUserName()))
 			throw new NoUserWithUserNameException();
