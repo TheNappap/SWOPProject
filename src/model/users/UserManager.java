@@ -73,7 +73,7 @@ public class UserManager{
 	 * returns a copy of the user implementation list
 	 * @return user list
 	 */
-	public List<UserImpl> getUserImplList() {
+	private List<UserImpl> getUserImplList() {
 		List<UserImpl> users = new ArrayList<UserImpl>();
 		for (UserImpl s : userList) {
 			users.add(s);
@@ -85,7 +85,7 @@ public class UserManager{
 	 * gets the currently logged in user
 	 * @return logged in user
 	 */
-	public UserImpl getLoggedInUser() {
+	public User getLoggedInUser() {
 		return loggedInUser;
 	}
 	
