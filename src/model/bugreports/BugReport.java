@@ -1,7 +1,7 @@
 package model.bugreports;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import model.bugreports.comments.Commentable;
 import model.bugreports.comments.InitialComment;
@@ -13,49 +13,49 @@ public class BugReport implements Comparable<BugReport>, Commentable {
 
 	//Immutable
 	private final Date creationDate;	//Creation Date of the BugReport.
-	private final ArrayList<Developer> assignees;	//List of Developers assigned to this BugReport.
-	private final ArrayList<BugReport> dependsOn;	//List of BugReports on which this BugReport depends.
-	private final ArrayList<InitialComment> comments;	//Comments on this BugReport.
 	private final Issuer issuedBy;		//The Issuer who issued this BugReport.
 	private final Subsystem subsystem;	//Subsystem to which this BugReport is attached.
+	private final String title;			//Title of the BugReport.
+	private final String description;	//Description of the BugReport.
+	private final List<Developer> assignees;	//List of Developers assigned to this BugReport.
+	private final List<BugReport> dependsOn;	//List of BugReports on which this BugReport depends.
+	private final List<InitialComment> comments;	//Comments on this BugReport.
 	
 	//Mutable
-	private String title;			//Title of the BugReport.
-	private String description;		//Description of the BugReport.
 	private BugTag bugTag;			//BugTag that is attached to this BugReport.
 	private BugReport duplicate;	//The duplicate of this BugReport, if any.
 
 	/**
 	 * BugReport Constructor. 
+	 * Preferably not to be used for direct creation of BugReport. Use BugReportBuilder!
 	 * @param title	The title of the BugReport.
 	 * @param description Description of the BugReport.
 	 * @param subsystem Subsystem this BugReport is attached to.
+	 * @param assignees The Developers assigned to this BugReport.
+	 * @param comments The InitialComments on this BugReport.
 	 * @param dependsOn	List of BugReports on which this BugReport depends.
 	 * @param issuedBy Issuer who issued this BugReport.
 	 * @param creationDate The date the BugReport was created.
-	 * @param tag The tag to assign to the BugReport
+	 * @param bugTag The BugTag to assign to the BugReport
+	 * @param duplicate The duplicate BugReport of this BugReport, if any.
 	 */
-	public BugReport(String title, String description, Subsystem subsystem, ArrayList<BugReport> dependsOn, Issuer issuedBy, Date creationDate, BugTag tag) {
-		//Variables on instantiation.
-		this.dependsOn 	= dependsOn;
-		this.issuedBy 	= issuedBy;
-		this.subsystem	= subsystem;
-		setTitle(title);
-		setDescription(description);
-		
-		//Non-variables on instantiation.
-		this.assignees 		= new ArrayList<Developer>();		//No assignees yet on fresh BugReport.
-		this.comments 		= new ArrayList<InitialComment>();	//No comments yet on fresh BugReport.
-		this.creationDate 	= creationDate;				
-		setBugTag(tag);							
-		setDuplicate(null);								//No reported Duplicate yet.
+	public BugReport(String title, String description, Subsystem subsystem, List<BugReport> dependsOn, List<Developer> assignees, List<InitialComment> comments, Issuer issuedBy, Date creationDate, BugTag bugTag, BugReport duplicate) {
+		this.dependsOn 		= dependsOn;
+		this.issuedBy 		= issuedBy;
+		this.subsystem		= subsystem;
+		this.title			= title;
+		this.description 	= description;
+		this.assignees 		= assignees;		
+		this.comments 		= comments;	
+		this.creationDate 	= creationDate;						
+		this.bugTag			= bugTag;						
+		this.duplicate		= duplicate;								
 	}
 	
 	/**
 	 * Create and add an InitialComment to this BugReport.
 	 * @param form The CommentCreationForm that contains all necessary details to create a Comment.
 	 */
-	//TO-DO : Factory pattern?
 	public void addComment(String commentText) {
 		getComments().add(new InitialComment(commentText, this));
 	}
@@ -91,16 +91,8 @@ public class BugReport implements Comparable<BugReport>, Commentable {
 		return title;
 	}
 	
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
 	public String getDescription() {
 		return description;
-	}
-	
-	public void setDescription(String description) {
-		this.description = description;
 	}
 	
 	public Date getCreationDate() {
@@ -119,11 +111,11 @@ public class BugReport implements Comparable<BugReport>, Commentable {
 		this.bugTag = bugTag;
 	}
 
-	public ArrayList<Developer> getAssignees() {
+	public List<Developer> getAssignees() {
 		return assignees;
 	}
 
-	public ArrayList<BugReport> getDependsOn() {
+	public List<BugReport> getDependsOn() {
 		return dependsOn;
 	}
 
@@ -139,7 +131,7 @@ public class BugReport implements Comparable<BugReport>, Commentable {
 		return issuedBy;
 	}
 
-	public ArrayList<InitialComment> getComments() {
+	public List<InitialComment> getComments() {
 		return comments;
 	}
 	

@@ -2,6 +2,7 @@ package ui;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import controllers.BugReportController;
@@ -471,7 +472,7 @@ public class Main {
 		}
 	}
 	
-	private static void printComments(ArrayList<InitialComment> comments) {
+	private static void printComments(List<InitialComment> comments) {
 		for (int index = 0; index < comments.size(); index++) {
 			String level = " " + (index+1) + ".";
 			System.out.println(level + comments.get(index).getText());
@@ -479,7 +480,7 @@ public class Main {
 		}
 	}
 
-	private static void printComments(ArrayList<ReplyComment> comments, String string) {
+	private static void printComments(List<ReplyComment> comments, String string) {
 		for (int index = 0; index < comments.size(); index++) {
 			String level = string + (index+1) + ".";
 			System.out.println(level + comments.get(index).getText());

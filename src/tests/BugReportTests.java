@@ -53,25 +53,25 @@ public class BugReportTests {
 		try{
 			bugReportBuilder.getBugReport();
 			fail();
-		} catch (NullPointerException e) { }
+		} catch (IllegalStateException e) { }
 		try{
 			bugReportBuilder.setTitle("Project")
 							.getBugReport();
 			fail();
-		} catch (NullPointerException e) { }
+		} catch (IllegalStateException e) { }
 		try{
 			bugReportBuilder.setTitle("Project")
 							.setDescription("Very long description.")
 							.getBugReport();
 			fail();
-		} catch (NullPointerException e) { }
+		} catch (IllegalStateException e) { }
 		try{
 			bugReportBuilder.setTitle("Project")
 			.setDescription("Very long description.")
 			.setSubsystem(new Subsystem(null, null, null, null, null))
 			.getBugReport();
 			fail();
-		} catch (NullPointerException e) { }
+		} catch (IllegalStateException e) { }
 		try{
 			bugReportBuilder.setTitle("Project")
 			.setDescription("Very long description.")
@@ -79,7 +79,7 @@ public class BugReportTests {
 			.setDependsOn(new ArrayList<BugReport>())
 			.getBugReport();
 			fail();
-		} catch (NullPointerException e) { }
+		} catch (IllegalStateException e) { }
 		try{
 			bugReportBuilder.setTitle("Project")
 			.setDescription("Very long description.")
@@ -89,7 +89,7 @@ public class BugReportTests {
 			.setBugTag(BugTag.NEW)
 			.setCreationDate(new Date())
 			.getBugReport();
-		} catch (NullPointerException e) { 
+		} catch (IllegalStateException e) { 
 			fail();
 		}
 	}
@@ -290,12 +290,12 @@ public class BugReportTests {
 				fail();
 			} catch (NullPointerException e ) { }
 			try {
-				form.setBugReport(new BugReport(null, null, null, null, null, null, null));
+				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null, null));
 				form.allVarsFilledIn();
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setBugReport(new BugReport(null, null, null, null, null, null, null));
+				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null, null));
 				form.setDeveloper(new Developer(null, null, null, null));
 				form.allVarsFilledIn();
 			} catch (NullPointerException e) {
@@ -393,12 +393,12 @@ public class BugReportTests {
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setBugReport(new BugReport(null, null, null, null, null, null, null));
+				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null, null));
 				form.allVarsFilledIn();
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setBugReport(new BugReport(null, null, null, null, null, null, null));
+				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null, null));
 				form.setBugTag(BugTag.NEW);
 				form.allVarsFilledIn();
 			} catch (NullPointerException e) {
@@ -429,12 +429,12 @@ public class BugReportTests {
 			} catch (NullPointerException e) { }
 			
 			try {
-				form.setCommentable(new BugReport(null, null, null, null, null, null, null));
+				form.setCommentable(new BugReport(null, null, null, null, null, null, null, null, null, null));
 				form.allVarsFilledIn();
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setCommentable(new BugReport(null, null, null, null, null, null, null));
+				form.setCommentable(new BugReport(null, null, null, null, null, null, null, null, null, null));
 				form.setText("Nice!");
 				form.allVarsFilledIn();
 			} catch (NullPointerException e) {

@@ -2,10 +2,13 @@ package model.bugreports.builders;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import model.bugreports.BugReport;
 import model.bugreports.BugTag;
+import model.bugreports.comments.InitialComment;
 import model.projects.Subsystem;
+import model.users.Developer;
 import model.users.Issuer;
 
 /**
@@ -15,20 +18,24 @@ import model.users.Issuer;
  */
 public class BugReportBuilder {
 
-	private String title; //Title of the BugReport. 
-	private String description;	//Title of the BugReport. 
-	private Subsystem subsystem; //Title of the BugReport. 
-	private ArrayList<BugReport> dependsOn; //Other BugReports the BugReports belongs to. 
-	private Issuer issuedBy; //Issuer who issued the BugReport. 
-	private Date creationDate; //The day this BugReport was created.
-	private BugTag tag; //The tag assigned to the BugReport
-
+	//Required parameters
+	private String title; 			//Title of the BugReport. 
+	private String description;		//Description of the BugReport. 
+	private Subsystem subsystem; 	//Subsystem the BugReport belongs to.
+	private Issuer issuedBy; 		//Issuer who issued the BugReport. 
+	private ArrayList<BugReport> dependsOn; //Other BugReports the BugReports depends on.
+	
+	//Optional Parameters
+	private Date creationDate 	= new Date();	//The day this BugReport was created.
+	private BugTag bugTag		= BugTag.NEW; 	//The tag assigned to the BugReport.
+	private BugReport duplicate;				//Duplicate of the BugReport, if any.
+	private List<Developer> assignees 		= new ArrayList<Developer>();		//Developers assigned to the BugReport.
+	private List<InitialComment> comments 	= new ArrayList<InitialComment>();	//Comments on the BugReport.
+	
 	/**  
 	 * Empty constructor.  
 	 */
-	public BugReportBuilder() {
-		
-	}
+	public BugReportBuilder() { }
 
 	/**  
 	 * Set the title for the BugReport.  
@@ -50,16 +57,6 @@ public class BugReportBuilder {
 		return this;
 	}
 	
-	/**  
-	 * Set the dependencies for the BugReport.  
-	 * @param dependsOn The BugReports the BugReport depends on.  
-	 * @return this.  
-	 */
-	public BugReportBuilder setDependsOn(ArrayList<BugReport> dependsOn) {
-		this.dependsOn = dependsOn;
-		return this;
-	}
-
 	/**
 	 * Set the Subsystem the BugReport belongs to.
 	 * @param subsystem The Subsystem the BugReport belongs to.
@@ -69,7 +66,7 @@ public class BugReportBuilder {
 		this.subsystem = subsystem;
 		return this;
 	}
-	
+
 	/**
 	 * Set the Issuer who creates the BugReport.
 	 * @param issuedBy The Issuer who creates the BugReport
@@ -77,6 +74,26 @@ public class BugReportBuilder {
 	 */
 	public BugReportBuilder setIssuer(Issuer issuedBy) {
 		this.issuedBy = issuedBy;
+		return this;
+	}
+
+	/**  
+	 * Set the dependencies for the BugReport.  
+	 * @param dependsOn The BugReports the BugReport depends on.  
+	 * @return this.  
+	 */
+	public BugReportBuilder setDependsOn(ArrayList<BugReport> dependsOn) {
+		this.dependsOn = dependsOn;
+		return this;
+	}
+	
+	/**
+	 * Set the duplicate of the BugReport.
+	 * @param duplicate The duplicate of the BugReport.
+	 * @return this.
+	 */
+	public BugReportBuilder setDuplicate(BugReport duplicate) {
+		this.duplicate = duplicate;
 		return this;
 	}
 	
@@ -89,14 +106,34 @@ public class BugReportBuilder {
 		this.creationDate = creationDate;
 		return this;
 	}
-	
+
 	/**  
 	 * Set the BugTag for the BugReport.  
 	 * @param tag The BugTag for the BugReport  
 	 * @return this.  
 	 */  
 	public BugReportBuilder setBugTag(BugTag tag) {
-		this.tag = tag;
+		this.bugTag = tag;
+		return this;
+	}
+	
+	/**
+	 * Set the assignees for the BugReport.
+	 * @param assignees The Developers assigned to the BugReport.
+	 * @return this.
+	 */
+	public BugReportBuilder setAssignees(List<Developer> assignees) {
+		this.assignees = assignees;
+		return this;
+	}
+	
+	/**
+	 * Set the comments on the BugReport.
+	 * @param comments The InitialComments on the BugReport.
+	 * @return this.
+	 */
+	public BugReportBuilder setComments(List<InitialComment> comments) {
+		this.comments = comments;
 		return this;
 	}
 
@@ -107,18 +144,23 @@ public class BugReportBuilder {
 	 */
 	public BugReport getBugReport() {
 		validate();
-		return new BugReport(title, description, subsystem, dependsOn, issuedBy, creationDate, tag);
+		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, bugTag, duplicate);
 	}
 
 	//Assure all variables are not null.
 	private void validate() {
-		if (title == null) 			throw new NullPointerException("Bugreport title is null");
-		if (description == null) 	throw new NullPointerException("Bugreport description is null");
-		if (subsystem == null) 		throw new NullPointerException("Bugreport subsystem is null");
-		if (dependsOn == null) 		throw new NullPointerException("Bugreport dependsOn is null");
-		if (issuedBy == null) 		throw new NullPointerException("Bugreport issuedBy is null");
-		if (creationDate == null)	throw new NullPointerException("Bugreport creationDate is null");
-		if (tag == null) 			throw new NullPointerException("Bugreport tag is null");
+		if (title == null) 			throw new IllegalStateException("Title is null");
+		if (description == null) 	throw new IllegalStateException("Description is null");
+		if (subsystem == null) 		throw new IllegalStateException("Subsystem is null");
+		if (issuedBy == null) 		throw new IllegalStateException("IssuedBy is null");
+		if (dependsOn == null) 		throw new IllegalStateException("DependsOn is null");
+		if (creationDate == null)	throw new IllegalStateException("CreationDate is null");
+		if (bugTag == null) 		throw new IllegalStateException("BugTag is null");
+		if (assignees == null)		throw new IllegalStateException("Assignees is null");
+		if (comments == null)		throw new IllegalStateException("Comments is null");
+		
+		if (bugTag == BugTag.DUPLICATE && duplicate == null) throw new IllegalStateException("BugTag is DUPLICATE but duplicate is null.");
+		if (bugTag != BugTag.DUPLICATE && duplicate != null) throw new IllegalStateException("BugTag isn't DUPLICATE but yet duplicate isn't null.");
 	}
 
 }

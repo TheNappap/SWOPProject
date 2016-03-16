@@ -16,7 +16,7 @@ public class InitialComment extends Comment {
 		
 		this.commentOn = commentOn;
 	}
-	
+
 	//Getters and Setters
 	
 	public BugReport commentOn() {
