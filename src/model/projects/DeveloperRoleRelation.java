@@ -15,6 +15,15 @@ public class DeveloperRoleRelation {
 		this.user = user;
 		this.role = role;
 	}
+
+	/**
+	 * Copy constructor.
+	 * @param developerRoleRelation The DeveloperRoleRelation to copy.
+     */
+	DeveloperRoleRelation(DeveloperRoleRelation developerRoleRelation) {
+		this.user = developerRoleRelation.getUser();
+		this.role = developerRoleRelation.getRole();
+	}
 	
 	/**
 	 * Get the user involved in this relation.

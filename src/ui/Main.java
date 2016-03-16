@@ -11,6 +11,7 @@ import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.BugReport;
+import model.bugreports.bugtag.BugTagEnum;
 import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
 import model.bugreports.comments.InitialComment;
@@ -20,15 +21,11 @@ import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
-import model.bugtag.BugTag;
 import model.projects.Project;
 import model.projects.Role;
 import model.projects.Subsystem;
-import model.projects.forms.ProjectAssignForm;
-import model.projects.forms.ProjectCreationForm;
-import model.projects.forms.ProjectDeleteForm;
-import model.projects.forms.ProjectUpdateForm;
-import model.projects.forms.SubsystemCreationForm;
+import model.projects.Version;
+import model.projects.forms.*;
 import model.users.Developer;
 import model.users.Issuer;
 import model.users.User;
@@ -167,8 +164,69 @@ public class Main {
 		String greeting = userController.loginAs(selectedUser);
 		System.out.println(greeting);
 	}
-	
+
 	public static void createProject() {
+		boolean valid = false;
+		int selected = 0;
+		while (!valid) {
+			System.out.println("Please indicate wheter you would like to: ");
+			System.out.println(" 1. Fork an existing project");
+			System.out.println(" 2. Create a new project");
+			selected = input.nextInt();
+			input.nextLine();
+
+			if (selected > 0 && selected < 3)
+				valid = true;
+		}
+
+		if (selected == 1)
+			createForkedProject();
+		if (selected == 2)
+			createNewProject();;
+	}
+
+	public static void createForkedProject() {
+		ProjectForkForm form;
+		Project project;
+		try {
+			form = projectController.getProjectForkForm();
+			project = selectProject(projectController.getProjectList());
+
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		System.out.println("Enter the budget estimate for the project:");
+		form.setBudgetEstimate(input.nextDouble());
+		input.nextLine();
+
+		boolean valid = false;
+		while (!valid) {
+			try {
+				System.out.println("Enter the start date for the project (dd/mm/yyyy):");
+				form.setStartDate((new SimpleDateFormat("dd/MM/yyyy")).parse(input.nextLine()));
+				valid = true;
+			} catch (Exception e) { }
+		}
+
+		valid = false;
+		while (!valid) {
+			try {
+				System.out.println("Enter the version number for the project:");
+				String vNumber = input.nextLine();
+				int major = Integer.parseInt(vNumber.split(".")[0]);
+				int minor = Integer.parseInt(vNumber.split(".")[1]);
+				int revision = Integer.parseInt(vNumber.split(".")[2]);
+				form.setVersion(new Version(major, minor, revision));
+			} catch (Exception e) { }
+		}
+
+		projectController.forkProject(form);
+		System.out.println("Project is forked.");
+	}
+
+	public static void createNewProject() {
 		ProjectCreationForm form;
 		try {
 			 form = projectController.getProjectCreationForm();
@@ -176,7 +234,7 @@ public class Main {
 			System.out.println(e.getMessage());
 			return;
 		}
-		
+
 		System.out.println("Enter the name of the project:");
 		form.setName(input.nextLine());
 		System.out.println("Enter the description of the project:");
@@ -377,7 +435,7 @@ public class Main {
 		System.out.println(" Creation Date: " + bugReport.getCreationDate());
 		System.out.println(" Issued by: " + bugReport.getIssuedBy().getUserName());
 		System.out.println(" Subsystem: " + bugReport.getSubsystem().getName());
-		if (bugReport.getBugTag() == BugTag.DUPLICATE)
+		if (bugReport.getBugTag().getBugTagEnum() == BugTagEnum.DUPLICATE)
 			System.out.println(" Duplicate: " + bugReport.getDuplicate().getTitle());
 		System.out.println(" Assignees: ");
 		for (Developer dev : bugReport.getAssignees())
@@ -569,20 +627,20 @@ public class Main {
 		}
 	}
 	
-	private static BugTag selectBugTag() {
+	private static BugTagEnum selectBugTag() {
 		while (true) {
 			System.out.println("Select a bug tag by entering its number");
 			
 			int number = 1;
-			for (BugTag tag : BugTag.values()){
+			for (BugTagEnum tag : BugTagEnum.values()){
 				System.out.println(number + ". " + tag.toString());
 				number++;
 			}
 			
 			int selected = input.nextInt();
 			input.nextLine();
-			if (selected <= BugTag.values().length)
-				return BugTag.values()[selected - 1];
+			if (selected <= BugTagEnum.values().length)
+				return BugTagEnum.values()[selected - 1];
 		}
 	}
 
@@ -619,7 +677,7 @@ public class Main {
 		}
 	}
 	
-	private static Project selectProject(ArrayList<Project> projects) {
+	private static Project selectProject(List<Project> projects) {
 		while (true) {
 			System.out.println("Select a project by entering its number: ");
 			int number = 1;
@@ -634,7 +692,7 @@ public class Main {
 				return projects.get(selected - 1);
 		}
 	}
-	private static model.projects.System selectSystem(ArrayList<model.projects.System> systems) {
+	private static model.projects.System selectSystem(List<model.projects.System> systems) {
 		while (true) {
 			System.out.println("Select a project or subsystem by entering its number: ");
 			int number = 1;
@@ -650,7 +708,7 @@ public class Main {
 		}
 	}
 	
-	private static Subsystem selectSubsystem(ArrayList<Subsystem> subsystems) {
+	private static Subsystem selectSubsystem(List<Subsystem> subsystems) {
 		while (true) {
 			System.out.println("Select a subsystem by entering its number: ");
 			int number = 1;

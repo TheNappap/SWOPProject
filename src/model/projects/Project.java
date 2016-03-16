@@ -22,6 +22,18 @@ public class Project extends System {
 		setTeam(team);
 	}
 
+	/**
+	 * Copy constructor.
+	 * @param project The Project object to copy.
+     */
+	Project(Project project) {
+		super(project.getName(), project.getDescription(), null, new Version(project.getVersion()));
+		setCreationDate(new Date(project.getCreationDate().getTime()));
+		setStartDate(new Date(project.getStartDate().getTime()));
+		setBudgetEstimate(project.getBudgetEstimate());
+		setTeam(new ProjectTeam(project.getTeam()));
+	}
+
 	private Date creationDate;
 	private Date startDate;
 	private double budgetEstimate;

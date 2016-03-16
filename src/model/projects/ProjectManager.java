@@ -6,11 +6,7 @@ import java.util.List;
 
 import model.projects.builders.ProjectBuilder;
 import model.projects.builders.SubsystemBuilder;
-import model.projects.forms.ProjectAssignForm;
-import model.projects.forms.ProjectCreationForm;
-import model.projects.forms.ProjectDeleteForm;
-import model.projects.forms.ProjectUpdateForm;
-import model.projects.forms.SubsystemCreationForm;
+import model.projects.forms.*;
 import model.users.Developer;
 
 public class ProjectManager implements ProjectDAO {
@@ -25,6 +21,7 @@ public class ProjectManager implements ProjectDAO {
 	 * Create and add a new project to the list.
 	 * @param form The filled in form with the details about the project to be created.
 	 */
+	@Override
 	public void createProject(ProjectCreationForm form) {
 		ProjectTeam team = new ProjectTeam();
 		team.addMember(form.getLeadDeveloper(), Role.LEAD);
@@ -50,7 +47,20 @@ public class ProjectManager implements ProjectDAO {
 		
 		return p;
 	}
-	
+
+	/**
+	 * Fork an existing project and add it to the projects list.
+	 * @param form The ProjectForkForm containing all the details about the project to be forked.
+     */
+	@Override
+	public void createFork(ProjectForkForm form) {
+		Project fork = new Project(form.getProject());
+		fork.setBudgetEstimate(form.getBudgetEstimate());
+		fork.setVersion(form.getVersion());
+		fork.setStartDate(form.getStartDate());
+		projectList.add(fork);
+	}
+
 	/**
 	 * Method to update a project.
 	 * @param form The ProjectUpdateForm containing all the details about the project to update.

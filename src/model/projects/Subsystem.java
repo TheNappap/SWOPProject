@@ -11,6 +11,14 @@ public class Subsystem extends System {
 		super(name, description, parent, version);
 		setProject(project);
 	}
+
+	/**
+	 * Copy constructor
+	 * @param sub The subsystem to copy.
+     */
+	Subsystem(Subsystem sub) {
+		super(sub);
+	}
 	
 	public Project getProject() {
 		return project;
