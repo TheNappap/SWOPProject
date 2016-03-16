@@ -18,6 +18,12 @@ public class Subsystem extends System {
      */
 	Subsystem(Subsystem sub) {
 		super(sub);
+		this.setProject(sub.getProject());
+		this.setParent(sub.getParent());
+	}
+	
+	public Subsystem copy() {
+		return new Subsystem(this);
 	}
 	
 	public Project getProject() {

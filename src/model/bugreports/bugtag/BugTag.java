@@ -16,6 +16,14 @@ public abstract class BugTag {
 	}
 	
 	/**
+	 * Copy constructor.
+	 * @param other BugTag to copy.
+	 */
+	protected BugTag(BugTag other) {
+		this.acceptedTransitions = other.acceptedTransitions;
+	}
+	
+	/**
 	 * Checks if this BugTag can change to the given BugTagEnum
 	 * @param bugTagEnum The BugTagEnum to which this BugTag would like to change.
 	 * @return true if the transition is allowed. false if it isn't.

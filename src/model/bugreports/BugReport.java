@@ -9,6 +9,7 @@ import model.bugreports.bugtag.BugTag;
 import model.projects.Subsystem;
 import model.users.Developer;
 import model.users.Issuer;
+import model.users.User;
 
 public class BugReport implements Comparable<BugReport>, Commentable { //A Comment can be commented on.
 
@@ -78,6 +79,8 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 	 * 		| getBugTag() == bugTag
 	 */
 	public void updateBugTag(BugTag bugTag) {
+		if (!bugTag.isTransitionAllowed(bugTag.getBugTagEnum())) throw new IllegalArgumentException("Transistion is not allowed.");
+		
 		setBugTag(bugTag);
 	}
 	
@@ -128,12 +131,18 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 		this.duplicate = duplicate;
 	}
 
-	public Issuer getIssuedBy() {
+	public User getIssuedBy() {
 		return issuedBy;
 	}
 
+	@Override
 	public List<Comment> getComments() {
 		return comments;
+//		List<Comment> returnComments = new ArrayList<Comment>(comments.size());
+//		
+//		for (Comment comment : comments) returnComments.add(comment.copy());
+//		
+//		return returnComments;
 	}
 	
 }

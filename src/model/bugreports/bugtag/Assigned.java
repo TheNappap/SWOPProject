@@ -5,6 +5,14 @@ public class Assigned extends BugTag {
 	public Assigned() {
 		super(new BugTagEnum[]{BugTagEnum.UNDER_REVIEW, BugTagEnum.NOT_A_BUG, BugTagEnum.DUPLICATE});
 	}
+	
+	protected Assigned(Assigned other) {
+		super(other);
+	}
+	
+	public Assigned copy() {
+		return new Assigned(this);
+	}
 
 	@Override
 	public BugTagEnum getBugTagEnum() {
