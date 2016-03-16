@@ -52,11 +52,16 @@ public class ProjectManager {
 	 * @param form The ProjectForkForm containing all the details about the project to be forked.
      */
 	public void createFork(ProjectForkForm form) {
-		Project fork = new Project(form.getProject());
-		fork.setBudgetEstimate(form.getBudgetEstimate());
-		fork.setVersion(form.getVersion());
-		fork.setStartDate(form.getStartDate());
+		createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
+	}
+
+	public Project createFork(Project project, double budgetEstimate, Version version, Date startDate) {
+		Project fork = new Project(project);
+		fork.setBudgetEstimate(budgetEstimate);
+		fork.setVersion(version);
+		fork.setStartDate(startDate);
 		projectList.add(fork);
+		return fork;
 	}
 
 	/**
@@ -64,15 +69,18 @@ public class ProjectManager {
 	 * @param form The ProjectUpdateForm containing all the details about the project to update.
 	 */
 	public void updateProject(ProjectUpdateForm form) {
-		Project project = form.getProject();
+		updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate(), form.getLeadDeveloper(), form.getVersion());
+	}
+
+	public void updateProject(Project project, String name, String description, double budgetEstimate, Date startDate, Developer lead, Version version) {
 		for (Project p : projectList) {
 			if (p == project) {
-				p.setBudgetEstimate(form.getBudgetEstimate());
-				p.setDescription(form.getDescription());
-				p.setName(form.getName());
-				p.setStartDate(form.getStartDate());
-				p.setVersion(form.getVersion());
-				p.getTeam().setLeadDeveloper(form.getLeadDeveloper());
+				p.setBudgetEstimate(budgetEstimate);
+				p.setDescription(description);
+				p.setName(name);
+				p.setStartDate(startDate);
+				p.setVersion(version);
+				p.getTeam().setLeadDeveloper(lead);
 			}
 		}
 	}
@@ -82,9 +90,12 @@ public class ProjectManager {
 	 * @param form The ProjectDeleteForm containing all the details about the project to delete.
 	 */
 	public void deleteProject(ProjectDeleteForm form) {
-		Project project = form.getProject();
+		deleteProject(form.getProject());
+	}
+
+	public void deleteProject(Project project) {
 		for (int i = 0; i < projectList.size(); i++) {
-			if (projectList.get(i) == project) 
+			if (projectList.get(i) == project)
 				projectList.remove(i);
 		}
 	}
@@ -94,10 +105,13 @@ public class ProjectManager {
 	 * @param form The ProjectAssignForm containing all the details about the assignment.
 	 */
 	public void assignToProject(ProjectAssignForm form) {
-		Project project = form.getProject();
+		assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
+	}
+
+	public void assignToProject(Project project, Developer dev, Role role) {
 		for (Project p : projectList) {
-			if (p == project) 
-				p.getTeam().addMember(form.getDeveloper(), form.getRole());
+			if (p == project)
+				p.getTeam().addMember(dev, role);
 		}
 	}
 
