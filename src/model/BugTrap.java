@@ -33,6 +33,31 @@ public class BugTrap {
 		return bugReportDAO;
 	}
 	
+	public boolean isLoggedIn(){
+		if(getUserManager().getLoggedInUser() == null)
+			return false;
+		else
+			return true;
+	}
+	
+	public boolean isAdminLoggedIn(){
+		if(isLoggedIn())
+			return false;
+		return getUserManager().getLoggedInUser().isAdmin();
+	}
+	
+	public boolean isIssuerLoggedIn(){
+		if(isLoggedIn())
+			return false;
+		return getUserManager().getLoggedInUser().isIssuer();
+	}
+	
+	public boolean isDeveloperLoggedIn(){
+		if(isLoggedIn())
+			return false;
+		return getUserManager().getLoggedInUser().isDeveloper();
+	}
+	
 	public void initialize() {
 		BugTrapInitializer initializer = new BugTrapInitializer(this);
 		initializer.init();
