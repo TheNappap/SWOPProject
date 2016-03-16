@@ -144,13 +144,13 @@ public class Main {
 					
 			switch (category) {
 				case 1:
-					users = userController.getUserList(UserCategory.ADMIN);
+					users = userController.getAdmins();
 					break;
 				case 2:
-					users = userController.getUserList(UserCategory.ISSUER);
+					users = userController.getIssuers();
 					break;
 				case 3:
-					users = userController.getUserList(UserCategory.DEVELOPER);
+					users = userController.getDevelopers()O;
 					break;
 				default:
 					valid = false;

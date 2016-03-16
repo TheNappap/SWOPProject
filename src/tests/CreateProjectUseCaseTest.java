@@ -1,26 +1,24 @@
 package tests;
 
-import model.BugTrap;
+import static org.junit.Assert.assertEquals;
+
+import java.util.Date;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import model.projects.Project;
 import model.projects.ProjectManager;
 import model.projects.ProjectTeam;
 import model.projects.Version;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Date;
-
-import static org.junit.Assert.assertEquals;
 
 public class CreateProjectUseCaseTest {
 
-	private BugTrap bugTrap;
 	private ProjectManager projectManager;
 
 	@Before
 	public void setUp() throws Exception {
-		bugTrap = new BugTrap();
-		projectManager = bugTrap.getProjectManager();
+		projectManager = new ProjectManager();
 	}
 
 	@SuppressWarnings("deprecation")

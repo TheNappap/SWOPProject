@@ -6,8 +6,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import model.users.Administrator;
 import model.users.User;
-import model.users.UserCategory;
 import model.users.UserManager;
 import model.users.exceptions.NoUserWithUserNameException;
 
@@ -20,13 +20,13 @@ public class LoginUseCaseTest {
 	public void setUp() throws Exception {
 		//add user
 		userManager = new UserManager();
-		userManager.createUser(UserCategory.ADMIN, "", "", "", "ADMIN");
+		userManager.createAdmin("", "", "", "ADMIN");
 	}
 
 	@Test
 	public void loginSuccesTest() {
 		//step 1
-		List<User> list = userManager.getUserList(UserCategory.ADMIN);
+		List<Administrator> list = userManager.getAdmins();
 		//step 2
 		User user = list.get(0);
 		//step 3

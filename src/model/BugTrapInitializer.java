@@ -75,7 +75,23 @@ class BugTrapInitializer {
 		String username = node.getAttribute("username");
 		UserCategory type = UserCategory.valueOf(node.getAttribute("type"));
 		
-		bugTrap.getUserManager().createUser(type, first, middle, last, username);
+		switch (type) {
+		case ADMIN:
+			bugTrap.getUserManager().createAdmin(first, middle, last, username);
+			break;
+
+		case ISSUER:
+			bugTrap.getUserManager().createIssuer(first, middle, last, username);
+			break;
+			
+		case DEVELOPER:
+			bugTrap.getUserManager().createDeveloper(first, middle, last, username);
+			break;
+
+		default:
+			break;
+		}
+		
 	}
 	
 	private void createProject(Element node) throws Exception {

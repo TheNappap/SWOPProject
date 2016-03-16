@@ -1,10 +1,12 @@
 package controllers;
 
-import model.BugTrap;
-import model.users.User;
-import model.users.UserCategory;
-
 import java.util.List;
+
+import model.BugTrap;
+import model.users.Administrator;
+import model.users.Developer;
+import model.users.Issuer;
+import model.users.User;
 
 public class UserController extends Controller {
 	
@@ -12,8 +14,16 @@ public class UserController extends Controller {
 		super(bugTrap);
 	}
 	
-	public List<User> getUserList(UserCategory userCategory) {
-		return getBugTrap().getUserManager().getUserList(userCategory);
+	public List<Administrator> getAdmins() {
+		return getBugTrap().getUserManager().getAdmins();
+	}
+	
+	public List<Issuer> getIssuers() {
+		return getBugTrap().getUserManager().getIssuers();
+	}
+	
+	public List<Developer> getDevelopers() {
+		return getBugTrap().getUserManager().getDevelopers();
 	}
 	
 	public String loginAs(User loggingUser) {
