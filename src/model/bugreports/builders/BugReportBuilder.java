@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import model.bugreports.BugReport;
-import model.bugreports.BugTag;
 import model.bugreports.comments.InitialComment;
+import model.bugtag.BugTag;
+import model.bugtag.BugTagEnum;
+import model.bugtag.New;
 import model.projects.Subsystem;
 import model.users.Developer;
 import model.users.Issuer;
@@ -27,7 +29,7 @@ public class BugReportBuilder {
 	
 	//Optional Parameters
 	private Date creationDate 	= new Date();	//The day this BugReport was created.
-	private BugTag bugTag		= BugTag.NEW; 	//The tag assigned to the BugReport.
+	private BugTag bugTag		= new New(); 	//The tag assigned to the BugReport.
 	private BugReport duplicate;				//Duplicate of the BugReport, if any.
 	private List<Developer> assignees 		= new ArrayList<Developer>();		//Developers assigned to the BugReport.
 	private List<InitialComment> comments 	= new ArrayList<InitialComment>();	//Comments on the BugReport.
@@ -159,8 +161,8 @@ public class BugReportBuilder {
 		if (assignees == null)		throw new IllegalStateException("Assignees is null");
 		if (comments == null)		throw new IllegalStateException("Comments is null");
 		
-		if (bugTag == BugTag.DUPLICATE && duplicate == null) throw new IllegalStateException("BugTag is DUPLICATE but duplicate is null.");
-		if (bugTag != BugTag.DUPLICATE && duplicate != null) throw new IllegalStateException("BugTag isn't DUPLICATE but yet duplicate isn't null.");
+		if (bugTag.getBugTagEnum() == BugTagEnum.DUPLICATE && duplicate == null) throw new IllegalStateException("BugTagEnum is DUPLICATE but duplicate is null.");
+		if (bugTag.getBugTagEnum() != BugTagEnum.DUPLICATE && duplicate != null) throw new IllegalStateException("BugTagEnum isn't DUPLICATE but yet duplicate isn't null.");
 	}
 
 }

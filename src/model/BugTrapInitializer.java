@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import model.bugreports.BugTag;
+import model.bugtag.BugTag;
 import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Role;
