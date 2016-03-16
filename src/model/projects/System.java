@@ -20,7 +20,21 @@ public abstract class System {
 		setDescription(description);
 		setVersion(version);
 		setParent(parent);
+	}
 
+	/**
+	 * Copy constructor
+	 * @param sys The System to copy.
+     */
+	System(System sys) {
+		this.subsystems = new ArrayList<Subsystem>();
+		setName(sys.getName());
+		setDescription(sys.getDescription());
+		setVersion(new Version(sys.getVersion()));
+		for (Subsystem s : sys.getSubsystems())
+			this.subsystems.add(new Subsystem(s));
+		for (Subsystem s : this.subsystems)
+			s.setParent(this);
 	}
 	
 	public String getName() {
