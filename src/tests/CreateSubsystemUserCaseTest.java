@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,7 +60,7 @@ public class CreateSubsystemUserCaseTest {
 			//step 1
 			SubsystemCreationForm form =  projectController.getSubsystemCreationForm();
 			//step 2
-			ArrayList<Project> list = projectController.getProjectList();
+			List<Project> list = projectController.getProjectList();
 			//step 3
 			Project system = list.get(0);
 			//step 4

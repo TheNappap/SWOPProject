@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -56,7 +57,7 @@ public class ShowProjectUseCaseTest {
 	@Test
 	public void test() {
 		
-		ArrayList<Project> list;
+		List<Project> list;
 		try {
 			//step 1
 			//user indicates he wants to inspect a project

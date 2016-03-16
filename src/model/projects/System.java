@@ -30,7 +30,7 @@ public abstract class System {
 		this.subsystems = new ArrayList<Subsystem>();
 		setName(sys.getName());
 		setDescription(sys.getDescription());
-		setVersion(new Version(sys.getVersion()));
+		setVersion(sys.getVersion().copy());
 		for (Subsystem s : sys.getSubsystems())
 			this.subsystems.add(new Subsystem(s));
 		for (Subsystem s : this.subsystems)

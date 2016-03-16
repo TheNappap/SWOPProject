@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -62,7 +63,7 @@ public class UpdateProjectUseCaseTest {
 			//step 1
 			ProjectUpdateForm form = projectController.getProjectUpdateForm();
 			//step 2
-			ArrayList<Project> list = projectController.getProjectList();
+			List<Project> list = projectController.getProjectList();
 			//step 3
 			Project project = list.get(0);
 			//step 4
