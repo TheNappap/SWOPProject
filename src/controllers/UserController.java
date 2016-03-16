@@ -1,6 +1,6 @@
 package controllers;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import model.BugTrap;
 import model.users.User;
@@ -12,31 +12,31 @@ public class UserController extends Controller {
 		super(bugTrap);
 	}
 	
-	public ArrayList<User> getUserList(UserCategory userCategory) {
-		return getBugTrap().getUserDAO().getUserList(userCategory);
+	public List<User> getUserList(UserCategory userCategory) {
+		return getBugTrap().getUserManager().getUserList(userCategory);
 	}
 	
 	public String loginAs(User loggingUser) {
-		return getBugTrap().getUserDAO().loginAs(loggingUser);
+		return getBugTrap().getUserManager().loginAs(loggingUser);
 	}
 	
 	public boolean isLoggedIn(User user) {
-		return getBugTrap().getUserDAO().isLoggedIn(user);
+		return getBugTrap().getUserManager().isLoggedIn(user);
 	}
 	
 	public boolean userNameExists(String userName) {
-		return getBugTrap().getUserDAO().userNameExists(userName);
+		return getBugTrap().getUserManager().userNameExists(userName);
 	}
 	
 	public boolean userExists(User user) {
-		return getBugTrap().getUserDAO().userExists(user);
+		return getBugTrap().getUserManager().userExists(user);
 	}
 	
 	public User getLoggedInUser() {
-		return getBugTrap().getUserDAO().getLoggedInUser();
+		return getBugTrap().getUserManager().getLoggedInUser();
 	}
 	
 	public void logOff() {
-		getBugTrap().getUserDAO().logOff();
+		getBugTrap().getUserManager().logOff();
 	}
 }

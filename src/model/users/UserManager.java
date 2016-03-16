@@ -1,26 +1,27 @@
 package model.users;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import model.users.exceptions.NoUserWithUserNameException;
 import model.users.exceptions.NotUniqueUserNameException;
 
-public class UserManager  implements UserDAO {
+public class UserManager{
 	
 	
 	public UserManager(){
-		userList = new ArrayList<User>();
+		userList = new ArrayList<UserImpl>();
 		setLoggedInUser(null);
 	}
 	
-	private ArrayList<User> userList;
-	private User loggedInUser;
+	private List<UserImpl> userList;
+	private UserImpl loggedInUser;
 	
 	/**
 	 * Checks if the given User is logged in or not.
 	 * @param user The user to check.
 	 * @return true if the given User is logged in, false if (s)he's not.
 	 */
-	@Override
 	public boolean isLoggedIn(User user) {
 		if(getLoggedInUser() == null)
 			return false;
@@ -50,24 +51,51 @@ public class UserManager  implements UserDAO {
 	/**
 	 * Log the current user off 
 	 */
-	@Override
 	public void logOff(){
 		setLoggedInUser(null);
 	}
 	
 	//USERS
 	
-	public ArrayList<User> getUserList() {
-		return userList;
+	/**
+	 * returns a copy of the user list
+	 * @return user list
+	 */
+	public List<User> getUserList() {
+		List<User> users = new ArrayList<User>();
+		for (User s : userList) {
+			users.add(s);
+		}
+		return users;
 	}
 	
-	@Override
-	public User getLoggedInUser() {
+	/**
+	 * returns a copy of the user implementation list
+	 * @return user list
+	 */
+	public List<UserImpl> getUserImplList() {
+		List<UserImpl> users = new ArrayList<UserImpl>();
+		for (UserImpl s : userList) {
+			users.add(s);
+		}
+		return users;
+	}
+	
+	public UserImpl getLoggedInUser() {
 		return loggedInUser;
 	}
 	
 	private void setLoggedInUser(User user){
-		loggedInUser = user;
+		if(!userNameExists(user.getUserName()))
+			throw new NoUserWithUserNameException();
+		
+		UserImpl userImpl = null;
+		for (UserImpl u : userList) {
+			if(u.getUserName().equals(user.getUserName())){
+				userImpl = u;
+			}
+		}
+		loggedInUser = userImpl;
 	}
 	
 	
@@ -76,12 +104,10 @@ public class UserManager  implements UserDAO {
 	 * @param userCategory The UserCategory for which to make the user list.
 	 * @return An ArrayList containing the Users from userList that are from the given UserCategory.
 	 */
-
-	@Override
-	public ArrayList<User> getUserList(UserCategory userCategory) {
-		ArrayList<User> userList = new ArrayList<User>();
+	public List<User> getUserList(UserCategory userCategory) {
+		List<User> userList = new ArrayList<User>();
 		
-		for (User user : getUserList()) 
+		for (UserImpl user : getUserImplList()) 
 			if (user.getCategory() == userCategory)
 				userList.add(user);
 		
@@ -103,7 +129,7 @@ public class UserManager  implements UserDAO {
 			throw new NotUniqueUserNameException();
 		}
 		
-		User user;
+		UserImpl user;
 		switch (uc) {
 		case ADMIN:
 			user = new Administrator(fn, mn, ln, un);

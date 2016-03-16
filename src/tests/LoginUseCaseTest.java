@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import controllers.UserController;
 import model.BugTrap;
-import model.users.User;
+import model.users.UserImpl;
 import model.users.UserCategory;
 import model.users.UserManager;
 
@@ -20,14 +20,14 @@ public class LoginUseCaseTest {
 	public void setUp() throws Exception {
 		controller = new UserController(new BugTrap());
 		//add user
-		UserManager userMan = (UserManager) controller.getBugTrap().getUserDAO();
+		UserManager userMan = (UserManager) controller.getBugTrap().getUserManager();
 		userMan.createUser(UserCategory.ADMIN, "", "", "", "ADMIN");
 	}
 
 	@Test
 	public void loginTest() {
 		//step 1 & 2
-		ArrayList<User> list = controller.getUserList(UserCategory.ADMIN);
+		ArrayList<UserImpl> list = controller.getUserList(UserCategory.ADMIN);
 		//step 3
 		String message = controller.loginAs(list.get(0));
 		//step 4

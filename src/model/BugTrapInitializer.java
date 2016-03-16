@@ -77,7 +77,7 @@ class BugTrapInitializer {
 		String username = node.getAttribute("username");
 		UserCategory type = UserCategory.valueOf(node.getAttribute("type"));
 		
-		bugTrap.userDAO.createUser(type, first, middle, last, username);
+		bugTrap.getUserManager().createUser(type, first, middle, last, username);
 	}
 	
 	private void createProject(Element node) throws Exception {
@@ -94,7 +94,7 @@ class BugTrapInitializer {
 				continue;
 						
 			Element role = (Element)roles.item(i);
-			team.addMember((Developer)bugTrap.userDAO.getUser(role.getAttribute("user")), Role.valueOf(role.getAttribute("role")));
+			team.addMember((Developer)bugTrap.getUserManager().getUser(role.getAttribute("user")), Role.valueOf(role.getAttribute("role")));
 		}
 			
 		Project project = bugTrap.projectDAO.createProject(name, descr,creation, start, budgetEstimate, team, null);
@@ -131,7 +131,7 @@ class BugTrapInitializer {
 		Date creation = (new SimpleDateFormat("dd/MM/yyyy")).parse(node.getAttribute("creationDate"));
 		Subsystem sub = bugTrap.projectDAO.getSubsystemWithName(node.getAttribute("subsystem"));
 		BugTag tag = BugTag.valueOf(node.getAttribute("tag"));
-		Issuer issuer = (Issuer)bugTrap.userDAO.getUser(node.getAttribute("issuer"));
+		Issuer issuer = (Issuer)bugTrap.getUserManager().getUser(node.getAttribute("issuer"));
 		
 		bugTrap.bugReportDAO.addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), tag);
 	}

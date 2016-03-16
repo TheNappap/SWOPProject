@@ -135,7 +135,7 @@ public class Main {
 	public static void login() {
 		boolean valid = false;
 		int category = 0;
-		ArrayList<User> users = new ArrayList<User>();
+		List<User> users = new ArrayList<User>();
 		User selectedUser = null;
 		while (!valid) {
 			valid = true;
@@ -458,7 +458,7 @@ public class Main {
 		System.out.println("Bug report is updated.");
 	}
 	
-	private static User selectUser(ArrayList<User> users) {
+	private static User selectUser(List<User> users) {
 		while (true) {
 			System.out.println("Select a user by entering the username: ");
 			for (User user : users)

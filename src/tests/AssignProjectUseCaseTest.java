@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class AssignProjectUseCaseTest {
 		userController = new UserController(bugTrap);
 		
 		//add user
-		UserManager userMan = (UserManager) userController.getBugTrap().getUserDAO();
+		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
 		userMan.createUser(UserCategory.ADMIN, "", "", "", "ADMIN");
 		userMan.createUser(UserCategory.DEVELOPER, "", "", "", "Dev");
 		Administrator admin =  (Administrator) userController.getUserList(UserCategory.ADMIN).get(0);
@@ -73,7 +74,7 @@ public class AssignProjectUseCaseTest {
 			Project  project = list.get(0);
 			form.setProject(project);
 			//step 4
-			ArrayList<User> devs = userController.getUserList(UserCategory.DEVELOPER);
+			List<User> devs = userController.getUserList(UserCategory.DEVELOPER);
 			//step 5
 			Developer dev = (Developer) devs.get(0);
 			form.setDeveloper(dev);

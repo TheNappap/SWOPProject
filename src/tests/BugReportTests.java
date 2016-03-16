@@ -40,7 +40,7 @@ public class BugReportTests {
 		controller = new BugReportController(bugTrap);
 		UserController userController = new UserController(bugTrap);
 		//add user
-		UserManager userMan = (UserManager) userController.getBugTrap().getUserDAO();
+		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
 		userMan.createUser(UserCategory.DEVELOPER, "", "", "", "Dev");
 		Developer dev =  (Developer) userController.getUserList(UserCategory.DEVELOPER).get(0);
 		userController.loginAs(dev);
