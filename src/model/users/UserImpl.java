@@ -14,7 +14,7 @@ public abstract class UserImpl implements User{
 		setUserName(userName);
 	}
 	
-	public abstract UserCategory getCategory();
+	protected abstract UserCategory getCategory();
 	
 	public boolean isAdmin(){
 		return getCategory() == UserCategory.ADMIN;
