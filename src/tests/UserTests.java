@@ -30,7 +30,7 @@ public class UserTests {
 	@Before
 	public void setUp() throws Exception {
 		bugTrap = new BugTrap();
-		userManager = (UserManager) bugTrap.getUserDAO();
+		userManager = (UserManager) bugTrap.getUserManager();
 		userController = new UserController(bugTrap);
 		
 		userManager.createUser(UserCategory.ADMIN, "Richard", "Rosie", "Reese", "RRR");

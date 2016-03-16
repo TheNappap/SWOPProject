@@ -1,6 +1,6 @@
 package tests;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import controllers.UserController;
 import model.BugTrap;
-import model.users.UserImpl;
+import model.users.User;
 import model.users.UserCategory;
 import model.users.UserManager;
 
@@ -27,7 +27,7 @@ public class LoginUseCaseTest {
 	@Test
 	public void loginTest() {
 		//step 1 & 2
-		ArrayList<UserImpl> list = controller.getUserList(UserCategory.ADMIN);
+		List<User> list = controller.getUserList(UserCategory.ADMIN);
 		//step 3
 		String message = controller.loginAs(list.get(0));
 		//step 4

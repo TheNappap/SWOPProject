@@ -45,7 +45,7 @@ public class ProjectFormTests {
 		userController = new UserController(bugTrap);
 		
 		//add user
-		UserManager userMan = (UserManager) userController.getBugTrap().getUserDAO();
+		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
 		userMan.createUser(UserCategory.DEVELOPER, "", "", "", "Dev");
 		userMan.createUser(UserCategory.ADMIN, "", "", "", "ADMIN");
 		Administrator admin =  (Administrator) userController.getUserList(UserCategory.ADMIN).get(0);

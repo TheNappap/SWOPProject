@@ -40,7 +40,7 @@ public class SubsystemUsecaseTests {
 		lead = new Developer("John", "Johnny", "Johnson", "Boss");
 		
 		//add user
-		UserManager userMan = (UserManager) userController.getBugTrap().getUserDAO();
+		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
 		userMan.createUser(UserCategory.ADMIN, "", "", "", "ADMIN");
 		userMan.createUser(UserCategory.DEVELOPER, "", "", "", "Dev");
 		Administrator admin =  (Administrator) userController.getUserList(UserCategory.ADMIN).get(0);
