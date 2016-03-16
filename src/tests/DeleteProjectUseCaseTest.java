@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +59,7 @@ public class DeleteProjectUseCaseTest {
 			//step 1
 			ProjectDeleteForm form =  projectController.getProjectDeleteForm();
 			//step 2
-			ArrayList<Project> list = projectController.getProjectList();
+			List<Project> list = projectController.getProjectList();
 			//step 3
 			form.setProject(list.get(0));
 			//step 4

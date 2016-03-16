@@ -27,7 +27,7 @@ public class Project extends System {
 	 * @param project The Project object to copy.
      */
 	Project(Project project) {
-		super(project.getName(), project.getDescription(), null, new Version(project.getVersion()));
+		super(project.getName(), project.getDescription(), null, project.getVersion().copy());
 		setCreationDate(new Date(project.getCreationDate().getTime()));
 		setStartDate(new Date(project.getStartDate().getTime()));
 		setBudgetEstimate(project.getBudgetEstimate());

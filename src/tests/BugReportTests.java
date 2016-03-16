@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.Date;
 
+import model.bugreports.bugtag.BugTagEnum;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -85,7 +86,7 @@ public class BugReportTests {
 			.setSubsystem(new Subsystem(null, null, null, null, null))
 			.setDependsOn(new ArrayList<BugReport>())
 			.setIssuer(new Issuer(null, null, null, null))
-			.setBugTag(BugTag.NEW)
+			.setBugTag(BugTagEnum.NEW.createBugTag())
 			.setCreationDate(new Date())
 			.getBugReport();
 		} catch (IllegalStateException e) { 
@@ -113,7 +114,7 @@ public class BugReportTests {
 			assertNotNull(bugReport.getComments());
 			assertNotNull(bugReport.getAssignees());
 			assertNull(bugReport.getDuplicate());
-			assertEquals(BugTag.NEW, bugReport.getBugTag());
+			assertEquals(BugTagEnum.NEW.createBugTag(), bugReport.getBugTag());
 		} catch (UnauthorizedAccessException e) {
 			fail("not logged in as issuer");
 		}
@@ -228,14 +229,14 @@ public class BugReportTests {
 		BugReport bugReport0;
 		try {
 			bugReport0 = controller.getBugReportList().get(0);
-			assertEquals(BugTag.NEW, bugReport0.getBugTag());
+			assertEquals(BugTagEnum.NEW.createBugTag(), bugReport0.getBugTag());
 			
 			form.setBugReport(bugReport0);
-			form.setBugTag(BugTag.NOT_A_BUG);
+			form.setBugTag(BugTagEnum.NOT_A_BUG.createBugTag());
 			
 			controller.updateBugReport(form);
 			
-			assertEquals(BugTag.NOT_A_BUG, bugReport0.getBugTag());
+			assertEquals(BugTagEnum.NOT_A_BUG.createBugTag(), bugReport0.getBugTag());
 		} catch (UnauthorizedAccessException e) {
 			fail("not logged in as issuer");
 		}
@@ -398,7 +399,7 @@ public class BugReportTests {
 			} catch (NullPointerException e) { }
 			try {
 				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null, null));
-				form.setBugTag(BugTag.NEW);
+				form.setBugTag(BugTagEnum.NEW.createBugTag());
 				form.allVarsFilledIn();
 			} catch (NullPointerException e) {
 				fail();

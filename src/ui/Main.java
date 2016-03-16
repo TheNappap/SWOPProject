@@ -11,6 +11,7 @@ import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.BugReport;
+import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagEnum;
 import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
@@ -625,7 +626,7 @@ public class Main {
 		}
 	}
 	
-	private static BugTagEnum selectBugTag() {
+	private static BugTag selectBugTag() {
 		while (true) {
 			System.out.println("Select a bug tag by entering its number");
 			
@@ -638,7 +639,7 @@ public class Main {
 			int selected = input.nextInt();
 			input.nextLine();
 			if (selected <= BugTagEnum.values().length)
-				return BugTagEnum.values()[selected - 1];
+				return BugTagEnum.values()[selected - 1].createBugTag();
 		}
 	}
 

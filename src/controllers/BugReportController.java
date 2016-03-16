@@ -20,17 +20,15 @@ public class BugReportController extends Controller {
 	
 	public BugReportCreationForm getBugReportCreationForm() throws UnauthorizedAccessException{
 
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null || (getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ISSUER
-																&& getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.DEVELOPER))
+		if (!getBugTrap().isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
 		return new BugReportCreationForm();
 	}
 
 	public CommentCreationForm getCommentCreationForm() throws UnauthorizedAccessException{
-		
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null || (getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ISSUER
-																&& getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.DEVELOPER))
+
+		if (!getBugTrap().isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
 		return new CommentCreationForm();
@@ -38,14 +36,14 @@ public class BugReportController extends Controller {
 
 	public BugReportAssignForm getBugReportAssignForm() throws UnauthorizedAccessException{
 
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.DEVELOPER)
+		if (!getBugTrap().isDeveloperLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
 		
 		return new BugReportAssignForm();
 	}
 	
 	public BugReportUpdateForm getBugReportUpdateForm() throws UnauthorizedAccessException{
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null || getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.DEVELOPER)
+		if (!getBugTrap().isDeveloperLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
 		
 		return new BugReportUpdateForm();
@@ -53,8 +51,7 @@ public class BugReportController extends Controller {
 
 	public ArrayList<BugReport> getBugReportList() throws UnauthorizedAccessException{
 
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null || (getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ISSUER
-																&& getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.DEVELOPER))
+		if (!getBugTrap().isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
 		return getBugTrap().getBugReportDAO().getBugReportList();
@@ -62,8 +59,7 @@ public class BugReportController extends Controller {
 
 	public ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
 
-		if (getBugTrap().getUserDAO().getLoggedInUser() == null || (getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.ISSUER
-																&& getBugTrap().getUserDAO().getLoggedInUser().getCategory() != UserCategory.DEVELOPER))
+		if (!getBugTrap().isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
 		return getBugTrap().getBugReportDAO().getOrderedList(types, arguments);
