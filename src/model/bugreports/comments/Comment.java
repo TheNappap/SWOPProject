@@ -8,26 +8,32 @@ import java.util.List;
  * Class that represents a Comment.
  * 
  */
-public abstract class Comment implements Commentable { //A Comment can be commented on.
+public class Comment implements Commentable { //A Comment can be commented on.
 
 	//All immutable.
 	private final Date creationDate;				//Creation Date of the Comment.
-	private final List<ReplyComment> comments;		//Comments to this Comment.
+	private final List<Comment> comments;			//Comments to this Comment.
 	private final String text;						//Text.
 
 	/**  
 	 * Constructor.  
-	 * @param text The text of this Comment.  z
-	 */  
+	 * @param text The text of this Comment.
+	 **/  
 	public Comment(String text) {
 		this.creationDate = new Date();
-		this.comments 	  = new ArrayList<ReplyComment>();
+		this.comments 	  = new ArrayList<Comment>();
 		this.text 		  = text;
+	}
+	
+	protected Comment(Comment other) {
+		this.creationDate 	= new Date(other.getCreationDate().getTime());
+		this.comments		= other.getComments();
+		this.text			= other.getText();
 	}
 
 	@Override
 	public void addComment(String commentText) {
-		comments.add(new ReplyComment(commentText, this));
+		comments.add(new Comment(commentText));
 	}
 	
 	//Getters and Setters
@@ -40,10 +46,10 @@ public abstract class Comment implements Commentable { //A Comment can be commen
 		return creationDate;
 	}
 
-	public List<ReplyComment> getComments() {
-		List<ReplyComment> returnComments = new ArrayList<ReplyComment>(comments.size());
+	public List<Comment> getComments() {
+		List<Comment> returnComments = new ArrayList<Comment>(comments.size());
 		
-		for (ReplyComment replyComment : comments) returnComments.add(replyComment);
+		for (Comment replyComment : comments) returnComments.add(replyComment);
 		
 		return returnComments;
 	}

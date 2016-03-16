@@ -5,10 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import model.bugreports.BugReport;
-import model.bugreports.comments.InitialComment;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagEnum;
 import model.bugreports.bugtag.New;
+import model.bugreports.comments.Comment;
 import model.projects.Subsystem;
 import model.users.Developer;
 import model.users.Issuer;
@@ -32,7 +32,7 @@ public class BugReportBuilder {
 	private BugTag bugTag		= new New(); 	//The tag assigned to the BugReport.
 	private BugReport duplicate;				//Duplicate of the BugReport, if any.
 	private List<Developer> assignees 		= new ArrayList<Developer>();		//Developers assigned to the BugReport.
-	private List<InitialComment> comments 	= new ArrayList<InitialComment>();	//Comments on the BugReport.
+	private List<Comment> comments 	= new ArrayList<Comment>();	//Comments on the BugReport.
 	
 	/**  
 	 * Empty constructor.  
@@ -134,7 +134,7 @@ public class BugReportBuilder {
 	 * @param comments The InitialComments on the BugReport.
 	 * @return this.
 	 */
-	public BugReportBuilder setComments(List<InitialComment> comments) {
+	public BugReportBuilder setComments(List<Comment> comments) {
 		this.comments = comments;
 		return this;
 	}
