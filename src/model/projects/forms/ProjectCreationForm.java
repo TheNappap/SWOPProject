@@ -1,9 +1,9 @@
 package model.projects.forms;
 
-import java.util.Date;
-
 import model.Form;
 import model.users.Developer;
+
+import java.util.Date;
 
 /**
  * Form used to store temporary data to create a project.

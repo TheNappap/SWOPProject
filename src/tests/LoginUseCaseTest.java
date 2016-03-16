@@ -1,16 +1,15 @@
 package tests;
 
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import controllers.UserController;
 import model.BugTrap;
 import model.users.User;
 import model.users.UserCategory;
 import model.users.UserManager;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
 
 public class LoginUseCaseTest {
 	

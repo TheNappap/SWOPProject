@@ -1,14 +1,12 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.Project;
 import model.projects.forms.*;
 import model.users.Developer;
-import model.users.UserCategory;
+
+import java.util.List;
 
 public class ProjectController extends Controller {
 

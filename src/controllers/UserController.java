@@ -1,10 +1,10 @@
 package controllers;
 
-import java.util.List;
-
 import model.BugTrap;
 import model.users.User;
 import model.users.UserCategory;
+
+import java.util.List;
 
 public class UserController extends Controller {
 	

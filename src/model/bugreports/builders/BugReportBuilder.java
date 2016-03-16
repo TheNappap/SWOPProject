@@ -1,9 +1,5 @@
 package model.bugreports.builders;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import model.bugreports.BugReport;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagEnum;
@@ -12,6 +8,10 @@ import model.bugreports.comments.Comment;
 import model.projects.Subsystem;
 import model.users.Developer;
 import model.users.Issuer;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Builder pattern.

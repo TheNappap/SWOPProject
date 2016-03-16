@@ -1,10 +1,5 @@
 package ui;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import controllers.BugReportController;
 import controllers.ProjectController;
 import controllers.UserController;
@@ -29,6 +24,11 @@ import model.users.Developer;
 import model.users.Issuer;
 import model.users.User;
 import model.users.UserCategory;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 

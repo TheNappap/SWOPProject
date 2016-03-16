@@ -1,10 +1,9 @@
 package model.projects;
 
+import model.users.Developer;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import model.users.Developer;
-import model.users.UserCategory;
 
 /**
  * This class represents a team for a project.

@@ -1,15 +1,15 @@
 package model.bugreports;
 
-import java.util.Date;
-import java.util.List;
-
+import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
-import model.bugreports.bugtag.BugTag;
 import model.projects.Subsystem;
 import model.users.Developer;
 import model.users.Issuer;
 import model.users.User;
+
+import java.util.Date;
+import java.util.List;
 
 public class BugReport implements Comparable<BugReport>, Commentable { //A Comment can be commented on.
 

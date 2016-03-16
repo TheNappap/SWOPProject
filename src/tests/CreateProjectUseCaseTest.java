@@ -1,29 +1,17 @@
 package tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.util.Date;
-import java.util.List;
-
+import model.BugTrap;
+import model.projects.Project;
 import model.projects.ProjectManager;
 import model.projects.ProjectTeam;
 import model.projects.Version;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import controllers.ProjectController;
-import controllers.UserController;
-import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
-import model.projects.Project;
-import model.projects.forms.ProjectCreationForm;
-import model.users.Administrator;
-import model.users.Developer;
-import model.users.User;
-import model.users.UserCategory;
-import model.users.UserManager;
+import java.util.Calendar;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
 
 public class CreateProjectUseCaseTest {
 
