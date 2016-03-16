@@ -1,4 +1,4 @@
-package model.bugtag;
+package model.bugreports.bugtag;
 
 public enum BugTagEnum {
 	NEW,			//Fresh BugReport

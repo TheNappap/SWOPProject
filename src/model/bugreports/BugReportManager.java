@@ -8,8 +8,8 @@ import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportCreationForm;
-import model.bugtag.BugTag;
-import model.bugtag.BugTagEnum;
+import model.bugreports.bugtag.BugTag;
+import model.bugreports.bugtag.BugTagEnum;
 import model.projects.Subsystem;
 import model.users.Issuer;
 
