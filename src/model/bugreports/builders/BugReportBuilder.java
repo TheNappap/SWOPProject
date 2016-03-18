@@ -1,17 +1,16 @@
 package model.bugreports.builders;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import model.bugreports.BugReport;
 import model.bugreports.bugtag.BugTag;
-import model.bugreports.bugtag.BugTagEnum;
 import model.bugreports.bugtag.New;
 import model.bugreports.comments.Comment;
 import model.projects.Subsystem;
 import model.users.Developer;
 import model.users.Issuer;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Builder pattern.
@@ -30,7 +29,6 @@ public class BugReportBuilder {
 	//Optional Parameters
 	private Date creationDate 	= new Date();	//The day this BugReport was created.
 	private BugTag bugTag		= new New(); 	//The tag assigned to the BugReport.
-	private BugReport duplicate;				//Duplicate of the BugReport, if any.
 	private List<Comment> comments 		= new ArrayList<Comment>();		//Comments on the BugReport.
 	private List<Developer> assignees 	= new ArrayList<Developer>();	//Developers assigned to the BugReport.
 	
@@ -89,16 +87,6 @@ public class BugReportBuilder {
 		return this;
 	}
 	
-	/**
-	 * Set the duplicate of the BugReport.
-	 * @param duplicate The duplicate of the BugReport.
-	 * @return this.
-	 */
-	public BugReportBuilder setDuplicate(BugReport duplicate) {
-		this.duplicate = duplicate;
-		return this;
-	}
-	
 	/**  
 	 * Set the creation date for the BugReport.  
 	 * @param creationDate The date on which the BugReport was created  
@@ -146,7 +134,7 @@ public class BugReportBuilder {
 	 */
 	public BugReport getBugReport() {
 		validate();
-		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, bugTag, duplicate);
+		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, bugTag);
 	}
 
 	//Assure all variables are not null.
@@ -160,9 +148,6 @@ public class BugReportBuilder {
 		if (bugTag == null) 		throw new IllegalStateException("BugTag is null");
 		if (assignees == null)		throw new IllegalStateException("Assignees is null");
 		if (comments == null)		throw new IllegalStateException("Comments is null");
-		
-		if (bugTag.getBugTagEnum() == BugTagEnum.DUPLICATE && duplicate == null) throw new IllegalStateException("BugTagEnum is DUPLICATE but duplicate is null.");
-		if (bugTag.getBugTagEnum() != BugTagEnum.DUPLICATE && duplicate != null) throw new IllegalStateException("BugTagEnum isn't DUPLICATE but yet duplicate isn't null.");
 	}
 
 }

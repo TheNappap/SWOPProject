@@ -1,5 +1,7 @@
 package model.bugreports.bugtag;
 
+import model.bugreports.BugReport;
+
 /**
  * This class represents the NotABug bug tag.
  * This means that a BugReport is not considered
@@ -14,6 +16,11 @@ public class NotABug extends BugTag {
 	@Override
 	public BugTagEnum getBugTagEnum() {
 		return BugTagEnum.NOT_A_BUG;
+	}
+
+	@Override
+	public BugReport getDuplicate() {
+		return null;
 	}
 
 }

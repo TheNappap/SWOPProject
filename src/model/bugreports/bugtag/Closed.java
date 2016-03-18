@@ -1,5 +1,7 @@
 package model.bugreports.bugtag;
 
+import model.bugreports.BugReport;
+
 /**
  * This class represents the Closed bug tag.
  * This means that the BugReport has been closed
@@ -14,6 +16,11 @@ public class Closed extends BugTag {
 	@Override
 	public BugTagEnum getBugTagEnum() {
 		return BugTagEnum.CLOSED;
+	}
+
+	@Override
+	public BugReport getDuplicate() {
+		return null;
 	}
 
 }
