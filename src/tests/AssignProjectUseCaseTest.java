@@ -1,19 +1,14 @@
 package tests;
 
-import static org.junit.Assert.assertEquals;
 
-import java.util.Date;
-
+import model.BugTrap;
+import model.projects.*;
+import model.users.Developer;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.BugTrap;
-import model.projects.Project;
-import model.projects.ProjectManager;
-import model.projects.ProjectTeam;
-import model.projects.Role;
-import model.projects.Version;
-import model.users.Developer;
+import java.util.Date;
 
 public class AssignProjectUseCaseTest {
 
@@ -32,7 +27,7 @@ public class AssignProjectUseCaseTest {
 		Developer dev = new Developer("", "", "", "");
 		projectManager.assignToProject(project, dev, Role.PROGRAMMER);
 
-		assertEquals(project.getTeam().getProgrammers().get(0), dev);
+		Assert.assertEquals(project.getTeam().getProgrammers().get(0), dev);
 	}
 
 	@Test
@@ -41,7 +36,7 @@ public class AssignProjectUseCaseTest {
 		Developer dev = new Developer("", "", "", "");
 		projectManager.assignToProject(project, dev, Role.LEAD);
 
-		assertEquals(project.getTeam().getLeadDeveloper(), dev);
+		Assert.assertEquals(project.getTeam().getLeadDeveloper(), dev);
 	}
 
 	@Test
@@ -50,6 +45,6 @@ public class AssignProjectUseCaseTest {
 		Developer dev = new Developer("", "", "", "");
 		projectManager.assignToProject(project, dev, Role.LEAD);
 
-		assertEquals(project.getTeam().getLeadDeveloper(), dev);
+		Assert.assertEquals(project.getTeam().getLeadDeveloper(), dev);
 	}
 }

@@ -1,5 +1,9 @@
 package model.users;
 
+/**
+ * An abstract class for users
+ *
+ */
 public abstract class User {
 	
 	private String firstName;

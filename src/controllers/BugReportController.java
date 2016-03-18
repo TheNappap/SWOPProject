@@ -1,7 +1,5 @@
 package controllers;
 
-import java.util.ArrayList;
-
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.BugReport;
@@ -11,6 +9,13 @@ import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
 
+import java.util.List;
+
+/**
+ * Controller for all BugReport related things.
+ * Controllers are the interface that is available to developers
+ * creating e.g. a BugTrap UI.
+ */
 public class BugReportController extends Controller {
 
 	public BugReportController(BugTrap bugTrap) {
@@ -18,56 +23,41 @@ public class BugReportController extends Controller {
 	}
 	
 	public BugReportCreationForm getBugReportCreationForm() throws UnauthorizedAccessException{
-
-		if (!getBugTrap().isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
-		
-		return new BugReportCreationForm();
+		return getBugTrap().getFormFactory().makeBugReportCreationForm();
 	}
 
 	public CommentCreationForm getCommentCreationForm() throws UnauthorizedAccessException{
-
-		if (!getBugTrap().isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
-		
-		return new CommentCreationForm();
+		return getBugTrap().getFormFactory().makeCommentCreationForm();
 	}
 
 	public BugReportAssignForm getBugReportAssignForm() throws UnauthorizedAccessException{
-
-		if (!getBugTrap().isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
-		
-		return new BugReportAssignForm();
+		return getBugTrap().getFormFactory().makeBugReportAssignForm();
 	}
 	
 	public BugReportUpdateForm getBugReportUpdateForm() throws UnauthorizedAccessException{
-		if (!getBugTrap().isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
-		
-		return new BugReportUpdateForm();
+		return getBugTrap().getFormFactory().makeBugReportUpdateForm();
 	}
 
-	public ArrayList<BugReport> getBugReportList() throws UnauthorizedAccessException{
+	public List<BugReport> getBugReportList() throws UnauthorizedAccessException{
 
 		if (!getBugTrap().isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
-		return getBugTrap().getBugReportDAO().getBugReportList();
+		return getBugTrap().getBugReportManager().getBugReportList();
 	}
 
-	public ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
+	public List<BugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
 
 		if (!getBugTrap().isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
-		return getBugTrap().getBugReportDAO().getOrderedList(types, arguments);
+		return getBugTrap().getBugReportManager().getOrderedList(types, arguments);
 	}
 
 	public void createBugReport(BugReportCreationForm form) {
 		form.allVarsFilledIn();
 		
-		getBugTrap().getBugReportDAO().addBugReport(form);
+		getBugTrap().getBugReportManager().addBugReport(form);
 	}
 
 	public void createComment(CommentCreationForm form) {

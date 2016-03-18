@@ -1,14 +1,6 @@
 package tests;
 
 
-import static org.junit.Assert.fail;
-
-import java.util.Date;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import controllers.ProjectController;
 import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
@@ -25,6 +17,13 @@ import model.users.Administrator;
 import model.users.Developer;
 import model.users.UserCategory;
 import model.users.UserManager;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Date;
+
+import static org.junit.Assert.fail;
 
 public class ProjectFormTests {
 	

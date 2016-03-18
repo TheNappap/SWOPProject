@@ -3,17 +3,32 @@ package controllers;
 import java.util.List;
 
 import model.BugTrap;
+import model.users.Administrator;
+import model.users.Developer;
+import model.users.Issuer;
 import model.users.User;
-import model.users.UserCategory;
 
+/**
+ * Controller for all User related things.
+ * Controllers are the interface that is available to developers
+ * creating e.g. a BugTrap UI.
+ */
 public class UserController extends Controller {
 	
 	public UserController(BugTrap bugTrap) {
 		super(bugTrap);
 	}
 	
-	public List<User> getUserList(UserCategory userCategory) {
-		return getBugTrap().getUserManager().getUserList(userCategory);
+	public List<Administrator> getAdmins() {
+		return getBugTrap().getUserManager().getAdmins();
+	}
+	
+	public List<Issuer> getIssuers() {
+		return getBugTrap().getUserManager().getIssuers();
+	}
+	
+	public List<Developer> getDevelopers() {
+		return getBugTrap().getUserManager().getDevelopers();
 	}
 	
 	public String loginAs(User loggingUser) {

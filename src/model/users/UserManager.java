@@ -1,11 +1,15 @@
 package model.users;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import model.users.exceptions.NoUserWithUserNameException;
 import model.users.exceptions.NotUniqueUserNameException;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The user manager is responsible for managing the users in the system.
+ *
+ */
 public class UserManager{
 	
 	
@@ -16,6 +20,57 @@ public class UserManager{
 	
 	private List<User> userList;
 	private User loggedInUser;
+	
+	/**
+	 * Creates an administrator
+	 * @param fn first name
+	 * @param mn middle name
+	 * @param ln last name
+	 * @param un user name
+	 * @throws NotUniqueUserNameException if the given user name already exists
+	 */
+	public void createAdmin(String fn, String mn, String ln, String un) {
+		if(userNameExists(un)){
+			throw new NotUniqueUserNameException();
+		}
+		
+		User user = new Administrator(fn, mn, ln, un);
+		userList.add(user);
+	}
+	
+	/**
+	 * Creates an issuer
+	 * @param fn first name
+	 * @param mn middle name
+	 * @param ln last name
+	 * @param un user name
+	 * @throws NotUniqueUserNameException if the given user name already exists
+	 */
+	public void createIssuer(String fn, String mn, String ln, String un) {
+		if(userNameExists(un)){
+			throw new NotUniqueUserNameException();
+		}
+		
+		User user = new Issuer(fn, mn, ln, un);
+		userList.add(user);
+	}
+	
+	/**
+	 * Creates a developer
+	 * @param fn first name
+	 * @param mn middle name
+	 * @param ln last name
+	 * @param un user name
+	 * @throws NotUniqueUserNameException if the given user name already exists
+	 */
+	public void createDeveloper(String fn, String mn, String ln, String un) {
+		if(userNameExists(un)){
+			throw new NotUniqueUserNameException();
+		}
+		
+		User user = new Developer(fn, mn, ln, un);
+		userList.add(user);
+	}
 	
 	/**
 	 * Checks if the given User is logged in or not.
@@ -93,52 +148,45 @@ public class UserManager{
 	
 	
 	/**
-	 * Create, fill and return an ArrayList containing all Users from userList that are from the given UserCategory.
-	 * @param userCategory The UserCategory for which to make the user list.
-	 * @return An ArrayList containing the Users from userList that are from the given UserCategory.
+	 * Returns a list of all admins
+	 * @return admin list
 	 */
-	public List<User> getUserList(UserCategory userCategory) {
-		List<User> userList = new ArrayList<User>();
+	public List<Administrator> getAdmins() {
+		List<Administrator> adminList = new ArrayList<Administrator>();
 		
 		for (User user : getUserList()) 
-			if (user.getCategory() == userCategory)
-				userList.add(user);
+			if (user.isAdmin())
+				adminList.add((Administrator) user);
 		
-		return userList;
+		return adminList;
 	}
 	
 	/**
-	 * Creates a user
-	 * @param uc user category
-	 * @param fn first name
-	 * @param mn middle name
-	 * @param ln last name
-	 * @param un user name
-	 * @throws IllegalArgumentException if the given user category is not supported
-	 * @throws NotUniqueUserNameException if the given user name already exists
+	 * Returns a list of all issuers
+	 * @return issuer list
 	 */
-	public void createUser(UserCategory uc, String fn, String mn, String ln, String un) {
-		if(userNameExists(un)){
-			throw new NotUniqueUserNameException();
-		}
+	public List<Issuer> getIssuers() {
+		List<Issuer> issuerList = new ArrayList<Issuer>();
 		
-		User user;
-		switch (uc) {
-		case ADMIN:
-			user = new Administrator(fn, mn, ln, un);
-			break;
-		case ISSUER:
-			user = new Issuer(fn, mn, ln, un);
-			break;
-		case DEVELOPER:
-			user = new Developer(fn, mn, ln, un);
-			break;
-
-		default:
-			throw new IllegalArgumentException("user category not supported");
-		}
+		for (User user : getUserList()) 
+			if (user.isIssuer())
+				issuerList.add((Issuer) user);
 		
-		userList.add(user);
+		return issuerList;
+	}
+	
+	/**
+	 * Returns a list of all devs
+	 * @return dev list
+	 */
+	public List<Developer> getDevelopers() {
+		List<Developer> devList = new ArrayList<Developer>();
+		
+		for (User user : getUserList()) 
+			if (user.isDeveloper())
+				devList.add((Developer) user);
+		
+		return devList;
 	}
 	
 	/**

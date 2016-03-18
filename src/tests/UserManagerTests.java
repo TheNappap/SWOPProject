@@ -1,18 +1,12 @@
 package tests;
 
+import model.users.*;
+import model.users.exceptions.NoUserWithUserNameException;
+import model.users.exceptions.NotUniqueUserNameException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import model.users.Administrator;
-import model.users.Developer;
-import model.users.Issuer;
-import model.users.User;
-import model.users.UserCategory;
-import model.users.UserManager;
-import model.users.exceptions.NoUserWithUserNameException;
-import model.users.exceptions.NotUniqueUserNameException;
 
 public class UserManagerTests {
 	
@@ -29,13 +23,13 @@ public class UserManagerTests {
 	public void setUp() throws Exception {
 		userManager = new UserManager();
 		
-		userManager.createUser(UserCategory.ADMIN, "Richard", "Rosie", "Reese", "RRR");
-		userManager.createUser(UserCategory.ISSUER, "Lindsey", "Lida", "Linkovic", "LLL");
-		userManager.createUser(UserCategory.DEVELOPER, "Carl", "Casey", "Carver", "CCC");
+		userManager.createAdmin("Richard", "Rosie", "Reese", "RRR");
+		userManager.createIssuer("Lindsey", "Lida", "Linkovic", "LLL");
+		userManager.createDeveloper("Carl", "Casey", "Carver", "CCC");
 		
-		admin = (Administrator) userManager.getUserList(UserCategory.ADMIN).get(0);
-		issuer = (Issuer) userManager.getUserList(UserCategory.ISSUER).get(0);
-		dev = (Developer) userManager.getUserList(UserCategory.DEVELOPER).get(0);
+		admin = userManager.getAdmins().get(0);
+		issuer = userManager.getIssuers().get(0);
+		dev = userManager.getDevelopers().get(0);
 	}
 
 	@Test
@@ -66,8 +60,18 @@ public class UserManagerTests {
 	}
 	
 	@Test (expected = NotUniqueUserNameException.class)
-	public void createUserFailUserNameExistsTest() {
-		userManager.createUser(UserCategory.DEVELOPER, "", "", "", "RRR");
+	public void createAdminFailUserNameExistsTest() {
+		userManager.createAdmin("", "", "", "RRR");
+	}
+	
+	@Test (expected = NotUniqueUserNameException.class)
+	public void createIssuerFailUserNameExistsTest() {
+		userManager.createIssuer("", "", "", "RRR");
+	}
+	
+	@Test (expected = NotUniqueUserNameException.class)
+	public void createDeveloperFailUserNameExistsTest() {
+		userManager.createDeveloper("", "", "", "RRR");
 	}
 	
 	@Test
@@ -105,13 +109,33 @@ public class UserManagerTests {
 	}
 	
 	@Test
-	public void getUserListTest() {
-		int nbAdmins = userManager.getUserList(UserCategory.ADMIN).size();
-		Assert.assertEquals(1, nbAdmins);
+	public void getAdminsTest() {
+		int nb = userManager.getAdmins().size();
+		Assert.assertEquals(1, nb);
 		
-		userManager.createUser(UserCategory.ADMIN, "", "", "", "");
-		nbAdmins = userManager.getUserList(UserCategory.ADMIN).size();
-		Assert.assertEquals(2, nbAdmins);
+		userManager.createAdmin("", "", "", "");
+		nb = userManager.getAdmins().size();
+		Assert.assertEquals(2, nb);
+	}
+	
+	@Test
+	public void getIssuersTest() {
+		int nb = userManager.getIssuers().size();
+		Assert.assertEquals(2, nb); //issuer and dev
+		
+		userManager.createIssuer("", "", "", "");
+		nb = userManager.getIssuers().size();
+		Assert.assertEquals(3, nb);
+	}
+	
+	@Test
+	public void getDeveloperTest() {
+		int nb = userManager.getDevelopers().size();
+		Assert.assertEquals(1, nb);
+		
+		userManager.createDeveloper("", "", "", "");
+		nb = userManager.getDevelopers().size();
+		Assert.assertEquals(2, nb);
 	}
 	
 	@Test

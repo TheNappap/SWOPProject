@@ -7,7 +7,6 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.BugTrap;
 import model.projects.Project;
 import model.projects.ProjectManager;
 import model.projects.ProjectTeam;
@@ -15,13 +14,11 @@ import model.projects.Version;
 
 public class CreateProjectUseCaseTest {
 
-	private BugTrap bugTrap;
 	private ProjectManager projectManager;
 
 	@Before
 	public void setUp() throws Exception {
-		bugTrap = new BugTrap();
-		projectManager = bugTrap.getProjectManager();
+		projectManager = new ProjectManager();
 	}
 
 	@SuppressWarnings("deprecation")

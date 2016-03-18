@@ -1,10 +1,5 @@
 package ui;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import controllers.BugReportController;
 import controllers.ProjectController;
 import controllers.UserController;
@@ -25,10 +20,12 @@ import model.projects.Role;
 import model.projects.Subsystem;
 import model.projects.Version;
 import model.projects.forms.*;
-import model.users.Developer;
-import model.users.Issuer;
-import model.users.User;
-import model.users.UserCategory;
+import model.users.*;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -144,13 +141,19 @@ public class Main {
 					
 			switch (category) {
 				case 1:
-					users = userController.getUserList(UserCategory.ADMIN);
+					List<Administrator> admins = userController.getAdmins();
+					for (Administrator a : admins)
+						users.add(a);
 					break;
 				case 2:
-					users = userController.getUserList(UserCategory.ISSUER);
+					List<Issuer> issuers = userController.getIssuers();
+					for (Issuer i : issuers)
+						users.add(i);
 					break;
 				case 3:
-					users = userController.getUserList(UserCategory.DEVELOPER);
+					List<Developer> devs = userController.getDevelopers();
+					for (Developer d : devs)
+						users.add(d);
 					break;
 				default:
 					valid = false;
@@ -406,7 +409,7 @@ public class Main {
 			System.out.println("Enter a description:");
 			form.setDescription(input.nextLine());
 			
-			ArrayList<BugReport> allReports = bugReportController.getBugReportList();
+			List<BugReport> allReports = bugReportController.getBugReportList();
 			ArrayList<BugReport> projectReports = new ArrayList<BugReport>();
 			ArrayList<Subsystem> projectSubs = chosenProject.getAllDirectOrIndirectSubsystems();
 			for (BugReport r : allReports) 
@@ -550,7 +553,7 @@ public class Main {
 		FilterType type = selectFilterType();
 		System.out.println("Enter the search parameter: ");
 		String parameter = input.nextLine();
-		ArrayList<BugReport> filtered;
+		List<BugReport> filtered;
 		try {
 			filtered = bugReportController.getOrderedList(new FilterType[]{type}, new String[]{parameter});
 			while (true) {
