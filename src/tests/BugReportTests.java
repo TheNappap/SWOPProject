@@ -36,9 +36,8 @@ public class BugReportTests {
 		controller = new BugReportController(bugTrap);
 		UserController userController = new UserController(bugTrap);
 		//add user
-		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
-		userMan.createUser(UserCategory.DEVELOPER, "", "", "", "Dev");
-		Developer dev =  (Developer) userController.getUserList(UserCategory.DEVELOPER).get(0);
+		UserManager userMan = userController.getBugTrap().getUserManager();
+		Developer dev = userMan.createDeveloper("", "", "", "Dev");
 		userController.loginAs(dev);
 	}
 
@@ -109,7 +108,7 @@ public class BugReportTests {
 			assertNotNull(bugReport.getCreationDate());
 			assertNotNull(bugReport.getComments());
 			assertNotNull(bugReport.getAssignees());
-			assertNull(bugReport.getDuplicate());
+			assertNull(bugReport.getBugTag().getDuplicate());
 			assertEquals(BugTagEnum.NEW.createBugTag(), bugReport.getBugTag());
 		} catch (UnauthorizedAccessException e) {
 			fail("not logged in as issuer");
@@ -286,12 +285,12 @@ public class BugReportTests {
 				fail();
 			} catch (NullPointerException e ) { }
 			try {
-				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null, null));
+				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null));
 				form.allVarsFilledIn();
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null, null));
+				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null));
 				form.setDeveloper(new Developer(null, null, null, null));
 				form.allVarsFilledIn();
 			} catch (NullPointerException e) {
@@ -389,12 +388,12 @@ public class BugReportTests {
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null, null));
+				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null));
 				form.allVarsFilledIn();
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null, null));
+				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null));
 				form.setBugTag(BugTagEnum.NEW.createBugTag());
 				form.allVarsFilledIn();
 			} catch (NullPointerException e) {
@@ -425,12 +424,12 @@ public class BugReportTests {
 			} catch (NullPointerException e) { }
 			
 			try {
-				form.setCommentable(new BugReport(null, null, null, null, null, null, null, null, null, null));
+				form.setCommentable(new BugReport(null, null, null, null, null, null, null, null, null));
 				form.allVarsFilledIn();
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setCommentable(new BugReport(null, null, null, null, null, null, null, null, null, null));
+				form.setCommentable(new BugReport(null, null, null, null, null, null, null, null, null));
 				form.setText("Nice!");
 				form.allVarsFilledIn();
 			} catch (NullPointerException e) {
