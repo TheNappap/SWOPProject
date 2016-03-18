@@ -55,7 +55,7 @@ public class ProjectTeam {
      */
 	public Developer getLeadDeveloper() {
 		for (DeveloperRoleRelation rel : team) {
-			if (rel.getRole() == Role.LEAD && rel.getUser().isDeveloper()) {
+			if (rel.getRole() == Role.LEAD) {
 				return rel.getUser();
 			}
 		}

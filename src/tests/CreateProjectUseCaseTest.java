@@ -6,6 +6,9 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.List;
 
+import model.BugTrap;
+import model.FormFactory;
+import model.bugreports.bugtag.BugTag;
 import org.junit.Before;
 import org.junit.Test;
 
