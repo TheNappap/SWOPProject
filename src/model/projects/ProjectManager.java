@@ -22,6 +22,8 @@ public class ProjectManager {
 	 * @param form The filled in form with the details about the project to be created.
 	 */
 	public Project createProject(ProjectCreationForm form) {
+		if (form == null) throw new IllegalArgumentException("ProjectCreationForm can not be null!");
+
 		ProjectTeam team = new ProjectTeam();
 		team.addMember(form.getLeadDeveloper(), Role.LEAD);
 		return createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), team, new Version(1, 0, 0));
@@ -52,6 +54,8 @@ public class ProjectManager {
 	 * @param form The ProjectForkForm containing all the details about the project to be forked.
      */
 	public Project createFork(ProjectForkForm form) {
+		if (form == null) throw new IllegalArgumentException("ProjectForkForm can not be null!");
+
 		return createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
 	}
 
@@ -69,6 +73,8 @@ public class ProjectManager {
 	 * @param form The ProjectUpdateForm containing all the details about the project to update.
 	 */
 	public Project updateProject(ProjectUpdateForm form) {
+		if (form == null) throw new IllegalArgumentException("ProjectUpdateForm can not be null!");
+
 		return updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate(), form.getLeadDeveloper(), form.getVersion());
 	}
 
@@ -91,6 +97,8 @@ public class ProjectManager {
 	 * @param form The ProjectDeleteForm containing all the details about the project to delete.
 	 */
 	public void deleteProject(ProjectDeleteForm form) {
+		if (form == null) throw new IllegalArgumentException("ProjectDeleteForm can not be null!");
+
 		deleteProject(form.getProject());
 	}
 
@@ -106,6 +114,8 @@ public class ProjectManager {
 	 * @param form The ProjectAssignForm containing all the details about the assignment.
 	 */
 	public void assignToProject(ProjectAssignForm form) {
+		if (form == null) throw new IllegalArgumentException("ProjectAssignForm can not be null!");
+
 		assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 	}
 
@@ -133,6 +143,8 @@ public class ProjectManager {
 	 * @return List containing all the projects for which the given developer is lead.
      */
 	public List<Project> getProjectsForLeadDeveloper(Developer dev) {
+		if (dev == null) throw new IllegalArgumentException("Developer can not be null!");
+
 		ArrayList<Project> projs = new ArrayList<Project>();
 		for (Project p : projectList) {
 			if (p.getTeam().getLeadDeveloper() == dev) 
@@ -146,6 +158,8 @@ public class ProjectManager {
 	 * @param form The SubsystemCreationForm containing all the data needed to create the subsystem.
      */
 	public void createSubsystem(SubsystemCreationForm form) {
+		if (form == null) throw new IllegalArgumentException("SubsystemCreationForm can not be null!");
+
 		createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), new Version(1, 0, 0));
 	}
 	
@@ -170,6 +184,8 @@ public class ProjectManager {
 	 * @return Subsystem with the given name.
      */
 	public Subsystem getSubsystemWithName(String name) {
+		if (name == null) throw new IllegalArgumentException("Subsystem name can not be null!");
+
 		for (Project p : projectList) {
 			for (Subsystem s : p.getAllDirectOrIndirectSubsystems()) {
 				if (s.getName().equals(name))

@@ -45,9 +45,9 @@ public class ProjectFormTests {
 		
 		//add user
 		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
-		userMan.createUser(UserCategory.DEVELOPER, "", "", "", "Dev");
-		userMan.createUser(UserCategory.ADMIN, "", "", "", "ADMIN");
-		Administrator admin =  (Administrator) userController.getUserList(UserCategory.ADMIN).get(0);
+		userMan.createDeveloper("", "", "", "Dev");
+		userMan.createAdmin("", "", "", "ADMIN");
+		Administrator admin = userController.getAdmins().get(0);
 		userController.loginAs(admin);
 		
 		dev = new Developer("","","","dev");
@@ -65,7 +65,7 @@ public class ProjectFormTests {
 		creationForm = projectController.getProjectCreationForm();
 		updateForm = projectController.getProjectUpdateForm();
 		subSystemCreationForm = projectController.getSubsystemCreationForm();
-		Developer dev =  (Developer) userController.getUserList(UserCategory.DEVELOPER).get(0);
+		Developer dev =  (Developer) userController.getDevelopers().get(0);
 		userController.loginAs(dev);
 		assignForm = projectController.getProjectAssignForm();
 		userController.loginAs(admin);
@@ -373,5 +373,4 @@ public class ProjectFormTests {
 		subSystemCreationForm.setDescription("");
 		subSystemCreationForm.allVarsFilledIn();
 	}
-
 }

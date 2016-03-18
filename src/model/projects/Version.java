@@ -81,4 +81,13 @@ public class Version implements Comparable<Version> {
 	public String toString() {
 		return getMajor() + "." + getMinor() + "." + getRevision();
 	}
+
+	/**
+	 * Method to get a first version object.
+	 * Version 1.0.0
+	 * @return Version object with number 1.0.0
+     */
+	public static Version firstVersion() {
+		return new Version(1, 0, 0);
+	}
 }
