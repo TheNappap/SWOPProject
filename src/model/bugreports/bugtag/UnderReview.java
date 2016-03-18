@@ -1,5 +1,7 @@
 package model.bugreports.bugtag;
 
+import model.bugreports.BugReport;
+
 /**
  * This class represents the UnderReview bug tag.
  * This means that a BugReport is currently under review
@@ -14,6 +16,11 @@ public class UnderReview extends BugTag {
 	@Override
 	public BugTagEnum getBugTagEnum() {
 		return BugTagEnum.UNDER_REVIEW;
+	}
+
+	@Override
+	public BugReport getDuplicate() {
+		return null;
 	}
 
 }

@@ -1,5 +1,7 @@
 package model.bugreports.bugtag;
 
+import model.bugreports.BugReport;
+
 /**
  * This class represents the Assigned bug tag.
  * This means that a BugReport has been assigned to a
@@ -22,6 +24,11 @@ public class Assigned extends BugTag {
 	@Override
 	public BugTagEnum getBugTagEnum() {
 		return BugTagEnum.ASSIGNED;
+	}
+
+	@Override
+	public BugReport getDuplicate() {
+		return null;
 	}
 
 }

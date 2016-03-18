@@ -25,7 +25,6 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 	
 	//Mutable
 	private BugTag bugTag;			//BugTag that is attached to this BugReport.
-	private BugReport duplicate;	//The duplicate of this BugReport, if any.
 
 	/**
 	 * BugReport Constructor. 
@@ -41,7 +40,7 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 	 * @param bugTag The BugTag to assign to the BugReport
 	 * @param duplicate The duplicate BugReport of this BugReport, if any.
 	 */
-	public BugReport(String title, String description, Subsystem subsystem, List<BugReport> dependsOn, List<Developer> assignees, List<Comment> comments, Issuer issuedBy, Date creationDate, BugTag bugTag, BugReport duplicate) {
+	public BugReport(String title, String description, Subsystem subsystem, List<BugReport> dependsOn, List<Developer> assignees, List<Comment> comments, Issuer issuedBy, Date creationDate, BugTag bugTag) {
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
 		this.subsystem		= subsystem;
@@ -50,8 +49,7 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 		this.assignees 		= assignees;		
 		this.comments 		= comments;	
 		this.creationDate 	= creationDate;						
-		this.bugTag			= bugTag;						
-		this.duplicate		= duplicate;								
+		this.bugTag			= bugTag;														
 	}
 	
 	/**
@@ -123,14 +121,6 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 		return dependsOn;
 	}
 
-	public BugReport getDuplicate() {
-		return duplicate;
-	}
-
-	public void setDuplicate(BugReport duplicate) {
-		this.duplicate = duplicate;
-	}
-
 	public User getIssuedBy() {
 		return issuedBy;
 	}
@@ -138,11 +128,6 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 	@Override
 	public List<Comment> getComments() {
 		return comments;
-//		List<Comment> returnComments = new ArrayList<Comment>(comments.size());
-//		
-//		for (Comment comment : comments) returnComments.add(comment.copy());
-//		
-//		return returnComments;
 	}
 	
 }

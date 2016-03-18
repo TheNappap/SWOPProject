@@ -1,4 +1,7 @@
 package model.bugreports.bugtag;
+
+import model.bugreports.BugReport;
+
 /**
  * Class representing a BugTag.
  * BugTags are assigned to BugReports to indicate their
@@ -40,4 +43,5 @@ public abstract class BugTag {
 	}
 
 	public abstract BugTagEnum getBugTagEnum();
+	public abstract BugReport getDuplicate();
 }

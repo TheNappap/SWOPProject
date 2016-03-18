@@ -1,5 +1,7 @@
 package model.bugreports.bugtag;
 
+import model.bugreports.BugReport;
+
 /**
  * This class represents the New bug tag.
  * This means that a BugReport has recently been
@@ -14,6 +16,11 @@ public class New extends BugTag {
 	@Override
 	public BugTagEnum getBugTagEnum() {
 		return BugTagEnum.NEW;
+	}
+
+	@Override
+	public BugReport getDuplicate() {
+		return null;
 	}
 
 }
