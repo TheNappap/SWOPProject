@@ -3,6 +3,7 @@ package model.projects.forms;
 import model.Form;
 import model.projects.Project;
 import model.projects.Version;
+import model.users.Developer;
 
 import java.util.Date;
 
@@ -15,9 +16,13 @@ public class ProjectForkForm implements Form {
     private double budgetEstimate;
     private Date startDate;
     private Version version;
+	private Developer leadDeveloper;
 
     public ProjectForkForm() {
-
+		project = null;
+		budgetEstimate = 0;
+		startDate = null;
+		leadDeveloper = null;
     }
 
     public double getBudgetEstimate() {
@@ -60,6 +65,16 @@ public class ProjectForkForm implements Form {
 
         this.project = project;
     }
+    
+    public Developer getLeadDeveloper() {
+		return leadDeveloper;
+	}
+
+	public void setLeadDeveloper(Developer leadDeveloper) {
+		if (leadDeveloper == null) throw new NullPointerException("Given lead developer is null.");
+		
+		this.leadDeveloper = leadDeveloper;
+	}
 
     @Override
     public void allVarsFilledIn() {
@@ -67,5 +82,6 @@ public class ProjectForkForm implements Form {
         if (getStartDate() == null) throw new NullPointerException("Start Date is null");
         if (getProject() == null) throw new NullPointerException("Project is null");
         if (getVersion() == null) throw new NullPointerException("Version is null");
+        if (getLeadDeveloper() == null) throw new NullPointerException("Lead is null");
     }
 }
