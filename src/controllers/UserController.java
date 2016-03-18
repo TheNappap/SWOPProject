@@ -8,6 +8,11 @@ import model.users.Developer;
 import model.users.Issuer;
 import model.users.User;
 
+/**
+ * Controller for all User related things.
+ * Controllers are the interface that is available to developers
+ * creating e.g. a BugTrap UI.
+ */
 public class UserController extends Controller {
 	
 	public UserController(BugTrap bugTrap) {

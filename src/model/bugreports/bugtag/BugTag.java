@@ -1,7 +1,8 @@
 package model.bugreports.bugtag;
 /**
- * Class representing a BugTag
- *
+ * Class representing a BugTag.
+ * BugTags are assigned to BugReports to indicate their
+ * current status.
  */
 public abstract class BugTag {
 

@@ -8,6 +8,11 @@ import model.users.Developer;
 
 import java.util.List;
 
+/**
+ * Controller for all Project related things.
+ * Controllers are the interface that is available to developers
+ * creating e.g. a BugTrap UI.
+ */
 public class ProjectController extends Controller {
 
 	public ProjectController(BugTrap bugTrap) {
