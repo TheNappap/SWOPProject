@@ -6,31 +6,31 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import model.BugTrap;
 import model.users.Administrator;
 import model.users.User;
-import model.users.UserManager;
 import model.users.exceptions.NoUserWithUserNameException;
 
 
 public class LoginUseCaseTest {
 	
-	UserManager userManager;
+	BugTrap bugTrap;
 
 	@Before
 	public void setUp() throws Exception {
+		bugTrap = new BugTrap();
 		//add user
-		userManager = new UserManager();
-		userManager.createAdmin("", "", "", "ADMIN");
+		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 	}
 
 	@Test
 	public void loginSuccesTest() {
 		//step 1
-		List<Administrator> list = userManager.getAdmins();
+		List<Administrator> list = bugTrap.getUserManager().getAdmins();
 		//step 2
 		User user = list.get(0);
 		//step 3
-		String message = userManager.loginAs(user);
+		String message = bugTrap.getUserManager().loginAs(user);
 		//step 4
 		Assert.assertEquals("User: ADMIN successfully logged in.",message);
 	}
@@ -38,7 +38,7 @@ public class LoginUseCaseTest {
 	@Test (expected = NoUserWithUserNameException.class)
 	public void loginNoUserTest() {
 		//step 3, wrong input
-		userManager.loginAs(null);
+		bugTrap.getUserManager().loginAs(null);
 	}
 
 }

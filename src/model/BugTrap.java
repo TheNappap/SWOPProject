@@ -45,19 +45,19 @@ public class BugTrap {
 	}
 	
 	public boolean isAdminLoggedIn(){
-		if(isLoggedIn())
+		if(!isLoggedIn())
 			return false;
 		return getUserManager().getLoggedInUser().isAdmin();
 	}
 	
 	public boolean isIssuerLoggedIn(){
-		if(isLoggedIn())
+		if(!isLoggedIn())
 			return false;
 		return getUserManager().getLoggedInUser().isIssuer();
 	}
 	
 	public boolean isDeveloperLoggedIn(){
-		if(isLoggedIn())
+		if(!isLoggedIn())
 			return false;
 		return getUserManager().getLoggedInUser().isDeveloper();
 	}
