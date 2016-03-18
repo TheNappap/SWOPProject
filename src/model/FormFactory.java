@@ -8,6 +8,7 @@ import model.bugreports.forms.CommentCreationForm;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectDeleteForm;
+import model.projects.forms.ProjectForkForm;
 import model.projects.forms.ProjectUpdateForm;
 import model.projects.forms.SubsystemCreationForm;
 
@@ -39,11 +40,23 @@ public class FormFactory {
 	}
 	
 	/**
+	 * Creates and returns a project fork form
+	 * @return project fork form
+	 * @throws UnauthorizedAccessException if the logged in user is not admin
+	 */
+	public ProjectForkForm makeProjectForkForm() throws UnauthorizedAccessException{
+		if (!getBugTrap().isAdminLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
+		
+		return new ProjectForkForm();
+	}
+	
+	/**
 	 * Creates and returns a project update form
 	 * @return project update form
 	 * @throws UnauthorizedAccessException if the logged in user is not admin
 	 */
-	public ProjectUpdateForm makeProjectUpdateoForm() throws UnauthorizedAccessException{
+	public ProjectUpdateForm makeProjectUpdateForm() throws UnauthorizedAccessException{
 		if (!getBugTrap().isAdminLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
 		
