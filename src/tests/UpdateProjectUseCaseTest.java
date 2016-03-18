@@ -49,7 +49,7 @@ public class UpdateProjectUseCaseTest {
 		//step 1
 		ProjectUpdateForm form = bugTrap.getFormFactory().makeProjectUpdateForm();
 		//step 2
-		List<Project> list = projectController.getProjectList();
+		List<Project> list = bugTrap.getProjectManager().getProjects();
 		//step 3
 		Project project = list.get(0);
 		//step 4

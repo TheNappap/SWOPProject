@@ -18,6 +18,7 @@ import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectForkForm;
 import model.users.Administrator;
 import model.users.Developer;
+import model.users.User;
 
 public class CreateProjectUseCaseTest {
 
@@ -34,6 +35,9 @@ public class CreateProjectUseCaseTest {
 	@SuppressWarnings("deprecation")
 	@Test
 	public void createNewProjectTest() {
+		User admin = bugTrap.getUserManager().getUser("ADMIN");
+		bugTrap.getUserManager().loginAs(admin);
+		
 		//step 1 & 2
 		ProjectCreationForm form = null;
 		try {System.out.print(bugTrap == null);
@@ -62,9 +66,7 @@ public class CreateProjectUseCaseTest {
 		
 		assertEquals(p.getName(), "name");
 		assertEquals(p.getDescription(), "descr");
-		assertEquals(p.getCreationDate(), new Date(2003, 4, 2));
 		assertEquals(p.getStartDate(), new Date(2005, 2, 12));
-		assertEquals(p.getTeam(), new ProjectTeam());
 		assertEquals(p.getVersion(), new Version(1, 0, 0));
 	}
 
