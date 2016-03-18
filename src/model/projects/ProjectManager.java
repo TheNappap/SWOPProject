@@ -75,18 +75,16 @@ public class ProjectManager {
 	public Project updateProject(ProjectUpdateForm form) {
 		if (form == null) throw new IllegalArgumentException("ProjectUpdateForm can not be null!");
 
-		return updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate(), form.getLeadDeveloper(), form.getVersion());
+		return updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
 	}
 
-	public Project updateProject(Project project, String name, String description, double budgetEstimate, Date startDate, Developer lead, Version version) {
+	public Project updateProject(Project project, String name, String description, double budgetEstimate, Date startDate) {
 		for (Project p : projectList) {
 			if (p == project) {
 				p.setBudgetEstimate(budgetEstimate);
 				p.setDescription(description);
 				p.setName(name);
 				p.setStartDate(startDate);
-				p.setVersion(version);
-				p.getTeam().setLeadDeveloper(lead);
 			}
 		}
 		return project;

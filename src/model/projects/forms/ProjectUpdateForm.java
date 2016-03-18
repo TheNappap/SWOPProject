@@ -1,11 +1,9 @@
 package model.projects.forms;
 
+import java.util.Date;
+
 import model.Form;
 import model.projects.Project;
-import model.projects.Version;
-import model.users.Developer;
-
-import java.util.Date;
 
 /**
  * Form used to store temporary data to update a project.
@@ -16,8 +14,6 @@ public class ProjectUpdateForm implements Form {
 	private String description;
 	private double budgetEstimate;
 	private Date startDate;
-	private Developer leadDeveloper;
-	private Version version;
 	
 	private Project project;
 
@@ -64,27 +60,6 @@ public class ProjectUpdateForm implements Form {
 		
 		this.startDate = startDate;
 	}
-
-	public Developer getLeadDeveloper() {
-		return leadDeveloper;
-	}
-
-	public void setLeadDeveloper(Developer leadDeveloper) {
-		if (leadDeveloper == null) throw new NullPointerException("Given lead developer is null.");
-		
-		this.leadDeveloper = leadDeveloper;
-	}
-
-	public Version getVersion() {
-		return version;
-	}
-
-	public void setVersion(Version version) {
-		if (version == null) throw new NullPointerException("Given version is null.");
-		if (this.project != null && this.getProject().getVersion().compareTo(version) == 1) throw new IllegalArgumentException("New version can not be less than previous version.");
-		
-		this.version = version;
-	}
 	
 	public Project getProject() {
 		return project;
@@ -102,8 +77,6 @@ public class ProjectUpdateForm implements Form {
 		if (getDescription() == null) throw new NullPointerException("Description is null");
 		if (getBudgetEstimate() <= 0) throw new IllegalArgumentException("Budget estimate is null");
 		if (getStartDate() == null) throw new NullPointerException("Start Date is null");
-		if (getLeadDeveloper() == null) throw new NullPointerException("Developer is null");
 		if (getProject() == null) throw new NullPointerException("Project is null");
-		if (getVersion() == null) throw new NullPointerException("Version is null");
 	}
 }
