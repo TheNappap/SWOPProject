@@ -1,5 +1,8 @@
 package model.bugreports.bugtag;
 
+/**
+ * An enumerator for all possible BugTags.
+ */
 public enum BugTagEnum {
 	NEW 			{ @Override public BugTag createBugTag() { return new New(); } },			//Fresh BugReport
 	ASSIGNED 		{ @Override public BugTag createBugTag() { return new Assigned(); } },		//A Developer has been assigned and the BugReport is being worked on.

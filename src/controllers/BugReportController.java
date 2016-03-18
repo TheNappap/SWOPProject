@@ -11,6 +11,11 @@ import model.bugreports.forms.CommentCreationForm;
 
 import java.util.List;
 
+/**
+ * Controller for all BugReport related things.
+ * Controllers are the interface that is available to developers
+ * creating e.g. a BugTrap UI.
+ */
 public class BugReportController extends Controller {
 
 	public BugReportController(BugTrap bugTrap) {
