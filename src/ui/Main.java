@@ -20,10 +20,7 @@ import model.projects.Role;
 import model.projects.Subsystem;
 import model.projects.Version;
 import model.projects.forms.*;
-import model.users.Developer;
-import model.users.Issuer;
-import model.users.User;
-import model.users.UserCategory;
+import model.users.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -144,13 +141,19 @@ public class Main {
 					
 			switch (category) {
 				case 1:
-					users = userController.getAdmins();
+					List<Administrator> admins = userController.getAdmins();
+					for (Administrator a : admins)
+						users.add(a);
 					break;
 				case 2:
-					users = userController.getIssuers();
+					List<Issuer> issuers = userController.getIssuers();
+					for (Issuer i : issuers)
+						users.add(i);
 					break;
 				case 3:
-					users = userController.getDevelopers()O;
+					List<Developer> devs = userController.getDevelopers();
+					for (Developer d : devs)
+						users.add(d);
 					break;
 				default:
 					valid = false;
