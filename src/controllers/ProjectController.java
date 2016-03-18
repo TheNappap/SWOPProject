@@ -57,19 +57,21 @@ public class ProjectController extends Controller {
 	/**
 	 * Create a project with the information provided in the form.
 	 * @param form ProjectCreationForm containing all the details about the project to be created.
+	 * @return The Project that was created.
 	 */
-	public void createProject(ProjectCreationForm form) {
+	public Project createProject(ProjectCreationForm form) {
 		form.allVarsFilledIn();
-		getBugTrap().getProjectManager().createProject(form);
+		return getBugTrap().getProjectManager().createProject(form);
 	}
 
 	/**
 	 * Fork a project with the information provided in the form.
 	 * @param form ProjectForkForm containing all the details about the fork.
+	 * @return The Project that was forked.
      */
-	public void forkProject(ProjectForkForm form) {
+	public Project forkProject(ProjectForkForm form) {
 		form.allVarsFilledIn();
-		getBugTrap().getProjectManager().createFork(form);
+		return getBugTrap().getProjectManager().createFork(form);
 	}
 
 	/**

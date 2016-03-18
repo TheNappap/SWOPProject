@@ -147,7 +147,7 @@ class BugTrapInitializer {
 		BugTagEnum tag = BugTagEnum.valueOf(node.getAttribute("tag"));
 		Issuer issuer = (Issuer)bugTrap.getUserManager().getUser(node.getAttribute("issuer"));
 		
-		bugTrap.bugReportDAO.addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), tag.createBugTag());
+		bugTrap.getBugReportManager().addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), tag.createBugTag());
 	}
 	
 	// -- XML Helpers --

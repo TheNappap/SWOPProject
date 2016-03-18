@@ -21,10 +21,10 @@ public class ProjectManager {
 	 * Create and add a new project to the list.
 	 * @param form The filled in form with the details about the project to be created.
 	 */
-	public void createProject(ProjectCreationForm form) {
+	public Project createProject(ProjectCreationForm form) {
 		ProjectTeam team = new ProjectTeam();
 		team.addMember(form.getLeadDeveloper(), Role.LEAD);
-		createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), team, new Version(1, 0, 0));
+		return createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), team, new Version(1, 0, 0));
 	}
 
 	public Project createProject(String name, String description, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam team, Version version) {
@@ -51,8 +51,8 @@ public class ProjectManager {
 	 * Fork an existing project and add it to the projects list.
 	 * @param form The ProjectForkForm containing all the details about the project to be forked.
      */
-	public void createFork(ProjectForkForm form) {
-		createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
+	public Project createFork(ProjectForkForm form) {
+		return createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
 	}
 
 	public Project createFork(Project project, double budgetEstimate, Version version, Date startDate) {
@@ -68,11 +68,11 @@ public class ProjectManager {
 	 * Method to update a project.
 	 * @param form The ProjectUpdateForm containing all the details about the project to update.
 	 */
-	public void updateProject(ProjectUpdateForm form) {
-		updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate(), form.getLeadDeveloper(), form.getVersion());
+	public Project updateProject(ProjectUpdateForm form) {
+		return updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate(), form.getLeadDeveloper(), form.getVersion());
 	}
 
-	public void updateProject(Project project, String name, String description, double budgetEstimate, Date startDate, Developer lead, Version version) {
+	public Project updateProject(Project project, String name, String description, double budgetEstimate, Date startDate, Developer lead, Version version) {
 		for (Project p : projectList) {
 			if (p == project) {
 				p.setBudgetEstimate(budgetEstimate);
@@ -83,6 +83,7 @@ public class ProjectManager {
 				p.getTeam().setLeadDeveloper(lead);
 			}
 		}
+		return project;
 	}
 
 	/**
