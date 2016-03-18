@@ -1,6 +1,5 @@
 package model;
 
-import model.bugreports.BugReportDAO;
 import model.bugreports.BugReportManager;
 import model.projects.ProjectManager;
 import model.users.UserManager;
@@ -9,13 +8,15 @@ public class BugTrap {
 
 	private final UserManager userManager;
 	private final ProjectManager projectManager;
-	final BugReportManager bugReportDAO;
+	private final BugReportManager bugReportManager;
+	private final FormFactory formFactory;
 	
 	
 	public BugTrap() {
 		this.userManager = new UserManager();
 		this.projectManager = new ProjectManager();
-		this.bugReportDAO = new BugReportManager();
+		this.bugReportManager = new BugReportManager();
+		this.formFactory = new FormFactory(this);
 	}
 
 	public UserManager getUserManager() {
@@ -28,8 +29,12 @@ public class BugTrap {
 	}
 
 
-	public BugReportDAO getBugReportDAO() {
-		return bugReportDAO;
+	public BugReportManager getBugReportManager() {
+		return bugReportManager;
+	}
+	
+	public FormFactory getFormFactory() {
+		return formFactory;
 	}
 	
 	public boolean isLoggedIn(){

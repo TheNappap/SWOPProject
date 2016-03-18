@@ -18,7 +18,7 @@ import java.util.Date;
  * Class that stores and manages BugReports.
  *
  */
-public class BugReportManager implements BugReportDAO {
+public class BugReportManager{
 
 	private final ArrayList<BugReport> bugReportList; //List that keeps BugReports.
 
@@ -29,7 +29,6 @@ public class BugReportManager implements BugReportDAO {
 		this.bugReportList = new ArrayList<BugReport>();
 	}
 
-	@Override
 	public ArrayList<BugReport> getOrderedList(FilterType[] types, String[] arguments) {
 		ArrayList<BugReport> filteredList = cloneList();
 		BugReportFilter filter = new BugReportFilter(filteredList);
@@ -42,7 +41,6 @@ public class BugReportManager implements BugReportDAO {
 		return filteredList;
 	}
 
-	@Override
 	public ArrayList<BugReport> getBugReportList() {
 		return bugReportList;
 	}
@@ -51,7 +49,6 @@ public class BugReportManager implements BugReportDAO {
 	 * Creates and adds a new BugReport to the list.
 	 * @param form The information for the new BugReport.
 	 */
-	@Override
 	public void addBugReport(BugReportCreationForm form) {
 		addBugReport(form.getTitle(), form.getDescription(), new Date(), form.getSubsystem(), form.getIssuer(), form.getDependsOn(), new New());
 	}

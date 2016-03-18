@@ -31,38 +31,27 @@ public class ProjectController extends Controller {
 	}
 
 	public ProjectCreationForm getProjectCreationForm() throws UnauthorizedAccessException {
-		if (!getBugTrap().isAdminLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
-		
-		return new ProjectCreationForm();
+		return getBugTrap().getFormFactory().makeProjectCreationForm();
 	}
 
 	public ProjectForkForm getProjectForkForm() throws UnauthorizedAccessException {
-		if (!getBugTrap().isAdminLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
-
-		return new ProjectForkForm();
+		return getBugTrap().getFormFactory().makeProjectForkForm();
 	}
 
 	public ProjectUpdateForm getProjectUpdateForm() throws UnauthorizedAccessException {
-		if (!getBugTrap().isAdminLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
-		
-		return new ProjectUpdateForm();
+		return getBugTrap().getFormFactory().makeProjectUpdateForm();
 	}
 	
 	public ProjectDeleteForm getProjectDeleteForm() throws UnauthorizedAccessException {
-		if (!getBugTrap().isAdminLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
-		
-		return new ProjectDeleteForm();
+		return getBugTrap().getFormFactory().makeProjectDeleteForm();
 	}
 
 	public ProjectAssignForm getProjectAssignForm() throws UnauthorizedAccessException {
-		if (!getBugTrap().isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
-		
-		return new ProjectAssignForm();
+		return getBugTrap().getFormFactory().makeProjectAssignForm();
+	}
+
+	public SubsystemCreationForm getSubsystemCreationForm() throws UnauthorizedAccessException{
+		return getBugTrap().getFormFactory().makeSubsystemCreationForm();
 	}
 
 	/**
@@ -108,15 +97,11 @@ public class ProjectController extends Controller {
 	public void deleteProject(ProjectDeleteForm form) {
 		getBugTrap().getProjectManager().deleteProject(form);
 	}
-
-	public SubsystemCreationForm getSubsystemCreationForm() throws UnauthorizedAccessException{
-
-		if (!getBugTrap().isAdminLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an administrator to perform this action.");
-		
-		return new SubsystemCreationForm();
-	}
 	
+	/**
+	 * Create a subsystem with the information provided in the form.
+	 * @param form SubsystemCreationForm containing all the details about the subsystem to be created.
+	 */
 	public void createSubsystem(SubsystemCreationForm form) {
 		form.allVarsFilledIn();
 		getBugTrap().getProjectManager().createSubsystem(form);

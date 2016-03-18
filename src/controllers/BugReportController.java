@@ -23,34 +23,19 @@ public class BugReportController extends Controller {
 	}
 	
 	public BugReportCreationForm getBugReportCreationForm() throws UnauthorizedAccessException{
-
-		if (!getBugTrap().isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
-		
-		return new BugReportCreationForm();
+		return getBugTrap().getFormFactory().makeBugReportCreationForm();
 	}
 
 	public CommentCreationForm getCommentCreationForm() throws UnauthorizedAccessException{
-
-		if (!getBugTrap().isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
-		
-		return new CommentCreationForm();
+		return getBugTrap().getFormFactory().makeCommentCreationForm();
 	}
 
 	public BugReportAssignForm getBugReportAssignForm() throws UnauthorizedAccessException{
-
-		if (!getBugTrap().isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
-		
-		return new BugReportAssignForm();
+		return getBugTrap().getFormFactory().makeBugReportAssignForm();
 	}
 	
 	public BugReportUpdateForm getBugReportUpdateForm() throws UnauthorizedAccessException{
-		if (!getBugTrap().isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
-		
-		return new BugReportUpdateForm();
+		return getBugTrap().getFormFactory().makeBugReportUpdateForm();
 	}
 
 	public List<BugReport> getBugReportList() throws UnauthorizedAccessException{
@@ -58,7 +43,7 @@ public class BugReportController extends Controller {
 		if (!getBugTrap().isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
-		return getBugTrap().getBugReportDAO().getBugReportList();
+		return getBugTrap().getBugReportManager().getBugReportList();
 	}
 
 	public List<BugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
@@ -66,13 +51,13 @@ public class BugReportController extends Controller {
 		if (!getBugTrap().isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
-		return getBugTrap().getBugReportDAO().getOrderedList(types, arguments);
+		return getBugTrap().getBugReportManager().getOrderedList(types, arguments);
 	}
 
 	public void createBugReport(BugReportCreationForm form) {
 		form.allVarsFilledIn();
 		
-		getBugTrap().getBugReportDAO().addBugReport(form);
+		getBugTrap().getBugReportManager().addBugReport(form);
 	}
 
 	public void createComment(CommentCreationForm form) {
