@@ -46,35 +46,30 @@ public class UpdateProjectUseCaseTest {
 
 	@Test
 	public void updateProjectTest() {
-		try{
-			//step 1
-			ProjectUpdateForm form = projectController.getProjectUpdateForm();
-			//step 2
-			List<Project> list = projectController.getProjectList();
-			//step 3
-			Project project = list.get(0);
-			//step 4
-			form.setProject(project);
-			//step 5
-			form.setBudgetEstimate(10000);
-			form.setDescription("project");
-			form.setName("Project S");
-			form.setStartDate(new Date(1302));
-			form.setVersion(new Version(2, 0, 0));
-			form.setLeadDeveloper(colleague);
-			//step 6
-			projectController.updateProject(form);	
-			
-			Assert.assertEquals("Project S", project.getName());
-			Assert.assertEquals("project", project.getDescription());
-			Assert.assertEquals(new Date(1302), project.getStartDate());
-			Assert.assertEquals(10000, project.getBudgetEstimate(), 0.001);
-			Assert.assertEquals(new Version(2, 0, 0), project.getVersion());
-			Assert.assertEquals(colleague, project.getTeam().getLeadDeveloper());
-		}
-		catch(UnauthorizedAccessException eo){
-			fail("admin not logged in");
-		}
+		//step 1
+		ProjectUpdateForm form = bugTrap.getFormFactory().makeProjectUpdateForm();
+		//step 2
+		List<Project> list = projectController.getProjectList();
+		//step 3
+		Project project = list.get(0);
+		//step 4
+		form.setProject(project);
+		//step 5
+		form.setBudgetEstimate(10000);
+		form.setDescription("project");
+		form.setName("Project S");
+		form.setStartDate(new Date(1302));
+		form.setVersion(new Version(2, 0, 0));
+		form.setLeadDeveloper(colleague);
+		//step 6
+		projectController.updateProject(form);	
+		
+		Assert.assertEquals("Project S", project.getName());
+		Assert.assertEquals("project", project.getDescription());
+		Assert.assertEquals(new Date(1302), project.getStartDate());
+		Assert.assertEquals(10000, project.getBudgetEstimate(), 0.001);
+		Assert.assertEquals(new Version(2, 0, 0), project.getVersion());
+		Assert.assertEquals(colleague, project.getTeam().getLeadDeveloper());
 	}
 
 }
