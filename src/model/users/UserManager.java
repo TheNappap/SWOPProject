@@ -28,14 +28,16 @@ public class UserManager{
 	 * @param ln last name
 	 * @param un user name
 	 * @throws NotUniqueUserNameException if the given user name already exists
+	 * @return Administrator new admin
 	 */
-	public void createAdmin(String fn, String mn, String ln, String un) {
+	public Administrator createAdmin(String fn, String mn, String ln, String un) {
 		if(userNameExists(un)){
 			throw new NotUniqueUserNameException();
 		}
 		
-		User user = new Administrator(fn, mn, ln, un);
+		Administrator user = new Administrator(fn, mn, ln, un);
 		userList.add(user);
+		return user;
 	}
 	
 	/**
@@ -45,14 +47,16 @@ public class UserManager{
 	 * @param ln last name
 	 * @param un user name
 	 * @throws NotUniqueUserNameException if the given user name already exists
+	 * @return Issuer new issuer
 	 */
-	public void createIssuer(String fn, String mn, String ln, String un) {
+	public Issuer createIssuer(String fn, String mn, String ln, String un) {
 		if(userNameExists(un)){
 			throw new NotUniqueUserNameException();
 		}
 		
-		User user = new Issuer(fn, mn, ln, un);
+		Issuer user = new Issuer(fn, mn, ln, un);
 		userList.add(user);
+		return user;
 	}
 	
 	/**
@@ -63,13 +67,14 @@ public class UserManager{
 	 * @param un user name
 	 * @throws NotUniqueUserNameException if the given user name already exists
 	 */
-	public void createDeveloper(String fn, String mn, String ln, String un) {
+	public Developer createDeveloper(String fn, String mn, String ln, String un) {
 		if(userNameExists(un)){
 			throw new NotUniqueUserNameException();
 		}
 		
-		User user = new Developer(fn, mn, ln, un);
+		Developer user = new Developer(fn, mn, ln, un);
 		userList.add(user);
+		return user;
 	}
 	
 	/**
@@ -125,7 +130,7 @@ public class UserManager{
 	}
 	
 	/**
-	 * gets the currently logged in user
+	 * gets the currently logged in user, returns NULL if no user is logged in
 	 * @return logged in user
 	 */
 	public User getLoggedInUser() {
