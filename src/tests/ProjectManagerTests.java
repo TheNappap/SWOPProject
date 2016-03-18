@@ -1,14 +1,20 @@
 package tests;
 
-import model.projects.*;
-import model.users.Developer;
-import model.users.UserManager;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.Date;
+import model.projects.Project;
+import model.projects.ProjectManager;
+import model.projects.ProjectTeam;
+import model.projects.Role;
+import model.projects.Subsystem;
+import model.projects.Version;
+import model.users.Developer;
+import model.users.UserManager;
 
 public class ProjectManagerTests {
 

@@ -1,17 +1,22 @@
 package tests;
 
 
-import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
-import model.FormFactory;
-import model.projects.*;
-import model.projects.forms.ProjectAssignForm;
-import model.users.Developer;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Date;
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
+import model.FormFactory;
+import model.projects.Project;
+import model.projects.ProjectManager;
+import model.projects.ProjectTeam;
+import model.projects.Role;
+import model.projects.Version;
+import model.projects.forms.ProjectAssignForm;
+import model.users.Developer;
 
 public class AssignProjectUseCaseTest {
 

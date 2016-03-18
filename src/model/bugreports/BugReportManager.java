@@ -1,5 +1,9 @@
 package model.bugreports;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.New;
 import model.bugreports.builders.BugReportBuilder;
@@ -8,10 +12,6 @@ import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportCreationForm;
 import model.projects.Subsystem;
 import model.users.Issuer;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 
 /**
  * 

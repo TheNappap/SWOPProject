@@ -1,13 +1,18 @@
 package model.projects;
 
-import model.projects.builders.ProjectBuilder;
-import model.projects.builders.SubsystemBuilder;
-import model.projects.forms.*;
-import model.users.Developer;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import model.projects.builders.ProjectBuilder;
+import model.projects.builders.SubsystemBuilder;
+import model.projects.forms.ProjectAssignForm;
+import model.projects.forms.ProjectCreationForm;
+import model.projects.forms.ProjectDeleteForm;
+import model.projects.forms.ProjectForkForm;
+import model.projects.forms.ProjectUpdateForm;
+import model.projects.forms.SubsystemCreationForm;
+import model.users.Developer;
 
 public class ProjectManager {
 
@@ -55,6 +60,7 @@ public class ProjectManager {
      */
 	public Project createFork(ProjectForkForm form) {
 		if (form == null) throw new IllegalArgumentException("ProjectForkForm can not be null!");
+		form.allVarsFilledIn();
 
 		return createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
 	}
@@ -74,6 +80,7 @@ public class ProjectManager {
 	 */
 	public Project updateProject(ProjectUpdateForm form) {
 		if (form == null) throw new IllegalArgumentException("ProjectUpdateForm can not be null!");
+		form.allVarsFilledIn();
 
 		return updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
 	}
@@ -96,6 +103,7 @@ public class ProjectManager {
 	 */
 	public void deleteProject(ProjectDeleteForm form) {
 		if (form == null) throw new IllegalArgumentException("ProjectDeleteForm can not be null!");
+		form.allVarsFilledIn();
 
 		deleteProject(form.getProject());
 	}
@@ -113,6 +121,7 @@ public class ProjectManager {
 	 */
 	public void assignToProject(ProjectAssignForm form) {
 		if (form == null) throw new IllegalArgumentException("ProjectAssignForm can not be null!");
+		form.allVarsFilledIn();
 
 		assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 	}
@@ -154,11 +163,12 @@ public class ProjectManager {
 	/**
 	 * Method to create a subsystem.
 	 * @param form The SubsystemCreationForm containing all the data needed to create the subsystem.
+	 * @return 
      */
-	public void createSubsystem(SubsystemCreationForm form) {
+	public Subsystem createSubsystem(SubsystemCreationForm form) {
 		if (form == null) throw new IllegalArgumentException("SubsystemCreationForm can not be null!");
 
-		createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), new Version(1, 0, 0));
+		return createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), new Version(1, 0, 0));
 	}
 	
 	public Subsystem createSubsystem(String name, String description, Project project, System parent, Version version) {

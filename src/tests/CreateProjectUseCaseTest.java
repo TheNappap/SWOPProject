@@ -67,6 +67,7 @@ public class CreateProjectUseCaseTest {
 		assertEquals(p.getName(), "name");
 		assertEquals(p.getDescription(), "descr");
 		assertEquals(p.getStartDate(), new Date(2005, 2, 12));
+		assertEquals(1234, p.getBudgetEstimate(), 0.01);
 		assertEquals(p.getVersion(), new Version(1, 0, 0));
 	}
 
@@ -144,6 +145,8 @@ public class CreateProjectUseCaseTest {
 		}
 		catch (NullPointerException e) {
 		}
+		catch (IllegalArgumentException e) {
+		}
 		
 		try {
 			ProjectForkForm form = bugTrap.getFormFactory().makeProjectForkForm();
@@ -153,6 +156,8 @@ public class CreateProjectUseCaseTest {
 			fail("not authorized");
 		}
 		catch (NullPointerException e){
+		}
+		catch (IllegalArgumentException e) {
 		}
 	}
 	

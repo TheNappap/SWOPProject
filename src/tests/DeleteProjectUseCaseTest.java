@@ -1,69 +1,102 @@
 package tests;
 
-import controllers.ProjectController;
-import controllers.UserController;
-import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
-import model.projects.Project;
-import model.projects.forms.ProjectCreationForm;
-import model.projects.forms.ProjectDeleteForm;
-import model.users.Administrator;
-import model.users.Developer;
-import model.users.UserCategory;
-import model.users.UserManager;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.Test;
+
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
+import model.projects.Project;
+import model.projects.ProjectTeam;
+import model.projects.Version;
+import model.projects.forms.ProjectDeleteForm;
+import model.users.Administrator;
+import model.users.User;
 
 public class DeleteProjectUseCaseTest {
 
-	private ProjectController projectController;
-	private UserController userController;
 	private BugTrap bugTrap;
-	private Developer lead;
 	
 	@Before
 	public void setUp() throws Exception {
 		bugTrap = new BugTrap();
-		projectController = new ProjectController(bugTrap);
-		userController = new UserController(bugTrap);
-		lead = new Developer("John", "Johnny", "Johnson", "Boss");
+		//add users
+		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
+		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
 		
-		//add user
-		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
-		userMan.createUser(UserCategory.DEVELOPER, "", "", "", "Dev");
-		userMan.createUser(UserCategory.ADMIN, "", "", "", "ADMIN");
-		Administrator admin =  (Administrator) userController.getUserList(UserCategory.ADMIN).get(0);
-		userController.loginAs(admin);
-		
-		ProjectCreationForm form = projectController.getProjectCreationForm();
-		form.setBudgetEstimate(5000);
-		form.setDescription("Setup project");
-		form.setLeadDeveloper(lead);
-		form.setName("Project X");
-		form.setStartDate(new Date(12));
-		
-		projectController.createProject(form);
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, new ProjectTeam(), new Version(1, 0, 0));
 	}
 
 	@Test
 	public void DeleteProjectTest() {
+		assertFalse(bugTrap.getProjectManager().getProjects().isEmpty());
+		
+		//login
+		User admin = bugTrap.getUserManager().getUser("ADMIN");
+		bugTrap.getUserManager().loginAs(admin);
+				
+		//step 1
+		ProjectDeleteForm form = null;
+		try {
+			form = bugTrap.getFormFactory().makeProjectDeleteForm();
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
+		//step 2
+		List<Project> list = bugTrap.getProjectManager().getProjects();
+		//step 3
+		form.setProject(list.get(0));
+		//step 4
+		bugTrap.getProjectManager().deleteProject(form);
+		
+		assertTrue(bugTrap.getProjectManager().getProjects().isEmpty());
+	}
+	
+	@Test
+	public void notAuthorizedTest() {
+		try {
+			bugTrap.getFormFactory().makeProjectDeleteForm();
+			fail("should throw exception");
+		} catch (UnauthorizedAccessException e) {
+		}
+	}
+	
+	@Test
+	public void varsNotFilledTest() {
+		//login
+		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
-			//step 1
-			ProjectDeleteForm form =  projectController.getProjectDeleteForm();
-			//step 2
-			List<Project> list = projectController.getProjectList();
-			//step 3
-			form.setProject(list.get(0));
-			//step 4
-			projectController.deleteProject(form);
+			ProjectDeleteForm form = bugTrap.getFormFactory().makeProjectDeleteForm();
+			bugTrap.getProjectManager().deleteProject(form);
+			fail("should throw exception");
 		} catch (UnauthorizedAccessException e) {
-			fail("admin not logged in");
+			fail("not authorized");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+	@Test
+	public void nullFormTest() {
+		//login
+		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		bugTrap.getUserManager().loginAs(admin);
+		
+		ProjectDeleteForm form = null;
+		try {
+			bugTrap.getProjectManager().deleteProject(form);
+			fail("should throw exception");
+		}
+		catch (IllegalArgumentException e) {
 		}
 	}
 }
