@@ -1,5 +1,6 @@
 package ui;
 
+import com.sun.org.apache.xerces.internal.impl.dv.DVFactoryException;
 import controllers.BugReportController;
 import controllers.ProjectController;
 import controllers.UserController;
@@ -254,7 +255,7 @@ public class Main {
 			} catch (Exception e) { }
 		}
 		
-		User lead = selectUser(userController.getUserList(UserCategory.DEVELOPER));
+		User lead = selectUser(userController.getDevelopers());
 		form.setLeadDeveloper((Developer)lead);
 		
 		projectController.createProject(form);
@@ -294,7 +295,7 @@ public class Main {
 			} catch (Exception e) { }
 		}
 		
-		User lead = selectUser(userController.getUserList(UserCategory.DEVELOPER));
+		User lead = selectUser(userController.getDevelopers());
 		form.setLeadDeveloper((Developer)lead);
 		
 		projectController.updateProject(form);
@@ -311,7 +312,9 @@ public class Main {
 		
 		Project project = null;
 		try {
-			project = selectProject(projectController.getProjectsForLeadDeveloper());
+			if (bugTrap.getUserManager().getLoggedInUser() != null && bugTrap.getUserManager().getLoggedInUser().isDeveloper())
+				project = selectProject(projectController.getProjectsForLeadDeveloper((Developer)bugTrap.getUserManager().getLoggedInUser()));
+			else throw new UnauthorizedAccessException("You need to be logged in as a developer.");
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
 		}
@@ -440,7 +443,7 @@ public class Main {
 		System.out.println(" Issued by: " + bugReport.getIssuedBy().getUserName());
 		System.out.println(" Subsystem: " + bugReport.getSubsystem().getName());
 		if (bugReport.getBugTag().getBugTagEnum() == BugTagEnum.DUPLICATE)
-			System.out.println(" Duplicate: " + bugReport.getDuplicate().getTitle());
+			System.out.println(" Duplicate: " + bugReport.getBugTag().getDuplicate().getTitle());
 		System.out.println(" Assignees: ");
 		for (Developer dev : bugReport.getAssignees())
 			System.out.println(" - " + dev.getUserName());
@@ -491,7 +494,7 @@ public class Main {
 		try {
 			form = bugReportController.getBugReportAssignForm();
 			report = selectBugReport();
-			dev = (Developer)selectUser(userController.getUserList(UserCategory.DEVELOPER));
+			dev = (Developer)selectUser(userController.getDevelopers());
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
 			return;
@@ -519,15 +522,15 @@ public class Main {
 		bugReportController.updateBugReport(form);
 		System.out.println("Bug report is updated.");
 	}
-	
-	private static User selectUser(List<User> users) {
+
+	private static <T extends User> T selectUser(List<T> users) {
 		while (true) {
 			System.out.println("Select a user by entering the username: ");
-			for (User user : users)
+			for (T user : users)
 				System.out.println(user.getUserName() + " (" + user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName() + ")");
 			
 			String name = input.nextLine();
-			for (User user : users) {
+			for (T user : users) {
 				if (user.getUserName().equals(name))
 					return user;
 			}
