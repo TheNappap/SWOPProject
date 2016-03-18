@@ -6,9 +6,6 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.List;
 
-import model.BugTrap;
-import model.FormFactory;
-import model.bugreports.bugtag.BugTag;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,6 +15,8 @@ import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Version;
 import model.projects.forms.ProjectCreationForm;
+import model.projects.forms.ProjectForkForm;
+import model.users.Administrator;
 import model.users.Developer;
 
 public class CreateProjectUseCaseTest {
@@ -58,10 +57,9 @@ public class CreateProjectUseCaseTest {
 		form.setLeadDeveloper(dev);
 		
 		//step 6
-		bugTrap.getProjectManager().createProject(form);
-		//TODO show project
+		Project p = bugTrap.getProjectManager().createProject(form);
 		
-		Project p = bugTrap.getProjectManager().getProjects().get(0);
+		
 		assertEquals(p.getName(), "name");
 		assertEquals(p.getDescription(), "descr");
 		assertEquals(p.getCreationDate(), new Date(2003, 4, 2));
@@ -70,12 +68,43 @@ public class CreateProjectUseCaseTest {
 		assertEquals(p.getVersion(), new Version(1, 0, 0));
 	}
 
-	/*@SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	@Test
 	public void createForkProjectTest() {
-		Project project = projectManager.createProject("name", "descr", new Date(2003, 4, 2), new Date(2005, 2, 12), 1234, new ProjectTeam(), new Version(1, 0, 0));
+		//login
+		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		bugTrap.getUserManager().loginAs(admin);
+		
+		//create fork
+		//step 1a
+		List<Project> projects =  bugTrap.getProjectManager().getProjects();
+		
+		//step 2a
+		Project project = projects.get(0);
+		
+		//step 3a
+		ProjectForkForm form = null;
+		try {System.out.print(bugTrap == null);
+			form = bugTrap.getFormFactory().makeProjectForkForm();
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
+		
+		//step 4a
+		form.setProject(project);
+		form.setStartDate(new Date(2010, 3, 21));
+		form.setBudgetEstimate(1234);
+		form.setVersion(new Version(2, 0, 1));
+				
+		//step 5a
+		List<Developer> devs = bugTrap.getUserManager().getDevelopers();
+		Developer dev = devs.get(0);
+		form.setLeadDeveloper(dev);
+		bugTrap.getProjectManager().createFork(form);
+		//TODO show project
 
-		Project fork = projectManager.createFork(project, 346, new Version(2, 0, 1), new Date(2010, 3, 21));
+		Project fork = bugTrap.getProjectManager().getProjects().get(1);
 		assertEquals(fork.getName(), project.getName());
 		assertEquals(fork.getDescription(), project.getDescription());
 		assertEquals(fork.getTeam(), project.getTeam());
@@ -83,5 +112,5 @@ public class CreateProjectUseCaseTest {
 		assertEquals(fork.getCreationDate(), project.getCreationDate());
 		assertEquals(fork.getStartDate(), new Date(2010, 3, 21));
 		assertEquals(fork.getBudgetEstimate(), 346, 0.01);
-	}*/
+	}
 }

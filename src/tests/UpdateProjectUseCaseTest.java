@@ -23,26 +23,15 @@ import static org.junit.Assert.fail;
 
 public class UpdateProjectUseCaseTest {
 
-	private ProjectController projectController;
-	private UserController userController;
 	private BugTrap bugTrap;
-	private Developer lead;
-	private Developer colleague;
 	
 	@Before
 	public void setUp() throws Exception {
 		bugTrap = new BugTrap();
-		projectController = new ProjectController(bugTrap);
-		userController = new UserController(bugTrap);
-		lead = new Developer("John", "Johnny", "Johnson", "Boss");
-		colleague = new Developer("Donald", "D", "Duck", "Quack!");
 		
 		//add user
-		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
-		userMan.createUser(UserCategory.DEVELOPER, "", "", "", "Dev");
-		userMan.createUser(UserCategory.ADMIN, "", "", "", "ADMIN");
-		Administrator admin =  (Administrator) userController.getUserList(UserCategory.ADMIN).get(0);
-		userController.loginAs(admin);
+		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
+		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		
 		ProjectCreationForm form = projectController.getProjectCreationForm();
 		form.setBudgetEstimate(5000);
