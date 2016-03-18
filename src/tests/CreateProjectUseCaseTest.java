@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 
+import model.BugTrap;
+import model.FormFactory;
+import model.bugreports.bugtag.BugTag;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,15 +18,21 @@ import model.projects.Version;
 public class CreateProjectUseCaseTest {
 
 	private ProjectManager projectManager;
+	private FormFactory formFactory;
 
 	@Before
 	public void setUp() throws Exception {
+		BugTrap bugTrap = new BugTrap();
 		projectManager = new ProjectManager();
+		formFactory = new FormFactory(bugTrap);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Test
 	public void createNewProjectTest() {
+
+
+
 		projectManager.createProject("name", "descr", new Date(2003, 4, 2), new Date(2005, 2, 12), 1234, new ProjectTeam(), new Version(1, 0, 0));
 
 		Project p = projectManager.getProjects().get(0);

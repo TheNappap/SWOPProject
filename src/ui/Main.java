@@ -311,12 +311,14 @@ public class Main {
 		
 		Project project = null;
 		try {
-			project = selectProject(projectController.getProjectList());
+			project = selectProject(projectController.getProjectsForLeadDeveloper());
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
 		}
 		form.setProject(project);
-		Developer dev = (Developer) selectUser(userController.getUserList(UserCategory.DEVELOPER));
+		List<User> users = new ArrayList<>();
+		users.addAll(userController.getDevelopers());
+		Developer dev = (Developer) selectUser(users);
 		form.setDeveloper(dev);
 		Role role = selectRole();
 		form.setRole(role);
