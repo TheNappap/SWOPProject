@@ -156,4 +156,25 @@ public class CreateProjectUseCaseTest {
 		}
 	}
 	
+	@Test
+	public void nullFormTest() {
+		//login
+		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		bugTrap.getUserManager().loginAs(admin);
+		
+		try {
+			bugTrap.getProjectManager().createProject(null);
+			fail("should throw exception");
+		}
+		catch (IllegalArgumentException e) {
+		}
+		
+		try {
+			bugTrap.getProjectManager().createFork(null);
+			fail("should throw exception");
+		}
+		catch (IllegalArgumentException e){
+		}
+	}
+	
 }
