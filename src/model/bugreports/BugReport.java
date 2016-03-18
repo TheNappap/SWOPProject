@@ -138,11 +138,6 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 	@Override
 	public List<Comment> getComments() {
 		return comments;
-//		List<Comment> returnComments = new ArrayList<Comment>(comments.size());
-//		
-//		for (Comment comment : comments) returnComments.add(comment.copy());
-//		
-//		return returnComments;
 	}
 	
 }
