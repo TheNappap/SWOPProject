@@ -1,25 +1,22 @@
 package tests;
 
-import controllers.ProjectController;
-import controllers.UserController;
-import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
-import model.projects.Project;
-import model.projects.Version;
-import model.projects.forms.ProjectCreationForm;
-import model.projects.forms.ProjectUpdateForm;
-import model.users.Administrator;
-import model.users.Developer;
-import model.users.UserCategory;
-import model.users.UserManager;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.fail;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
+import model.projects.Project;
+import model.projects.ProjectTeam;
+import model.projects.Version;
+import model.projects.forms.ProjectUpdateForm;
+import model.users.Administrator;
+import model.users.User;
 
 public class UpdateProjectUseCaseTest {
 
@@ -33,21 +30,25 @@ public class UpdateProjectUseCaseTest {
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
 		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		
-		ProjectCreationForm form = projectController.getProjectCreationForm();
-		form.setBudgetEstimate(5000);
-		form.setDescription("Setup project");
-		form.setLeadDeveloper(lead);
-		form.setName("Project X");
-		form.setStartDate(new Date(12));
-		
-		projectController.createProject(form);
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, new ProjectTeam(), new Version(1, 0, 0));
 		
 	}
 
 	@Test
 	public void updateProjectTest() {
+		//login
+		User admin = bugTrap.getUserManager().getUser("ADMIN");
+		bugTrap.getUserManager().loginAs(admin);
+		
+		
 		//step 1
-		ProjectUpdateForm form = bugTrap.getFormFactory().makeProjectUpdateForm();
+		ProjectUpdateForm form = null;
+		try {
+			form = bugTrap.getFormFactory().makeProjectUpdateForm();
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
 		//step 2
 		List<Project> list = bugTrap.getProjectManager().getProjects();
 		//step 3
@@ -58,18 +59,54 @@ public class UpdateProjectUseCaseTest {
 		form.setBudgetEstimate(10000);
 		form.setDescription("project");
 		form.setName("Project S");
-		form.setStartDate(new Date(1302));
-		form.setVersion(new Version(2, 0, 0));
-		form.setLeadDeveloper(colleague);
+		form.setStartDate(new Date(3000));
 		//step 6
-		projectController.updateProject(form);	
+		project = bugTrap.getProjectManager().updateProject(form);	
 		
 		Assert.assertEquals("Project S", project.getName());
 		Assert.assertEquals("project", project.getDescription());
-		Assert.assertEquals(new Date(1302), project.getStartDate());
+		Assert.assertEquals(new Date(3000), project.getStartDate());
 		Assert.assertEquals(10000, project.getBudgetEstimate(), 0.001);
-		Assert.assertEquals(new Version(2, 0, 0), project.getVersion());
-		Assert.assertEquals(colleague, project.getTeam().getLeadDeveloper());
+	}
+
+	@Test
+	public void notAuthorizedTest() {
+		try {
+			bugTrap.getFormFactory().makeProjectUpdateForm();
+			fail("should throw exception");
+		} catch (UnauthorizedAccessException e) {
+		}
+	}
+	
+	@Test
+	public void varsNotFilledTest() {
+		//login
+		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		bugTrap.getUserManager().loginAs(admin);
+		
+		try {
+			ProjectUpdateForm form = bugTrap.getFormFactory().makeProjectUpdateForm();
+			bugTrap.getProjectManager().updateProject(form);
+			fail("should throw exception");
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+	@Test
+	public void nullFormTest() {
+		//login
+		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		bugTrap.getUserManager().loginAs(admin);
+		
+		try {
+			bugTrap.getProjectManager().updateProject(null);
+			fail("should throw exception");
+		}
+		catch (IllegalArgumentException e) {
+		}
 	}
 
 }

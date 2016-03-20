@@ -1,12 +1,17 @@
 package tests;
 
-import model.users.*;
-import model.users.exceptions.NoUserWithUserNameException;
-import model.users.exceptions.NotUniqueUserNameException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import model.users.Administrator;
+import model.users.Developer;
+import model.users.Issuer;
+import model.users.User;
+import model.users.UserManager;
+import model.users.exceptions.NoUserWithUserNameException;
+import model.users.exceptions.NotUniqueUserNameException;
 
 public class UserManagerTests {
 	

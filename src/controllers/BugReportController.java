@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.List;
+
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.BugReport;
@@ -8,8 +10,6 @@ import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
-
-import java.util.List;
 
 /**
  * Controller for all BugReport related things.

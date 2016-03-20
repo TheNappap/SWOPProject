@@ -1,12 +1,13 @@
 package tests;
 
-import model.projects.Project;
-import model.projects.Subsystem;
-import model.projects.Version;
-import model.projects.System;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import model.projects.Project;
+import model.projects.Subsystem;
+import model.projects.System;
+import org.junit.Assert;
+import model.projects.Version;
 
 public class SystemTests {
     System sys;

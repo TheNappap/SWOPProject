@@ -1,80 +1,143 @@
 package tests;
 
-import controllers.ProjectController;
-import controllers.UserController;
-import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
-import model.projects.Project;
-import model.projects.Subsystem;
-import model.projects.forms.ProjectCreationForm;
-import model.projects.forms.SubsystemCreationForm;
-import model.users.Administrator;
-import model.users.Developer;
-import model.users.UserCategory;
-import model.users.UserManager;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.fail;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
+import model.projects.Project;
+import model.projects.ProjectTeam;
+import model.projects.Subsystem;
+import model.projects.Version;
+import model.projects.forms.SubsystemCreationForm;
+import model.users.Administrator;
+import model.users.User;
 
 public class CreateSubsystemUserCaseTest {
 
-	private ProjectController projectController;
-	private UserController userController;
-	private BugTrap bugTrap;
-	private Developer lead;
+private BugTrap bugTrap;
 	
 	@Before
 	public void setUp() throws Exception {
 		bugTrap = new BugTrap();
-		projectController = new ProjectController(bugTrap);
-		userController = new UserController(bugTrap);
-		lead = new Developer("John", "Johnny", "Johnson", "Boss");
 		
 		//add user
-		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
-		userMan.createUser(UserCategory.DEVELOPER, "", "", "", "Dev");
-		userMan.createUser(UserCategory.ADMIN, "", "", "", "ADMIN");
-		Administrator admin =  (Administrator) userController.getUserList(UserCategory.ADMIN).get(0);
-		userController.loginAs(admin);
+		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
+		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
+		//add project
+		Project project = bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, new ProjectTeam(), new Version(1, 0, 0));
+		//add subsystem to project
+		bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
 		
-		ProjectCreationForm form = projectController.getProjectCreationForm();
-		form.setBudgetEstimate(5000);
-		form.setDescription("Setup project");
-		form.setLeadDeveloper(lead);
-		form.setName("Project X");
-		form.setStartDate(new Date(12));
-		
-		projectController.createProject(form);
 	}
 
 	@Test
-	public void createSubsystemTest() {
+	public void createSubsystemInProjectTest() {
+		//login
+		User admin = bugTrap.getUserManager().getUser("ADMIN");
+		bugTrap.getUserManager().loginAs(admin);		
+				
+		
+		//step 1
+		SubsystemCreationForm form = null;
 		try {
-			//step 1
-			SubsystemCreationForm form =  projectController.getSubsystemCreationForm();
-			//step 2
-			List<Project> list = projectController.getProjectList();
-			//step 3
-			Project system = list.get(0);
-			//step 4
-			form.setParent(system);
-			//step 5
-			form.setDescription("Subsystem");
-			form.setName("sub X");
-			//step 6
-			projectController.createSubsystem(form);;
-			
-			Subsystem subsystem = system.getSubsystems().get(0);
-			Assert.assertTrue(subsystem.getName().equals("sub X"));
-			Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
-			Assert.assertEquals(system, subsystem.getParent());
+			form = bugTrap.getFormFactory().makeSubsystemCreationForm();
 		} catch (UnauthorizedAccessException e) {
-			fail("not logged in as admin");
+			fail("not authorized");
+			e.printStackTrace();
+		}
+		//step 2
+		List<Project> list = bugTrap.getProjectManager().getProjects();
+		//step 3
+		Project project = list.get(0);
+		//step 4
+		form.setParent(project);
+		//step 5
+		form.setDescription("Subsystem");
+		form.setName("sub X");
+		//step 6
+		Subsystem subsystem = bugTrap.getProjectManager().createSubsystem(form);
+		
+		Assert.assertTrue(subsystem.getName().equals("sub X"));
+		Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
+		Assert.assertEquals(project, subsystem.getParent());
+	}
+	
+	@Test
+	public void createSubsystemInSubsystemTest() {
+		//login
+		User admin = bugTrap.getUserManager().getUser("ADMIN");
+		bugTrap.getUserManager().loginAs(admin);			
+				
+		
+		//step 1
+		SubsystemCreationForm form = null;
+		try {
+			form = bugTrap.getFormFactory().makeSubsystemCreationForm();
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
+		//step 2
+		List<Project> list = bugTrap.getProjectManager().getProjects();
+		//step 3
+		Subsystem system = list.get(0).getSubsystems().get(0);
+		//step 4
+		form.setParent(system);
+		//step 5
+		form.setDescription("Subsystem");
+		form.setName("sub X");
+		//step 6
+		Subsystem subsystem = bugTrap.getProjectManager().createSubsystem(form);
+		
+		Assert.assertTrue(subsystem.getName().equals("sub X"));
+		Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
+		Assert.assertEquals(system, subsystem.getParent());
+	}
+	
+	@Test
+	public void notAuthorizedTest() {
+		try {
+			bugTrap.getFormFactory().makeSubsystemCreationForm();
+			fail("should throw exception");
+		} catch (UnauthorizedAccessException e) {
+		}
+	}
+	
+	@Test
+	public void varsNotFilledTest() {
+		//login
+		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		bugTrap.getUserManager().loginAs(admin);
+		
+		try {
+			SubsystemCreationForm form = bugTrap.getFormFactory().makeSubsystemCreationForm();
+			bugTrap.getProjectManager().createSubsystem(form);
+			fail("should throw exception");
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+	@Test
+	public void nullFormTest() {
+		//login
+		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		bugTrap.getUserManager().loginAs(admin);
+		
+		try {
+			bugTrap.getProjectManager().createSubsystem(null);
+			fail("should throw exception");
+		}
+		catch (IllegalArgumentException e) {
 		}
 	}
 

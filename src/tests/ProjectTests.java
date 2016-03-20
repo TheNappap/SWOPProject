@@ -1,11 +1,12 @@
 package tests;
 
-import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Version;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import model.projects.Project;
 
 import java.util.Date;
 
@@ -17,6 +18,7 @@ public class ProjectTests {
 
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testConstructor(){
         ProjectTeam team = new ProjectTeam();
