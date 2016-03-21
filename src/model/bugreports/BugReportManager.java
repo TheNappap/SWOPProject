@@ -5,11 +5,9 @@ import java.util.Collections;
 import java.util.Date;
 
 import model.bugreports.bugtag.BugTag;
-import model.bugreports.bugtag.New;
 import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
-import model.bugreports.forms.BugReportCreationForm;
 import model.projects.Subsystem;
 import model.users.Issuer;
 
@@ -43,14 +41,6 @@ public class BugReportManager{
 
 	public ArrayList<BugReport> getBugReportList() {
 		return bugReportList;
-	}
-	
-	/**
-	 * Creates and adds a new BugReport to the list.
-	 * @param form The information for the new BugReport.
-	 */
-	public void addBugReport(BugReportCreationForm form) {
-		addBugReport(form.getTitle(), form.getDescription(), new Date(), form.getSubsystem(), form.getIssuer(), form.getDependsOn(), new New());
 	}
 	
 	public void addBugReport(String title, String description, Date creationDate, Subsystem subsystem, Issuer issuer, ArrayList<BugReport> dependencies, BugTag tag) {
