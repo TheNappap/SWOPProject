@@ -5,6 +5,8 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.List;
 
+import model.projects.IProject;
+import model.users.IUser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +39,7 @@ public class UpdateProjectUseCaseTest {
 	@Test
 	public void updateProjectTest() {
 		//login
-		User admin = bugTrap.getUserManager().getUser("ADMIN");
+		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
 		bugTrap.getUserManager().loginAs(admin);
 		
 		
@@ -50,9 +52,9 @@ public class UpdateProjectUseCaseTest {
 			e.printStackTrace();
 		}
 		//step 2
-		List<Project> list = bugTrap.getProjectManager().getProjects();
+		List<IProject> list = bugTrap.getProjectManager().getProjects();
 		//step 3
-		Project project = list.get(0);
+		IProject project = list.get(0);
 		//step 4
 		form.setProject(project);
 		//step 5
@@ -81,7 +83,7 @@ public class UpdateProjectUseCaseTest {
 	@Test
 	public void varsNotFilledTest() {
 		//login
-		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
@@ -98,7 +100,7 @@ public class UpdateProjectUseCaseTest {
 	@Test
 	public void nullFormTest() {
 		//login
-		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
 		
 		try {

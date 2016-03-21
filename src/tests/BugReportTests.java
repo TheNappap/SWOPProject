@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.bugreports.IBugReport;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -75,7 +76,7 @@ public class BugReportTests {
 			bugReportBuilder.setTitle("Project")
 			.setDescription("Very long description.")
 			.setSubsystem(new Subsystem(null, null, null, null, null))
-			.setDependsOn(new ArrayList<BugReport>())
+			.setDependsOn(new ArrayList<IBugReport>())
 			.getBugReport();
 			fail();
 		} catch (IllegalStateException e) { }
@@ -83,7 +84,7 @@ public class BugReportTests {
 			bugReportBuilder.setTitle("Project")
 			.setDescription("Very long description.")
 			.setSubsystem(new Subsystem(null, null, null, null, null))
-			.setDependsOn(new ArrayList<BugReport>())
+			.setDependsOn(new ArrayList<IBugReport>())
 			.setIssuer(new Issuer(null, null, null, null))
 			.setBugTag(BugTagEnum.NEW.createBugTag())
 			.setCreationDate(new Date())
@@ -101,11 +102,11 @@ public class BugReportTests {
 		form.setDescription("Very long description.");
 		form.setIssuer(new Issuer(null, null, null, null));
 		form.setSubsystem(new Subsystem(null, null, null, null, null));
-		form.setDependsOn(new ArrayList<BugReport>());
+		form.setDependsOn(new ArrayList<IBugReport>());
 		
 		controller.createBugReport(form);
 		
-		BugReport bugReport;
+		IBugReport bugReport;
 		try {
 			bugReport = controller.getBugReportList().get(0);
 		
@@ -113,7 +114,7 @@ public class BugReportTests {
 			assertNotNull(bugReport.getComments());
 			assertNotNull(bugReport.getAssignees());
 			assertNull(bugReport.getBugTag().getDuplicate());
-			assertEquals(BugTagEnum.NEW.createBugTag(), bugReport.getBugTag());
+			assertEquals(BugTagEnum.NEW, bugReport.getBugTag().getBugTagEnum());
 		} catch (UnauthorizedAccessException e) {
 			fail("not logged in as issuer");
 		}
@@ -124,14 +125,14 @@ public class BugReportTests {
 	public void getOrderedListTitleDescTest() {
 		fillWithBugReports();
 		
-		List<BugReport> filteredTitle;
+		List<IBugReport> filteredTitle;
 		try {
 			filteredTitle = controller.getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING}, new String[]{"0"});
 			
 			assertEquals(1, filteredTitle.size());
 			assertEquals("Project title 0", filteredTitle.get(0).getTitle());
 			
-			List<BugReport> filteredDesc = controller.getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING}, new String[]{"Very"});
+			List<IBugReport> filteredDesc = controller.getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING}, new String[]{"Very"});
 		
 			assertEquals(5, filteredDesc.size());
 		} catch (UnauthorizedAccessException e) {
@@ -143,7 +144,7 @@ public class BugReportTests {
 	public void getOrderedListIssuedByTest() {
 		fillWithBugReports();
 		
-		List<BugReport> filtered;
+		List<IBugReport> filtered;
 		try {
 			filtered = controller.getOrderedList(new FilterType[]{FilterType.FILED_BY_USER}, new String[]{"Mathijs"});
 			
@@ -161,12 +162,12 @@ public class BugReportTests {
 		Developer dev2 = new Developer(null,null,null, "Doe");
 		
 		try {
-			controller.getBugReportList().get(0).assignDeveloper(dev1);
-			controller.getBugReportList().get(0).assignDeveloper(dev2);
-			controller.getBugReportList().get(1).assignDeveloper(dev1);
-			controller.getBugReportList().get(2).assignDeveloper(dev2);
+			((BugReport)controller.getBugReportList().get(0)).assignDeveloper(dev1);
+			((BugReport)controller.getBugReportList().get(0)).assignDeveloper(dev2);
+			((BugReport)controller.getBugReportList().get(1)).assignDeveloper(dev1);
+			((BugReport)controller.getBugReportList().get(2)).assignDeveloper(dev2);
 			
-			List<BugReport> filtered = controller.getOrderedList(new FilterType[]{FilterType.ASSIGNED_TO_USER}, new String[]{"John"});
+			List<IBugReport> filtered = controller.getOrderedList(new FilterType[]{FilterType.ASSIGNED_TO_USER}, new String[]{"John"});
 			
 			assertEquals(2, filtered.size());
 		} catch (UnauthorizedAccessException e) {
@@ -182,8 +183,8 @@ public class BugReportTests {
 		try {
 			form = controller.getCommentCreationForm();
 			
-			BugReport bugReport0 = controller.getBugReportList().get(0);
-			BugReport bugReport1 = controller.getBugReportList().get(1);
+			IBugReport bugReport0 = controller.getBugReportList().get(0);
+			IBugReport bugReport1 = controller.getBugReportList().get(1);
 			
 			form.setCommentable(bugReport0);
 			form.setText("Nice project!");
@@ -204,7 +205,7 @@ public class BugReportTests {
 	public void ReplyCommentsTest() {
 		fillWithBugReports();
 		
-		BugReport bugReport0;
+		IBugReport bugReport0;
 		try {
 			bugReport0 = controller.getBugReportList().get(0);
 			
@@ -225,17 +226,17 @@ public class BugReportTests {
 		
 		BugReportUpdateForm form = new BugReportUpdateForm();
 		
-		BugReport bugReport0;
+		IBugReport bugReport0;
 		try {
 			bugReport0 = controller.getBugReportList().get(0);
-			assertEquals(BugTagEnum.NEW.createBugTag(), bugReport0.getBugTag());
+			assertEquals(BugTagEnum.NEW, bugReport0.getBugTag().getBugTagEnum());
 			
 			form.setBugReport(bugReport0);
 			form.setBugTag(BugTagEnum.NOT_A_BUG.createBugTag());
 			
 			controller.updateBugReport(form);
 			
-			assertEquals(BugTagEnum.NOT_A_BUG.createBugTag(), bugReport0.getBugTag());
+			assertEquals(BugTagEnum.NOT_A_BUG, bugReport0.getBugTag().getBugTagEnum());
 		} catch (UnauthorizedAccessException e) {
 			fail("not logged in as issuer");
 		}
@@ -250,7 +251,7 @@ public class BugReportTests {
 		try {
 			form = controller.getBugReportAssignForm();
 
-			BugReport bugReport0 = controller.getBugReportList().get(0);
+			IBugReport bugReport0 = controller.getBugReportList().get(0);
 			
 			assertEquals(0, bugReport0.getAssignees().size());
 			
@@ -266,7 +267,6 @@ public class BugReportTests {
 		} catch (UnauthorizedAccessException e) {
 			fail("not logged in as issuer");
 		}
-		
 	}
 
 	@Test
@@ -333,25 +333,25 @@ public class BugReportTests {
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setDependsOn(new ArrayList<BugReport>());
+				form.setDependsOn(new ArrayList<IBugReport>());
 				form.allVarsFilledIn();
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setDependsOn(new ArrayList<BugReport>());
+				form.setDependsOn(new ArrayList<IBugReport>());
 				form.setDescription("Very long description");
 				form.allVarsFilledIn();
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setDependsOn(new ArrayList<BugReport>());
+				form.setDependsOn(new ArrayList<IBugReport>());
 				form.setDescription("Very long description");
 				form.setTitle("Some title");
 				form.allVarsFilledIn();
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setDependsOn(new ArrayList<BugReport>());
+				form.setDependsOn(new ArrayList<IBugReport>());
 				form.setDescription("Very long description");
 				form.setTitle("Some title");
 				form.setIssuer(new Issuer(null, null, null, null));
@@ -359,7 +359,7 @@ public class BugReportTests {
 				fail();
 			} catch (NullPointerException e) { }
 			try {
-				form.setDependsOn(new ArrayList<BugReport>());
+				form.setDependsOn(new ArrayList<IBugReport>());
 				form.setDescription("Very long description");
 				form.setTitle("Some title");
 				form.setIssuer(new Issuer(null, null, null, null));
@@ -460,7 +460,7 @@ public class BugReportTests {
 			form.setTitle("Project title " + i);
 			form.setDescription("Very long description " + i);
 			form.setSubsystem(new Subsystem(null, null, null, null, null));
-			form.setDependsOn(new ArrayList<BugReport>());
+			form.setDependsOn(new ArrayList<IBugReport>());
 			
 			if (i == 0 || i == 3) 	form.setIssuer(issuer1);
 			else					form.setIssuer(issuer2);

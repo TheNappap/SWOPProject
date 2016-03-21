@@ -5,6 +5,8 @@ import static org.junit.Assert.fail;
 
 import java.util.Date;
 
+import model.projects.*;
+import model.users.IUser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,10 +15,6 @@ import controllers.ProjectController;
 import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
-import model.projects.Project;
-import model.projects.Role;
-import model.projects.Subsystem;
-import model.projects.Version;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectUpdateForm;
@@ -33,8 +31,8 @@ public class ProjectFormTests {
 	ProjectCreationForm creationForm;
 	ProjectUpdateForm updateForm;
 	SubsystemCreationForm subSystemCreationForm;
-	Project project;
-	Subsystem  subsystem;
+	IProject project;
+	ISubsystem  subsystem;
 	Developer dev;
 
 	@Before
@@ -47,7 +45,7 @@ public class ProjectFormTests {
 		UserManager userMan = (UserManager) userController.getBugTrap().getUserManager();
 		userMan.createDeveloper("", "", "", "Dev");
 		userMan.createAdmin("", "", "", "ADMIN");
-		Administrator admin = userController.getAdmins().get(0);
+		IUser admin = userController.getAdmins().get(0);
 		userController.loginAs(admin);
 		
 		dev = new Developer("","","","dev");
@@ -163,19 +161,15 @@ public class ProjectFormTests {
 			updateForm.setProject(project);
 			updateForm.setBudgetEstimate(10000);
 			updateForm.setDescription("Updated!");
-			updateForm.setLeadDeveloper(dev);
 			updateForm.setName("Project Y");
 			updateForm.setStartDate(d);
-			updateForm.setVersion(new Version(2, 1, 0));
-			
+
 			projectController.updateProject(updateForm);
 			
 			Assert.assertEquals("Project Y", updateForm.getName());
 			Assert.assertEquals("Updated!", updateForm.getDescription());
 			Assert.assertEquals(10000, updateForm.getBudgetEstimate(), 0.001);
 			Assert.assertEquals(d, updateForm.getStartDate());
-			Assert.assertEquals(dev, updateForm.getLeadDeveloper());
-			Assert.assertEquals(new Version(2, 1, 0), updateForm.getVersion());
 		} catch (UnauthorizedAccessException e) {
 			fail("admin not logged in");
 		}
@@ -204,22 +198,6 @@ public class ProjectFormTests {
 	@Test (expected = NullPointerException.class)
 	public void updateFormSetStartDateTest() {
 		updateForm.setStartDate(null);
-	}
-	
-	@Test (expected = NullPointerException.class)
-	public void updateFormSetLeadDeveloperTest() {
-		updateForm.setLeadDeveloper(null);
-	}
-	
-	@Test (expected = NullPointerException.class)
-	public void updateFormSetVersionTest() {
-		updateForm.setVersion(null);
-	}
-	
-	@Test (expected = IllegalArgumentException.class)
-	public void updateFormSetOlderVersionTest() {
-		updateForm.setProject(project);
-		updateForm.setVersion(new Version(0, 0, 0));
 	}
 	
 	@Test (expected = NullPointerException.class)
@@ -263,21 +241,9 @@ public class ProjectFormTests {
 		updateForm.setDescription("");
 		updateForm.setBudgetEstimate(100);
 		updateForm.setStartDate(new Date(1302));
-		updateForm.setLeadDeveloper(dev);
 		updateForm.allVarsFilledIn();
 	}
 	
-	@Test (expected = NullPointerException.class)
-	public void updateFormVersionNotSetTest() {
-		updateForm.setName("");
-		updateForm.setDescription("");
-		updateForm.setBudgetEstimate(100);
-		updateForm.setStartDate(new Date(1302));
-		updateForm.setLeadDeveloper(dev);
-		updateForm.setProject(project);
-		updateForm.allVarsFilledIn();
-	}
-
 	@Test
 	public void assignFormSuccesTest() {
 		assignForm.setProject(project);

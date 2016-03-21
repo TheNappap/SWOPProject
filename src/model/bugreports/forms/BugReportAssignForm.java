@@ -2,12 +2,14 @@ package model.bugreports.forms;
 
 import model.Form;
 import model.bugreports.BugReport;
+import model.bugreports.IBugReport;
 import model.users.Developer;
+import model.users.IUser;
 
 public class BugReportAssignForm implements Form {
 
-	private BugReport bugReport;
-	private Developer developer;
+	private IBugReport bugReport;
+	private IUser developer;
 
 	public BugReportAssignForm() {
 		//Explicitly setting this to null.
@@ -23,22 +25,23 @@ public class BugReportAssignForm implements Form {
 
 	//Getters and Setters
 	
-	public BugReport getBugReport() {
+	public IBugReport getBugReport() {
 		return bugReport;
 	}
 	
-	public void setBugReport(BugReport bugReport) {
+	public void setBugReport(IBugReport bugReport) {
 		if (bugReport == null) throw new NullPointerException("Bugreport is null");
 		
 		this.bugReport = bugReport;
 	}
 	
-	public Developer getDeveloper() {
+	public IUser getDeveloper() {
 		return developer;
 	}
 	
-	public void setDeveloper(Developer developer) {
+	public void setDeveloper(IUser developer) {
 		if (developer == null) throw new NullPointerException("Developer is null");
+		if (!developer.isDeveloper()) throw new IllegalArgumentException("Developer should be a developer.");
 		
 		this.developer = developer;
 	}

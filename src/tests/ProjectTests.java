@@ -30,6 +30,5 @@ public class ProjectTests {
         Assert.assertEquals(p.getCreationDate(), new Date(2012, 7, 28));
         Assert.assertEquals(p.getStartDate(), new Date(2013, 1, 1));
         Assert.assertEquals(p.getBudgetEstimate(), 12345, 0.0000001);
-        Assert.assertEquals(p.getTeam(), team);
     }
 }

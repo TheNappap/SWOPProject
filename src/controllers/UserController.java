@@ -3,10 +3,7 @@ package controllers;
 import java.util.List;
 
 import model.BugTrap;
-import model.users.Administrator;
-import model.users.Developer;
-import model.users.Issuer;
-import model.users.User;
+import model.users.*;
 
 /**
  * Controller for all User related things.
@@ -19,23 +16,23 @@ public class UserController extends Controller {
 		super(bugTrap);
 	}
 	
-	public List<Administrator> getAdmins() {
+	public List<IUser> getAdmins() {
 		return getBugTrap().getUserManager().getAdmins();
 	}
 	
-	public List<Issuer> getIssuers() {
+	public List<IUser> getIssuers() {
 		return getBugTrap().getUserManager().getIssuers();
 	}
 	
-	public List<Developer> getDevelopers() {
+	public List<IUser> getDevelopers() {
 		return getBugTrap().getUserManager().getDevelopers();
 	}
 	
-	public String loginAs(User loggingUser) {
+	public String loginAs(IUser loggingUser) {
 		return getBugTrap().getUserManager().loginAs(loggingUser);
 	}
 	
-	public boolean isLoggedIn(User user) {
+	public boolean isLoggedIn(IUser user) {
 		return getBugTrap().getUserManager().isLoggedIn(user);
 	}
 	
@@ -43,11 +40,11 @@ public class UserController extends Controller {
 		return getBugTrap().getUserManager().userNameExists(userName);
 	}
 	
-	public boolean userExists(User user) {
+	public boolean userExists(IUser user) {
 		return getBugTrap().getUserManager().userExists(user);
 	}
 	
-	public User getLoggedInUser() {
+	public IUser getLoggedInUser() {
 		return getBugTrap().getUserManager().getLoggedInUser();
 	}
 	
