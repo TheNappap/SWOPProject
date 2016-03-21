@@ -5,12 +5,12 @@ import java.util.Date;
 import java.util.List;
 
 import model.bugreports.BugReport;
+import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.New;
 import model.bugreports.comments.Comment;
-import model.projects.Subsystem;
-import model.users.Developer;
-import model.users.Issuer;
+import model.projects.ISubsystem;
+import model.users.IUser;
 
 /**
  * Builder pattern.
@@ -22,15 +22,15 @@ public class BugReportBuilder {
 	//Required parameters
 	private String title; 			//Title of the BugReport. 
 	private String description;		//Description of the BugReport. 
-	private Subsystem subsystem; 	//Subsystem the BugReport belongs to.
-	private Issuer issuedBy; 		//Issuer who issued the BugReport. 
-	private ArrayList<BugReport> dependsOn; //Other BugReports the BugReports depends on.
+	private ISubsystem subsystem; 	//Subsystem the BugReport belongs to.
+	private IUser issuedBy; 		//Issuer who issued the BugReport.
+	private List<IBugReport> dependsOn; //Other BugReports the BugReports depends on.
 	
 	//Optional Parameters
 	private Date creationDate 	= new Date();	//The day this BugReport was created.
 	private BugTag bugTag		= new New(); 	//The tag assigned to the BugReport.
 	private List<Comment> comments 		= new ArrayList<Comment>();		//Comments on the BugReport.
-	private List<Developer> assignees 	= new ArrayList<Developer>();	//Developers assigned to the BugReport.
+	private List<IUser> assignees 	= new ArrayList<IUser>();	//Developers assigned to the BugReport.
 	
 	/**  
 	 * Empty constructor.  
@@ -62,7 +62,7 @@ public class BugReportBuilder {
 	 * @param subsystem The Subsystem the BugReport belongs to.
 	 * @return this.
 	 */
-	public BugReportBuilder setSubsystem(Subsystem subsystem) {
+	public BugReportBuilder setSubsystem(ISubsystem subsystem) {
 		this.subsystem = subsystem;
 		return this;
 	}
@@ -72,7 +72,9 @@ public class BugReportBuilder {
 	 * @param issuedBy The Issuer who creates the BugReport
 	 * @return this.
 	 */
-	public BugReportBuilder setIssuer(Issuer issuedBy) {
+	public BugReportBuilder setIssuer(IUser issuedBy) {
+		if (!issuedBy.isIssuer()) throw new IllegalArgumentException("Issuer should be an issuer.");
+
 		this.issuedBy = issuedBy;
 		return this;
 	}
@@ -82,7 +84,7 @@ public class BugReportBuilder {
 	 * @param dependsOn The BugReports the BugReport depends on.  
 	 * @return this.  
 	 */
-	public BugReportBuilder setDependsOn(ArrayList<BugReport> dependsOn) {
+	public BugReportBuilder setDependsOn(List<IBugReport> dependsOn) {
 		this.dependsOn = dependsOn;
 		return this;
 	}
@@ -112,7 +114,7 @@ public class BugReportBuilder {
 	 * @param assignees The Developers assigned to the BugReport.
 	 * @return this.
 	 */
-	public BugReportBuilder setAssignees(List<Developer> assignees) {
+	public BugReportBuilder setAssignees(List<IUser> assignees) {
 		this.assignees = assignees;
 		return this;
 	}

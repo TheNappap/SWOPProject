@@ -4,14 +4,14 @@ import java.util.List;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
-import model.projects.Project;
+import model.projects.IProject;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectDeleteForm;
 import model.projects.forms.ProjectForkForm;
 import model.projects.forms.ProjectUpdateForm;
 import model.projects.forms.SubsystemCreationForm;
-import model.users.Developer;
+import model.users.IUser;
 
 /**
  * Controller for all Project related things.
@@ -24,14 +24,17 @@ public class ProjectController extends Controller {
 		super(bugTrap);
 	}
 
-	public List<Project> getProjectList() throws UnauthorizedAccessException{
+	public List<IProject> getProjectList() throws UnauthorizedAccessException{
 		if (!getBugTrap().isLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
 		
 		return getBugTrap().getProjectManager().getProjects();
 	}
 	
-	public List<Project> getProjectsForLeadDeveloper(Developer dev) {
+	public List<IProject> getProjectsForLeadDeveloper(IUser dev) {
+		if (!dev.isDeveloper())
+			throw new IllegalArgumentException("Given user should be a developer!");
+
 		return getBugTrap().getProjectManager().getProjectsForLeadDeveloper(dev);
 	}
 
@@ -64,7 +67,7 @@ public class ProjectController extends Controller {
 	 * @param form ProjectCreationForm containing all the details about the project to be created.
 	 * @return The Project that was created.
 	 */
-	public Project createProject(ProjectCreationForm form) {
+	public IProject createProject(ProjectCreationForm form) {
 		form.allVarsFilledIn();
 		return getBugTrap().getProjectManager().createProject(form);
 	}
@@ -74,7 +77,7 @@ public class ProjectController extends Controller {
 	 * @param form ProjectForkForm containing all the details about the fork.
 	 * @return The Project that was forked.
      */
-	public Project forkProject(ProjectForkForm form) {
+	public IProject forkProject(ProjectForkForm form) {
 		form.allVarsFilledIn();
 		return getBugTrap().getProjectManager().createFork(form);
 	}

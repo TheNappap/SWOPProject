@@ -2,7 +2,6 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,9 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import model.BugTrap;
-import model.projects.Project;
+import model.projects.IProject;
+import model.projects.ISubsystem;
 import model.projects.ProjectTeam;
-import model.projects.Subsystem;
 import model.projects.Version;
 
 public class ShowProjectUseCaseTest {
@@ -37,11 +36,11 @@ public class ShowProjectUseCaseTest {
 		//step 1
 		//user indicates he wants to inspect a project
 		//step 2
-		List<Project> list = bugTrap.getProjectManager().getProjects();
+		List<IProject> list = bugTrap.getProjectManager().getProjects();
 		//step 3
-		Project project = list.get(0);
+		IProject project = list.get(0);
 		//step 4
-		ArrayList<Subsystem> subsystems = project.getSubsystems();
+		List<ISubsystem> subsystems = project.getSubsystems();
 		
 		assertEquals(project.getName(), "name");
 		assertEquals(project.getDescription(), "description");

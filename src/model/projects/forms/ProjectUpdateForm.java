@@ -3,7 +3,7 @@ package model.projects.forms;
 import java.util.Date;
 
 import model.Form;
-import model.projects.Project;
+import model.projects.IProject;
 
 /**
  * Form used to store temporary data to update a project.
@@ -15,7 +15,7 @@ public class ProjectUpdateForm implements Form {
 	private double budgetEstimate;
 	private Date startDate;
 	
-	private Project project;
+	private IProject project;
 
 	public ProjectUpdateForm() {
 		
@@ -61,11 +61,11 @@ public class ProjectUpdateForm implements Form {
 		this.startDate = startDate;
 	}
 	
-	public Project getProject() {
+	public IProject getProject() {
 		return project;
 	}
 	
-	public void setProject(Project project) {
+	public void setProject(IProject project) {
 		if (project == null) throw new NullPointerException("Given project is null.");
 		
 		this.project = project;

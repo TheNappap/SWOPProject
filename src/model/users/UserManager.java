@@ -82,7 +82,7 @@ public class UserManager{
 	 * @param user The user to check.
 	 * @return true if the given User is logged in, false if (s)he's not.
 	 */
-	public boolean isLoggedIn(User user) {
+	public boolean isLoggedIn(IUser user) {
 		if(getLoggedInUser() == null)
 			return false;
 		if (getLoggedInUser().equals(user))
@@ -96,7 +96,7 @@ public class UserManager{
 	 * @throws IllegalArgumentException If the given User doesn't exist in the system.
 	 * @return A message specifying if the given User is logged in or that (s)he was already logged in.
 	 */
-	public String loginAs(User loggingUser) {
+	public String loginAs(IUser loggingUser) {
 		if(!userExists(loggingUser)) 
 			throw new NoUserWithUserNameException();
 
@@ -121,8 +121,8 @@ public class UserManager{
 	 * returns a copy of the user list
 	 * @return user list
 	 */
-	public List<User> getUserList() {
-		List<User> users = new ArrayList<User>();
+	public List<IUser> getUserList() {
+		List<IUser> users = new ArrayList<IUser>();
 		for (User s : userList) {
 			users.add(s);
 		}
@@ -133,7 +133,7 @@ public class UserManager{
 	 * gets the currently logged in user, returns NULL if no user is logged in
 	 * @return logged in user
 	 */
-	public User getLoggedInUser() {
+	public IUser getLoggedInUser() {
 		return loggedInUser;
 	}
 	
@@ -141,7 +141,7 @@ public class UserManager{
 	 * sets the logged in user to the given user
 	 * @param user to set as logged in
 	 */
-	private void setLoggedInUser(User user){
+	private void setLoggedInUser(IUser user){
 		User userImpl = null;
 		for (User u : userList) {
 			if(u.getUserName().equals(user.getUserName())){
@@ -156,10 +156,10 @@ public class UserManager{
 	 * Returns a list of all admins
 	 * @return admin list
 	 */
-	public List<Administrator> getAdmins() {
-		List<Administrator> adminList = new ArrayList<Administrator>();
+	public List<IUser> getAdmins() {
+		List<IUser> adminList = new ArrayList<IUser>();
 		
-		for (User user : getUserList()) 
+		for (IUser user : getUserList())
 			if (user.isAdmin())
 				adminList.add((Administrator) user);
 		
@@ -170,12 +170,12 @@ public class UserManager{
 	 * Returns a list of all issuers
 	 * @return issuer list
 	 */
-	public List<Issuer> getIssuers() {
-		List<Issuer> issuerList = new ArrayList<Issuer>();
+	public List<IUser> getIssuers() {
+		List<IUser> issuerList = new ArrayList<IUser>();
 		
-		for (User user : getUserList()) 
+		for (IUser user : getUserList())
 			if (user.isIssuer())
-				issuerList.add((Issuer) user);
+				issuerList.add(user);
 		
 		return issuerList;
 	}
@@ -184,12 +184,12 @@ public class UserManager{
 	 * Returns a list of all devs
 	 * @return dev list
 	 */
-	public List<Developer> getDevelopers() {
-		List<Developer> devList = new ArrayList<Developer>();
+	public List<IUser> getDevelopers() {
+		List<IUser> devList = new ArrayList<IUser>();
 		
-		for (User user : getUserList()) 
+		for (IUser user : getUserList())
 			if (user.isDeveloper())
-				devList.add((Developer) user);
+				devList.add(user);
 		
 		return devList;
 	}
@@ -200,7 +200,7 @@ public class UserManager{
 	 * @return if the given username exists
 	 */
 	public boolean userNameExists(String userName){
-		for(User user: getUserList()){
+		for(IUser user : getUserList()){
 			if(user.getUserName().equals(userName)){
 				return true;
 			}
@@ -214,8 +214,8 @@ public class UserManager{
 	 * @param user
 	 * @return true if the given user exists
 	 */
-	public boolean userExists(User user){
-		for (User u : getUserList()) 
+	public boolean userExists(IUser user){
+		for (IUser u : getUserList())
 			if (u == user) {
 				return true;
 			}
@@ -228,8 +228,8 @@ public class UserManager{
 	 * @return The user with the given username. Null if no such user exists.
 	 * @throws NoUserWithUserNameException
 	 */
-	public User getUser(String userName) {
-		for(User user: getUserList()){
+	public IUser getUser(String userName) {
+		for(IUser user : getUserList()){
 			if(user.getUserName().equals(userName)){
 				return user;
 			}

@@ -1,8 +1,11 @@
 package model.projects;
 
 import java.util.Date;
+import java.util.List;
 
-public class Project extends System {
+import model.users.IUser;
+
+public class Project extends System implements IProject {
 
 	/**
 	 * Constructor for a project
@@ -34,6 +37,10 @@ public class Project extends System {
 		setTeam(new ProjectTeam(project.getTeam()));
 	}
 
+	public Project copy() {
+		return new Project(this);
+	}
+
 	private Date creationDate;
 	private Date startDate;
 	private double budgetEstimate;
@@ -43,6 +50,7 @@ public class Project extends System {
 	 * Method to get the creation date for the project
 	 * @return The creation date of the project
      */
+	@Override
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -55,6 +63,7 @@ public class Project extends System {
 	 * Method to get the start date for the project
 	 * @return The start date of the project
 	 */
+	@Override
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -67,6 +76,7 @@ public class Project extends System {
 	 * Method to get the budget estimate for the project
 	 * @return The budget estimate of the project
 	 */
+	@Override
 	public double getBudgetEstimate() {
 		return budgetEstimate;
 	}
@@ -79,11 +89,47 @@ public class Project extends System {
 	 * Method to get the team assigned to the project
 	 * @return The team assigned the project
 	 */
-	public ProjectTeam getTeam() {
+	ProjectTeam getTeam() {
 		return team;
 	}
 
 	void setTeam(ProjectTeam team) {
 		this.team = team;
+	}
+
+	@Override
+	public IUser getLeadDeveloper() {
+		return getTeam().getLeadDeveloper();
+	}
+
+	@Override
+	public void setLeadDeveloper(IUser user) {
+		if (!user.isDeveloper())
+			throw new IllegalArgumentException("Lead developer should be a developer.");
+		getTeam().setLeadDeveloper(user);
+	}
+
+	@Override
+	public List<IUser> getProgrammers() {
+		return getTeam().getProgrammers();
+	}
+
+	@Override
+	public List<IUser> getTesters() {
+		return getTeam().getTesters();
+	}
+
+	@Override
+	public void addProgrammer(IUser programmer) {
+		if (!programmer.isDeveloper())
+			throw new IllegalArgumentException("Programmer should be a developer!");
+		getTeam().addMember(programmer, Role.PROGRAMMER);
+	}
+
+	@Override
+	public void addTester(IUser tester) {
+		if (!tester.isDeveloper())
+			throw new IllegalArgumentException("Tester should be a developer!");
+		getTeam().addMember(tester, Role.TESTER);
 	}
 }

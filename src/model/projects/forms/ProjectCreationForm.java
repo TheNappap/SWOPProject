@@ -3,7 +3,7 @@ package model.projects.forms;
 import java.util.Date;
 
 import model.Form;
-import model.users.Developer;
+import model.users.IUser;
 
 /**
  * Form used to store temporary data to create a project.
@@ -14,7 +14,7 @@ public class ProjectCreationForm implements Form {
 	private String description;
 	private double budgetEstimate;
 	private Date startDate;
-	private Developer leadDeveloper;
+	private IUser leadDeveloper;
 
 	public ProjectCreationForm() {
 		name = null;
@@ -64,13 +64,14 @@ public class ProjectCreationForm implements Form {
 		this.startDate = startDate;
 	}
 
-	public Developer getLeadDeveloper() {
+	public IUser getLeadDeveloper() {
 		return leadDeveloper;
 	}
 
-	public void setLeadDeveloper(Developer leadDeveloper) {
+	public void setLeadDeveloper(IUser leadDeveloper) {
 		if (leadDeveloper == null) throw new NullPointerException("Given lead developer is null.");
-		
+		if (!leadDeveloper.isDeveloper()) throw new IllegalArgumentException("Lead developer should be a developer.");
+
 		this.leadDeveloper = leadDeveloper;
 	}
 

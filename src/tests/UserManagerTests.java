@@ -5,10 +5,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import model.users.Administrator;
 import model.users.Developer;
-import model.users.Issuer;
-import model.users.User;
+import model.users.IUser;
 import model.users.UserManager;
 import model.users.exceptions.NoUserWithUserNameException;
 import model.users.exceptions.NotUniqueUserNameException;
@@ -16,9 +14,9 @@ import model.users.exceptions.NotUniqueUserNameException;
 public class UserManagerTests {
 	
 	private UserManager userManager;
-	private Administrator admin;
-	private Issuer issuer;
-	private Developer dev;
+	private IUser admin;
+	private IUser issuer;
+	private IUser dev;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -145,7 +143,7 @@ public class UserManagerTests {
 	
 	@Test
 	public void getUserSuccesTest() {
-		User user = userManager.getUser("RRR");
+		IUser user = userManager.getUser("RRR");
 		Assert.assertEquals(admin, user);
 		user = userManager.getUser("LLL");
 		Assert.assertEquals(issuer, user);

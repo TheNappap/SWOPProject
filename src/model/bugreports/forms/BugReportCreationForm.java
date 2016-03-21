@@ -1,20 +1,20 @@
 package model.bugreports.forms;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import model.Form;
-import model.bugreports.BugReport;
-import model.projects.Subsystem;
-import model.users.Issuer;
+import model.bugreports.IBugReport;
+import model.projects.ISubsystem;
+import model.users.IUser;
 
 public class BugReportCreationForm implements Form {
 
 	//Information needed to create a BugReport.
-	private Issuer issuer;	//Issuer who issues a BugReport.
+	private IUser issuer;	//Issuer who issues a BugReport.
 	private String title;	//A Title for the BugReport.
 	private String description;	//A description for the BugReport.
-	private Subsystem subsystem;	//The Subsystem the BugReport is about.
-	private ArrayList<BugReport> dependsOn;	//List of BugReports the BugReport depends on.
+	private ISubsystem subsystem;	//The Subsystem the BugReport is about.
+	private List<IBugReport> dependsOn;	//List of BugReports the BugReport depends on.
 	
 	public BugReportCreationForm() {
 		//Explicitly settings this to null.
@@ -56,33 +56,34 @@ public class BugReportCreationForm implements Form {
 		this.description = description;
 	}
 
-	public Subsystem getSubsystem() {
+	public ISubsystem getSubsystem() {
 		return subsystem;
 	}
 
-	public void setSubsystem(Subsystem subsystem) {
+	public void setSubsystem(ISubsystem subsystem) {
 		if (subsystem == null) throw new NullPointerException("Subsystem is null");
 		
 		this.subsystem = subsystem;
 	}
 
-	public ArrayList<BugReport> getDependsOn() {
+	public List<IBugReport> getDependsOn() {
 		return dependsOn;
 	}
 
-	public void setDependsOn(ArrayList<BugReport> dependsOn) {
+	public void setDependsOn(List<IBugReport> dependsOn) {
 		if (dependsOn == null) throw new NullPointerException("DependsOn is null");
 		
 		this.dependsOn = dependsOn;
 	}
 
-	public Issuer getIssuer() {
+	public IUser getIssuer() {
 		return issuer;
 	}
 
-	public void setIssuer(Issuer issuer) {
+	public void setIssuer(IUser issuer) {
 		if (issuer == null) throw new NullPointerException("Issuer is null");
-		
+		if (!issuer.isIssuer()) throw new IllegalArgumentException("Issuer should be an issuer.");
+
 		this.issuer = issuer;
 	}
 }

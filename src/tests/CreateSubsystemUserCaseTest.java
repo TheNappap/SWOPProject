@@ -11,13 +11,13 @@ import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
+import model.projects.IProject;
+import model.projects.ISubsystem;
 import model.projects.Project;
 import model.projects.ProjectTeam;
-import model.projects.Subsystem;
 import model.projects.Version;
 import model.projects.forms.SubsystemCreationForm;
-import model.users.Administrator;
-import model.users.User;
+import model.users.IUser;
 
 public class CreateSubsystemUserCaseTest {
 
@@ -31,7 +31,7 @@ private BugTrap bugTrap;
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
 		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		//add project
-		Project project = bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, new ProjectTeam(), new Version(1, 0, 0));
+		Project project = (Project)bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, new ProjectTeam(), new Version(1, 0, 0));
 		//add subsystem to project
 		bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
 		
@@ -40,7 +40,7 @@ private BugTrap bugTrap;
 	@Test
 	public void createSubsystemInProjectTest() {
 		//login
-		User admin = bugTrap.getUserManager().getUser("ADMIN");
+		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
 		bugTrap.getUserManager().loginAs(admin);		
 				
 		
@@ -53,16 +53,16 @@ private BugTrap bugTrap;
 			e.printStackTrace();
 		}
 		//step 2
-		List<Project> list = bugTrap.getProjectManager().getProjects();
+		List<IProject> list = bugTrap.getProjectManager().getProjects();
 		//step 3
-		Project project = list.get(0);
+		IProject project = list.get(0);
 		//step 4
 		form.setParent(project);
 		//step 5
 		form.setDescription("Subsystem");
 		form.setName("sub X");
 		//step 6
-		Subsystem subsystem = bugTrap.getProjectManager().createSubsystem(form);
+		ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem(form);
 		
 		Assert.assertTrue(subsystem.getName().equals("sub X"));
 		Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
@@ -72,7 +72,7 @@ private BugTrap bugTrap;
 	@Test
 	public void createSubsystemInSubsystemTest() {
 		//login
-		User admin = bugTrap.getUserManager().getUser("ADMIN");
+		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
 		bugTrap.getUserManager().loginAs(admin);			
 				
 		
@@ -85,16 +85,16 @@ private BugTrap bugTrap;
 			e.printStackTrace();
 		}
 		//step 2
-		List<Project> list = bugTrap.getProjectManager().getProjects();
+		List<IProject> list = bugTrap.getProjectManager().getProjects();
 		//step 3
-		Subsystem system = list.get(0).getSubsystems().get(0);
+		ISubsystem system = list.get(0).getSubsystems().get(0);
 		//step 4
 		form.setParent(system);
 		//step 5
 		form.setDescription("Subsystem");
 		form.setName("sub X");
 		//step 6
-		Subsystem subsystem = bugTrap.getProjectManager().createSubsystem(form);
+		ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem(form);
 		
 		Assert.assertTrue(subsystem.getName().equals("sub X"));
 		Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
@@ -113,7 +113,7 @@ private BugTrap bugTrap;
 	@Test
 	public void varsNotFilledTest() {
 		//login
-		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
@@ -130,7 +130,7 @@ private BugTrap bugTrap;
 	@Test
 	public void nullFormTest() {
 		//login
-		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
 		
 		try {

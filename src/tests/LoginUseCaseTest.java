@@ -7,8 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import model.BugTrap;
-import model.users.Administrator;
-import model.users.User;
+import model.users.IUser;
 import model.users.exceptions.NoUserWithUserNameException;
 
 
@@ -26,9 +25,9 @@ public class LoginUseCaseTest {
 	@Test
 	public void loginSuccesTest() {
 		//step 1
-		List<Administrator> list = bugTrap.getUserManager().getAdmins();
+		List<IUser> list = bugTrap.getUserManager().getAdmins();
 		//step 2
-		User user = list.get(0);
+		IUser user = list.get(0);
 		//step 3
 		String message = bugTrap.getUserManager().loginAs(user);
 		//step 4

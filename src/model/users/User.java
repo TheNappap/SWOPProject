@@ -2,9 +2,8 @@ package model.users;
 
 /**
  * An abstract class for users
- *
  */
-public abstract class User {
+public abstract class User implements IUser {
 	
 	private String firstName;
 	private String middleName;

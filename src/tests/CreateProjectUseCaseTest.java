@@ -11,14 +11,12 @@ import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
-import model.projects.Project;
+import model.projects.IProject;
 import model.projects.ProjectTeam;
 import model.projects.Version;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectForkForm;
-import model.users.Administrator;
-import model.users.Developer;
-import model.users.User;
+import model.users.IUser;
 
 public class CreateProjectUseCaseTest {
 
@@ -35,7 +33,7 @@ public class CreateProjectUseCaseTest {
 	@SuppressWarnings("deprecation")
 	@Test
 	public void createNewProjectTest() {
-		User admin = bugTrap.getUserManager().getUser("ADMIN");
+		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
 		bugTrap.getUserManager().loginAs(admin);
 		
 		//step 1 & 2
@@ -54,14 +52,14 @@ public class CreateProjectUseCaseTest {
 		form.setBudgetEstimate(1234);
 		
 		//step 4
-		List<Developer> devs = bugTrap.getUserManager().getDevelopers();
+		List<IUser> devs = bugTrap.getUserManager().getDevelopers();
 		
 		//step 5
-		Developer dev = devs.get(0);
+		IUser dev = devs.get(0);
 		form.setLeadDeveloper(dev);
 		
 		//step 6
-		Project p = bugTrap.getProjectManager().createProject(form);
+		IProject p = bugTrap.getProjectManager().createProject(form);
 		
 		
 		assertEquals(p.getName(), "name");
@@ -75,17 +73,17 @@ public class CreateProjectUseCaseTest {
 	@Test
 	public void createForkProjectTest() {
 		//login
-		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
 		//addProject
 		bugTrap.getProjectManager().createProject("name", "description", new Date(2005, 1, 2), new Date(2005, 2, 12), 1234, new ProjectTeam(), new Version(1, 0, 0));
 		
 		//create fork
 		//step 1a
-		List<Project> projects =  bugTrap.getProjectManager().getProjects();
+		List<IProject> projects =  bugTrap.getProjectManager().getProjects();
 		
 		//step 2a
-		Project project = projects.get(0);
+		IProject project = projects.get(0);
 		
 		//step 3a
 		ProjectForkForm form = null;
@@ -103,10 +101,10 @@ public class CreateProjectUseCaseTest {
 		form.setVersion(new Version(2, 0, 1));
 				
 		//step 5a
-		List<Developer> devs = bugTrap.getUserManager().getDevelopers();
-		Developer dev = devs.get(0);
+		List<IUser> devs = bugTrap.getUserManager().getDevelopers();
+		IUser dev = devs.get(0);
 		form.setLeadDeveloper(dev);
-		Project fork = bugTrap.getProjectManager().createFork(form);
+		IProject fork = bugTrap.getProjectManager().createFork(form);
 
 		assertEquals(fork.getName(), project.getName());
 		assertEquals(fork.getDescription(), project.getDescription());
@@ -133,7 +131,7 @@ public class CreateProjectUseCaseTest {
 	@Test
 	public void varsNotFilledTest() {
 		//login
-		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
@@ -164,7 +162,7 @@ public class CreateProjectUseCaseTest {
 	@Test
 	public void nullFormTest() {
 		//login
-		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
 		
 		try {

@@ -18,7 +18,6 @@ import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Role;
 import model.projects.Subsystem;
-import model.users.Developer;
 import model.users.Issuer;
 import model.users.UserCategory;
 
@@ -66,7 +65,7 @@ class BugTrapInitializer {
 			}
 			
 		} catch (Exception e) {
-			System.out.println("Initialization failed.");
+			java.lang.System.out.println("Initialization failed.");
 		}
 	}
 	
@@ -105,16 +104,26 @@ class BugTrapInitializer {
 		
 		NodeList roles = node.getElementsByTagName("role");
 		ProjectTeam team = new ProjectTeam();
+		Project project = (Project)bugTrap.getProjectManager().createProject(name, descr,creation, start, budgetEstimate, team, null);
 		for (int i = 0; i < roles.getLength(); i++) {
 			if (roles.item(i).getNodeType() != Node.ELEMENT_NODE)
 				continue;
 						
 			Element role = (Element)roles.item(i);
-			team.addMember((Developer)bugTrap.getUserManager().getUser(role.getAttribute("user")), Role.valueOf(role.getAttribute("role")));
+			Role r = Role.valueOf(role.getAttribute("role"));
+			switch (r) {
+				case PROGRAMMER:
+					project.addProgrammer(bugTrap.getUserManager().getUser(role.getAttribute("user")));
+					break;
+				case TESTER:
+					project.addTester(bugTrap.getUserManager().getUser(role.getAttribute("user")));
+					break;
+				case LEAD:
+					project.setLeadDeveloper(bugTrap.getUserManager().getUser(role.getAttribute("user")));
+					break;
+			}
 		}
-			
-		Project project = bugTrap.getProjectManager().createProject(name, descr,creation, start, budgetEstimate, team, null);
-		
+
 		ArrayList<Node> subsystems = getDirectElementsWithTagName((Element)getFirstDirectElementWithTagName(node, "subsystems"), "subsystem");
 		for (int i = 0; i < subsystems.size(); i++) {
 			if (subsystems.get(i).getNodeType() != Node.ELEMENT_NODE) 
@@ -129,7 +138,7 @@ class BugTrapInitializer {
 		String name = node.getAttribute("name");
 		String descr = node.getAttribute("description");
 		
-		Subsystem sub = bugTrap.getProjectManager().createSubsystem(name, descr, project, parent, null);
+		Subsystem sub = (Subsystem)bugTrap.getProjectManager().createSubsystem(name, descr, project, parent, null);
 		
 		ArrayList<Node> subsystems = getDirectElementsWithTagName((Element)getFirstDirectElementWithTagName(node, "subsystems"), "subsystem");
 		for (int i = 0; i < subsystems.size(); i++) {
@@ -145,7 +154,7 @@ class BugTrapInitializer {
 		String title = node.getAttribute("title");
 		String descr = node.getAttribute("description");
 		Date creation = (new SimpleDateFormat("dd/MM/yyyy")).parse(node.getAttribute("creationDate"));
-		Subsystem sub = bugTrap.getProjectManager().getSubsystemWithName(node.getAttribute("subsystem"));
+		Subsystem sub = (Subsystem)bugTrap.getProjectManager().getSubsystemWithName(node.getAttribute("subsystem"));
 		BugTagEnum tag = BugTagEnum.valueOf(node.getAttribute("tag"));
 		Issuer issuer = (Issuer)bugTrap.getUserManager().getUser(node.getAttribute("issuer"));
 		

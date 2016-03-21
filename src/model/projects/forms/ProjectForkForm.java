@@ -3,20 +3,20 @@ package model.projects.forms;
 import java.util.Date;
 
 import model.Form;
-import model.projects.Project;
+import model.projects.IProject;
 import model.projects.Version;
-import model.users.Developer;
+import model.users.IUser;
 
 /**
  * Form used to store temporary data to fork project.
  */
 public class ProjectForkForm implements Form {
-    private Project project;
+    private IProject project;
 
     private double budgetEstimate;
     private Date startDate;
     private Version version;
-	private Developer leadDeveloper;
+	private IUser leadDeveloper;
 
     public ProjectForkForm() {
 		project = null;
@@ -56,23 +56,24 @@ public class ProjectForkForm implements Form {
         this.version = version;
     }
 
-    public Project getProject() {
+    public IProject getProject() {
         return project;
     }
 
-    public void setProject(Project project) {
+    public void setProject(IProject project) {
         if (project == null) throw new NullPointerException("Given project is null.");
 
         this.project = project;
     }
     
-    public Developer getLeadDeveloper() {
+    public IUser getLeadDeveloper() {
 		return leadDeveloper;
 	}
 
-	public void setLeadDeveloper(Developer leadDeveloper) {
+	public void setLeadDeveloper(IUser leadDeveloper) {
 		if (leadDeveloper == null) throw new NullPointerException("Given lead developer is null.");
-		
+		if (!leadDeveloper.isDeveloper()) throw new IllegalArgumentException("Lead developer should be a developer.");
+
 		this.leadDeveloper = leadDeveloper;
 	}
 

@@ -1,27 +1,25 @@
 package model.bugreports;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
-import model.bugreports.comments.Commentable;
-import model.projects.Subsystem;
-import model.users.Developer;
-import model.users.Issuer;
-import model.users.User;
+import model.projects.ISubsystem;
+import model.users.IUser;
 
-public class BugReport implements Comparable<BugReport>, Commentable { //A Comment can be commented on.
+public class BugReport implements IBugReport { //A Comment can be commented on.
 
 	//Immutable
 	private final Date creationDate;	//Creation Date of the BugReport.
-	private final Issuer issuedBy;		//The Issuer who issued this BugReport.
-	private final Subsystem subsystem;	//Subsystem to which this BugReport is attached.
+	private final IUser issuedBy;		//The Issuer who issued this BugReport.
+	private final ISubsystem subsystem;	//Subsystem to which this BugReport is attached.
 	private final String title;			//Title of the BugReport.
 	private final String description;	//Description of the BugReport.
 	private final List<Comment> comments;		//Comments on this BugReport.
-	private final List<Developer> assignees;	//List of Developers assigned to this BugReport.
-	private final List<BugReport> dependsOn;	//List of BugReports on which this BugReport depends.
+	private final List<IUser> assignees;	//List of Developers assigned to this BugReport.
+	private final List<IBugReport> dependsOn;	//List of BugReports on which this BugReport depends.
 	
 	//Mutable
 	private BugTag bugTag;			//BugTag that is attached to this BugReport.
@@ -38,9 +36,8 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 	 * @param issuedBy Issuer who issued this BugReport.
 	 * @param creationDate The date the BugReport was created.
 	 * @param bugTag The BugTag to assign to the BugReport
-	 * @param duplicate The duplicate BugReport of this BugReport, if any.
 	 */
-	public BugReport(String title, String description, Subsystem subsystem, List<BugReport> dependsOn, List<Developer> assignees, List<Comment> comments, Issuer issuedBy, Date creationDate, BugTag bugTag) {
+	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, BugTag bugTag) {
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
 		this.subsystem		= subsystem;
@@ -54,20 +51,22 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 	
 	/**
 	 * Create and add an InitialComment to this BugReport.
-	 * @param form The CommentCreationForm that contains all necessary details to create a Comment.
+	 * @param commentText The text of the comment.
 	 */
 	public void addComment(String commentText) {
-		getComments().add(new Comment(commentText));
+		comments.add(new Comment(commentText));
 	}
 	
 	/**
 	 * Adds the given Developer to the assignees list.
-	 * @param developer The Developer to add.
+	 * @param developer The developer to add.
+	 * @pre The developer is a developer.
+	 * 		| developer.isDeveloper() == true;
 	 * @post The Developer is part of the assignees list.
 	 * 		| getAssignees().contains(developer);
 	 */
-	public void assignDeveloper(Developer developer) {
-		getAssignees().add(developer);
+	public void assignDeveloper(IUser developer) {
+		assignees.add(developer);
 	}
 
 	/**
@@ -77,34 +76,39 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 	 * 		| getBugTag() == bugTag
 	 */
 	public void updateBugTag(BugTag bugTag) {
-		if (!bugTag.isTransitionAllowed(bugTag.getBugTagEnum())) throw new IllegalArgumentException("Transistion is not allowed.");
+		if (!this.bugTag.isTransitionAllowed(bugTag.getBugTagEnum())) throw new IllegalArgumentException("Transistion is not allowed.");
 		
 		setBugTag(bugTag);
 	}
 	
 	@Override
-	public int compareTo(BugReport otherBugReport) {
+	public int compareTo(IBugReport otherBugReport) {
 		return getTitle().compareTo(otherBugReport.getTitle());
 	}
 	
 	//Getters and Setters
-	
+
+	@Override
 	public String getDescription() {
 		return description;
 	}
-	
+
+	@Override
 	public String getTitle() {
 		return title;
 	}
 
+	@Override
 	public Date getCreationDate() {
 		return creationDate;
 	}
 
-	public Subsystem getSubsystem() {
+	@Override
+	public ISubsystem getSubsystem() {
 		return subsystem;
 	}
 
+	@Override
 	public BugTag getBugTag() {
 		return bugTag;
 	}
@@ -113,15 +117,24 @@ public class BugReport implements Comparable<BugReport>, Commentable { //A Comme
 		this.bugTag = bugTag;
 	}
 
-	public List<Developer> getAssignees() {
-		return assignees;
+	@Override
+	public List<IUser> getAssignees() {
+		List<IUser> copy = new ArrayList<>();
+		for (IUser u : assignees)
+			copy.add(u);
+		return copy;
 	}
 
-	public List<BugReport> getDependsOn() {
-		return dependsOn;
+	@Override
+	public List<IBugReport> getDependsOn() {
+		List<IBugReport> copy = new ArrayList<>();
+		for (IBugReport r : dependsOn)
+			copy.add(r);
+		return copy;
 	}
 
-	public User getIssuedBy() {
+	@Override
+	public IUser getIssuedBy() {
 		return issuedBy;
 	}
 

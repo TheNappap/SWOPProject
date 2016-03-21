@@ -3,21 +3,21 @@ package model.bugreports.filters;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import model.bugreports.BugReport;
-import model.users.Developer;
+import model.bugreports.IBugReport;
+import model.users.IUser;
 
 /**  
  * Class dedicated to filtering BugReport lists according to FilterTypes.  
  */  
 public class BugReportFilter {
 
-	private final ArrayList<BugReport> filteredList; //List to filter. 
+	private final ArrayList<IBugReport> filteredList; //List to filter.
 		
 	/**  
 	 * Constructor.  
 	 * @param bugReportList The BugReport list to filter.  
 	 */  
-	public BugReportFilter(ArrayList<BugReport> bugReportList) {
+	public BugReportFilter(ArrayList<IBugReport> bugReportList) {
 		this.filteredList = bugReportList;
 	}
 
@@ -27,7 +27,7 @@ public class BugReportFilter {
 	 * @param string Argument to filter by.  
 	 * @return The list with given filter applied.  
 	 */  
-	public ArrayList<BugReport> filter(FilterType type, String string) {
+	public ArrayList<IBugReport> filter(FilterType type, String string) {
 		switch (type) {
 		case CONTAINS_STRING:
 			inTitleOrDesc(string);
@@ -45,30 +45,30 @@ public class BugReportFilter {
 	}
 	
 	private void inTitleOrDesc(String string) {
-		Iterator<BugReport> iter = getFilteredList().iterator();
+		Iterator<IBugReport> iter = getFilteredList().iterator();
 		while (iter.hasNext()) {
-			BugReport bugReport = iter.next();
+			IBugReport bugReport = iter.next();
 			if (!bugReport.getTitle().contains(string) && !bugReport.getDescription().contains(string))
 				iter.remove();
 		}
 	}
 	
 	private void issuedByUser(String string) {
-		Iterator<BugReport> iter = getFilteredList().iterator();
+		Iterator<IBugReport> iter = getFilteredList().iterator();
 		while (iter.hasNext()) {
-			BugReport bugReport = iter.next();
+			IBugReport bugReport = iter.next();
 			if (!bugReport.getIssuedBy().getUserName().equals(string))
 				iter.remove();
 		}
 	}
 	
 	private void assignedByUser(String string) {
-		Iterator<BugReport> iter = getFilteredList().iterator();
+		Iterator<IBugReport> iter = getFilteredList().iterator();
 		while (iter.hasNext()) {
-			BugReport bugReport = iter.next();
+			IBugReport bugReport = iter.next();
 			
 			boolean remove = true;
-			for (Developer assignee : bugReport.getAssignees()) {
+			for (IUser assignee : bugReport.getAssignees()) {
 				if (assignee.getUserName().equals(string))
 					remove = false;
 			}
@@ -77,7 +77,7 @@ public class BugReportFilter {
 		}
 	}
 
-	private ArrayList<BugReport> getFilteredList() {
+	private ArrayList<IBugReport> getFilteredList() {
 		return filteredList;
 	}
 }

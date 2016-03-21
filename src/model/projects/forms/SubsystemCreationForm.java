@@ -1,8 +1,8 @@
 package model.projects.forms;
 
 import model.Form;
-import model.projects.Project;
-import model.projects.System;
+import model.projects.IProject;
+import model.projects.ISystem;
 
 /**
  * Form used to store temporary data to create a subsystem.
@@ -11,8 +11,8 @@ public class SubsystemCreationForm implements Form {
 
 	private String name;
 	private String description;
-	private System parent;
-	private Project project;
+	private ISystem parent;
+	private IProject project;
 		
 	public SubsystemCreationForm() {
 		
@@ -38,24 +38,24 @@ public class SubsystemCreationForm implements Form {
 		this.description = description;
 	}
 
-	public System getParent() {
+	public ISystem getParent() {
 		return parent;
 	}
 
-	public void setParent(System parent) {
+	public void setParent(ISystem parent) {
 		if (parent == null) throw new NullPointerException("Given parent is null.");
 		
 		// The project is the root
-		System p = parent;
+		ISystem p = parent;
 		while (p.getParent() != null)
 			p = p.getParent();
 		
-		this.project = (Project)p;
+		this.project = (IProject)p;
 		
 		this.parent = parent;
 	}
 
-	public Project getProject() {
+	public IProject getProject() {
 		return project;
 	}
 
