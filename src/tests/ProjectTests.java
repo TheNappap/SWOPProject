@@ -1,14 +1,14 @@
 package tests;
 
-import model.projects.ProjectTeam;
-import model.projects.Version;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import model.projects.Project;
-
-import java.util.Date;
+import model.projects.ProjectTeam;
+import model.projects.Version;
 
 public class ProjectTests {
     private Project project;

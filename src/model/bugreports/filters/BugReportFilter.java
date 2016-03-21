@@ -3,9 +3,7 @@ package model.bugreports.filters;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
-import model.users.Developer;
 import model.users.IUser;
 
 /**  

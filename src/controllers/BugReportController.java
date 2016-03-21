@@ -1,17 +1,19 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
-import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
+import model.bugreports.bugtag.New;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
-import model.users.Developer;
+import model.users.IUser;
 
 /**
  * Controller for all BugReport related things.
@@ -57,8 +59,8 @@ public class BugReportController extends Controller {
 
 	public void createBugReport(BugReportCreationForm form) {
 		form.allVarsFilledIn();
-		
-		getBugTrap().getBugReportManager().addBugReport(form);
+		//String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, BugTag tag
+		getBugTrap().getBugReportManager().addBugReport(form.getTitle(), form.getDescription(), new Date(), form.getSubsystem(), form.getIssuer(), form.getDependsOn(), new ArrayList<IUser>(), new New());
 	}
 
 	public void createComment(CommentCreationForm form) {

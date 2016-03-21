@@ -8,14 +8,16 @@ import java.util.Date;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import model.projects.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import model.bugreports.bugtag.BugTagEnum;
-import model.users.Developer;
+import model.projects.Project;
+import model.projects.ProjectTeam;
+import model.projects.Role;
+import model.projects.Subsystem;
 import model.users.Issuer;
 import model.users.UserCategory;
 

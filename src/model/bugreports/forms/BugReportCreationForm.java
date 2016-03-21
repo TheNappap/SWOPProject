@@ -1,15 +1,11 @@
 package model.bugreports.forms;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import model.Form;
-import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 import model.projects.ISubsystem;
-import model.projects.Subsystem;
 import model.users.IUser;
-import model.users.Issuer;
 
 public class BugReportCreationForm implements Form {
 

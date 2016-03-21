@@ -10,10 +10,7 @@ import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.New;
 import model.bugreports.comments.Comment;
 import model.projects.ISubsystem;
-import model.projects.Subsystem;
-import model.users.Developer;
 import model.users.IUser;
-import model.users.Issuer;
 
 /**
  * Builder pattern.

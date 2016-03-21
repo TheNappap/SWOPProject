@@ -1,7 +1,6 @@
 package model.bugreports.forms;
 
 import model.Form;
-import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 

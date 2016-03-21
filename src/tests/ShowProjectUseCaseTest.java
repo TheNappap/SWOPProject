@@ -2,16 +2,18 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import model.projects.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import model.BugTrap;
+import model.projects.IProject;
+import model.projects.ISubsystem;
+import model.projects.ProjectTeam;
+import model.projects.Version;
 
 public class ShowProjectUseCaseTest {
 	

@@ -3,7 +3,7 @@ package controllers;
 import java.util.List;
 
 import model.BugTrap;
-import model.users.*;
+import model.users.IUser;
 
 /**
  * Controller for all User related things.

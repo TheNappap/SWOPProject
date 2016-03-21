@@ -1,9 +1,7 @@
 package model.bugreports.forms;
 
 import model.Form;
-import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
-import model.users.Developer;
 import model.users.IUser;
 
 public class BugReportAssignForm implements Form {
