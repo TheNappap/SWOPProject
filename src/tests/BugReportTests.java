@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import model.bugreports.IBugReport;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,6 +18,7 @@ import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.BugReport;
+import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTagEnum;
 import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.filters.FilterType;

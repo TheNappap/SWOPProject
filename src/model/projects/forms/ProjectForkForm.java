@@ -4,9 +4,7 @@ import java.util.Date;
 
 import model.Form;
 import model.projects.IProject;
-import model.projects.Project;
 import model.projects.Version;
-import model.users.Developer;
 import model.users.IUser;
 
 /**

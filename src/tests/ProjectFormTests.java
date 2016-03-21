@@ -5,8 +5,6 @@ import static org.junit.Assert.fail;
 
 import java.util.Date;
 
-import model.projects.*;
-import model.users.IUser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,12 +13,15 @@ import controllers.ProjectController;
 import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
+import model.projects.IProject;
+import model.projects.ISubsystem;
+import model.projects.Role;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectUpdateForm;
 import model.projects.forms.SubsystemCreationForm;
-import model.users.Administrator;
 import model.users.Developer;
+import model.users.IUser;
 import model.users.UserManager;
 
 public class ProjectFormTests {

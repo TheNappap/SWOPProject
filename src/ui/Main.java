@@ -1,6 +1,5 @@
 package ui;
 
-import java.lang.System;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +10,6 @@ import controllers.ProjectController;
 import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
-import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagEnum;
@@ -22,14 +20,20 @@ import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
-import model.projects.*;
+import model.projects.IProject;
+import model.projects.ISubsystem;
+import model.projects.ISystem;
+import model.projects.Role;
+import model.projects.Version;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectDeleteForm;
 import model.projects.forms.ProjectForkForm;
 import model.projects.forms.ProjectUpdateForm;
 import model.projects.forms.SubsystemCreationForm;
-import model.users.*;
+import model.users.Developer;
+import model.users.IUser;
+import model.users.Issuer;
 
 public class Main {
 

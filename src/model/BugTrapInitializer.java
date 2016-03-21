@@ -1,24 +1,24 @@
 package model;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import model.projects.*;
+import model.bugreports.bugtag.BugTagEnum;
+import model.projects.Project;
+import model.projects.ProjectTeam;
+import model.projects.Role;
+import model.projects.Subsystem;
 import model.users.IUser;
+import model.users.Issuer;
+import model.users.UserCategory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import model.bugreports.bugtag.BugTagEnum;
-import model.users.Developer;
-import model.users.Issuer;
-import model.users.UserCategory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 class BugTrapInitializer {
 	private BugTrap bugTrap;

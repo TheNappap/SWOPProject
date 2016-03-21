@@ -1,12 +1,12 @@
 package model.bugreports;
 
+import java.util.Date;
+import java.util.List;
+
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Commentable;
 import model.projects.ISubsystem;
 import model.users.IUser;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Interface for the BugReport object.

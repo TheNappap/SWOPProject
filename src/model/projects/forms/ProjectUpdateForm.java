@@ -4,8 +4,6 @@ import java.util.Date;
 
 import model.Form;
 import model.projects.IProject;
-import model.projects.Project;
-import model.users.IUser;
 
 /**
  * Form used to store temporary data to update a project.

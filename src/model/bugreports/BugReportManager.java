@@ -6,15 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 import model.bugreports.bugtag.BugTag;
-import model.bugreports.bugtag.New;
 import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
-import model.bugreports.forms.BugReportCreationForm;
 import model.projects.ISubsystem;
-import model.projects.Subsystem;
 import model.users.IUser;
-import model.users.Issuer;
 
 /**
  * 
@@ -48,21 +44,14 @@ public class BugReportManager{
 		return cloneList();
 	}
 	
-	/**
-	 * Creates and adds a new BugReport to the list.
-	 * @param form The information for the new BugReport.
-	 */
-	public void addBugReport(BugReportCreationForm form) {
-		addBugReport(form.getTitle(), form.getDescription(), new Date(), form.getSubsystem(), form.getIssuer(), form.getDependsOn(), new New());
-	}
-	
-	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, BugTag tag) {
+	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) {
 		bugReportList.add((new BugReportBuilder()).setTitle(title)
 				.setDescription(description)
 				.setSubsystem(subsystem)
 				.setIssuer(issuer)
 				.setDependsOn(dependencies)
 				.setCreationDate(creationDate)
+				.setAssignees(assignees)
 				.setBugTag(tag)
 				.getBugReport());
 	}

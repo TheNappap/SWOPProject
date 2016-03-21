@@ -2,14 +2,12 @@ package tests;
 
 import java.util.List;
 
-import model.users.IUser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import model.BugTrap;
-import model.users.Administrator;
-import model.users.User;
+import model.users.IUser;
 import model.users.exceptions.NoUserWithUserNameException;
 
 

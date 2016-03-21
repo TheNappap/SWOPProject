@@ -3,8 +3,6 @@ package model.projects.forms;
 import model.Form;
 import model.projects.IProject;
 import model.projects.ISystem;
-import model.projects.Project;
-import model.projects.System;
 
 /**
  * Form used to store temporary data to create a subsystem.
