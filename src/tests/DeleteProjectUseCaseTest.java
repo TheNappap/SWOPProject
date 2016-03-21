@@ -5,8 +5,11 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
+import java.util.IdentityHashMap;
 import java.util.List;
 
+import model.projects.IProject;
+import model.users.IUser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +41,7 @@ public class DeleteProjectUseCaseTest {
 		assertFalse(bugTrap.getProjectManager().getProjects().isEmpty());
 		
 		//login
-		User admin = bugTrap.getUserManager().getUser("ADMIN");
+		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
 		bugTrap.getUserManager().loginAs(admin);
 				
 		//step 1
@@ -50,7 +53,7 @@ public class DeleteProjectUseCaseTest {
 			e.printStackTrace();
 		}
 		//step 2
-		List<Project> list = bugTrap.getProjectManager().getProjects();
+		List<IProject> list = bugTrap.getProjectManager().getProjects();
 		//step 3
 		form.setProject(list.get(0));
 		//step 4
@@ -71,7 +74,7 @@ public class DeleteProjectUseCaseTest {
 	@Test
 	public void varsNotFilledTest() {
 		//login
-		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
@@ -88,7 +91,7 @@ public class DeleteProjectUseCaseTest {
 	@Test
 	public void nullFormTest() {
 		//login
-		Administrator admin = bugTrap.getUserManager().getAdmins().get(0);
+		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
 		
 		ProjectDeleteForm form = null;

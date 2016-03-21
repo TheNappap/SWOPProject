@@ -3,7 +3,7 @@ package model.projects;
 /**
  * This class represents a subsystem in a system.
  */
-public class Subsystem extends System {
+public class Subsystem extends System implements ISubsystem {
 
 	private Project project;
 	
@@ -16,17 +16,18 @@ public class Subsystem extends System {
 	 * Copy constructor
 	 * @param sub The subsystem to copy.
      */
-	Subsystem(Subsystem sub) {
+	/*Subsystem(Subsystem sub) {
 		super(sub);
 		this.setProject(sub.getProject());
 		this.setParent(sub.getParent());
-	}
+	}*/
 	
-	public Subsystem copy() {
+	/*public Subsystem copy() {
 		return new Subsystem(this);
-	}
-	
-	public Project getProject() {
+	}*/
+
+	@Override
+	public IProject getProject() {
 		return project;
 	}
 	

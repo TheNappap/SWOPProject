@@ -13,6 +13,7 @@ import model.projects.forms.ProjectForkForm;
 import model.projects.forms.ProjectUpdateForm;
 import model.projects.forms.SubsystemCreationForm;
 import model.users.Developer;
+import model.users.IUser;
 
 public class ProjectManager {
 
@@ -26,7 +27,7 @@ public class ProjectManager {
 	 * Create and add a new project to the list.
 	 * @param form The filled in form with the details about the project to be created.
 	 */
-	public Project createProject(ProjectCreationForm form) {
+	public IProject createProject(ProjectCreationForm form) {
 		if (form == null) throw new IllegalArgumentException("ProjectCreationForm can not be null!");
 
 		ProjectTeam team = new ProjectTeam();
@@ -34,7 +35,7 @@ public class ProjectManager {
 		return createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), team, new Version(1, 0, 0));
 	}
 
-	public Project createProject(String name, String description, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam team, Version version) {
+	public IProject createProject(String name, String description, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam team, Version version) {
 		if (version == null)
 			version = new Version(1, 0, 0);
 		if (team == null)
@@ -58,15 +59,20 @@ public class ProjectManager {
 	 * Fork an existing project and add it to the projects list.
 	 * @param form The ProjectForkForm containing all the details about the project to be forked.
      */
-	public Project createFork(ProjectForkForm form) {
+	public IProject createFork(ProjectForkForm form) {
 		if (form == null) throw new IllegalArgumentException("ProjectForkForm can not be null!");
 		form.allVarsFilledIn();
 
 		return createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
 	}
 
-	public Project createFork(Project project, double budgetEstimate, Version version, Date startDate) {
-		Project fork = new Project(project);
+	public IProject createFork(IProject project, double budgetEstimate, Version version, Date startDate) {
+		Project toFork = null;
+		for (Project p : projectList)
+			if (p == project)
+				toFork = p;
+
+		Project fork = toFork.copy();
 		fork.setBudgetEstimate(budgetEstimate);
 		fork.setVersion(version);
 		fork.setStartDate(startDate);
@@ -78,14 +84,14 @@ public class ProjectManager {
 	 * Method to update a project.
 	 * @param form The ProjectUpdateForm containing all the details about the project to update.
 	 */
-	public Project updateProject(ProjectUpdateForm form) {
+	public IProject updateProject(ProjectUpdateForm form) {
 		if (form == null) throw new IllegalArgumentException("ProjectUpdateForm can not be null!");
 		form.allVarsFilledIn();
 
 		return updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
 	}
 
-	public Project updateProject(Project project, String name, String description, double budgetEstimate, Date startDate) {
+	public IProject updateProject(IProject project, String name, String description, double budgetEstimate, Date startDate) {
 		for (Project p : projectList) {
 			if (p == project) {
 				p.setBudgetEstimate(budgetEstimate);
@@ -108,7 +114,7 @@ public class ProjectManager {
 		deleteProject(form.getProject());
 	}
 
-	public void deleteProject(Project project) {
+	public void deleteProject(IProject project) {
 		for (int i = 0; i < projectList.size(); i++) {
 			if (projectList.get(i) == project)
 				projectList.remove(i);
@@ -126,7 +132,7 @@ public class ProjectManager {
 		assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 	}
 
-	public void assignToProject(Project project, Developer dev, Role role) {
+	public void assignToProject(IProject project, IUser dev, Role role) {
 		for (Project p : projectList) {
 			if (p == project)
 				p.getTeam().addMember(dev, role);
@@ -137,8 +143,8 @@ public class ProjectManager {
 	 * Method to get all the projects in the system.
 	 * @return List containing all the projects in the system.
      */
-	public List<Project> getProjects() {
-		ArrayList<Project> projects = new ArrayList<Project>();
+	public List<IProject> getProjects() {
+		ArrayList<IProject> projects = new ArrayList<IProject>();
 		for (Project p : projectList)
 			projects.add(p);
 		return projects;
@@ -149,10 +155,11 @@ public class ProjectManager {
 	 * @param dev The developer for who to find the projects he/she leads.
 	 * @return List containing all the projects for which the given developer is lead.
      */
-	public List<Project> getProjectsForLeadDeveloper(Developer dev) {
+	public List<IProject> getProjectsForLeadDeveloper(IUser dev) {
 		if (dev == null) throw new IllegalArgumentException("Developer can not be null!");
+		if (!dev.isDeveloper()) throw new IllegalArgumentException("Developer should be a developer.");
 
-		ArrayList<Project> projs = new ArrayList<Project>();
+		ArrayList<IProject> projs = new ArrayList<IProject>();
 		for (Project p : projectList) {
 			if (p.getTeam().getLeadDeveloper() == dev) 
 				projs.add(p);
@@ -165,13 +172,24 @@ public class ProjectManager {
 	 * @param form The SubsystemCreationForm containing all the data needed to create the subsystem.
 	 * @return 
      */
-	public Subsystem createSubsystem(SubsystemCreationForm form) {
+	public ISubsystem createSubsystem(SubsystemCreationForm form) {
 		if (form == null) throw new IllegalArgumentException("SubsystemCreationForm can not be null!");
 
-		return createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), new Version(1, 0, 0));
+		Project project = null;
+		for (Project p : projectList)
+			if (p == form.getProject())
+				project = p;
+		System system = null;
+		if (form.getParent() == project)
+			system = project;
+		for (System s : project.getAllSubsystems())
+			if (s == form.getParent())
+				system = s;
+
+		return createSubsystem(form.getName(), form.getDescription(), project, system, new Version(1, 0, 0));
 	}
 	
-	public Subsystem createSubsystem(String name, String description, Project project, System parent, Version version) {
+	public ISubsystem createSubsystem(String name, String description, Project project, System parent, Version version) {
 		if (version == null)
 			version = new Version(1, 0, 0);
 		
@@ -191,11 +209,11 @@ public class ProjectManager {
 	 * @param name The name for which to search.
 	 * @return Subsystem with the given name.
      */
-	public Subsystem getSubsystemWithName(String name) {
+	public ISubsystem getSubsystemWithName(String name) {
 		if (name == null) throw new IllegalArgumentException("Subsystem name can not be null!");
 
 		for (Project p : projectList) {
-			for (Subsystem s : p.getAllDirectOrIndirectSubsystems()) {
+			for (ISubsystem s : p.getAllDirectOrIndirectSubsystems()) {
 				if (s.getName().equals(name))
 					return s;
 			}

@@ -3,7 +3,7 @@ package model.projects;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.users.Developer;
+import model.users.IUser;
 
 /**
  * This class represents a team for a project.
@@ -31,8 +31,9 @@ public class ProjectTeam {
 	 * @param user The user for which to add a role.
 	 * @param role The role to assign to the user.
      */
-	public void addMember(Developer user, Role role) {
+	void addMember(IUser user, Role role) {
 		if (user == null) throw new NullPointerException("Given user is null.");
+		if (!user.isDeveloper()) throw new IllegalArgumentException("User should be a developer!");
 		
 		boolean alreadyExists = false;
 		for (DeveloperRoleRelation rel : team) {
@@ -53,7 +54,7 @@ public class ProjectTeam {
 	 * Method to get the lead developer from this team.
 	 * @return The lead developer in the team.
      */
-	public Developer getLeadDeveloper() {
+	IUser getLeadDeveloper() {
 		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.LEAD) {
 				return rel.getUser();
@@ -68,7 +69,7 @@ public class ProjectTeam {
 	 * being a programmer in the team.
 	 * @param dev The developer
      */
-	public void setLeadDeveloper(Developer dev) {
+	void setLeadDeveloper(IUser dev) {
 		// Make previous lead a programmer
 		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.LEAD && rel.getUser() == dev)
@@ -87,8 +88,8 @@ public class ProjectTeam {
 	 * Method to get the programmers in the team.
 	 * @return List containing all the programmers in the team.
      */
-	public List<Developer> getProgrammers() {
-		ArrayList<Developer> programmers = new ArrayList<Developer>();
+	List<IUser> getProgrammers() {
+		ArrayList<IUser> programmers = new ArrayList<IUser>();
 		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.PROGRAMMER)
 				programmers.add(rel.getUser());
@@ -100,8 +101,8 @@ public class ProjectTeam {
 	 * Method to get all the testers in the team.
 	 * @return List of all the testers in the team.
      */
-	public List<Developer> getTesters() {
-		ArrayList<Developer> testers = new ArrayList<Developer>();
+	List<IUser> getTesters() {
+		ArrayList<IUser> testers = new ArrayList<IUser>();
 		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.TESTER)
 				testers.add(rel.getUser());

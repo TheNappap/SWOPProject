@@ -1,5 +1,6 @@
 package ui;
 
+import java.lang.System;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.BugReport;
+import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagEnum;
 import model.bugreports.comments.Comment;
@@ -20,20 +22,14 @@ import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
-import model.projects.Project;
-import model.projects.Role;
-import model.projects.Subsystem;
-import model.projects.Version;
+import model.projects.*;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectDeleteForm;
 import model.projects.forms.ProjectForkForm;
 import model.projects.forms.ProjectUpdateForm;
 import model.projects.forms.SubsystemCreationForm;
-import model.users.Administrator;
-import model.users.Developer;
-import model.users.Issuer;
-import model.users.User;
+import model.users.*;
 
 public class Main {
 
@@ -61,7 +57,7 @@ public class Main {
 		input = new Scanner(System.in);
 		
 		while (!quit) {
-			User user = userController.getLoggedInUser();
+			IUser user = userController.getLoggedInUser();
 			if (user != null)
 				System.out.print("[" + user.getUserName() + "] ");
 			String line = input.nextLine();
@@ -136,8 +132,8 @@ public class Main {
 	public static void login() {
 		boolean valid = false;
 		int category = 0;
-		List<User> users = new ArrayList<User>();
-		User selectedUser = null;
+		List<IUser> users = new ArrayList<IUser>();
+		IUser selectedUser = null;
 		while (!valid) {
 			valid = true;
 			System.out.println("Select a user cateogry by entering the number: ");
@@ -149,19 +145,13 @@ public class Main {
 					
 			switch (category) {
 				case 1:
-					List<Administrator> admins = userController.getAdmins();
-					for (Administrator a : admins)
-						users.add(a);
+					users = userController.getAdmins();
 					break;
 				case 2:
-					List<Issuer> issuers = userController.getIssuers();
-					for (Issuer i : issuers)
-						users.add(i);
+					users = userController.getIssuers();
 					break;
 				case 3:
-					List<Developer> devs = userController.getDevelopers();
-					for (Developer d : devs)
-						users.add(d);
+					users = userController.getDevelopers();
 					break;
 				default:
 					valid = false;
@@ -197,7 +187,7 @@ public class Main {
 
 	public static void createForkedProject() {
 		ProjectForkForm form;
-		Project project;
+		IProject project;
 		try {
 			form = projectController.getProjectForkForm(); 
 			project = selectProject(projectController.getProjectList());
@@ -261,9 +251,14 @@ public class Main {
 				valid = true;
 			} catch (Exception e) { }
 		}
-		
-		User lead = selectUser(userController.getDevelopers());
-		form.setLeadDeveloper((Developer)lead);
+
+		valid = false;
+		while (!valid) {
+			try {
+				IUser lead = selectUser(userController.getDevelopers());
+				form.setLeadDeveloper(lead);
+			} catch (IllegalArgumentException e) { }
+		}
 		
 		projectController.createProject(form);
 		System.out.println("Project is created.");
@@ -278,7 +273,7 @@ public class Main {
 			return;
 		}
 		
-		Project project = null;
+		IProject project = null;
 		try {
 			project = selectProject(projectController.getProjectList());
 		} catch (UnauthorizedAccessException e1) {
@@ -302,9 +297,6 @@ public class Main {
 			} catch (Exception e) { }
 		}
 		
-		User lead = selectUser(userController.getDevelopers());
-		form.setLeadDeveloper((Developer)lead);
-		
 		projectController.updateProject(form);
 		System.out.println("Project is updated.");
 	}
@@ -317,7 +309,7 @@ public class Main {
 			System.out.println(e.getMessage());
 		}
 		
-		Project project = null;
+		IProject project = null;
 		try {
 			if (bugTrap.getUserManager().getLoggedInUser() != null && bugTrap.getUserManager().getLoggedInUser().isDeveloper())
 				project = selectProject(projectController.getProjectsForLeadDeveloper((Developer)bugTrap.getUserManager().getLoggedInUser()));
@@ -326,10 +318,7 @@ public class Main {
 			System.out.println(e.getMessage());
 		}
 		form.setProject(project);
-		List<User> users = new ArrayList<>();
-		users.addAll(userController.getDevelopers());
-		Developer dev = (Developer) selectUser(users);
-		form.setDeveloper(dev);
+		form.setDeveloper(selectUser(userController.getDevelopers()));
 		Role role = selectRole();
 		form.setRole(role);
 		
@@ -346,7 +335,7 @@ public class Main {
 			return;
 		}
 		
-		Project project = null;
+		IProject project = null;
 		try {
 			project = selectProject(projectController.getProjectList());
 		} catch (UnauthorizedAccessException e) {
@@ -359,7 +348,7 @@ public class Main {
 	}
 	
 	public static void showProject() {
-		Project project = null;
+		IProject project = null;
 		try {
 			project = selectProject(projectController.getProjectList());
 			System.out.println(" -- " + project.getName() + " -- ");
@@ -369,7 +358,7 @@ public class Main {
 			System.out.println(" Start date: " + project.getStartDate().toString());
 			System.out.println(" Version: " + project.getVersion());
 			
-			for (Subsystem system : project.getAllDirectOrIndirectSubsystems()) {
+			for (ISubsystem system : project.getAllDirectOrIndirectSubsystems()) {
 				System.out.println(" -- " + system.getName() + " -- ");
 				System.out.println(" Description: " + system.getDescription());
 				System.out.println(" Version: " + system.getVersion());
@@ -383,15 +372,15 @@ public class Main {
 		SubsystemCreationForm form;  
 		try {  
 			form = projectController.getSubsystemCreationForm();  
-			ArrayList<model.projects.System> allSystems = new ArrayList<model.projects.System>();  
-			for (Project project : projectController.getProjectList()) {  
+			ArrayList<ISystem> allSystems = new ArrayList<ISystem>();
+			for (IProject project : projectController.getProjectList()) {
 				allSystems.add(project);  
-				for (model.projects.System sys : project.getAllDirectOrIndirectSubsystems()) {   
+				for (ISystem sys : project.getAllDirectOrIndirectSubsystems()) {
 					allSystems.add(sys);  
 				}  
 			}  
 		    		  
-			model.projects.System selectedSystem = selectSystem(allSystems);  
+			ISystem selectedSystem = selectSystem(allSystems);
 			form.setParent(selectedSystem);  
 				  
 			System.out.println("Enter the name of the subsystem:");  
@@ -411,8 +400,8 @@ public class Main {
 		BugReportCreationForm form = null;
 		try {
 			form = bugReportController.getBugReportCreationForm();
-			Project chosenProject = selectProject(projectController.getProjectList());
-			Subsystem chosenSubsystem = selectSubsystem(chosenProject.getSubsystems());
+			IProject chosenProject = selectProject(projectController.getProjectList());
+			ISubsystem chosenSubsystem = selectSubsystem(chosenProject.getSubsystems());
 			
 			form.setIssuer((Issuer) userController.getLoggedInUser());
 			form.setSubsystem(chosenSubsystem);
@@ -421,14 +410,14 @@ public class Main {
 			System.out.println("Enter a description:");
 			form.setDescription(input.nextLine());
 			
-			List<BugReport> allReports = bugReportController.getBugReportList();
-			ArrayList<BugReport> projectReports = new ArrayList<BugReport>();
-			ArrayList<Subsystem> projectSubs = chosenProject.getAllDirectOrIndirectSubsystems();
-			for (BugReport r : allReports) 
+			List<IBugReport> allReports = bugReportController.getBugReportList();
+			List<IBugReport> projectReports = new ArrayList<IBugReport>();
+			List<ISubsystem> projectSubs = chosenProject.getAllDirectOrIndirectSubsystems();
+			for (IBugReport r : allReports)
 				if (projectSubs.contains(r.getSubsystem()))
 					projectReports.add(r);
 			
-			ArrayList<BugReport> selectedDependencies = selectBugReports(projectReports);
+			List<IBugReport> selectedDependencies = selectBugReports(projectReports);
 			form.setDependsOn(selectedDependencies);
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
@@ -439,7 +428,7 @@ public class Main {
 	}
 	
 	public static void inspectBugReport() {
-		BugReport bugReport;
+		IBugReport bugReport;
 		bugReport = selectBugReport();
 		if (bugReport == null)
 			return;
@@ -452,10 +441,10 @@ public class Main {
 		if (bugReport.getBugTag().getBugTagEnum() == BugTagEnum.DUPLICATE)
 			System.out.println(" Duplicate: " + bugReport.getBugTag().getDuplicate().getTitle());
 		System.out.println(" Assignees: ");
-		for (Developer dev : bugReport.getAssignees())
+		for (IUser dev : bugReport.getAssignees())
 			System.out.println(" - " + dev.getUserName());
 		System.out.println(" Depends on: ");
-		for (BugReport bug : bugReport.getDependsOn())
+		for (IBugReport bug : bugReport.getDependsOn())
 			System.out.println(" - " + bug.getTitle());
 		System.out.println(" Comments: ");
 		
@@ -466,7 +455,7 @@ public class Main {
 		try {
 			CommentCreationForm form = bugReportController.getCommentCreationForm();
 			
-			BugReport chosenBugReport = selectBugReport();
+			IBugReport chosenBugReport = selectBugReport();
 			boolean valid = false;
 			while (!valid) {
 				System.out.println("Comment directly on this bug report or on one of its comments?");
@@ -496,12 +485,12 @@ public class Main {
 	
 	public static void assignToBugReport() {
 		BugReportAssignForm form = null;
-		BugReport report = null;
-		Developer dev = null;
+		IBugReport report = null;
+		IUser dev = null;
 		try {
 			form = bugReportController.getBugReportAssignForm();
 			report = selectBugReport();
-			dev = (Developer)selectUser(userController.getDevelopers());
+			dev = selectUser(userController.getDevelopers());
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
 			return;
@@ -522,7 +511,7 @@ public class Main {
 			return;
 		}
 		
-		BugReport selected = selectBugReport();
+		IBugReport selected = selectBugReport();
 		form.setBugReport(selected);
 		form.setBugTag(selectBugTag());
 		
@@ -530,14 +519,14 @@ public class Main {
 		System.out.println("Bug report is updated.");
 	}
 
-	private static <T extends User> T selectUser(List<T> users) {
+	private static IUser selectUser(List<IUser> users) {
 		while (true) {
 			System.out.println("Select a user by entering the username: ");
-			for (T user : users)
+			for (IUser user : users)
 				System.out.println(user.getUserName() + " (" + user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName() + ")");
 			
 			String name = input.nextLine();
-			for (T user : users) {
+			for (IUser user : users) {
 				if (user.getUserName().equals(name))
 					return user;
 			}
@@ -561,17 +550,17 @@ public class Main {
 	}
 	
 
-	private static BugReport selectBugReport() {
+	private static IBugReport selectBugReport() {
 		FilterType type = selectFilterType();
 		System.out.println("Enter the search parameter: ");
 		String parameter = input.nextLine();
-		List<BugReport> filtered;
+		List<IBugReport> filtered;
 		try {
 			filtered = bugReportController.getOrderedList(new FilterType[]{type}, new String[]{parameter});
 			while (true) {
 				System.out.println("Select a bugreport by entering its number: ");
 				int number = 1;
-				for (BugReport bugReport : filtered) {
+				for (IBugReport bugReport : filtered) {
 					System.out.println(number + ". " + bugReport.getTitle());
 					number++;
 				}
@@ -588,12 +577,12 @@ public class Main {
 		return null;
 	}
 	
-	private static ArrayList<BugReport> selectBugReports(ArrayList<BugReport> reports) {
+	private static List<IBugReport> selectBugReports(List<IBugReport> reports) {
 		while (true) {
-			ArrayList<BugReport> selected = new ArrayList<BugReport>();
+			ArrayList<IBugReport> selected = new ArrayList<IBugReport>();
 			System.out.println("Select bugreports by entering its numbers separated by commas: ");
 			int number = 1;
-			for (BugReport bugReport : reports) {
+			for (IBugReport bugReport : reports) {
 				System.out.println(number + ". " + bugReport.getTitle());
 				number++;
 			}
@@ -609,7 +598,7 @@ public class Main {
 		}
 	}
 		
-	private static Commentable selectComment(BugReport report, Comment currentlySelected) {
+	private static Commentable selectComment(IBugReport report, Comment currentlySelected) {
 		while (true) {			
 			int number = 1;
 			if (currentlySelected == null) {
@@ -691,11 +680,11 @@ public class Main {
 		}
 	}
 	
-	private static Project selectProject(List<Project> projects) {
+	private static IProject selectProject(List<IProject> projects) {
 		while (true) {
 			System.out.println("Select a project by entering its number: ");
 			int number = 1;
-			for (Project project : projects) {
+			for (IProject project : projects) {
 				System.out.println(number + ". " + project.getName());
 				number++;
 			}
@@ -706,11 +695,11 @@ public class Main {
 				return projects.get(selected - 1);
 		}
 	}
-	private static model.projects.System selectSystem(List<model.projects.System> systems) {
+	private static ISystem selectSystem(List<ISystem> systems) {
 		while (true) {
 			System.out.println("Select a project or subsystem by entering its number: ");
 			int number = 1;
-			for (model.projects.System sys : systems) {
+			for (ISystem sys : systems) {
 				System.out.println(number + ". " + sys.getName());
 				number++;
 			}
@@ -722,11 +711,11 @@ public class Main {
 		}
 	}
 	
-	private static Subsystem selectSubsystem(List<Subsystem> subsystems) {
+	private static ISubsystem selectSubsystem(List<ISubsystem> subsystems) {
 		while (true) {
 			System.out.println("Select a subsystem by entering its number: ");
 			int number = 1;
-			for (Subsystem sub : subsystems) {
+			for (ISubsystem sub : subsystems) {
 				System.out.println(number + ". " + sub.getName());
 				number++;
 			}

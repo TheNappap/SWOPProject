@@ -2,11 +2,12 @@ package model.bugreports.forms;
 
 import model.Form;
 import model.bugreports.BugReport;
+import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 
 public class BugReportUpdateForm implements Form{
 
-	private BugReport bugReport;	//The BugReport to update.
+	private IBugReport bugReport;	//The BugReport to update.
 	private BugTag bugTag;			//The new BugTag.
 
 	public BugReportUpdateForm() {
@@ -23,13 +24,13 @@ public class BugReportUpdateForm implements Form{
 		if (getBugTag() == null) throw new NullPointerException("BugTag is null");
 	}
 
-	public void setBugReport(BugReport bugReport) {
+	public void setBugReport(IBugReport bugReport) {
 		if (bugReport == null) throw new NullPointerException("Given BugReport is null.");
 		
 		this.bugReport = bugReport;
 	}
 	
-	public BugReport getBugReport() {
+	public IBugReport getBugReport() {
 		return bugReport;
 	}
 	

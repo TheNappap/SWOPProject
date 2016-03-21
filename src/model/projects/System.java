@@ -1,11 +1,12 @@
 package model.projects;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents a system in BugTrap.
  */
-public abstract class System {
+public abstract class System implements ISystem {
 
 	private String name;
 	private String description;
@@ -26,16 +27,16 @@ public abstract class System {
 	 * Copy constructor
 	 * @param sys The System to copy.
      */
-	System(System sys) {
-		this.subsystems = new ArrayList<Subsystem>();
+	/*System(System sys) {
+		this.subsystems = new ArrayList<ISubsystem>();
 		setName(sys.getName());
 		setDescription(sys.getDescription());
 		setVersion(sys.getVersion().copy());
-		for (Subsystem s : sys.getSubsystems())
-			this.subsystems.add(new Subsystem(s));
-		for (Subsystem s : this.subsystems)
+		for (ISubsystem s : sys.getSubsystems())
+			this.subsystems.add(s);
+		for (ISubsystem s : this.subsystems)
 			s.setParent(this);
-	}
+	}*/
 	
 	public String getName() {
 		return name;
@@ -53,7 +54,7 @@ public abstract class System {
 		this.description = description;
 	}
 	
-	public System getParent() {
+	public ISystem getParent() {
 		return parent;
 	}
 	
@@ -61,8 +62,11 @@ public abstract class System {
 		this.parent = parent;
 	}
 	
-	public ArrayList<Subsystem> getSubsystems() {
-		return subsystems;
+	public List<ISubsystem> getSubsystems() {
+		List<ISubsystem> copy = new ArrayList<>();
+		for (ISubsystem s : subsystems)
+			copy.add(s);
+		return copy;
 	}
 	
 	public Version getVersion() {
@@ -82,7 +86,7 @@ public abstract class System {
      */
 	public void addSubsystem(Subsystem sub) throws UnsupportedOperationException {
 		// Travel the path to the root. The subsystem being added should not be one of the parents
-		System parent = this.getParent();
+		ISystem parent = this.getParent();
 		boolean canAdd = true;
 		while (parent != null && canAdd) {
 			if (parent == sub) 
@@ -90,17 +94,29 @@ public abstract class System {
 			parent = parent.getParent();
 		}
 		
-		if (canAdd)
+		if (canAdd) {
 			this.subsystems.add(sub);
+			sub.setParent(this);
+		}
 		else
 			throw new UnsupportedOperationException("the given subsystem is parent of this subsystem");
 	}
 	
-	public ArrayList<Subsystem> getAllDirectOrIndirectSubsystems() {
+	public List<ISubsystem> getAllDirectOrIndirectSubsystems() {
+		ArrayList<ISubsystem> subs = new ArrayList<ISubsystem>();
+		for (ISubsystem s : subsystems) {
+			subs.add(s);
+			for (ISubsystem ss : s.getAllDirectOrIndirectSubsystems())
+				subs.add(ss);
+		}
+		return subs;
+	}
+
+	List<Subsystem> getAllSubsystems() {
 		ArrayList<Subsystem> subs = new ArrayList<Subsystem>();
 		for (Subsystem s : subsystems) {
 			subs.add(s);
-			for (Subsystem ss : s.getAllDirectOrIndirectSubsystems())
+			for (Subsystem ss : s.getAllSubsystems())
 				subs.add(ss);
 		}
 		return subs;
