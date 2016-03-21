@@ -1,25 +1,24 @@
 package model;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import model.bugreports.bugtag.BugTagEnum;
 import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Role;
 import model.projects.Subsystem;
+import model.users.IUser;
 import model.users.Issuer;
 import model.users.UserCategory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 class BugTrapInitializer {
 	private BugTrap bugTrap;
@@ -77,22 +76,21 @@ class BugTrapInitializer {
 		UserCategory type = UserCategory.valueOf(node.getAttribute("type"));
 		
 		switch (type) {
-		case ADMIN:
-			bugTrap.getUserManager().createAdmin(first, middle, last, username);
-			break;
+			case ADMIN:
+				bugTrap.getUserManager().createAdmin(first, middle, last, username);
+				break;
 
-		case ISSUER:
-			bugTrap.getUserManager().createIssuer(first, middle, last, username);
-			break;
-			
-		case DEVELOPER:
-			bugTrap.getUserManager().createDeveloper(first, middle, last, username);
-			break;
+			case ISSUER:
+				bugTrap.getUserManager().createIssuer(first, middle, last, username);
+				break;
 
-		default:
-			break;
+			case DEVELOPER:
+				bugTrap.getUserManager().createDeveloper(first, middle, last, username);
+				break;
+
+			default:
+				break;
 		}
-		
 	}
 	
 	private void createProject(Element node) throws Exception {
@@ -157,8 +155,18 @@ class BugTrapInitializer {
 		Subsystem sub = (Subsystem)bugTrap.getProjectManager().getSubsystemWithName(node.getAttribute("subsystem"));
 		BugTagEnum tag = BugTagEnum.valueOf(node.getAttribute("tag"));
 		Issuer issuer = (Issuer)bugTrap.getUserManager().getUser(node.getAttribute("issuer"));
-		
-		bugTrap.getBugReportManager().addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), tag.createBugTag());
+
+		NodeList assignees = node.getElementsByTagName("assignee");
+		ArrayList<IUser> assigned = new ArrayList<>();
+		for (int i = 0; i < assignees.getLength(); i++) {
+			if (assignees.item(i).getNodeType() != Node.ELEMENT_NODE)
+				continue;
+
+			Element assignee = (Element) assignees.item(i);
+			assigned.add(bugTrap.getUserManager().getUser(assignee.getAttribute("user")));
+		}
+
+		bugTrap.getBugReportManager().addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), assigned, tag.createBugTag());
 	}
 	
 	// -- XML Helpers --
