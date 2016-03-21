@@ -72,8 +72,15 @@ public abstract class System {
 	void setVersion(Version version) {
 		this.version = version;
 	}
-	
-	void addSubsystem(Subsystem sub) throws UnsupportedOperationException {
+
+	/**
+	 * Method to add a subsystem to a system.
+	 * THIS METHOD SHOULD HAVE PACKAGE VISIBILITY.
+	 * Due to testing, this visiblity could not be sustained.
+	 * @param sub The subsystem to add.
+	 * @throws UnsupportedOperationException When adding a subsystem that is at a higher level in the subsystem structure.
+     */
+	public void addSubsystem(Subsystem sub) throws UnsupportedOperationException {
 		// Travel the path to the root. The subsystem being added should not be one of the parents
 		System parent = this.getParent();
 		boolean canAdd = true;
