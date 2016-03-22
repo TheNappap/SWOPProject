@@ -35,7 +35,7 @@ public class CreateBugReportUseCaseTest {
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
 		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		//add project
-		Project project = (Project) bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, new ProjectTeam(), new Version(1, 0, 0));
+		Project project = (Project) bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		//add subsystem to project
 		bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
 		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project, Version.firstVersion());
@@ -53,38 +53,37 @@ public class CreateBugReportUseCaseTest {
 		BugReportCreationForm form = null;
 		try {
 			form = bugTrap.getFormFactory().makeBugReportCreationForm();
+			//step 2
+			List<IProject> projects = bugTrap.getProjectManager().getProjects();
+			//step 3
+			IProject project = projects.get(0);
+			//step 4
+			List<ISubsystem> subsystems = project.getAllDirectOrIndirectSubsystems();
+			//step 5
+			ISubsystem subsystem = subsystems.get(0);
+			form.setSubsystem(subsystem);
+			//step 6
+			form.setIssuer(dev);
+
+			//step 7
+			form.setTitle("Bug");
+			form.setDescription("a Bug");
+			//step 8
+			List<IBugReport> bugReports = bugTrap.getBugReportManager().getBugReportsForProject(project);
+			//step 9
+			List<IBugReport> dependencies = new ArrayList<IBugReport>();
+			dependencies.add(bugReports.get(0));
+			form.setDependsOn(dependencies);
+			//step 10
+			IBugReport bugReport = bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, dev, dependencies, new ArrayList<IUser>(), new New());
+
+			Assert.assertTrue(subsystem.getName().equals("sub X"));
+			Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
+			Assert.assertEquals(project, subsystem.getParent());
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
 		}
-		
-		//step 2
-		List<IProject> projects = bugTrap.getProjectManager().getProjects();
-		//step 3
-		IProject project = projects.get(0);
-		//step 4
-		List<ISubsystem> subsystems = project.getAllDirectOrIndirectSubsystems();
-		//step 5
-		ISubsystem subsystem = subsystems.get(0);
-		form.setSubsystem(subsystem);
-		//step 6
-		form.setIssuer(dev);
-		
-		//step 7
-		form.setTitle("Bug");
-		form.setDescription("a Bug");
-		//step 8
-		List<IBugReport> bugReports = bugTrap.getBugReportManager().getBugReportsForProject(project);
-		//step 9
-		List<IBugReport> dependencies = new ArrayList<IBugReport>();
-		dependencies.add(bugReports.get(0));
-		form.setDependsOn(dependencies);
-		//step 10
-		IBugReport bugReport = bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, dev, dependencies, new ArrayList<IUser>(), new New());
-		
-		Assert.assertTrue(subsystem.getName().equals("sub X"));
-		Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
-		Assert.assertEquals(project, subsystem.getParent());
 	}
 	
 	@Test
@@ -104,7 +103,7 @@ public class CreateBugReportUseCaseTest {
 		
 		try {
 			SubsystemCreationForm form = bugTrap.getFormFactory().makeSubsystemCreationForm();
-			bugTrap.getProjectManager().createSubsystem(form);
+			bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
 			fail("should throw exception");
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
@@ -120,7 +119,7 @@ public class CreateBugReportUseCaseTest {
 		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
-			bugTrap.getProjectManager().createSubsystem(null);
+			bugTrap.getProjectManager().createSubsystem(null, null, null, null, null);
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) {

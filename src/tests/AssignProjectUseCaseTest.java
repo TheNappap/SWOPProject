@@ -33,18 +33,16 @@ public class AssignProjectUseCaseTest {
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV2");
 		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		
-		ProjectTeam team = new ProjectTeam();
-		IProject project = bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, team, new Version(1, 0, 0));
+		IProject project = bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		project.setLeadDeveloper(dev);
 	}
 
 	@Test
-	public void assignProgrammerToProjectTest(){
+	public void assignProgrammerToProjectTest() throws UnauthorizedAccessException {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("DEV");
 		bugTrap.getUserManager().loginAs(dev);
-				
-		
+
 		//step 1
 		ProjectAssignForm form = null;
 		try {
@@ -54,7 +52,7 @@ public class AssignProjectUseCaseTest {
 			e.printStackTrace();
 		}
 		//step 2 TODO get logged in user (is dev?)
-		List<IProject> projects = bugTrap.getProjectManager().getProjectsForLeadDeveloper((Developer) dev);
+		List<IProject> projects = bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper();
 		//step 3
 		IProject project =  projects.get(0);
 		form.setProject(project);
@@ -68,7 +66,7 @@ public class AssignProjectUseCaseTest {
 		//step 7
 		form.setRole(Role.PROGRAMMER);
 
-		bugTrap.getProjectManager().assignToProject(form);
+		bugTrap.getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 
 		Assert.assertEquals(project.getProgrammers().get(0), developer);
 	}
@@ -103,7 +101,7 @@ public class AssignProjectUseCaseTest {
 		//step 7
 		form.setRole(Role.LEAD);
 
-		bugTrap.getProjectManager().assignToProject(form);
+		bugTrap.getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 
 		Assert.assertEquals(project.getLeadDeveloper(), developer);
 	}
@@ -138,7 +136,7 @@ public class AssignProjectUseCaseTest {
 		//step 7
 		form.setRole(Role.TESTER);
 
-		bugTrap.getProjectManager().assignToProject(form);
+		bugTrap.getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 
 		Assert.assertEquals(project.getTesters().get(0), developer);
 	}
@@ -151,7 +149,7 @@ public class AssignProjectUseCaseTest {
 		
 		//step 2a
 		try {
-			bugTrap.getProjectManager().getProjectsForLeadDeveloper((Developer) dev);
+			bugTrap.getProjectManager().getProjectsForLeadDeveloper(dev);
 			fail("should throw exception");
 		} catch (UnsupportedOperationException e) {
 		}
@@ -166,34 +164,22 @@ public class AssignProjectUseCaseTest {
 		}
 	}
 	
-	@Test
-	public void varsNotFilledTest() {
+	@Test (expected = NullPointerException.class)
+	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("DEV");
 		bugTrap.getUserManager().loginAs(dev);
 		
-		try {
-			ProjectAssignForm form = bugTrap.getFormFactory().makeProjectAssignForm();
-			bugTrap.getProjectManager().assignToProject(form);
-			fail("should throw exception");
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-		}
-		catch (NullPointerException e) {
-		}
+		ProjectAssignForm form = bugTrap.getFormFactory().makeProjectAssignForm();
+		bugTrap.getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 	}
 	
-	@Test
+	@Test (expected = IllegalArgumentException.class)
 	public void nullFormTest() {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("DEV");
 		bugTrap.getUserManager().loginAs(dev);
 		
-		try {
-			bugTrap.getProjectManager().assignToProject(null);
-			fail("should throw exception");
-		}
-		catch (IllegalArgumentException e) {
-		}
+		bugTrap.getProjectManager().assignToProject(null, null, null);
 	}
 }
