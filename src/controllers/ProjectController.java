@@ -1,10 +1,12 @@
 package controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.IProject;
+import model.projects.Version;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectDeleteForm;
@@ -35,14 +37,7 @@ public class ProjectController extends Controller {
 	}
 
 	public List<IProject> getProjectsForSignedInLeadDeveloper() throws UnauthorizedAccessException {
-		if (!getBugTrap().isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("You must be logged in as a developer to get a list of projects for which you are lead.");
-
-		List<IProject> list = getProjectsForLeadDeveloper(getBugTrap().getUserManager().getLoggedInUser());
-		if (list.size() == 0)
-			throw new UnsupportedOperationException("You are not leading any projects");
-
-		return list;
+		return getBugTrap().getProjectManager().getProjectsForSignedInLeadDeveloper();
 	}
 
 	public ProjectCreationForm getProjectCreationForm() throws UnauthorizedAccessException {
@@ -76,7 +71,7 @@ public class ProjectController extends Controller {
 	 */
 	public IProject createProject(ProjectCreationForm form) {
 		form.allVarsFilledIn();
-		return getBugTrap().getProjectManager().createProject(form);
+		return getBugTrap().getProjectManager().createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
 	}
 
 	/**
@@ -86,7 +81,7 @@ public class ProjectController extends Controller {
      */
 	public IProject forkProject(ProjectForkForm form) {
 		form.allVarsFilledIn();
-		return getBugTrap().getProjectManager().createFork(form);
+		return getBugTrap().getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
 	}
 
 	/**
@@ -95,7 +90,7 @@ public class ProjectController extends Controller {
 	 */
 	public void updateProject(ProjectUpdateForm form) {
 		form.allVarsFilledIn();
-		getBugTrap().getProjectManager().updateProject(form);
+		getBugTrap().getProjectManager().updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
 	}
 
 	/**
@@ -104,7 +99,7 @@ public class ProjectController extends Controller {
 	 */
 	public void assignToProject(ProjectAssignForm form) {
 		form.allVarsFilledIn();
-		getBugTrap().getProjectManager().assignToProject(form);
+		getBugTrap().getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 	}
 
 	/**
@@ -112,7 +107,7 @@ public class ProjectController extends Controller {
 	 * @param form ProjectDeleteForm containing the details about the project to be deleted.
 	 */
 	public void deleteProject(ProjectDeleteForm form) {
-		getBugTrap().getProjectManager().deleteProject(form);
+		getBugTrap().getProjectManager().deleteProject(form.getProject());
 	}
 	
 	/**
@@ -121,6 +116,6 @@ public class ProjectController extends Controller {
 	 */
 	public void createSubsystem(SubsystemCreationForm form) {
 		form.allVarsFilledIn();
-		getBugTrap().getProjectManager().createSubsystem(form);
+		getBugTrap().getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
 	}
 }

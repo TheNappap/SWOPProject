@@ -412,15 +412,8 @@ public class Main {
 			form.setTitle(input.nextLine());
 			System.out.println("Enter a description:");
 			form.setDescription(input.nextLine());
-			
-			List<IBugReport> allReports = bugReportController.getBugReportList();
-			List<IBugReport> projectReports = new ArrayList<IBugReport>();
-			List<ISubsystem> projectSubs = chosenProject.getAllDirectOrIndirectSubsystems();
-			for (IBugReport r : allReports)
-				if (projectSubs.contains(r.getSubsystem()))
-					projectReports.add(r);
-			
-			List<IBugReport> selectedDependencies = selectBugReports(projectReports);
+
+			List<IBugReport> selectedDependencies = selectBugReports(bugReportController.getBugReportsForProject(chosenSubsystem.getProject()));
 			form.setDependsOn(selectedDependencies);
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());

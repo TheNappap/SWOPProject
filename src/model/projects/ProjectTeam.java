@@ -11,6 +11,10 @@ import model.users.IUser;
 public class ProjectTeam {
 	private final ArrayList<DeveloperRoleRelation> team;
 
+	/**
+	 * Constructor.
+	 * Method should not be public, but package. Due to need for testing, it is public.
+	 */
 	public ProjectTeam() {
 		team = new ArrayList<DeveloperRoleRelation>();
 	}
@@ -28,10 +32,11 @@ public class ProjectTeam {
 	/**
 	 * Method to add a member to the team. The member is assigned a certain role.
 	 * If this member with this role is already in the team, nothing is added.
+	 * Method should not be public, but package. Due to need for testing, it is public.
 	 * @param user The user for which to add a role.
 	 * @param role The role to assign to the user.
      */
-	void addMember(IUser user, Role role) {
+	public void addMember(IUser user, Role role) {
 		if (user == null) throw new NullPointerException("Given user is null.");
 		if (!user.isDeveloper()) throw new IllegalArgumentException("User should be a developer!");
 		
@@ -53,8 +58,9 @@ public class ProjectTeam {
 	/**
 	 * Method to get the lead developer from this team.
 	 * @return The lead developer in the team.
+	 * Method should not be public, but package. Due to need for testing, it is public.
      */
-	IUser getLeadDeveloper() {
+	public IUser getLeadDeveloper() {
 		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.LEAD) {
 				return rel.getUser();
@@ -68,8 +74,9 @@ public class ProjectTeam {
 	 * lead developer was assigned, his role is changed to
 	 * being a programmer in the team.
 	 * @param dev The developer
+	 * Method should not be public, but package. Due to need for testing, it is public.
      */
-	void setLeadDeveloper(IUser dev) {
+	public void setLeadDeveloper(IUser dev) {
 		// Make previous lead a programmer
 		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.LEAD && rel.getUser() == dev)
@@ -87,8 +94,9 @@ public class ProjectTeam {
 	/**
 	 * Method to get the programmers in the team.
 	 * @return List containing all the programmers in the team.
+	 * Method should not be public, but package. Due to need for testing, it is public.
      */
-	List<IUser> getProgrammers() {
+	public List<IUser> getProgrammers() {
 		ArrayList<IUser> programmers = new ArrayList<IUser>();
 		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.PROGRAMMER)
@@ -100,8 +108,9 @@ public class ProjectTeam {
 	/**
 	 * Method to get all the testers in the team.
 	 * @return List of all the testers in the team.
+	 * Method should not be public, but package. Due to need for testing, it is public.
      */
-	List<IUser> getTesters() {
+	public List<IUser> getTesters() {
 		ArrayList<IUser> testers = new ArrayList<IUser>();
 		for (DeveloperRoleRelation rel : team) {
 			if (rel.getRole() == Role.TESTER)
