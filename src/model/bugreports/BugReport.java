@@ -53,8 +53,10 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * Create and add an InitialComment to this BugReport.
 	 * @param commentText The text of the comment.
 	 */
-	public void addComment(String commentText) {
-		comments.add(new Comment(commentText));
+	public Comment addComment(String commentText) {
+		Comment comment = new Comment(commentText);
+		comments.add(comment);
+		return comment;
 	}
 	
 	/**
@@ -66,6 +68,8 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * 		| getAssignees().contains(developer);
 	 */
 	public void assignDeveloper(IUser developer) {
+		if (!developer.isDeveloper()) throw new IllegalArgumentException();
+		
 		assignees.add(developer);
 	}
 
@@ -76,9 +80,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * 		| getBugTag() == bugTag
 	 */
 	public void updateBugTag(BugTag bugTag) {
-		if (!this.bugTag.isTransitionAllowed(bugTag.getBugTagEnum())) throw new IllegalArgumentException("Transistion is not allowed.");
-		
-		setBugTag(bugTag);
+		this.bugTag = getBugTag().confirmBugTag(bugTag);
 	}
 	
 	@Override
@@ -113,24 +115,22 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 		return bugTag;
 	}
 
-	public void setBugTag(BugTag bugTag) {
-		this.bugTag = bugTag;
-	}
-
 	@Override
 	public List<IUser> getAssignees() {
-		List<IUser> copy = new ArrayList<>();
-		for (IUser u : assignees)
-			copy.add(u);
-		return copy;
+		List<IUser> returnList = new ArrayList<>();
+		
+		returnList.addAll(assignees);
+		
+		return returnList;
 	}
 
 	@Override
 	public List<IBugReport> getDependsOn() {
-		List<IBugReport> copy = new ArrayList<>();
-		for (IBugReport r : dependsOn)
-			copy.add(r);
-		return copy;
+		List<IBugReport> returnList = new ArrayList<>();
+		
+		returnList.addAll(dependsOn);
+		
+		return returnList;
 	}
 
 	@Override
@@ -140,7 +140,11 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 
 	@Override
 	public List<Comment> getComments() {
-		return comments;
+		List<Comment> returnList = new ArrayList<>(); 
+		
+		returnList.addAll(comments);
+		
+		return returnList;
 	}
 	
 }

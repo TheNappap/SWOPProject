@@ -11,7 +11,7 @@ public interface Commentable {
 	 * Add a Comment to this Commentable with given text.  
 	 * @param text The text of the comment.  
 	 */  
-	public void addComment(String text);
+	public Comment addComment(String text);
 	
 	/**
 	 * Return a List containing the Comments on this Commentable.

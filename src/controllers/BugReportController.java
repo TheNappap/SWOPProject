@@ -57,7 +57,6 @@ public class BugReportController extends Controller {
 
 	public void createBugReport(BugReportCreationForm form) {
 		form.allVarsFilledIn();
-		//String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, BugTag tag
 		getBugTrap().getBugReportManager().addBugReport(form.getTitle(), form.getDescription(), new Date(), form.getSubsystem(), form.getIssuer(), form.getDependsOn(), new ArrayList<IUser>(), new New());
 	}
 

@@ -20,16 +20,16 @@ import model.users.IUser;
 public class BugReportBuilder {
 
 	//Required parameters
-	private String title; 			//Title of the BugReport. 
-	private String description;		//Description of the BugReport. 
-	private ISubsystem subsystem; 	//Subsystem the BugReport belongs to.
-	private IUser issuedBy; 		//Issuer who issued the BugReport.
+	private String title; 				//Title of the BugReport. 
+	private String description;			//Description of the BugReport. 
+	private ISubsystem subsystem; 		//Subsystem the BugReport belongs to.
+	private IUser issuedBy; 			//Issuer who issued the BugReport.
 	private List<IBugReport> dependsOn; //Other BugReports the BugReports depends on.
 	
 	//Optional Parameters
 	private Date creationDate 	= new Date();	//The day this BugReport was created.
 	private BugTag bugTag		= new New(); 	//The tag assigned to the BugReport.
-	private List<Comment> comments 		= new ArrayList<Comment>();		//Comments on the BugReport.
+	private List<Comment> comments 	= new ArrayList<Comment>();		//Comments on the BugReport.
 	private List<IUser> assignees 	= new ArrayList<IUser>();	//Developers assigned to the BugReport.
 	
 	/**  

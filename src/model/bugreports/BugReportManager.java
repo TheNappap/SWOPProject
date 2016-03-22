@@ -33,11 +33,9 @@ public class BugReportManager{
 		this.bugTrap = bugTrap;
 	}
 
-	public ArrayList<IBugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
-		if (!bugTrap.isLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
-
-		ArrayList<IBugReport> filteredList = cloneList();
+	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) {
+		List<IBugReport> filteredList = getBugReportList();
+		
 		BugReportFilter filter = new BugReportFilter(filteredList);
 		
 		for (int index = 0; index < types.length; index++)
@@ -48,10 +46,10 @@ public class BugReportManager{
 		return filteredList;
 	}
 
-	public List<IBugReport> getBugReportList() throws UnauthorizedAccessException {
-		if (!bugTrap.isLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
-		return cloneList();
+	public List<IBugReport> getBugReportList() {
+		ArrayList<IBugReport> clonedList = new ArrayList<IBugReport>();
+		clonedList.addAll(clonedList);
+		return clonedList;
 	}
 
 	public List<IBugReport> getBugReportsForProject(IProject project) throws UnauthorizedAccessException {
@@ -78,15 +76,6 @@ public class BugReportManager{
 				.setAssignees(assignees)
 				.setBugTag(tag)
 				.getBugReport());
-	}
-
-	private ArrayList<IBugReport> cloneList() {
-		ArrayList<IBugReport> clonedList = new ArrayList<IBugReport>();
-		
-		for (IBugReport bugReport : bugReportList) 
-			clonedList.add(bugReport);
-		
-		return clonedList;
 	}
 
 	public void assignToBugReport(IBugReport bugReport, IUser dev) {
