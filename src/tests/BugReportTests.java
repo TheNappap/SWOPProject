@@ -86,7 +86,7 @@ public class BugReportTests {
 			.setSubsystem(new Subsystem(null, null, null, null, null))
 			.setDependsOn(new ArrayList<IBugReport>())
 			.setIssuer(new Issuer(null, null, null, null))
-			.setBugTag(BugTagEnum.NEW.createBugTag())
+			.confirmBugTag(BugTagEnum.NEW.createBugTag())
 			.setCreationDate(new Date())
 			.getBugReport();
 		} catch (IllegalStateException e) { 
@@ -232,7 +232,7 @@ public class BugReportTests {
 			assertEquals(BugTagEnum.NEW, bugReport0.getBugTag().getBugTagEnum());
 			
 			form.setBugReport(bugReport0);
-			form.setBugTag(BugTagEnum.NOT_A_BUG.createBugTag());
+			form.confirmBugTag(BugTagEnum.NOT_A_BUG.createBugTag());
 			
 			controller.updateBugReport(form);
 			
@@ -398,7 +398,7 @@ public class BugReportTests {
 			} catch (NullPointerException e) { }
 			try {
 				form.setBugReport(new BugReport(null, null, null, null, null, null, null, null, null));
-				form.setBugTag(BugTagEnum.NEW.createBugTag());
+				form.confirmBugTag(BugTagEnum.NEW.createBugTag());
 				form.allVarsFilledIn();
 			} catch (NullPointerException e) {
 				fail();

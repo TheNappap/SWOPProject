@@ -7,21 +7,16 @@ import model.bugreports.BugReport;
  * This means that a BugReport is a duplicate from
  * another BugReport.
  */
-public class Duplicate extends BugTag {
+public class Duplicate extends Closed {
 
 	private BugReport duplicate;
 	
-	public Duplicate() {
-		super(new BugTagEnum[]{});
+	public Duplicate(BugReport duplicate) {
+		this.duplicate = duplicate;
 	}
 
 	@Override
-	public BugTagEnum getBugTagEnum() {
-		return BugTagEnum.DUPLICATE;
-	}
-
-	@Override
-	public BugReport getDuplicate() {
+	public BugReport getLinkedBugReport() {
 		return duplicate;
 	}
 

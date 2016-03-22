@@ -29,7 +29,7 @@ public class BugReportBuilder {
 	//Optional Parameters
 	private Date creationDate 	= new Date();	//The day this BugReport was created.
 	private BugTag bugTag		= new New(); 	//The tag assigned to the BugReport.
-	private List<Comment> comments 		= new ArrayList<Comment>();		//Comments on the BugReport.
+	private List<Comment> comments 	= new ArrayList<Comment>();		//Comments on the BugReport.
 	private List<IUser> assignees 	= new ArrayList<IUser>();	//Developers assigned to the BugReport.
 	
 	/**  

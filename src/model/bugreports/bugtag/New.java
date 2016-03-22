@@ -7,20 +7,33 @@ import model.bugreports.BugReport;
  * This means that a BugReport has recently been
  * created and is not yet assigned a tag.
  */
-public class New extends BugTag {
+public class New implements BugTag {
 
-	public New() {
-		super(new BugTagEnum[]{BugTagEnum.ASSIGNED, BugTagEnum.DUPLICATE, BugTagEnum.NOT_A_BUG});
+	@Override
+	public BugReport getLinkedBugReport() {
+		throw new IllegalStateException();
 	}
 
 	@Override
-	public BugTagEnum getBugTagEnum() {
-		return BugTagEnum.NEW;
+	public BugTag confirmBugTag(BugTag bugTag) {
+		return bugTag;
 	}
 
 	@Override
-	public BugReport getDuplicate() {
-		return null;
+	public boolean isNew() {
+		return true;
 	}
+
+	@Override
+	public boolean isInProgress() {
+		return false;
+	}
+
+	@Override
+	public boolean isClosed() {
+		return false;
+	}
+	
+	
 
 }

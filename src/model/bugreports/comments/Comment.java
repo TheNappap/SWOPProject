@@ -25,24 +25,6 @@ public class Comment implements Commentable { //A Comment can be commented on.
 		this.text 		  = text;
 	}
 	
-	/**
-	 * Copy constructor.
-	 * @param other To be copied object.
-	 */
-	protected Comment(Comment other) {
-		this.creationDate 	= other.getCreationDate();
-		this.comments		= other.getComments();
-		this.text			= other.getText();
-	}
-
-	/**
-	 * Create a copy of this Comment.
-	 * @return A copy of this Comment.
-	 */
-	public Comment copy() {
-		return new Comment(this);
-	}
-	
 	@Override
 	public void addComment(String commentText) {
 		comments.add(new Comment(commentText));
