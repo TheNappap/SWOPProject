@@ -9,22 +9,17 @@ import model.bugreports.BugReport;
  */
 public abstract class BugTag {
 
+	private final BugReport bugReport;
+	
 	private final BugTagEnum[] 	acceptedTransitions; //To what BugTagEnums can this BugTag change to?
 	
 	/**
 	 * Constructor.
 	 * @param acceptedTransitions The BugTagEnums to which this BugTag can change.
 	 */
-	public BugTag(BugTagEnum[] acceptedTransitions) {
+	public BugTag(BugReport bugReport, BugTagEnum[] acceptedTransitions) {
+		this.bugReport				= bugReport;
 		this.acceptedTransitions 	= acceptedTransitions;
-	}
-	
-	/**
-	 * Copy constructor.
-	 * @param other BugTag to copy.
-	 */
-	protected BugTag(BugTag other) {
-		this.acceptedTransitions = other.acceptedTransitions;
 	}
 	
 	/**
@@ -42,6 +37,10 @@ public abstract class BugTag {
 		return acceptedTransitions;
 	}
 
+	public BugReport getBugReport() {
+		return bugReport;
+	}
+	
 	public abstract BugTagEnum getBugTagEnum();
 	public abstract BugReport getDuplicate();
 }
