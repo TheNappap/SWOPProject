@@ -1,4 +1,4 @@
-package tests;
+package tests.projecttests;
 
 
 import static org.junit.Assert.fail;

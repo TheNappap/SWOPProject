@@ -1,4 +1,4 @@
-package tests;
+package tests.projecttests;
 
 import java.util.Date;
 
@@ -68,7 +68,6 @@ public class ProjectManagerTests {
         IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, new ProjectTeam(), new Version(1, 0, 0));
         UserManager um = new UserManager();
         um.createDeveloper("", "", "", "D");
-        IUser d = um.getDevelopers().get(0);
         projectManager.updateProject(project, "nn", "dd", 3883, new Date(2015, 11, 1));
 
         Assert.assertEquals(project.getName(), "nn");

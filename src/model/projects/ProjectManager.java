@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
 import model.projects.builders.ProjectBuilder;
 import model.projects.builders.SubsystemBuilder;
 import model.projects.forms.ProjectAssignForm;
@@ -16,10 +18,12 @@ import model.users.IUser;
 
 public class ProjectManager {
 
-	private ArrayList<Project> projectList;
+	private final ArrayList<Project> projectList;
+	private final BugTrap bugTrap;
 
-	public ProjectManager() {
+	public ProjectManager(BugTrap bugTrap) {
 		projectList = new ArrayList<Project>();
+		this.bugTrap = bugTrap;
 	}
 	
 	/**
@@ -142,7 +146,10 @@ public class ProjectManager {
 	 * Method to get all the projects in the system.
 	 * @return List containing all the projects in the system.
      */
-	public List<IProject> getProjects() {
+	public List<IProject> getProjects() throws UnauthorizedAccessException {
+		if (!bugTrap.isLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
+
 		ArrayList<IProject> projects = new ArrayList<IProject>();
 		for (Project p : projectList)
 			projects.add(p);

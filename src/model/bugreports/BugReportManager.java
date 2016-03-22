@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.filters.BugReportFilter;
@@ -20,15 +22,20 @@ import model.users.IUser;
 public class BugReportManager{
 
 	private final ArrayList<BugReport> bugReportList; //List that keeps BugReports.
+	private final BugTrap bugTrap;
 
 	/**
 	 * Constructor.
 	 */
-	public BugReportManager() {
+	public BugReportManager(BugTrap bugTrap) {
 		this.bugReportList = new ArrayList<BugReport>();
+		this.bugTrap = bugTrap;
 	}
 
-	public ArrayList<IBugReport> getOrderedList(FilterType[] types, String[] arguments) {
+	public ArrayList<IBugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
+		if (!bugTrap.isLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
+
 		ArrayList<IBugReport> filteredList = cloneList();
 		BugReportFilter filter = new BugReportFilter(filteredList);
 		
@@ -40,7 +47,9 @@ public class BugReportManager{
 		return filteredList;
 	}
 
-	public List<IBugReport> getBugReportList() {
+	public List<IBugReport> getBugReportList() throws UnauthorizedAccessException {
+		if (!bugTrap.isLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
 		return cloneList();
 	}
 	

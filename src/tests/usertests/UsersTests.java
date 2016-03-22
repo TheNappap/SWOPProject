@@ -1,4 +1,4 @@
-package tests;
+package tests.usertests;
 
 import org.junit.Assert;
 import org.junit.Before;
