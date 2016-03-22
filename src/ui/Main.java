@@ -46,11 +46,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		// Initialize BugTrap
-		try {
-			init();
-		} catch (UnauthorizedAccessException e) {
-			
-		}
+		init();
 		
 		// Initialize CLI
 		quit = false;
@@ -72,7 +68,7 @@ public class Main {
 		System.out.println("Goodbye.");
 	}
 	
-	public static void init() throws UnauthorizedAccessException {
+	public static void init() {
 		bugTrap = new BugTrap();
 		userController = new UserController(bugTrap);
 		projectController = new ProjectController(bugTrap);
@@ -315,11 +311,13 @@ public class Main {
 		
 		IProject project = null;
 		try {
-			if (bugTrap.getUserManager().getLoggedInUser() != null && bugTrap.getUserManager().getLoggedInUser().isDeveloper())
-				project = selectProject(projectController.getProjectsForLeadDeveloper((Developer)bugTrap.getUserManager().getLoggedInUser()));
-			else throw new UnauthorizedAccessException("You need to be logged in as a developer.");
+			project = selectProject(projectController.getProjectsForSignedInLeadDeveloper());
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
+			return;
+		} catch (UnsupportedOperationException e) {
+			System.out.println("You are not leading any projects!");
+			return;
 		}
 		form.setProject(project);
 		form.setDeveloper(selectUser(userController.getDevelopers()));
@@ -344,6 +342,7 @@ public class Main {
 			project = selectProject(projectController.getProjectList());
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
+			return;
 		}
 		form.setProject(project);
 		

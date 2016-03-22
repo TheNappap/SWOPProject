@@ -14,8 +14,8 @@ public class BugTrap {
 	
 	public BugTrap() {
 		this.userManager = new UserManager();
-		this.projectManager = new ProjectManager();
-		this.bugReportManager = new BugReportManager();
+		this.projectManager = new ProjectManager(this);
+		this.bugReportManager = new BugReportManager(this);
 		this.formFactory = new FormFactory(this);
 	}
 
@@ -23,11 +23,9 @@ public class BugTrap {
 		return userManager;
 	}
 
-
 	public ProjectManager getProjectManager() {
 		return projectManager;
 	}
-
 
 	public BugReportManager getBugReportManager() {
 		return bugReportManager;
