@@ -53,8 +53,10 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * Create and add an InitialComment to this BugReport.
 	 * @param commentText The text of the comment.
 	 */
-	public void addComment(String commentText) {
-		comments.add(new Comment(commentText));
+	public Comment addComment(String commentText) {
+		Comment comment = new Comment(commentText);
+		comments.add(comment);
+		return comment;
 	}
 	
 	/**
@@ -66,6 +68,8 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * 		| getAssignees().contains(developer);
 	 */
 	public void assignDeveloper(IUser developer) {
+		if (!developer.isDeveloper()) throw new IllegalArgumentException();
+		
 		assignees.add(developer);
 	}
 
@@ -109,10 +113,6 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	@Override
 	public BugTag getBugTag() {
 		return bugTag;
-	}
-
-	public void setBugTag(BugTag bugTag) {
-		this.bugTag = bugTag;
 	}
 
 	@Override

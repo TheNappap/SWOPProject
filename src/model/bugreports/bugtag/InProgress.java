@@ -11,7 +11,7 @@ public abstract class InProgress implements BugTag {
 	
 	@Override
 	public BugTag confirmBugTag(BugTag bugTag) {
-		if (bugTag.isClosed()) return bugTag;
+		if (bugTag.isClosed() || bugTag.isInProgress()) return bugTag;
 		
 		throw new IllegalStateException();
 	}

@@ -20,10 +20,10 @@ import model.users.IUser;
 public class BugReportBuilder {
 
 	//Required parameters
-	private String title; 			//Title of the BugReport. 
-	private String description;		//Description of the BugReport. 
-	private ISubsystem subsystem; 	//Subsystem the BugReport belongs to.
-	private IUser issuedBy; 		//Issuer who issued the BugReport.
+	private String title; 				//Title of the BugReport. 
+	private String description;			//Description of the BugReport. 
+	private ISubsystem subsystem; 		//Subsystem the BugReport belongs to.
+	private IUser issuedBy; 			//Issuer who issued the BugReport.
 	private List<IBugReport> dependsOn; //Other BugReports the BugReports depends on.
 	
 	//Optional Parameters

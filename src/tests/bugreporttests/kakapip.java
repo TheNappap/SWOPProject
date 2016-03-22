@@ -31,7 +31,7 @@ import model.users.Developer;
 import model.users.Issuer;
 import model.users.UserManager;
 
-public class BugReportTests {
+public class kakapip {
 
 	private BugReportController controller;
 	
