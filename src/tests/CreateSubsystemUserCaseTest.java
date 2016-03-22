@@ -53,7 +53,13 @@ public class CreateSubsystemUserCaseTest {
 			e.printStackTrace();
 		}
 		//step 2
-		List<IProject> list = bugTrap.getProjectManager().getProjects();
+		List<IProject> list = null;
+		try {
+			list = bugTrap.getProjectManager().getProjects();
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
 		//step 3
 		IProject project = list.get(0);
 		//step 4
@@ -85,7 +91,13 @@ public class CreateSubsystemUserCaseTest {
 			e.printStackTrace();
 		}
 		//step 2
-		List<IProject> list = bugTrap.getProjectManager().getProjects();
+		List<IProject> list = null;
+		try {
+			list = bugTrap.getProjectManager().getProjects();
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
 		//step 3
 		ISubsystem system = list.get(0).getSubsystems().get(0);
 		//step 4

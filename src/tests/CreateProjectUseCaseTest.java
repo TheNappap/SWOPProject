@@ -80,7 +80,13 @@ public class CreateProjectUseCaseTest {
 		
 		//create fork
 		//step 1a
-		List<IProject> projects =  bugTrap.getProjectManager().getProjects();
+		List<IProject> projects = null;
+		try {
+			projects = bugTrap.getProjectManager().getProjects();
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
 		
 		//step 2a
 		IProject project = projects.get(0);
