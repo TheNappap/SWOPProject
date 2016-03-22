@@ -2,6 +2,8 @@ package tests.projecttests;
 
 import java.util.Date;
 
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -28,13 +30,14 @@ public class ProjectManagerTests {
 
     @Before
     public void setUp() throws Exception {
-        projectManager = new ProjectManager();
+        BugTrap bugTrap = new BugTrap();
+        projectManager = new ProjectManager(bugTrap);
     }
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testCreateProject() {
-        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, new ProjectTeam(), new Version(1, 0, 0));
+    public void testCreateProject() throws UnauthorizedAccessException {
+        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
         Assert.assertTrue(projectManager.getProjects().contains(project));
 
         Assert.assertEquals(project.getName(), "n");
@@ -48,7 +51,7 @@ public class ProjectManagerTests {
     @SuppressWarnings("deprecation")
     @Test
     public void testCreateFork() {
-        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, new ProjectTeam(), new Version(1, 0, 0));
+        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
         IProject fork = projectManager.createFork(project, 123592929, new Version(2, 1, 0), new Date(2016, 1, 1));
 
         Assert.assertEquals(project.getName(), fork.getName());
@@ -65,7 +68,7 @@ public class ProjectManagerTests {
     @SuppressWarnings("deprecation")
     @Test
     public void testUpdateProject() {
-        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, new ProjectTeam(), new Version(1, 0, 0));
+        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
         UserManager um = new UserManager();
         um.createDeveloper("", "", "", "D");
         projectManager.updateProject(project, "nn", "dd", 3883, new Date(2015, 11, 1));
@@ -78,8 +81,8 @@ public class ProjectManagerTests {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testDeleteProject() {
-        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, new ProjectTeam(), new Version(1, 0, 0));
+    public void testDeleteProject() throws UnauthorizedAccessException {
+        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
         projectManager.deleteProject(project);
 
         Assert.assertEquals(projectManager.getProjects().size(), 0);
@@ -88,7 +91,7 @@ public class ProjectManagerTests {
     @SuppressWarnings("deprecation")
     @Test
     public void testAssignToProject() {
-        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, new ProjectTeam(), new Version(1, 0, 0));
+        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
         UserManager um = new UserManager();
         um.createDeveloper("", "", "", "D0");
         IUser d0 = um.getDevelopers().get(0);
@@ -124,17 +127,9 @@ public class ProjectManagerTests {
         um.createDeveloper("", "", "", "D3");
         IUser d3 = um.getDevelopers().get(2);
 
-        ProjectTeam t1 = new ProjectTeam();
-        IProject p1 = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, t1, new Version(1, 0, 0));
-        p1.setLeadDeveloper(d1);
-
-        ProjectTeam t2 = new ProjectTeam();
-        IProject p2 = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, t2, new Version(1, 0, 0));
-        p2.setLeadDeveloper(d2);
-
-        ProjectTeam t3 = new ProjectTeam();
-        IProject p3 = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, t3, new Version(1, 0, 0));
-        p3.setLeadDeveloper(d3);
+        IProject p1 = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d1, new Version(1, 0, 0));
+        IProject p2 = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d2, new Version(1, 0, 0));
+        IProject p3 = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d3, new Version(1, 0, 0));
 
         Assert.assertTrue(projectManager.getProjectsForLeadDeveloper(d1).contains(p1));
         Assert.assertTrue(projectManager.getProjectsForLeadDeveloper(d2).contains(p2));
@@ -151,7 +146,7 @@ public class ProjectManagerTests {
     @SuppressWarnings("deprecation")
     @Test
     public void testCreateSubsystem() {
-        Project project = (Project)projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, new ProjectTeam(), new Version(1, 0, 0));
+        Project project = (Project)projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
         Subsystem sub = (Subsystem)projectManager.createSubsystem("name", "description", project, project, new Version(1, 0, 0));
 
         Assert.assertEquals(sub.getName(), "name");
@@ -179,7 +174,7 @@ public class ProjectManagerTests {
     @SuppressWarnings("deprecation")
     @Test
     public void testGetSubsystemWithName() {
-        Project project = (Project)projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, new ProjectTeam(), new Version(1, 0, 0));
+        Project project = (Project)projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
         ISubsystem sub = projectManager.createSubsystem("name", "description", project, project, new Version(1, 0, 0));
 
         Assert.assertEquals(projectManager.getSubsystemWithName("name"), sub);
