@@ -37,6 +37,14 @@ public class DeleteProjectUseCaseTest {
 		//login
 		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
 		bugTrap.getUserManager().loginAs(admin);
+		
+		try {
+			assertFalse(bugTrap.getProjectManager().getProjects().isEmpty());
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
+		
 				
 		//step 1
 		ProjectDeleteForm form = null;
@@ -50,6 +58,25 @@ public class DeleteProjectUseCaseTest {
 			//step 4
 			bugTrap.getProjectManager().deleteProject(form.getProject());
 
+			assertTrue(bugTrap.getProjectManager().getProjects().isEmpty());
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
+		//step 2
+		List<IProject> list = null;
+		try {
+			list = bugTrap.getProjectManager().getProjects();
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
+		//step 3
+		form.setProject(list.get(0));
+		//step 4
+		bugTrap.getProjectManager().deleteProject(form.getProject());
+		
+		try {
 			assertTrue(bugTrap.getProjectManager().getProjects().isEmpty());
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
