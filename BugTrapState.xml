@@ -8,28 +8,28 @@
 		<user first="Maria" middle="" last="Carney" username="maria" type="DEVELOPER" />
 	</users>
 	<projects>
-		<project name="ProjectA" budgetEstimate="5000" description="This is project A." creationDate="4/10/2015" startDate="05/11/2015">
+		<project name="ProjectA" budgetEstimate="5000" description="This is project A." creationDate="4/10/2015" startDate="05/11/2015" version="5.0" milestone="M2.5">
 			<roles>
 				<role user="major" role="LEAD"></role>
-				<role user="major" role="PROGRAMMER"></role>
+				<role user="maria" role="PROGRAMMER"></role>
 				<role user="maria" role="TESTER"></role>
 			</roles>
 			<subsystems>
-				<subsystem name="SubsystemA1" description="Sub A1">
+				<subsystem name="SubsystemA1" description="Sub A1" milestone="M2.5.1">
 					<subsystems>
 					</subsystems>
 				</subsystem>
-				<subsystem name="SubsystemA2" description="Sub A2">
+				<subsystem name="SubsystemA2" description="Sub A2" milestone="M2.5">
 					<subsystems>
 					</subsystems>
 				</subsystem>
-				<subsystem name="SubsystemA3" description="Sub A3">
+				<subsystem name="SubsystemA3" description="Sub A3" milestone="M2.8.5">
 					<subsystems>
-						<subsystem name="SubsystemA3.1" description="Sub A3.1">
+						<subsystem name="SubsystemA3.1" description="Sub A3.1" milestone="M2.8.5.3">
 							<subsystems>
 							</subsystems>
 						</subsystem>
-						<subsystem name="SubsystemA3.1" description="Sub A3.2">
+						<subsystem name="SubsystemA3.1" description="Sub A3.2" milestone="M2.9">
 							<subsystems>
 							</subsystems>
 						</subsystem>
@@ -37,19 +37,19 @@
 				</subsystem>
 			</subsystems>
 		</project>
-		<project name="ProjectB" budgetEstimate="50000" description="This is project B." creationDate="1/12/2015" startDate="05/12/2015">
+		<project name="ProjectB" budgetEstimate="50000" description="This is project B." creationDate="1/12/2015" startDate="05/12/2015" milestone="M1.2">
 			<roles>
 				<role user="major" role="PROGRAMMER"></role>
 				<role user="maria" role="LEAD"></role>
 			</roles>
 			<subsystems>
-				<subsystem name="SubsystemB1" description="Sub B1">
+				<subsystem name="SubsystemB1" description="Sub B1" milestone="M1.3">
 					<subsystems>
 					</subsystems>
 				</subsystem>
-				<subsystem name="SubsystemB2" description="Sub B2">
+				<subsystem name="SubsystemB2" description="Sub B2" milestone="M1.2">
 					<subsystems>
-						<subsystem name="SubsystemB2.1" description="Sub B2.1">
+						<subsystem name="SubsystemB2.1" description="Sub B2.1" milestone="M1.2">
 							<subsystems>
 							</subsystems>
 						</subsystem>
@@ -59,18 +59,24 @@
 		</project>
 	</projects>
 	<bugreports>
-		<bugreport title="The function parse ewd returns unexpected results" description="If the function parse ewd is invoked while ..." creationDate="03/01/2016" subsystem="SubsystemB1" tag="CLOSED" issuer="doc">
+		<bugreport title="The function parse ewd returns unexpected results" description="If the function parse ewd is invoked while ..."
+				   creationDate="03/01/2016" subsystem="SubsystemB1" tag="CLOSED" issuer="doc" 
+				   errorMessage="" targetMilestone="M1.1" reproduce="" stackTrace="">
 			<assignees>
 				<assignee user="maria" />
 			</assignees>
 		</bugreport>
-		<bugreport title="Crash while processing user input" description="If incorrect user input is entered into the system ..." creationDate="15/01/2016" subsystem="SubsystemA3.1" tag="ASSIGNED" issuer="major">
+		<bugreport title="Crash while processing user input" description="If incorrect user input is entered into the system ..." 
+		           creationDate="15/01/2016" subsystem="SubsystemA3.1" tag="ASSIGNED" issuer="major"
+				   errorMessage="Internal Error 45: The ..." targetMilestone="" reproduce="" stackTrace="">
 			<assignees>
 				<assignee user="maria" />
 				<assignee user="major" />
 			</assignees>
 		</bugreport>
-		<bugreport title="SubsystemA2 freezes" description="If the function process dfe is invoked with ..." creationDate="04/02/2016" subsystem="SubsystemA2" tag="NEW" issuer="doc">
+		<bugreport title="SubsystemA2 freezes" description="If the function process dfe is invoked with ..."
+                   creationDate="04/02/2016" subsystem="SubsystemA2" tag="NEW" issuer="doc"
+				   errorMessage="" targetMilestone="M3.2" reproduce="Launch with command line invocation:..." stackTrace="Exception in thread ”main” java.lang...">
 			<assignees>
 			</assignees>
 		</bugreport>

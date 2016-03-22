@@ -19,15 +19,11 @@ import model.users.IUser;
  * creating e.g. a BugTrap UI.
  */
 public class ProjectController extends Controller {
-
 	public ProjectController(BugTrap bugTrap) {
 		super(bugTrap);
 	}
 
 	public List<IProject> getProjectList() throws UnauthorizedAccessException{
-		if (!getBugTrap().isLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
-		
 		return getBugTrap().getProjectManager().getProjects();
 	}
 	
@@ -36,6 +32,17 @@ public class ProjectController extends Controller {
 			throw new IllegalArgumentException("Given user should be a developer!");
 
 		return getBugTrap().getProjectManager().getProjectsForLeadDeveloper(dev);
+	}
+
+	public List<IProject> getProjectsForSignedInLeadDeveloper() throws UnauthorizedAccessException {
+		if (!getBugTrap().isDeveloperLoggedIn())
+			throw new UnauthorizedAccessException("You must be logged in as a developer to get a list of projects for which you are lead.");
+
+		List<IProject> list = getProjectsForLeadDeveloper(getBugTrap().getUserManager().getLoggedInUser());
+		if (list.size() == 0)
+			throw new UnsupportedOperationException("You are not leading any projects");
+
+		return list;
 	}
 
 	public ProjectCreationForm getProjectCreationForm() throws UnauthorizedAccessException {
