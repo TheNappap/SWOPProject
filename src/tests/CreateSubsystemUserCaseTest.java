@@ -31,7 +31,7 @@ public class CreateSubsystemUserCaseTest {
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
 		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		//add project
-		Project project = (Project)bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, new ProjectTeam(), new Version(1, 0, 0));
+		Project project = (Project)bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		//add subsystem to project
 		bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
 		
@@ -41,38 +41,31 @@ public class CreateSubsystemUserCaseTest {
 	public void createSubsystemInProjectTest() {
 		//login
 		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
-		bugTrap.getUserManager().loginAs(admin);		
-				
-		
+		bugTrap.getUserManager().loginAs(admin);
+
 		//step 1
 		SubsystemCreationForm form = null;
 		try {
 			form = bugTrap.getFormFactory().makeSubsystemCreationForm();
+			//step 2
+			List<IProject> list = bugTrap.getProjectManager().getProjects();
+			//step 3
+			IProject project = list.get(0);
+			//step 4
+			form.setParent(project);
+			//step 5
+			form.setDescription("Subsystem");
+			form.setName("sub X");
+			//step 6
+			ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
+
+			Assert.assertTrue(subsystem.getName().equals("sub X"));
+			Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
+			Assert.assertEquals(project, subsystem.getParent());
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
 		}
-		//step 2
-		List<IProject> list = null;
-		try {
-			list = bugTrap.getProjectManager().getProjects();
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		//step 3
-		IProject project = list.get(0);
-		//step 4
-		form.setParent(project);
-		//step 5
-		form.setDescription("Subsystem");
-		form.setName("sub X");
-		//step 6
-		ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem(form);
-		
-		Assert.assertTrue(subsystem.getName().equals("sub X"));
-		Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
-		Assert.assertEquals(project, subsystem.getParent());
 	}
 	
 	@Test
@@ -81,36 +74,29 @@ public class CreateSubsystemUserCaseTest {
 		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
 		bugTrap.getUserManager().loginAs(admin);			
 				
-		
 		//step 1
 		SubsystemCreationForm form = null;
 		try {
 			form = bugTrap.getFormFactory().makeSubsystemCreationForm();
+			//step 2
+			List<IProject> list = bugTrap.getProjectManager().getProjects();
+			//step 3
+			ISubsystem system = list.get(0).getSubsystems().get(0);
+			//step 4
+			form.setParent(system);
+			//step 5
+			form.setDescription("Subsystem");
+			form.setName("sub X");
+			//step 6
+			ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
+
+			Assert.assertTrue(subsystem.getName().equals("sub X"));
+			Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
+			Assert.assertEquals(system, subsystem.getParent());
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
 		}
-		//step 2
-		List<IProject> list = null;
-		try {
-			list = bugTrap.getProjectManager().getProjects();
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		//step 3
-		ISubsystem system = list.get(0).getSubsystems().get(0);
-		//step 4
-		form.setParent(system);
-		//step 5
-		form.setDescription("Subsystem");
-		form.setName("sub X");
-		//step 6
-		ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem(form);
-		
-		Assert.assertTrue(subsystem.getName().equals("sub X"));
-		Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
-		Assert.assertEquals(system, subsystem.getParent());
 	}
 	
 	@Test
@@ -130,7 +116,7 @@ public class CreateSubsystemUserCaseTest {
 		
 		try {
 			SubsystemCreationForm form = bugTrap.getFormFactory().makeSubsystemCreationForm();
-			bugTrap.getProjectManager().createSubsystem(form);
+			bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
 			fail("should throw exception");
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
@@ -146,11 +132,10 @@ public class CreateSubsystemUserCaseTest {
 		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
-			bugTrap.getProjectManager().createSubsystem(null);
+			bugTrap.getProjectManager().createSubsystem(null, null, null, null, null);
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) {
 		}
 	}
-
 }

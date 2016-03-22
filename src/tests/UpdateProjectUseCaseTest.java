@@ -29,7 +29,7 @@ public class UpdateProjectUseCaseTest {
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
 		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, new ProjectTeam(), new Version(1, 0, 0));
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		
 	}
 
@@ -44,34 +44,28 @@ public class UpdateProjectUseCaseTest {
 		ProjectUpdateForm form = null;
 		try {
 			form = bugTrap.getFormFactory().makeProjectUpdateForm();
+			//step 2
+			List<IProject> list = bugTrap.getProjectManager().getProjects();
+			//step 3
+			IProject project = list.get(0);
+			//step 4
+			form.setProject(project);
+			//step 5
+			form.setBudgetEstimate(10000);
+			form.setDescription("project");
+			form.setName("Project S");
+			form.setStartDate(new Date(3000));
+			//step 6
+			project = bugTrap.getProjectManager().updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
+
+			Assert.assertEquals("Project S", project.getName());
+			Assert.assertEquals("project", project.getDescription());
+			Assert.assertEquals(new Date(3000), project.getStartDate());
+			Assert.assertEquals(10000, project.getBudgetEstimate(), 0.001);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
 		}
-		//step 2
-		List<IProject> list = null;
-		try {
-			list = bugTrap.getProjectManager().getProjects();
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		//step 3
-		IProject project = list.get(0);
-		//step 4
-		form.setProject(project);
-		//step 5
-		form.setBudgetEstimate(10000);
-		form.setDescription("project");
-		form.setName("Project S");
-		form.setStartDate(new Date(3000));
-		//step 6
-		project = bugTrap.getProjectManager().updateProject(form);	
-		
-		Assert.assertEquals("Project S", project.getName());
-		Assert.assertEquals("project", project.getDescription());
-		Assert.assertEquals(new Date(3000), project.getStartDate());
-		Assert.assertEquals(10000, project.getBudgetEstimate(), 0.001);
 	}
 
 	@Test
@@ -91,7 +85,7 @@ public class UpdateProjectUseCaseTest {
 		
 		try {
 			ProjectUpdateForm form = bugTrap.getFormFactory().makeProjectUpdateForm();
-			bugTrap.getProjectManager().updateProject(form);
+			bugTrap.getProjectManager().updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
 			fail("should throw exception");
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
@@ -107,11 +101,10 @@ public class UpdateProjectUseCaseTest {
 		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
-			bugTrap.getProjectManager().updateProject(null);
+			bugTrap.getProjectManager().updateProject(null, null, null, 0, null);
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) {
 		}
 	}
-
 }

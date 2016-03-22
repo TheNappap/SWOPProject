@@ -37,14 +37,7 @@ public class ProjectController extends Controller {
 	}
 
 	public List<IProject> getProjectsForSignedInLeadDeveloper() throws UnauthorizedAccessException {
-		if (!getBugTrap().isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("You must be logged in as a developer to get a list of projects for which you are lead.");
-
-		List<IProject> list = getProjectsForLeadDeveloper(getBugTrap().getUserManager().getLoggedInUser());
-		if (list.size() == 0)
-			throw new UnsupportedOperationException("You are not leading any projects");
-
-		return list;
+		return getBugTrap().getProjectManager().getProjectsForSignedInLeadDeveloper();
 	}
 
 	public ProjectCreationForm getProjectCreationForm() throws UnauthorizedAccessException {
