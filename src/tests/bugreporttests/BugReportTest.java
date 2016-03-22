@@ -84,13 +84,13 @@ public class BugReportTest {
 	
 	@Test
 	public void updateBugTagTest() {
-		BugTag assignedTag = new Assigned();
-		BugTag closedTag = new Closed();
-		BugTag duplicateTag = new Duplicate(new BugReport(null, null, null, null, null, null, null, null, null));
-		BugTag newTag = new New();
-		BugTag notABugTag = new NotABug();
-		BugTag resolvedTag = new Resolved();
-		BugTag underReviewTag = new UnderReview();
+		BugTag assignedTag 		= new Assigned();
+		BugTag closedTag 		= new Closed();
+		BugTag duplicateTag 	= new Duplicate(new BugReport(null, null, null, null, null, null, null, null, null));
+		BugTag newTag 			= new New();
+		BugTag notABugTag 		= new NotABug();
+		BugTag resolvedTag 		= new Resolved();
+		BugTag underReviewTag 	= new UnderReview();
 		
 		//From New to New is allowed.
 		bugReport.updateBugTag(newTag);
@@ -116,4 +116,16 @@ public class BugReportTest {
 		try { bugReport.updateBugTag(assignedTag); fail(); } catch (IllegalStateException e) { }
 	}
 
+	@Test
+	public void compareTest() {
+		BugReport other = new BugReport("CugReport", null, null, null, null, null, null, null, null);
+		assertEquals(-1, bugReport.compareTo(other));
+		assertEquals(1, other.compareTo(bugReport));
+		
+		BugReport other2 = new BugReport("BugReport", null, null, null, null, null, null, null, null);
+		assertEquals(0, bugReport.compareTo(other2));
+		assertEquals(0, other2.compareTo(bugReport));
+		
+		
+	}
 }

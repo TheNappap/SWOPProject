@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.filters.BugReportFilter;
@@ -21,16 +23,19 @@ import model.users.IUser;
 public class BugReportManager{
 
 	private final ArrayList<BugReport> bugReportList; //List that keeps BugReports.
+	private final BugTrap bugTrap;
 
 	/**
 	 * Constructor.
 	 */
-	public BugReportManager() {
+	public BugReportManager(BugTrap bugTrap) {
 		this.bugReportList = new ArrayList<BugReport>();
+		this.bugTrap = bugTrap;
 	}
 
-	public ArrayList<IBugReport> getOrderedList(FilterType[] types, String[] arguments) {
-		ArrayList<IBugReport> filteredList = cloneList();
+	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) {
+		List<IBugReport> filteredList = getBugReportList();
+		
 		BugReportFilter filter = new BugReportFilter(filteredList);
 		
 		for (int index = 0; index < types.length; index++)
@@ -42,7 +47,9 @@ public class BugReportManager{
 	}
 
 	public List<IBugReport> getBugReportList() {
-		return cloneList();
+		ArrayList<IBugReport> clonedList = new ArrayList<IBugReport>();
+		clonedList.addAll(clonedList);
+		return clonedList;
 	}
 
 	public List<IBugReport> getBugReportsForProject(IProject project) throws UnauthorizedAccessException {
@@ -69,15 +76,6 @@ public class BugReportManager{
 				.setAssignees(assignees)
 				.setBugTag(tag)
 				.getBugReport());
-	}
-
-	private ArrayList<IBugReport> cloneList() {
-		ArrayList<IBugReport> clonedList = new ArrayList<IBugReport>();
-		
-		for (IBugReport bugReport : bugReportList) 
-			clonedList.add(bugReport);
-		
-		return clonedList;
 	}
 
 	public void assignToBugReport(IBugReport bugReport, IUser dev) {
