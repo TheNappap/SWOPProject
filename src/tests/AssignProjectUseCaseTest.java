@@ -74,7 +74,7 @@ public class AssignProjectUseCaseTest {
 	}
 
 	@Test (expected = UnsupportedOperationException.class)
-	public void assignLeadToProjectTest() throws UnauthorizedAccessException {
+	public void assignLeadToProjectTest(){
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("DEV");
 		bugTrap.getUserManager().loginAs(dev);
@@ -109,7 +109,7 @@ public class AssignProjectUseCaseTest {
 	}
 
 	@Test 
-	public void assignTesterToProjectTest() throws UnauthorizedAccessException {
+	public void assignTesterToProjectTest(){
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("DEV");
 		bugTrap.getUserManager().loginAs(dev);
@@ -141,5 +141,59 @@ public class AssignProjectUseCaseTest {
 		bugTrap.getProjectManager().assignToProject(form);
 
 		Assert.assertEquals(project.getTesters().get(0), developer);
+	}
+	
+	@Test
+	public void developerIsNowhereLeadTest() {
+		//login
+		IUser dev = bugTrap.getUserManager().getUser("DEV");
+		bugTrap.getUserManager().loginAs(dev);
+		
+		//step 2a
+		try {
+			bugTrap.getProjectManager().getProjectsForLeadDeveloper((Developer) dev);
+			fail("should throw exception");
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+	
+	@Test
+	public void notAuthorizedTest() {
+		try {
+			bugTrap.getFormFactory().makeProjectAssignForm();
+			fail("should throw exception");
+		} catch (UnauthorizedAccessException e) {
+		}
+	}
+	
+	@Test
+	public void varsNotFilledTest() {
+		//login
+		IUser dev = bugTrap.getUserManager().getUser("DEV");
+		bugTrap.getUserManager().loginAs(dev);
+		
+		try {
+			ProjectAssignForm form = bugTrap.getFormFactory().makeProjectAssignForm();
+			bugTrap.getProjectManager().assignToProject(form);
+			fail("should throw exception");
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+	@Test
+	public void nullFormTest() {
+		//login
+		IUser dev = bugTrap.getUserManager().getUser("DEV");
+		bugTrap.getUserManager().loginAs(dev);
+		
+		try {
+			bugTrap.getProjectManager().assignToProject(null);
+			fail("should throw exception");
+		}
+		catch (IllegalArgumentException e) {
+		}
 	}
 }

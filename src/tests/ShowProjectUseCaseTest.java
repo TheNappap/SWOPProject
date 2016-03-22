@@ -1,6 +1,7 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
@@ -9,11 +10,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.ProjectTeam;
 import model.projects.Version;
+import model.users.IUser;
 
 public class ShowProjectUseCaseTest {
 	
@@ -33,6 +36,11 @@ public class ShowProjectUseCaseTest {
 
 	@Test
 	public void showProjectTest() {
+		//login
+		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
+		bugTrap.getUserManager().loginAs(admin);
+				
+		
 		//step 1
 		//user indicates he wants to inspect a project
 		//step 2
@@ -48,6 +56,15 @@ public class ShowProjectUseCaseTest {
 		assertEquals(1234, project.getBudgetEstimate(), 0.01);
 		assertEquals(project.getVersion(), new Version(1, 0, 0));
 		Assert.assertEquals(0, subsystems.size());
+	}
+	
+	@Test
+	public void notAuthorizedTest() {
+		try {
+			bugTrap.getProjectManager().getProjects();
+			fail("should throw exception");
+		} catch (UnauthorizedAccessException e) {
+		}
 	}
 
 }
