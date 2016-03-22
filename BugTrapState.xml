@@ -65,6 +65,13 @@
 			<assignees>
 				<assignee user="maria" />
 			</assignees>
+			<tests>
+				<test>bool test_invalid_args_1() { ... }</test>
+				<test>void test_parse_ewd(String ewd) { ... }</test>
+			</tests>
+			<patches indexSelectedPatch="0">
+				<patch>e3109fcc9</patch>
+			</patches>
 		</bugreport>
 		<bugreport title="Crash while processing user input" description="If incorrect user input is entered into the system ..." 
 		           creationDate="15/01/2016" subsystem="SubsystemA3.1" tag="ASSIGNED" issuer="major"
@@ -73,12 +80,20 @@
 				<assignee user="maria" />
 				<assignee user="major" />
 			</assignees>
+			<tests>
+			</tests>
+			<patches>
+			</patches>
 		</bugreport>
 		<bugreport title="SubsystemA2 freezes" description="If the function process dfe is invoked with ..."
                    creationDate="04/02/2016" subsystem="SubsystemA2" tag="NEW" issuer="doc"
 				   errorMessage="" targetMilestone="M3.2" reproduce="Launch with command line invocation:..." stackTrace="Exception in thread ”main” java.lang...">
 			<assignees>
 			</assignees>
+			<tests>
+			</tests>
+			<patches>
+			</patches>
 		</bugreport>
 	</bugreports>
 </BugTrap>
