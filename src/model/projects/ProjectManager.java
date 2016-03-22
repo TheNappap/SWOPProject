@@ -27,6 +27,9 @@ public class ProjectManager {
 	}
 	
 	public IProject createProject(String name, String description, Date creationDate, Date startDate, double budgetEstimate, IUser lead, Version version) {
+		if (name == null || description == null || creationDate == null || startDate ==  null)
+			throw new IllegalArgumentException("Arguments should not be null.");
+
 		if (version == null)
 			version = new Version(1, 0, 0);
 
@@ -49,6 +52,9 @@ public class ProjectManager {
 	}
 
 	public IProject createFork(IProject project, double budgetEstimate, Version version, Date startDate) {
+		if (project == null || version == null || startDate == null)
+			throw new IllegalArgumentException("Arguments should not be null.");
+
 		Project toFork = null;
 		for (Project p : projectList)
 			if (p == project)
@@ -63,6 +69,9 @@ public class ProjectManager {
 	}
 
 	public IProject updateProject(IProject project, String name, String description, double budgetEstimate, Date startDate) {
+		if (project == null || name == null || description == null || startDate == null)
+			throw new IllegalArgumentException("Arguments should not be null.");
+
 		for (Project p : projectList) {
 			if (p == project) {
 				p.setBudgetEstimate(budgetEstimate);
@@ -75,6 +84,9 @@ public class ProjectManager {
 	}
 
 	public void deleteProject(IProject project) {
+		if (project == null)
+			throw new IllegalArgumentException("Project to delete should not be null.");
+
 		for (int i = 0; i < projectList.size(); i++) {
 			if (projectList.get(i) == project)
 				projectList.remove(i);
@@ -82,6 +94,9 @@ public class ProjectManager {
 	}
 
 	public void assignToProject(IProject project, IUser dev, Role role) {
+		if (project == null || dev == null || role == null)
+			throw new IllegalArgumentException("Arguments should not be null.");
+
 		for (Project p : projectList) {
 			if (p == project)
 				p.getTeam().addMember(dev, role);
@@ -119,7 +134,21 @@ public class ProjectManager {
 		return projs;
 	}
 
+	public List<IProject> getProjectsForSignedInLeadDeveloper() throws UnauthorizedAccessException {
+		if (!bugTrap.isDeveloperLoggedIn())
+			throw new UnauthorizedAccessException("You must be logged in as a developer to get a list of projects for which you are lead.");
+
+		List<IProject> list = getProjectsForLeadDeveloper(bugTrap.getUserManager().getLoggedInUser());
+		if (list.size() == 0)
+			throw new UnsupportedOperationException("You are not leading any projects");
+
+		return list;
+	}
+
 	public ISubsystem createSubsystem(String name, String description, IProject iproject, ISystem iparent, Version version) {
+		if (name == null || description == null || iproject == null || iparent == null)
+			throw  new IllegalArgumentException("Arguments should not be null.");
+
 		if (version == null)
 			version = new Version(1, 0, 0);
 

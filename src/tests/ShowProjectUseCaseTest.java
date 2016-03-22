@@ -30,17 +30,16 @@ public class ShowProjectUseCaseTest {
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
 		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, new ProjectTeam(), new Version(1, 0, 0));
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		
 	}
 
 	@Test
-	public void showProjectTest() {
+	public void showProjectTest() throws UnauthorizedAccessException {
 		//login
 		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
 		bugTrap.getUserManager().loginAs(admin);
-				
-		
+
 		//step 1
 		//user indicates he wants to inspect a project
 		//step 2
