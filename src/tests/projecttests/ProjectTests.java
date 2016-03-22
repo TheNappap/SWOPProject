@@ -1,4 +1,4 @@
-package tests;
+package tests.projecttests;
 
 import java.util.Date;
 
@@ -11,7 +11,6 @@ import model.projects.ProjectTeam;
 import model.projects.Version;
 
 public class ProjectTests {
-    private Project project;
 
     @Before
     public void setUp() throws Exception {
