@@ -102,7 +102,7 @@ class BugTrapInitializer {
 		
 		NodeList roles = node.getElementsByTagName("role");
 		ProjectTeam team = new ProjectTeam();
-		Project project = (Project)bugTrap.getProjectManager().createProject(name, descr,creation, start, budgetEstimate, team, null);
+		Project project = (Project)bugTrap.getProjectManager().createProject(name, descr,creation, start, budgetEstimate, null, null);
 		for (int i = 0; i < roles.getLength(); i++) {
 			if (roles.item(i).getNodeType() != Node.ELEMENT_NODE)
 				continue;

@@ -26,24 +26,14 @@ public class ProjectManager {
 		this.bugTrap = bugTrap;
 	}
 	
-	/**
-	 * Create and add a new project to the list.
-	 * @param form The filled in form with the details about the project to be created.
-	 */
-	public IProject createProject(ProjectCreationForm form) {
-		if (form == null) throw new IllegalArgumentException("ProjectCreationForm can not be null!");
-
-		ProjectTeam team = new ProjectTeam();
-		team.addMember(form.getLeadDeveloper(), Role.LEAD);
-		return createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), team, new Version(1, 0, 0));
-	}
-
-	public IProject createProject(String name, String description, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam team, Version version) {
+	public IProject createProject(String name, String description, Date creationDate, Date startDate, double budgetEstimate, IUser lead, Version version) {
 		if (version == null)
 			version = new Version(1, 0, 0);
-		if (team == null)
-			team = new ProjectTeam();
-		
+
+		ProjectTeam team = new ProjectTeam();
+		if (lead != null)
+			team.addMember(lead, Role.LEAD);
+
 		Project p = (new ProjectBuilder())
 				.setName(name)
 				.setCreationDate(creationDate)
@@ -56,17 +46,6 @@ public class ProjectManager {
 		projectList.add(p);
 		
 		return p;
-	}
-
-	/**
-	 * Fork an existing project and add it to the projects list.
-	 * @param form The ProjectForkForm containing all the details about the project to be forked.
-     */
-	public IProject createFork(ProjectForkForm form) {
-		if (form == null) throw new IllegalArgumentException("ProjectForkForm can not be null!");
-		form.allVarsFilledIn();
-
-		return createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
 	}
 
 	public IProject createFork(IProject project, double budgetEstimate, Version version, Date startDate) {
@@ -83,17 +62,6 @@ public class ProjectManager {
 		return fork;
 	}
 
-	/**
-	 * Method to update a project.
-	 * @param form The ProjectUpdateForm containing all the details about the project to update.
-	 */
-	public IProject updateProject(ProjectUpdateForm form) {
-		if (form == null) throw new IllegalArgumentException("ProjectUpdateForm can not be null!");
-		form.allVarsFilledIn();
-
-		return updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
-	}
-
 	public IProject updateProject(IProject project, String name, String description, double budgetEstimate, Date startDate) {
 		for (Project p : projectList) {
 			if (p == project) {
@@ -106,33 +74,11 @@ public class ProjectManager {
 		return project;
 	}
 
-	/**
-	 * Method to delete a project.
-	 * @param form The ProjectDeleteForm containing all the details about the project to delete.
-	 */
-	public void deleteProject(ProjectDeleteForm form) {
-		if (form == null) throw new IllegalArgumentException("ProjectDeleteForm can not be null!");
-		form.allVarsFilledIn();
-
-		deleteProject(form.getProject());
-	}
-
 	public void deleteProject(IProject project) {
 		for (int i = 0; i < projectList.size(); i++) {
 			if (projectList.get(i) == project)
 				projectList.remove(i);
 		}
-	}
-
-	/**
-	 * Method to assign a developer to a project.
-	 * @param form The ProjectAssignForm containing all the details about the assignment.
-	 */
-	public void assignToProject(ProjectAssignForm form) {
-		if (form == null) throw new IllegalArgumentException("ProjectAssignForm can not be null!");
-		form.allVarsFilledIn();
-
-		assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 	}
 
 	public void assignToProject(IProject project, IUser dev, Role role) {
@@ -173,40 +119,29 @@ public class ProjectManager {
 		return projs;
 	}
 
-	/**
-	 * Method to create a subsystem.
-	 * @param form The SubsystemCreationForm containing all the data needed to create the subsystem.
-	 * @return 
-     */
-	public ISubsystem createSubsystem(SubsystemCreationForm form) {
-		if (form == null) throw new IllegalArgumentException("SubsystemCreationForm can not be null!");
+	public ISubsystem createSubsystem(String name, String description, IProject iproject, ISystem iparent, Version version) {
+		if (version == null)
+			version = new Version(1, 0, 0);
 
 		Project project = null;
 		for (Project p : projectList)
-			if (p == form.getProject())
+			if (p == iproject)
 				project = p;
 		System system = null;
-		if (form.getParent() == project)
+		if (iparent == project)
 			system = project;
 		for (System s : project.getAllSubsystems())
-			if (s == form.getParent())
+			if (s == iparent)
 				system = s;
 
-		return createSubsystem(form.getName(), form.getDescription(), project, system, new Version(1, 0, 0));
-	}
-	
-	public ISubsystem createSubsystem(String name, String description, Project project, System parent, Version version) {
-		if (version == null)
-			version = new Version(1, 0, 0);
-		
 		Subsystem sub = (new SubsystemBuilder())
 				.setDescription(description)
 				.setName(name)
 				.setProject(project)
 				.setVersion(version)
-				.setParent(parent)
+				.setParent(system)
 				.getSubsystem();
-		parent.addSubsystem(sub);
+		system.addSubsystem(sub);
 		return sub;
 	}
 

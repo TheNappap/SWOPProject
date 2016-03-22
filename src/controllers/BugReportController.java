@@ -13,6 +13,7 @@ import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
+import model.projects.IProject;
 import model.users.IUser;
 
 /**
@@ -43,17 +44,14 @@ public class BugReportController extends Controller {
 	}
 
 	public List<IBugReport> getBugReportList() throws UnauthorizedAccessException{
-		if (!getBugTrap().isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
-		
 		return getBugTrap().getBugReportManager().getBugReportList();
 	}
 
-	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
+	public List<IBugReport> getBugReportsForProject(IProject project) throws UnauthorizedAccessException {
+		return getBugTrap().getBugReportManager().getBugReportsForProject(project);
+	}
 
-		if (!getBugTrap().isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
-		
+	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
 		return getBugTrap().getBugReportManager().getOrderedList(types, arguments);
 	}
 
