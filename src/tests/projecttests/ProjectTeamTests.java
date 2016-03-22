@@ -77,6 +77,4 @@ public class ProjectTeamTests {
         assertEquals(lead, team1.getProgrammers().get(0));
         assertEquals(prog, team1.getLeadDeveloper());
     }
-
 }
-
