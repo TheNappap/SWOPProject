@@ -2,18 +2,17 @@ package tests.projecttests;
 
 import java.util.Date;
 
-import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Project;
 import model.projects.ProjectManager;
-import model.projects.ProjectTeam;
 import model.projects.Role;
 import model.projects.Subsystem;
 import model.projects.Version;

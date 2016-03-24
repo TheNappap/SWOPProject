@@ -1,6 +1,7 @@
 package tests;
 
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
@@ -13,7 +14,6 @@ import org.junit.Test;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.IProject;
-import model.projects.ProjectTeam;
 import model.projects.Role;
 import model.projects.Version;
 import model.projects.forms.ProjectAssignForm;
@@ -51,7 +51,7 @@ public class AssignProjectUseCaseTest {
 			fail("not authorized");
 			e.printStackTrace();
 		}
-		//step 2 TODO get logged in user (is dev?)
+		//step 2
 		List<IProject> projects = bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper();
 		//step 3
 		IProject project =  projects.get(0);
@@ -61,10 +61,12 @@ public class AssignProjectUseCaseTest {
 		//step 5
 		IUser developer = devs.get(1);
 		form.setDeveloper(developer);
-		//step 6 TODO get roles not yet assigned to developer?
-		//bugTrap.getProjectManager().getRoles();
+		//step 6
+		List<Role> roles = project.getRolesNotAssignedTo(developer);
 		//step 7
-		form.setRole(Role.PROGRAMMER);
+		Role role = roles.get(0);//Programmer
+		assertTrue(role == Role.PROGRAMMER);
+		form.setRole(role);
 
 		bugTrap.getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 
@@ -86,7 +88,7 @@ public class AssignProjectUseCaseTest {
 			fail("not authorized");
 			e.printStackTrace();
 		}
-		//step 2 TODO get logged in user (is dev?)
+		//step 2
 		List<IProject> projects = bugTrap.getProjectManager().getProjectsForLeadDeveloper((Developer) dev);
 		//step 3
 		IProject project =  projects.get(0);
@@ -96,8 +98,7 @@ public class AssignProjectUseCaseTest {
 		//step 5
 		IUser developer = devs.get(1);
 		form.setDeveloper(developer);
-		//step 6 TODO get roles not yet assigned to developer?
-		//bugTrap.getProjectManager().getRoles();
+		//step 6
 		//step 7
 		form.setRole(Role.LEAD);
 
@@ -121,7 +122,7 @@ public class AssignProjectUseCaseTest {
 			fail("not authorized");
 			e.printStackTrace();
 		}
-		//step 2 TODO get logged in user (is dev?)
+		//step 2
 		List<IProject> projects = bugTrap.getProjectManager().getProjectsForLeadDeveloper((Developer) dev);
 		//step 3
 		IProject project =  projects.get(0);
@@ -131,10 +132,12 @@ public class AssignProjectUseCaseTest {
 		//step 5
 		IUser developer = devs.get(1);
 		form.setDeveloper(developer);
-		//step 6 TODO get roles not yet assigned to developer?
-		//bugTrap.getProjectManager().getRoles();
+		//step 6
+		List<Role> roles = project.getRolesNotAssignedTo(developer);
 		//step 7
-		form.setRole(Role.TESTER);
+		Role role = roles.get(1);//Tester
+		assertTrue(role == Role.TESTER);
+		form.setRole(role);
 
 		bugTrap.getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 

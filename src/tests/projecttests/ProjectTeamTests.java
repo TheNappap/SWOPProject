@@ -1,7 +1,8 @@
 package tests.projecttests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -76,5 +77,23 @@ public class ProjectTeamTests {
         team1.setLeadDeveloper(prog);
         assertEquals(lead, team1.getProgrammers().get(0));
         assertEquals(prog, team1.getLeadDeveloper());
+    }
+    
+    @Test
+    public void getRolesNotAssignedToTest() {
+        List<Role> roles = null;
+        
+        roles = team1.getRolesNotAssignedTo(lead);
+        assertEquals(2, roles.size());
+        assertTrue(roles.contains(Role.PROGRAMMER));
+        assertTrue(roles.contains(Role.TESTER));
+        
+        roles = team1.getRolesNotAssignedTo(prog);
+        assertEquals(1, roles.size());
+        assertTrue(roles.contains(Role.TESTER));
+        
+        roles = team1.getRolesNotAssignedTo(tester);
+        assertEquals(1, roles.size());
+        assertTrue(roles.contains(Role.PROGRAMMER));
     }
 }

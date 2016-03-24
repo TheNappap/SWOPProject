@@ -132,4 +132,15 @@ public class Project extends System implements IProject {
 			throw new IllegalArgumentException("Tester should be a developer!");
 		getTeam().addMember(tester, Role.TESTER);
 	}
+	
+
+	/**
+	 * Returns the roles that are not assigned to a given developer in a given project
+	 * @param dev the given developer
+	 * @return a list of roles not assigned to a developer
+	 */
+	@Override
+	public List<Role> getRolesNotAssignedTo(IUser dev){
+		return getTeam().getRolesNotAssignedTo(dev);
+	}
 }

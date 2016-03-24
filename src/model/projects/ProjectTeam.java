@@ -118,4 +118,28 @@ public class ProjectTeam {
 		}
 		return testers;
 	}
+	
+	/**
+	 * Returns the roles that are not assigned to a given developer in a given project
+	 * @param dev the given developer
+	 * @return a list of roles not assigned to a developer
+	 */
+	public List<Role> getRolesNotAssignedTo(IUser dev){
+		if (dev == null) throw new IllegalArgumentException("Developer can not be null!");
+		if (!dev.isDeveloper()) throw new IllegalArgumentException("Developer should be a developer.");
+		
+		List<Role> roles = new ArrayList<Role>();
+		for (Role role : Role.values()) {
+			if(role != Role.LEAD)
+				roles.add(role);
+		}
+		
+		for (DeveloperRoleRelation rel : team) {
+			if(rel.getUser().getUserName().equals(dev.getUserName())){
+				roles.remove(rel.getRole());
+			}
+		}
+		
+		return roles;
+	}
 }

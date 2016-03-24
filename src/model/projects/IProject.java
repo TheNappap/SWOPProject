@@ -22,4 +22,5 @@ public interface IProject extends ISystem {
 
     void addProgrammer(IUser programmer);
     void addTester(IUser tester);
+	List<Role> getRolesNotAssignedTo(IUser developer);
 }
