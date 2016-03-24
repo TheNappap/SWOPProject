@@ -12,7 +12,6 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
-import model.bugreports.bugtag.BugTagEnum;
 import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.FilterType;

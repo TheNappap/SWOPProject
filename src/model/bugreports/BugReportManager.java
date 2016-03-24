@@ -66,8 +66,8 @@ public class BugReportManager{
 		return projectReports;
 	}
 
-	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) {
-		bugReportList.add((new BugReportBuilder()).setTitle(title)
+	public IBugReport addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) {
+		BugReport report = (new BugReportBuilder()).setTitle(title)
 				.setDescription(description)
 				.setSubsystem(subsystem)
 				.setIssuer(issuer)
@@ -75,7 +75,9 @@ public class BugReportManager{
 				.setCreationDate(creationDate)
 				.setAssignees(assignees)
 				.setBugTag(tag)
-				.getBugReport());
+				.getBugReport();
+		bugReportList.add(report);
+		return report;
 	}
 
 	public void assignToBugReport(IBugReport bugReport, IUser dev) {

@@ -43,7 +43,7 @@ public class CreateBugReportUseCaseTest {
 	}
 
 	@Test
-	public void createSubsystemInProjectTest() {
+	public void createBugReportTest() {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("Dev");
 		bugTrap.getUserManager().loginAs(dev);		

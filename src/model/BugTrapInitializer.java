@@ -1,6 +1,5 @@
 package model;
 
-import model.bugreports.bugtag.BugTagEnum;
 import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Role;
