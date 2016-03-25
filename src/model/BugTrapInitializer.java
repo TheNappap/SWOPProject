@@ -1,5 +1,8 @@
 package model;
 
+import model.bugreports.BugReport;
+import model.bugreports.IBugReport;
+import model.bugreports.bugtag.BugTag;
 import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Role;
@@ -152,7 +155,7 @@ class BugTrapInitializer {
 		String descr = node.getAttribute("description");
 		Date creation = (new SimpleDateFormat("dd/MM/yyyy")).parse(node.getAttribute("creationDate"));
 		Subsystem sub = (Subsystem)bugTrap.getProjectManager().getSubsystemWithName(node.getAttribute("subsystem"));
-		BugTagEnum tag = BugTagEnum.valueOf(node.getAttribute("tag"));
+		BugTag tag = BugTag.fromString(node.getAttribute("tag"), null);
 		Issuer issuer = (Issuer)bugTrap.getUserManager().getUser(node.getAttribute("issuer"));
 
 		NodeList assignees = node.getElementsByTagName("assignee");
@@ -165,7 +168,7 @@ class BugTrapInitializer {
 			assigned.add(bugTrap.getUserManager().getUser(assignee.getAttribute("user")));
 		}
 
-		bugTrap.getBugReportManager().addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), assigned, tag.createBugTag());
+		bugTrap.getBugReportManager().addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), assigned, tag);
 	}
 	
 	// -- XML Helpers --
