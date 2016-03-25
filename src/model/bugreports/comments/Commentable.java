@@ -1,0 +1,21 @@
+package model.bugreports.comments;
+
+import java.util.List;
+
+/**
+ * Class tagging objects that can be commented on.
+ */
+public interface Commentable { 
+	
+	/**  
+	 * Add a Comment to this Commentable with given text.  
+	 * @param text The text of the comment.  
+	 */  
+	public Comment addComment(String text);
+	
+	/**
+	 * Return a List containing the Comments on this Commentable.
+	 * @return A List containing the Comments on this Commentable.
+	 */
+	public List<Comment> getComments();
+}
