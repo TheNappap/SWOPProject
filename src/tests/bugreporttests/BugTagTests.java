@@ -1,12 +1,20 @@
 package tests.bugreporttests;
 
-import model.bugreports.BugReport;
-import model.bugreports.bugtag.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import model.bugreports.BugReport;
+import model.bugreports.bugtag.Assigned;
+import model.bugreports.bugtag.BugTag;
+import model.bugreports.bugtag.Closed;
+import model.bugreports.bugtag.Duplicate;
+import model.bugreports.bugtag.New;
+import model.bugreports.bugtag.NotABug;
+import model.bugreports.bugtag.Resolved;
+import model.bugreports.bugtag.UnderReview;
 
 public class BugTagTests {
 

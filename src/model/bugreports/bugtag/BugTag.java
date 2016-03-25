@@ -1,9 +1,9 @@
 package model.bugreports.bugtag;
 
-import model.bugreports.BugReport;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import model.bugreports.BugReport;
 
 /**
  * Class representing a BugTag.
