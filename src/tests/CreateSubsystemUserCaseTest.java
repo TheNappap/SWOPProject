@@ -14,7 +14,6 @@ import model.BugTrap;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Project;
-import model.projects.ProjectTeam;
 import model.projects.Version;
 import model.projects.forms.SubsystemCreationForm;
 import model.users.IUser;

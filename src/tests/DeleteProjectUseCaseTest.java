@@ -13,7 +13,6 @@ import org.junit.Test;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.IProject;
-import model.projects.ProjectTeam;
 import model.projects.Version;
 import model.projects.forms.ProjectDeleteForm;
 import model.users.IUser;

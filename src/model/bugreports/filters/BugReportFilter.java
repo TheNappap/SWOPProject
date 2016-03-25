@@ -1,5 +1,6 @@
 package model.bugreports.filters;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,7 +19,8 @@ public class BugReportFilter {
 	 * @param bugReportList The BugReport list to filter.  
 	 */  
 	public BugReportFilter(List<IBugReport> bugReportList) {
-		this.filteredList = bugReportList;
+		this.filteredList = new ArrayList<IBugReport>();
+		filteredList.addAll(bugReportList);
 	}
 
 	/**  
