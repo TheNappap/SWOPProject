@@ -113,6 +113,7 @@ public class ProjectManagerTests {
     @SuppressWarnings("deprecation")
     @Test
     public void testAssignToProject() {
+    	
         IProject project = null;
 		try {
 			project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
@@ -120,6 +121,12 @@ public class ProjectManagerTests {
 			fail("not authorized");
 			e.printStackTrace();
 		}
+		
+		//to assign, need to be logged in as dev
+		IUser dev =  bugTrap.getUserManager().getUser("DEV");
+    	bugTrap.getUserManager().loginAs(dev);
+    	
+		
         UserManager um = new UserManager();
         um.createDeveloper("", "", "", "D0");
         IUser d0 = um.getDevelopers().get(0);
@@ -162,7 +169,7 @@ public class ProjectManagerTests {
     @SuppressWarnings("deprecation")
     @Test
     public void testGetProjectsForLeadDeveloper() {
-        UserManager um = new UserManager();
+        UserManager um = bugTrap.getUserManager();
         um.createDeveloper("", "", "", "D1");
         IUser d1 = um.getDevelopers().get(0);
         um.createDeveloper("", "", "", "D2");

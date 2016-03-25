@@ -185,7 +185,7 @@ public class AssignBugReportUseCaseTest {
 	@Test (expected = IllegalArgumentException.class)
 	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//login
-		IUser dev = bugTrap.getUserManager().getUser("DEV");
+		IUser dev = bugTrap.getUserManager().getUser("LEAD");
 		bugTrap.getUserManager().loginAs(dev);
 		
 		BugReportAssignForm form = bugTrap.getFormFactory().makeBugReportAssignForm();
@@ -195,7 +195,7 @@ public class AssignBugReportUseCaseTest {
 	@Test (expected = IllegalArgumentException.class)
 	public void nullFormTest() {
 		//login
-		IUser dev = bugTrap.getUserManager().getUser("DEV");
+		IUser dev = bugTrap.getUserManager().getUser("LEAD");
 		bugTrap.getUserManager().loginAs(dev);
 		
 		try {

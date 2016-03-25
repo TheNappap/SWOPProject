@@ -19,6 +19,7 @@ import model.bugreports.bugtag.Assigned;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.New;
 import model.bugreports.filters.FilterType;
+import model.projects.IProject;
 import model.projects.Subsystem;
 import model.projects.Version;
 import model.users.Administrator;
@@ -33,6 +34,13 @@ public class BugReportManagerTest {
 	@Before
 	public void setUp() throws Exception {
 		bugTrap = new BugTrap();
+		IUser dev = bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
+		IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
+		bugTrap.getUserManager().loginAs(admin);
+		
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		
+		bugTrap.getUserManager().loginAs(dev);
 	}
 
 	@Test
@@ -184,8 +192,8 @@ public class BugReportManagerTest {
 	@Test
 	public void getBugReportsForProject() {
 		try {
-			bugTrap.getProjectManager().createProject("ProjectName", "Desc", new Date(), new Date(), 0, new Developer(null, null, null, null), new Version(0, 0, 0));
-			bugTrap.getProjectManager().getProjects().get(0);
+			IProject project = bugTrap.getProjectManager().getProjects().get(0);
+			bugTrap.getBugReportManager().getBugReportsForProject(project);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();

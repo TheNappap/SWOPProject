@@ -28,12 +28,15 @@ public class CreateSubsystemUserCaseTest {
 		
 		//add user
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
+		IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
+		bugTrap.getUserManager().loginAs(admin);
+		
 		//add project
 		Project project = (Project)bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		//add subsystem to project
 		bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
 		
+		bugTrap.getUserManager().logOff();
 	}
 
 	@Test

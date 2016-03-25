@@ -25,10 +25,12 @@ public class DeleteProjectUseCaseTest {
 	public void setUp() throws Exception {
 		bugTrap = new BugTrap();
 		//add users
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
+		IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
+		bugTrap.getUserManager().loginAs(admin);
 		
 		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		bugTrap.getUserManager().logOff();
 	}
 
 	@Test

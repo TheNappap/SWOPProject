@@ -66,6 +66,8 @@ public class BugReportManager{
 	public List<IBugReport> getBugReportsForProject(IProject project) throws UnauthorizedAccessException {
 		if (!bugTrap.isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
+		if (project == null) 
+			throw new IllegalArgumentException("Arguments should not be null.");
 
 		List<ISubsystem> projectSubs = project.getAllDirectOrIndirectSubsystems();
 		List<IBugReport> projectReports = new ArrayList<IBugReport>();
@@ -97,6 +99,8 @@ public class BugReportManager{
 	public void assignToBugReport(IBugReport bugReport, IUser dev) throws UnauthorizedAccessException {
 		if (!bugTrap.isDeveloperLoggedIn())
 			throw new UnauthorizedAccessException("An developer needs to be logged in to perform this action.");
+		if (bugReport == null || dev == null) 
+			throw new IllegalArgumentException("Arguments should not be null.");
 		if (!dev.isDeveloper()) throw new IllegalArgumentException("The given user should be a developer.");
 		
 		IProject project = bugReport.getSubsystem().getProject();
@@ -116,6 +120,8 @@ public class BugReportManager{
 	public void updateBugReport(IBugReport bugReport, BugTag tag) throws UnauthorizedAccessException {
 		if (!bugTrap.isDeveloperLoggedIn())
 			throw new UnauthorizedAccessException("An developer needs to be logged in to perform this action.");
+		if (bugReport == null || tag == null) 
+			throw new IllegalArgumentException("Arguments should not be null.");
 
 		BugReport report = null;
 		for (BugReport b : bugReportList)
@@ -126,6 +132,9 @@ public class BugReportManager{
 	}
 
 	public Comment addComment(Commentable commentable, String text) throws UnauthorizedAccessException {
+		if (commentable == null || text == null)
+			throw new IllegalArgumentException("Arguments should not be null.");
+		
 		if (!bugTrap.isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
 		
