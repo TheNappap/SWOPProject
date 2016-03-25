@@ -144,6 +144,9 @@ public class CreateBugReportUseCaseTest {
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) {
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
 		}
 	}
 

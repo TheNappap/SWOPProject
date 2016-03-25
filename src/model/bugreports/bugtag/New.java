@@ -7,12 +7,9 @@ import model.bugreports.BugReport;
  * This means that a BugReport has recently been
  * created and is not yet assigned a tag.
  */
-public class New implements BugTag {
+public class New extends BugTag {
 
-	@Override
-	public BugReport getLinkedBugReport() {
-		throw new IllegalStateException();
-	}
+	static final String TAGSTRING = "NEW";
 
 	@Override
 	public BugTag confirmBugTag(BugTag bugTag) {
@@ -25,15 +22,14 @@ public class New implements BugTag {
 	}
 
 	@Override
-	public boolean isInProgress() {
-		return false;
+	protected String getTagString() {
+		return TAGSTRING;
 	}
 
-	@Override
-	public boolean isClosed() {
-		return false;
-	}
-	
-	
+	static BugTag fromStringChain(String tag, BugReport report) {
+		if (tag.equals(TAGSTRING))
+			return new New();
 
+		return NotABug.fromStringChain(tag, report);
+	}
 }

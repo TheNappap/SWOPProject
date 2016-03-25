@@ -118,7 +118,7 @@ public class Project extends System implements IProject {
 	public List<IUser> getTesters() {
 		return getTeam().getTesters();
 	}
-	
+
 	@Override
 	public List<IUser> getAllDevelopers() {
 		return getTeam().getAllDevelopers();

@@ -1,5 +1,19 @@
 package model;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import model.bugreports.bugtag.BugTag;
 import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Role;
@@ -7,17 +21,6 @@ import model.projects.Subsystem;
 import model.users.IUser;
 import model.users.Issuer;
 import model.users.UserCategory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 class BugTrapInitializer {
 	private BugTrap bugTrap;
@@ -100,7 +103,8 @@ class BugTrapInitializer {
 		Date creation = (new SimpleDateFormat("dd/MM/yyyy")).parse(node.getAttribute("creationDate"));
 		
 		NodeList roles = node.getElementsByTagName("role");
-		ProjectTeam team = new ProjectTeam();
+
+		//ProjectTeam team = new ProjectTeam(); Not used
 		Project project = (Project)bugTrap.getProjectManager().createProject(name, descr,creation, start, budgetEstimate, null, null);
 		for (int i = 0; i < roles.getLength(); i++) {
 			if (roles.item(i).getNodeType() != Node.ELEMENT_NODE)
@@ -152,7 +156,8 @@ class BugTrapInitializer {
 		String descr = node.getAttribute("description");
 		Date creation = (new SimpleDateFormat("dd/MM/yyyy")).parse(node.getAttribute("creationDate"));
 		Subsystem sub = (Subsystem)bugTrap.getProjectManager().getSubsystemWithName(node.getAttribute("subsystem"));
-		BugTagEnum tag = BugTagEnum.valueOf(node.getAttribute("tag"));
+
+		BugTag tag = BugTag.fromString(node.getAttribute("tag"), null);
 		Issuer issuer = (Issuer)bugTrap.getUserManager().getUser(node.getAttribute("issuer"));
 
 		NodeList assignees = node.getElementsByTagName("assignee");
@@ -165,7 +170,8 @@ class BugTrapInitializer {
 			assigned.add(bugTrap.getUserManager().getUser(assignee.getAttribute("user")));
 		}
 
-		bugTrap.getBugReportManager().addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), assigned, tag.createBugTag());
+
+		bugTrap.getBugReportManager().addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), assigned, tag);
 	}
 	
 	// -- XML Helpers --

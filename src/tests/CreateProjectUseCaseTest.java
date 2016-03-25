@@ -58,7 +58,13 @@ public class CreateProjectUseCaseTest {
 		form.setLeadDeveloper(dev);
 		
 		//step 6
-		IProject p = bugTrap.getProjectManager().createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
+		IProject p = null;
+		try {
+			p = bugTrap.getProjectManager().createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
 		
 		
 		assertEquals(p.getName(), "name");
@@ -75,7 +81,12 @@ public class CreateProjectUseCaseTest {
 		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
 		//addProject
-		bugTrap.getProjectManager().createProject("name", "description", new Date(2005, 1, 2), new Date(2005, 2, 12), 1234, null, new Version(1, 0, 0));
+		try {
+			bugTrap.getProjectManager().createProject("name", "description", new Date(2005, 1, 2), new Date(2005, 2, 12), 1234, null, new Version(1, 0, 0));
+		} catch (UnauthorizedAccessException e1) {
+			fail("not authorized");
+			e1.printStackTrace();
+		}
 		
 		//create fork
 		//step 1a
@@ -98,6 +109,7 @@ public class CreateProjectUseCaseTest {
 			fail("not authorized");
 			e.printStackTrace();
 		}
+
 		//step 4a
 		form.setProject(project);
 		form.setStartDate(new Date(2010, 3, 21));
@@ -108,7 +120,13 @@ public class CreateProjectUseCaseTest {
 		List<IUser> devs = bugTrap.getUserManager().getDevelopers();
 		IUser dev = devs.get(0);
 		form.setLeadDeveloper(dev);
-		IProject fork = bugTrap.getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
+		IProject fork = null;
+		try {
+			fork = bugTrap.getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
 
 		assertEquals(fork.getName(), project.getName());
 		assertEquals(fork.getDescription(), project.getDescription());
@@ -143,6 +161,9 @@ public class CreateProjectUseCaseTest {
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) {
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
 		}
 		
 		try {
@@ -150,6 +171,9 @@ public class CreateProjectUseCaseTest {
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e){
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
 		}
 	}
 	

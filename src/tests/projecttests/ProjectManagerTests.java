@@ -1,6 +1,6 @@
 package tests.projecttests;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.Date;
 
@@ -207,6 +207,7 @@ public class ProjectManagerTests {
     @SuppressWarnings("deprecation")
     @Test
     public void testCreateSubsystem() {
+
         IProject project = null;
         ISubsystem sub = null;
 		try {

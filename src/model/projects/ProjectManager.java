@@ -23,6 +23,7 @@ public class ProjectManager {
 	public IProject createProject(String name, String description, Date creationDate, Date startDate, double budgetEstimate, IUser lead, Version version) throws UnauthorizedAccessException {
 		if (!bugTrap.isAdminLoggedIn())
 			throw new UnauthorizedAccessException("An admin needs to be logged in to perform this action.");
+
 		if (name == null || description == null || creationDate == null || startDate ==  null)
 			throw new IllegalArgumentException("Arguments should not be null.");
 
@@ -50,6 +51,7 @@ public class ProjectManager {
 	public IProject createFork(IProject project, double budgetEstimate, Version version, Date startDate) throws UnauthorizedAccessException {
 		if (!bugTrap.isAdminLoggedIn())
 			throw new UnauthorizedAccessException("An admin needs to be logged in to perform this action.");
+
 		if (project == null || version == null || startDate == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
 
@@ -69,6 +71,7 @@ public class ProjectManager {
 	public IProject updateProject(IProject project, String name, String description, double budgetEstimate, Date startDate) throws UnauthorizedAccessException {
 		if (!bugTrap.isAdminLoggedIn())
 			throw new UnauthorizedAccessException("An admin needs to be logged in to perform this action.");
+
 		if (project == null || name == null || description == null || startDate == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
 
@@ -86,6 +89,7 @@ public class ProjectManager {
 	public void deleteProject(IProject project) throws UnauthorizedAccessException {
 		if (!bugTrap.isAdminLoggedIn())
 			throw new UnauthorizedAccessException("An admin needs to be logged in to perform this action.");
+
 		if (project == null)
 			throw new IllegalArgumentException("Project to delete should not be null.");
 
@@ -94,6 +98,7 @@ public class ProjectManager {
 				projectList.remove(i);
 		}
 	}
+
 
 	public void assignToProject(IProject project, IUser dev, Role role) throws UnauthorizedAccessException {
 		if (!bugTrap.isDeveloperLoggedIn())
@@ -149,9 +154,11 @@ public class ProjectManager {
 		return list;
 	}
 
+
 	public ISubsystem createSubsystem(String name, String description, IProject iproject, ISystem iparent, Version version) throws UnauthorizedAccessException {
 		if (!bugTrap.isAdminLoggedIn())
 			throw new UnauthorizedAccessException("An admin needs to be logged in to perform this action.");
+
 		if (name == null || description == null || iproject == null || iparent == null)
 			throw  new IllegalArgumentException("Arguments should not be null.");
 

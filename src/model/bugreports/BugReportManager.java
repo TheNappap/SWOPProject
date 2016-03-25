@@ -1,7 +1,6 @@
 package model.bugreports;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -48,13 +47,11 @@ public class BugReportManager{
 		List<IBugReport> filteredList = getBugReportList();
 		
 		BugReportFilter filter = new BugReportFilter(filteredList);
-		
+
 		for (int index = 0; index < types.length; index++)
 			filter.filter(types[index], arguments[index]);
 		
-		Collections.sort(filteredList);
-		
-		return filteredList;
+		return filter.getFilteredList();
 	}
 
 	public List<IBugReport> getBugReportList() throws UnauthorizedAccessException {
@@ -83,7 +80,7 @@ public class BugReportManager{
 	public IBugReport addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) throws UnauthorizedAccessException {
 		if (!bugTrap.isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
-		
+
 		BugReport report = (new BugReportBuilder()).setTitle(title)
 				.setDescription(description)
 				.setSubsystem(subsystem)
@@ -107,7 +104,7 @@ public class BugReportManager{
 		if(!project.isLead(loggedInUser) && !project.isTester(loggedInUser)){
 			throw new UnauthorizedAccessException("The logged in developer should be lead or tester in the project");
 		}
-		
+
 		BugReport report = null;
 		for (BugReport b : bugReportList)
 			if (b == bugReport)
@@ -119,7 +116,7 @@ public class BugReportManager{
 	public void updateBugReport(IBugReport bugReport, BugTag tag) throws UnauthorizedAccessException {
 		if (!bugTrap.isDeveloperLoggedIn())
 			throw new UnauthorizedAccessException("An developer needs to be logged in to perform this action.");
-		
+
 		BugReport report = null;
 		for (BugReport b : bugReportList)
 			if (b == bugReport)

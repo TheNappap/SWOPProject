@@ -138,7 +138,7 @@ public class AssignProjectUseCaseTest {
 		try {
 			projects = bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper();
 		} catch (UnauthorizedAccessException e) {
-			// TODO Auto-generated catch block
+			fail("not authorized");
 			e.printStackTrace();
 		}
 		//step 3
@@ -170,6 +170,7 @@ public class AssignProjectUseCaseTest {
 	public void developerIsNowhereLeadTest() {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("DEV2");
+
 		bugTrap.getUserManager().loginAs(dev);
 		
 		//step 2a

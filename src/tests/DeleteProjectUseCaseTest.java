@@ -64,7 +64,12 @@ public class DeleteProjectUseCaseTest {
 		//step 3
 		form.setProject(list.get(0));
 		//step 4
-		bugTrap.getProjectManager().deleteProject(form.getProject());
+		try {
+			bugTrap.getProjectManager().deleteProject(form.getProject());
+		} catch (UnauthorizedAccessException e1) {
+			fail("not authorized");
+			e1.printStackTrace();
+		}
 		
 		try {
 			assertTrue(bugTrap.getProjectManager().getProjects().isEmpty());
@@ -111,6 +116,9 @@ public class DeleteProjectUseCaseTest {
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) {
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
 		}
 	}
 }

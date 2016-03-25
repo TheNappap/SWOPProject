@@ -7,31 +7,24 @@ import model.bugreports.BugReport;
  * This means that the BugReport has been closed
  * and is no longer considered.
  */
-public class Closed implements BugTag {
+public class Closed extends BugTag {
 
-	@Override
-	public BugReport getLinkedBugReport() {
-		throw new IllegalStateException();
-	}
-
-	@Override
-	public BugTag confirmBugTag(BugTag bugTag) {
-		throw new IllegalStateException();
-	}
-
-	@Override
-	public boolean isNew() {
-		return false;
-	}
-
-	@Override
-	public boolean isInProgress() {
-		return false;
-	}
+	static final String TAGSTRING = "CLOSED";
 
 	@Override
 	public boolean isClosed() {
 		return true;
 	}
 
+	@Override
+	protected String getTagString() {
+		return TAGSTRING;
+	}
+
+	static BugTag fromStringChain(String tag, BugReport report) {
+		if (tag.equals(TAGSTRING))
+			return new Closed();
+
+		return Duplicate.fromStringChain(tag, report);
+	}
 }

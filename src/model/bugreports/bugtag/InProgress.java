@@ -2,7 +2,7 @@ package model.bugreports.bugtag;
 
 import model.bugreports.BugReport;
 
-public abstract class InProgress implements BugTag {
+public abstract class InProgress extends BugTag {
 
 	@Override
 	public BugReport getLinkedBugReport() {
@@ -15,19 +15,9 @@ public abstract class InProgress implements BugTag {
 		
 		throw new IllegalStateException();
 	}
-	
-	@Override
-	public boolean isNew() {
-		return false;
-	}
-	
+
 	@Override
 	public boolean isInProgress() {
 		return true;
-	}
-	
-	@Override
-	public boolean isClosed() {
-		return false;
 	}
 }
