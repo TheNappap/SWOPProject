@@ -12,6 +12,7 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
+import model.bugreports.bugtag.Duplicate;
 import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.FilterType;
@@ -432,8 +433,8 @@ public class Main {
 		System.out.println(" Creation Date: " + bugReport.getCreationDate());
 		System.out.println(" Issued by: " + bugReport.getIssuedBy().getUserName());
 		System.out.println(" Subsystem: " + bugReport.getSubsystem().getName());
-		if (bugReport.getBugTag().getBugTagEnum() == BugTagEnum.DUPLICATE)
-			System.out.println(" Duplicate: " + bugReport.getBugTag().getDuplicate().getTitle());
+		if (bugReport.getBugTag().isDuplicate())
+			System.out.println(" Duplicate: " + bugReport.getBugTag().getLinkedBugReport().getTitle());
 		System.out.println(" Assignees: ");
 		for (IUser dev : bugReport.getAssignees())
 			System.out.println(" - " + dev.getUserName());
@@ -629,15 +630,15 @@ public class Main {
 			System.out.println("Select a bug tag by entering its number");
 			
 			int number = 1;
-			for (BugTagEnum tag : BugTagEnum.values()){
-				System.out.println(number + ". " + tag.toString());
+			for (String tag : BugTag.allTagStrings()){
+				System.out.println(number + ". " + tag);
 				number++;
 			}
 			
 			int selected = input.nextInt();
 			input.nextLine();
-			if (selected <= BugTagEnum.values().length)
-				return BugTagEnum.values()[selected - 1].createBugTag();
+			if (selected <= BugTag.allTagStrings().size())
+				return BugTag.fromString(BugTag.allTagStrings().get(selected - 1), null);
 		}
 	}
 
