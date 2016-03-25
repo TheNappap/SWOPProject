@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.builders.BugReportBuilder;
@@ -23,39 +22,34 @@ import model.users.IUser;
 public class BugReportManager{
 
 	private final ArrayList<BugReport> bugReportList; //List that keeps BugReports.
-	private final BugTrap bugTrap;
 
 	/**
 	 * Constructor.
 	 */
 	public BugReportManager(BugTrap bugTrap) {
 		this.bugReportList = new ArrayList<BugReport>();
-		this.bugTrap = bugTrap;
 	}
 
 	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) {
 		List<IBugReport> filteredList = getBugReportList();
 		
 		BugReportFilter filter = new BugReportFilter(filteredList);
-		
+
 		for (int index = 0; index < types.length; index++)
 			filter.filter(types[index], arguments[index]);
 		
 		Collections.sort(filteredList);
 		
-		return filteredList;
+		return filter.getFilteredList();
 	}
 
 	public List<IBugReport> getBugReportList() {
 		ArrayList<IBugReport> clonedList = new ArrayList<IBugReport>();
-		clonedList.addAll(clonedList);
+		clonedList.addAll(bugReportList);
 		return clonedList;
 	}
 
-	public List<IBugReport> getBugReportsForProject(IProject project) throws UnauthorizedAccessException {
-		if (!bugTrap.isLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
-
+	public List<IBugReport> getBugReportsForProject(IProject project) {
 		List<ISubsystem> projectSubs = project.getAllDirectOrIndirectSubsystems();
 		List<IBugReport> projectReports = new ArrayList<IBugReport>();
 

@@ -12,7 +12,6 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
-import model.bugreports.bugtag.Duplicate;
 import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.FilterType;
@@ -31,7 +30,6 @@ import model.projects.forms.ProjectDeleteForm;
 import model.projects.forms.ProjectForkForm;
 import model.projects.forms.ProjectUpdateForm;
 import model.projects.forms.SubsystemCreationForm;
-import model.users.Developer;
 import model.users.IUser;
 import model.users.Issuer;
 
