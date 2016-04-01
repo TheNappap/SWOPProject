@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.bugtag.BugTag;
 import model.projects.Project;
 import model.projects.ProjectTeam;
@@ -135,7 +136,7 @@ class BugTrapInitializer {
 		}
 	}
 	
-	private void createSubsystem(Element node, Project project, model.projects.System parent) {
+	private void createSubsystem(Element node, Project project, model.projects.System parent) throws UnauthorizedAccessException {
 		String name = node.getAttribute("name");
 		String descr = node.getAttribute("description");
 		

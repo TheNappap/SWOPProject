@@ -220,8 +220,12 @@ public class Main {
 			} catch (Exception e) { }
 		}
 
-		projectController.forkProject(form);
-		System.out.println("Project is forked.");
+		try {
+			projectController.forkProject(form);
+			System.out.println("Project is forked.");			
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());			
+		}
 	}
 
 	public static void createNewProject() {
@@ -258,8 +262,12 @@ public class Main {
 			} catch (IllegalArgumentException e) { }
 		}
 		
-		projectController.createProject(form);
-		System.out.println("Project is created.");
+		try {
+			projectController.createProject(form);
+			System.out.println("Project is created.");
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+		}	
 	}
 	
 	public static void updateProject() {
@@ -295,8 +303,12 @@ public class Main {
 			} catch (Exception e) { }
 		}
 		
-		projectController.updateProject(form);
-		System.out.println("Project is updated.");
+		try {
+			projectController.updateProject(form);
+			System.out.println("Project is updated.");
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	public static void assignToProject() {
@@ -322,8 +334,12 @@ public class Main {
 		Role role = selectRole();
 		form.setRole(role);
 		
-		projectController.assignToProject(form);
-		System.out.println("Developer is assigned.");
+		try {
+			projectController.assignToProject(form);
+			System.out.println("Developer is assigned.");
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public static void deleteProject() {
@@ -344,8 +360,12 @@ public class Main {
 		}
 		form.setProject(project);
 		
-		projectController.deleteProject(form);
-		System.out.println("Project is deleted.");
+		try {
+			projectController.deleteProject(form);
+			System.out.println("Project is deleted.");
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	public static void showProject() {
@@ -393,8 +413,12 @@ public class Main {
 			return;  
 		}  
 		
-	 	projectController.createSubsystem(form);
+		try {
+			projectController.createSubsystem(form);
 	 	System.out.print("Subsystem is created.");
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	public static void createBugReport() {
@@ -416,9 +440,13 @@ public class Main {
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
 		}
-					
-		bugReportController.createBugReport(form);
-		System.out.println("The bug report is created.");
+		
+		try {
+			bugReportController.createBugReport(form);
+			System.out.println("The bug report is created.");
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	public static void inspectBugReport() {
@@ -492,8 +520,13 @@ public class Main {
 		
 		form.setBugReport(report);
 		form.setDeveloper(dev);
-		bugReportController.assignToBugReport(form);
-		System.out.println("Developer is assigned to bug report.");
+		
+		try {
+			bugReportController.assignToBugReport(form);
+			System.out.println("Developer is assigned to bug report.");
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	public static void updateBugReport() {
@@ -509,8 +542,12 @@ public class Main {
 		form.setBugReport(selected);
 		form.setBugTag(selectBugTag());
 		
-		bugReportController.updateBugReport(form);
-		System.out.println("Bug report is updated.");
+		try {
+			bugReportController.updateBugReport(form);
+			System.out.println("Bug report is updated.");
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	private static IUser selectUser(List<IUser> users) {
