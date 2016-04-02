@@ -38,12 +38,14 @@ public class AssignBugReportUseCaseTest {
 		Developer tester = bugTrap.getUserManager().createDeveloper("", "", "", "TESTER");
 		bugTrap.getUserManager().loginAs(admin);
 		
-		IProject project = bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		IProject project = bugTrap.getProjectManager().getProjects().get(0);
 		project.setLeadDeveloper(lead);
 		project.addProgrammer(prog);
 		project.addTester(tester);
 		//add subsystem to project
-		ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
+		bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
+		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
 		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project, Version.firstVersion());
 		bugTrap.getUserManager().loginAs(lead);
 		//add bugreport (for dependency)

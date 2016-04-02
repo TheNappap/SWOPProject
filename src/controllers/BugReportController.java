@@ -1,22 +1,17 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
-import model.bugreports.bugtag.New;
 import model.bugreports.commands.CreateBugReportCommand;
-import model.bugreports.comments.Comment;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
 import model.projects.IProject;
-import model.users.IUser;
 
 /**
  * Controller for all BugReport related things.
@@ -61,16 +56,14 @@ public class BugReportController extends Controller {
 		return getBugTrap().getBugReportManager().getOrderedList(types, arguments);
 	}
 
-	public IBugReport createBugReport(BugReportCreationForm form) throws UnauthorizedAccessException {
-		CreateBugReportCommand cmd = new CreateBugReportCommand(getBugTrap(), form);
-		cmd.execute();
-		return cmd.getResult();
+	public void createBugReport(BugReportCreationForm form) throws UnauthorizedAccessException {
+		new CreateBugReportCommand(getBugTrap(), form).execute();
 	}
 
-	public Comment createComment(CommentCreationForm form) throws UnauthorizedAccessException {
+	public void createComment(CommentCreationForm form) throws UnauthorizedAccessException {
 		form.allVarsFilledIn();
 
-		return getBugTrap().getBugReportManager().addComment(form.getCommentable(), form.getText());
+		getBugTrap().getBugReportManager().addComment(form.getCommentable(), form.getText());
 	}
 
 	public void updateBugReport(BugReportUpdateForm form) throws UnauthorizedAccessException {

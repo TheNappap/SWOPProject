@@ -16,7 +16,6 @@ import org.w3c.dom.NodeList;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.bugtag.BugTag;
 import model.projects.Project;
-import model.projects.ProjectTeam;
 import model.projects.Role;
 import model.projects.Subsystem;
 import model.users.IUser;
@@ -106,7 +105,8 @@ class BugTrapInitializer {
 		NodeList roles = node.getElementsByTagName("role");
 
 		//ProjectTeam team = new ProjectTeam(); Not used
-		Project project = (Project)bugTrap.getProjectManager().createProject(name, descr,creation, start, budgetEstimate, null, null);
+		bugTrap.getProjectManager().createProject(name, descr,creation, start, budgetEstimate, null, null);
+		Project project = (Project) bugTrap.getProjectManager().getProjects().get(bugTrap.getProjectManager().getProjects().size() - 1);
 		for (int i = 0; i < roles.getLength(); i++) {
 			if (roles.item(i).getNodeType() != Node.ELEMENT_NODE)
 				continue;
@@ -140,7 +140,8 @@ class BugTrapInitializer {
 		String name = node.getAttribute("name");
 		String descr = node.getAttribute("description");
 		
-		Subsystem sub = (Subsystem)bugTrap.getProjectManager().createSubsystem(name, descr, project, parent, null);
+		bugTrap.getProjectManager().createSubsystem(name, descr, project, parent, null);
+		Subsystem sub = (Subsystem) bugTrap.getProjectManager().getSubsystemWithName(name);
 		
 		ArrayList<Node> subsystems = getDirectElementsWithTagName((Element)getFirstDirectElementWithTagName(node, "subsystems"), "subsystem");
 		for (int i = 0; i < subsystems.size(); i++) {

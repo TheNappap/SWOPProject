@@ -60,7 +60,8 @@ public class CreateProjectUseCaseTest {
 		//step 6
 		IProject p = null;
 		try {
-			p = bugTrap.getProjectManager().createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
+			bugTrap.getProjectManager().createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
+			p = bugTrap.getProjectManager().getProjects().get(0);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
@@ -122,7 +123,8 @@ public class CreateProjectUseCaseTest {
 		form.setLeadDeveloper(dev);
 		IProject fork = null;
 		try {
-			fork = bugTrap.getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
+			bugTrap.getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
+			fork = bugTrap.getProjectManager().getProjects().get(1);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();

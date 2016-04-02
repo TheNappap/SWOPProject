@@ -36,14 +36,17 @@ public class CreateCommentUseCaseTest {
 		IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		bugTrap.getUserManager().loginAs(admin);
 		//add project
-		IProject project = bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		IProject project = bugTrap.getProjectManager().getProjects().get(0);
 		//add subsystem to project
-		ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
+		bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
+		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
 		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project, Version.firstVersion());
 		
 		bugTrap.getUserManager().loginAs(dev);
 		//add bugreport (for dependency)
-		IBugReport bugreport = bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, dev, new ArrayList<>(), new ArrayList<>(), new New());
+		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, dev, new ArrayList<>(), new ArrayList<>(), new New());
+		IBugReport bugreport = bugTrap.getBugReportManager().getBugReportList().get(0);
 		//add comment
 		bugTrap.getBugReportManager().addComment(bugreport, "comment1");
 		bugTrap.getUserManager().logOff();
@@ -85,16 +88,15 @@ public class CreateCommentUseCaseTest {
 		//step 5 & 6
 		form.setText("comment2");
 		//step 7
-		Comment comment = null;
 		try {
-			comment = bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
+			bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
 		}
 
-		assertTrue(bugReport.getComments().contains(comment));
-		assertEquals("comment2",comment.getText());
+		assertEquals(2, bugReport.getComments().size());
+		assertTrue(bugReport.getComments().get(1).getText().equals("comment2"));
 	}
 	
 	@Test
@@ -133,16 +135,15 @@ public class CreateCommentUseCaseTest {
 		//step 5 & 6
 		form.setText("comment2");
 		//step 7
-		Comment comment = null;
 		try {
-			comment = bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
+			bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
 		}
 
-		assertTrue(comments.get(0).getComments().contains(comment));
-		assertEquals("comment2",comment.getText());
+		assertEquals(1, comments.get(0).getComments().size());
+		assertTrue(comments.get(0).getComments().get(0).getText().equals("comment2"));
 	}
 	
 	@Test

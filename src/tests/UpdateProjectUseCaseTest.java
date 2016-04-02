@@ -56,8 +56,9 @@ public class UpdateProjectUseCaseTest {
 			form.setName("Project S");
 			form.setStartDate(new Date(3000));
 			//step 6
-			project = bugTrap.getProjectManager().updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
-
+			bugTrap.getProjectManager().updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
+			project = bugTrap.getProjectManager().getProjects().get(0);
+			
 			Assert.assertEquals("Project S", project.getName());
 			Assert.assertEquals("project", project.getDescription());
 			Assert.assertEquals(new Date(3000), project.getStartDate());

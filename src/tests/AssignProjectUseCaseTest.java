@@ -34,7 +34,8 @@ public class AssignProjectUseCaseTest {
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV2");
 		bugTrap.getUserManager().loginAs(admin);
 		
-		IProject project = bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		IProject project = bugTrap.getProjectManager().getProjects().get(0);
 		project.setLeadDeveloper(lead);
 	}
 

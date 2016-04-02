@@ -56,26 +56,14 @@ public class ProjectController extends Controller {
 		return getBugTrap().getFormFactory().makeSubsystemCreationForm();
 	}
 
-	/**
-	 * Create a project with the information provided in the form.
-	 * @param form ProjectCreationForm containing all the details about the project to be created.
-	 * @return The Project that was created.
-	 * @throws UnauthorizedAccessException 
-	 */
-	public IProject createProject(ProjectCreationForm form) throws UnauthorizedAccessException {
+	public void createProject(ProjectCreationForm form) throws UnauthorizedAccessException {
 		form.allVarsFilledIn();
-		return getBugTrap().getProjectManager().createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
+		getBugTrap().getProjectManager().createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
 	}
 
-	/**
-	 * Fork a project with the information provided in the form.
-	 * @param form ProjectForkForm containing all the details about the fork.
-	 * @return The Project that was forked.
-	 * @throws UnauthorizedAccessException 
-     */
-	public IProject forkProject(ProjectForkForm form) throws UnauthorizedAccessException {
+	public void forkProject(ProjectForkForm form) throws UnauthorizedAccessException {
 		form.allVarsFilledIn();
-		return getBugTrap().getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
+		getBugTrap().getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
 	}
 
 	/**
