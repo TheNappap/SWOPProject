@@ -1,6 +1,7 @@
 package model;
 
 import model.bugreports.BugReportManager;
+import model.notifications.NotificationManager;
 import model.projects.ProjectManager;
 import model.users.UserManager;
 
@@ -9,6 +10,7 @@ public class BugTrap {
 	private final UserManager userManager;
 	private final ProjectManager projectManager;
 	private final BugReportManager bugReportManager;
+	private final NotificationManager notificationManager;
 	private final FormFactory formFactory;
 	
 	
@@ -16,6 +18,7 @@ public class BugTrap {
 		this.userManager = new UserManager();
 		this.projectManager = new ProjectManager(this);
 		this.bugReportManager = new BugReportManager(this);
+		this.notificationManager = new NotificationManager(this);
 		this.formFactory = new FormFactory(this);
 	}
 
@@ -29,6 +32,10 @@ public class BugTrap {
 
 	public BugReportManager getBugReportManager() {
 		return bugReportManager;
+	}
+
+	public NotificationManager getNotificationManager() {
+		return notificationManager;
 	}
 	
 	public FormFactory getFormFactory() {

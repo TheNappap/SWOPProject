@@ -7,6 +7,7 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.IProject;
 import model.projects.Version;
+import model.projects.commands.*;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectDeleteForm;
@@ -57,13 +58,11 @@ public class ProjectController extends Controller {
 	}
 
 	public void createProject(ProjectCreationForm form) throws UnauthorizedAccessException {
-		form.allVarsFilledIn();
-		getBugTrap().getProjectManager().createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
+		new CreateProjectCommand(getBugTrap(), form).execute();
 	}
 
 	public void forkProject(ProjectForkForm form) throws UnauthorizedAccessException {
-		form.allVarsFilledIn();
-		getBugTrap().getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
+		new ForkProjectCommand(getBugTrap(), form).execute();
 	}
 
 	/**
@@ -72,8 +71,7 @@ public class ProjectController extends Controller {
 	 * @throws UnauthorizedAccessException 
 	 */
 	public void updateProject(ProjectUpdateForm form) throws UnauthorizedAccessException {
-		form.allVarsFilledIn();
-		getBugTrap().getProjectManager().updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
+		new UpdateProjectCommand(getBugTrap(), form).execute();
 	}
 
 	/**
@@ -82,8 +80,7 @@ public class ProjectController extends Controller {
 	 * @throws UnauthorizedAccessException 
 	 */
 	public void assignToProject(ProjectAssignForm form) throws UnauthorizedAccessException {
-		form.allVarsFilledIn();
-		getBugTrap().getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
+		new AssignProjectCommand(getBugTrap(), form).execute();
 	}
 
 	/**
@@ -92,7 +89,7 @@ public class ProjectController extends Controller {
 	 * @throws UnauthorizedAccessException 
 	 */
 	public void deleteProject(ProjectDeleteForm form) throws UnauthorizedAccessException {
-		getBugTrap().getProjectManager().deleteProject(form.getProject());
+		new DeleteProjectCommand(getBugTrap(), form).execute();
 	}
 	
 	/**
@@ -101,7 +98,6 @@ public class ProjectController extends Controller {
 	 * @throws UnauthorizedAccessException 
 	 */
 	public void createSubsystem(SubsystemCreationForm form) throws UnauthorizedAccessException {
-		form.allVarsFilledIn();
-		getBugTrap().getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
+		new CreateSubsystemCommand(getBugTrap(), form).execute();
 	}
 }
