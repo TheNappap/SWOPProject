@@ -8,6 +8,7 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.New;
+import model.bugreports.commands.CreateBugReportCommand;
 import model.bugreports.comments.Comment;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportAssignForm;
@@ -61,8 +62,9 @@ public class BugReportController extends Controller {
 	}
 
 	public IBugReport createBugReport(BugReportCreationForm form) throws UnauthorizedAccessException {
-		form.allVarsFilledIn();
-		return getBugTrap().getBugReportManager().addBugReport(form.getTitle(), form.getDescription(), new Date(), form.getSubsystem(), form.getIssuer(), form.getDependsOn(), new ArrayList<IUser>(), new New());
+		CreateBugReportCommand cmd = new CreateBugReportCommand(getBugTrap(), form);
+		cmd.execute();
+		return cmd.getResult();
 	}
 
 	public Comment createComment(CommentCreationForm form) throws UnauthorizedAccessException {
