@@ -8,7 +8,6 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.builders.BugReportBuilder;
-import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
@@ -79,11 +78,11 @@ public class BugReportManager{
 		return projectReports;
 	}
 
-	public IBugReport addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) throws UnauthorizedAccessException {
+	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) throws UnauthorizedAccessException {
 		if (!bugTrap.isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
 
-		BugReport report = (new BugReportBuilder()).setTitle(title)
+		bugReportList.add(new BugReportBuilder().setTitle(title)
 				.setDescription(description)
 				.setSubsystem(subsystem)
 				.setIssuer(issuer)
@@ -91,9 +90,7 @@ public class BugReportManager{
 				.setCreationDate(creationDate)
 				.setAssignees(assignees)
 				.setBugTag(tag)
-				.getBugReport();
-		bugReportList.add(report);
-		return report;
+				.getBugReport());
 	}
 
 	public void assignToBugReport(IBugReport bugReport, IUser dev) throws UnauthorizedAccessException {
@@ -131,13 +128,13 @@ public class BugReportManager{
 		report.updateBugTag(tag);
 	}
 
-	public Comment addComment(Commentable commentable, String text) throws UnauthorizedAccessException {
+	public void addComment(Commentable commentable, String text) throws UnauthorizedAccessException {
 		if (commentable == null || text == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
 		
 		if (!bugTrap.isIssuerLoggedIn())
 			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
 		
-		return commentable.addComment(text);
+		commentable.addComment(text);
 	}
 }

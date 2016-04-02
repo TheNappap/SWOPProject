@@ -13,7 +13,6 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.IProject;
 import model.projects.ISubsystem;
-import model.projects.Project;
 import model.projects.Version;
 import model.projects.forms.SubsystemCreationForm;
 import model.users.IUser;
@@ -32,7 +31,8 @@ public class CreateSubsystemUserCaseTest {
 		bugTrap.getUserManager().loginAs(admin);
 		
 		//add project
-		Project project = (Project)bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		IProject project = bugTrap.getProjectManager().getProjects().get(0);
 		//add subsystem to project
 		bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
 		
@@ -59,8 +59,9 @@ public class CreateSubsystemUserCaseTest {
 			form.setDescription("Subsystem");
 			form.setName("sub X");
 			//step 6
-			ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
-
+			bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
+			ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("sub X");	
+			
 			Assert.assertTrue(subsystem.getName().equals("sub X"));
 			Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
 			Assert.assertEquals(project, subsystem.getParent());
@@ -90,8 +91,9 @@ public class CreateSubsystemUserCaseTest {
 			form.setDescription("Subsystem");
 			form.setName("sub X");
 			//step 6
-			ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
-
+			bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
+			ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("sub X");
+			
 			Assert.assertTrue(subsystem.getName().equals("sub X"));
 			Assert.assertTrue(subsystem.getDescription().equals("Subsystem"));
 			Assert.assertEquals(system, subsystem.getParent());

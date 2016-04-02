@@ -20,7 +20,7 @@ public class ProjectManager {
 		this.bugTrap = bugTrap;
 	}
 	
-	public IProject createProject(String name, String description, Date creationDate, Date startDate, double budgetEstimate, IUser lead, Version version) throws UnauthorizedAccessException {
+	public void createProject(String name, String description, Date creationDate, Date startDate, double budgetEstimate, IUser lead, Version version) throws UnauthorizedAccessException {
 		if (!bugTrap.isAdminLoggedIn())
 			throw new UnauthorizedAccessException("An admin needs to be logged in to perform this action.");
 
@@ -34,7 +34,7 @@ public class ProjectManager {
 		if (lead != null)
 			team.addMember(lead, Role.LEAD);
 
-		Project p = (new ProjectBuilder())
+		projectList.add(new ProjectBuilder()
 				.setName(name)
 				.setCreationDate(creationDate)
 				.setStartDate(startDate)
@@ -42,13 +42,10 @@ public class ProjectManager {
 				.setTeam(team)
 				.setVersion(version)
 				.setBudgetEstimate(budgetEstimate)
-				.getProject();
-		projectList.add(p);
-		
-		return p;
+				.getProject());
 	}
 
-	public IProject createFork(IProject project, double budgetEstimate, Version version, Date startDate) throws UnauthorizedAccessException {
+	public void createFork(IProject project, double budgetEstimate, Version version, Date startDate) throws UnauthorizedAccessException {
 		if (!bugTrap.isAdminLoggedIn())
 			throw new UnauthorizedAccessException("An admin needs to be logged in to perform this action.");
 
@@ -61,14 +58,15 @@ public class ProjectManager {
 				toFork = p;
 
 		Project fork = toFork.copy();
+		
 		fork.setBudgetEstimate(budgetEstimate);
 		fork.setVersion(version);
 		fork.setStartDate(startDate);
+		
 		projectList.add(fork);
-		return fork;
 	}
 
-	public IProject updateProject(IProject project, String name, String description, double budgetEstimate, Date startDate) throws UnauthorizedAccessException {
+	public void updateProject(IProject project, String name, String description, double budgetEstimate, Date startDate) throws UnauthorizedAccessException {
 		if (!bugTrap.isAdminLoggedIn())
 			throw new UnauthorizedAccessException("An admin needs to be logged in to perform this action.");
 
@@ -83,7 +81,6 @@ public class ProjectManager {
 				p.setStartDate(startDate);
 			}
 		}
-		return project;
 	}
 
 	public void deleteProject(IProject project) throws UnauthorizedAccessException {
@@ -155,7 +152,7 @@ public class ProjectManager {
 	}
 
 
-	public ISubsystem createSubsystem(String name, String description, IProject iproject, ISystem iparent, Version version) throws UnauthorizedAccessException {
+	public void createSubsystem(String name, String description, IProject iproject, ISystem iparent, Version version) throws UnauthorizedAccessException {
 		if (!bugTrap.isAdminLoggedIn())
 			throw new UnauthorizedAccessException("An admin needs to be logged in to perform this action.");
 
@@ -184,7 +181,6 @@ public class ProjectManager {
 				.setParent(system)
 				.getSubsystem();
 		system.addSubsystem(sub);
-		return sub;
 	}
 
 	/**

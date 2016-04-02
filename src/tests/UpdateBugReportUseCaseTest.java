@@ -37,9 +37,11 @@ private BugTrap bugTrap;
 		bugTrap.getUserManager().loginAs(admin);
 		
 		//add project
-		IProject project = bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		IProject project = bugTrap.getProjectManager().getProjects().get(0);
 		//add subsystem to project
-		ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
+		bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
+		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
 		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project, Version.firstVersion());
 		bugTrap.getUserManager().loginAs(dev);
 		//add bugreport (for dependency)

@@ -35,9 +35,12 @@ public class CreateBugReportUseCaseTest {
 		bugTrap.getUserManager().loginAs(admin);
 
 		//add project
-		IProject project = bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		IProject project = bugTrap.getProjectManager().getProjects().get(0);
 		//add subsystem to project
-		ISubsystem subsystem = bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
+		bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
+		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
+		
 		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project, Version.firstVersion());
 		
 		bugTrap.getUserManager().loginAs(dev);
@@ -95,14 +98,20 @@ public class CreateBugReportUseCaseTest {
 		dependencies.add(bugReports.get(0));
 		form.setDependsOn(dependencies);
 		//step 10
-		IBugReport bugReport = null;
 		try {
-			bugReport = bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, dev, dependencies, new ArrayList<IUser>(), new New());
+			bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, dev, dependencies, new ArrayList<IUser>(), new New());
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
 		}
 
+		IBugReport bugReport = null;
+		try {
+			bugReport = bugTrap.getBugReportManager().getBugReportList().get(1);
+		} catch (UnauthorizedAccessException e) {
+			e.printStackTrace();
+		}
+		
 		Assert.assertEquals("Bug",bugReport.getTitle());
 		Assert.assertEquals("a Bug",bugReport.getDescription());
 		Assert.assertEquals(subsystem,bugReport.getSubsystem());

@@ -1,6 +1,6 @@
 package tests.projecttests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 
@@ -13,7 +13,6 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.IProject;
 import model.projects.ISubsystem;
-import model.projects.Project;
 import model.projects.ProjectManager;
 import model.projects.Role;
 import model.projects.Version;
@@ -41,8 +40,8 @@ public class ProjectManagerTests {
     @SuppressWarnings("deprecation")
     @Test
     public void testCreateProject() throws UnauthorizedAccessException {
-        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
-        Assert.assertTrue(projectManager.getProjects().contains(project));
+        projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+        IProject project = projectManager.getProjects().get(0);
 
         Assert.assertEquals(project.getName(), "n");
         Assert.assertEquals(project.getDescription(), "d");
@@ -57,14 +56,17 @@ public class ProjectManagerTests {
     public void testCreateFork() {
         IProject project = null;
         IProject fork = null;
+        		
 		try {
-			project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
-			fork = projectManager.createFork(project, 123592929, new Version(2, 1, 0), new Date(2016, 1, 1));
+			projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+			project = projectManager.getProjects().get(0);
+			projectManager.createFork(project, 123592929, new Version(2, 1, 0), new Date(2016, 1, 1));
+			fork = projectManager.getProjects().get(1);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
 		}
-
+		
         Assert.assertEquals(project.getName(), fork.getName());
         Assert.assertEquals(project.getDescription(), fork.getDescription());
         Assert.assertEquals(project.getLeadDeveloper(), fork.getLeadDeveloper());
@@ -81,7 +83,8 @@ public class ProjectManagerTests {
     public void testUpdateProject() {
         IProject project = null;
 		try {
-			project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+			projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+			project = projectManager.getProjects().get(0);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
@@ -104,8 +107,9 @@ public class ProjectManagerTests {
     @SuppressWarnings("deprecation")
     @Test
     public void testDeleteProject() throws UnauthorizedAccessException {
-        IProject project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
-        projectManager.deleteProject(project);
+        projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+        
+        projectManager.deleteProject(projectManager.getProjects().get(0));
 
         Assert.assertEquals(projectManager.getProjects().size(), 0);
     }
@@ -116,7 +120,8 @@ public class ProjectManagerTests {
     	
         IProject project = null;
 		try {
-			project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+			projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+			project = projectManager.getProjects().get(0);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
@@ -181,9 +186,12 @@ public class ProjectManagerTests {
         IProject p2 = null;
         IProject p3 = null;
 		try {
-			p1 = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d1, new Version(1, 0, 0));
-			p2 = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d2, new Version(1, 0, 0));
-	        p3 = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d3, new Version(1, 0, 0));
+			projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d1, new Version(1, 0, 0));
+			projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d2, new Version(1, 0, 0));
+	        projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d3, new Version(1, 0, 0));
+	        p1 = projectManager.getProjects().get(0);
+	        p2 = projectManager.getProjects().get(1);
+	        p3 = projectManager.getProjects().get(2);
 		} catch (UnauthorizedAccessException e1) {
 			fail("not authorized");
 			e1.printStackTrace();
@@ -218,8 +226,10 @@ public class ProjectManagerTests {
         IProject project = null;
         ISubsystem sub = null;
 		try {
-			project = projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
-			sub = projectManager.createSubsystem("name", "description", project, project, new Version(1, 0, 0));
+			projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+			project = projectManager.getProjects().get(0);
+			projectManager.createSubsystem("name", "description", project, project, new Version(1, 0, 0));
+			sub = projectManager.getSubsystemWithName("name");
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
@@ -235,7 +245,8 @@ public class ProjectManagerTests {
 
         ISubsystem subsub = null;
 		try {
-			subsub = projectManager.createSubsystem("name2", "descr2", project, sub, new Version(1, 0, 1));
+			projectManager.createSubsystem("name2", "descr2", project, sub, new Version(1, 0, 1));
+			subsub = projectManager.getSubsystemWithName("name2");
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
@@ -256,13 +267,14 @@ public class ProjectManagerTests {
     @SuppressWarnings("deprecation")
     @Test
     public void testGetSubsystemWithName() {
-        Project project;
+        IProject project;
 		try {
-			project = (Project)projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+			projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+			
+			project = projectManager.getProjects().get(0);
+	        projectManager.createSubsystem("name", "description", project, project, new Version(1, 0, 0));
 
-	        ISubsystem sub = projectManager.createSubsystem("name", "description", project, project, new Version(1, 0, 0));
-
-	        Assert.assertEquals(projectManager.getSubsystemWithName("name"), sub);
+	        Assert.assertEquals(projectManager.getSubsystemWithName("name").getName(), "name");
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
