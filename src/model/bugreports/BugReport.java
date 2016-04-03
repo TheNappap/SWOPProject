@@ -6,6 +6,7 @@ import java.util.List;
 
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
+import model.notifications.BugReportObserver;
 import model.projects.ISubsystem;
 import model.users.IUser;
 
@@ -20,7 +21,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	private final List<Comment> comments;		//Comments on this BugReport.
 	private final List<IUser> assignees;	//List of Developers assigned to this BugReport.
 	private final List<IBugReport> dependsOn;	//List of BugReports on which this BugReport depends.
-	
+	private final List<BugReportObserver> observers;
 	//Mutable
 	private BugTag bugTag;			//BugTag that is attached to this BugReport.
 
@@ -37,16 +38,17 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * @param creationDate The date the BugReport was created.
 	 * @param bugTag The BugTag to assign to the BugReport
 	 */
-	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, BugTag bugTag) {
+	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, List<BugReportObserver> observers, BugTag bugTag) {
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
 		this.subsystem		= subsystem;
 		this.title			= title;
 		this.description 	= description;
-		this.assignees 		= assignees;		
+		this.assignees 		= assignees;
 		this.comments 		= comments;	
-		this.creationDate 	= creationDate;						
-		this.bugTag			= bugTag;														
+		this.creationDate 	= creationDate;
+		this.bugTag			= bugTag;
+		this.observers		= observers;
 	}
 	
 	/**
@@ -79,6 +81,10 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 */
 	public void updateBugTag(BugTag bugTag) {
 		this.bugTag = getBugTag().confirmBugTag(bugTag);
+	}
+	
+	public void notifyObservers() {
+		
 	}
 	
 	@Override

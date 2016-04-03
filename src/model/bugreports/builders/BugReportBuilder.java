@@ -9,6 +9,7 @@ import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.New;
 import model.bugreports.comments.Comment;
+import model.notifications.BugReportObserver;
 import model.projects.ISubsystem;
 import model.users.IUser;
 
@@ -31,6 +32,7 @@ public class BugReportBuilder {
 	private BugTag bugTag		= new New(); 	//The tag assigned to the BugReport.
 	private List<Comment> comments 	= new ArrayList<Comment>();		//Comments on the BugReport.
 	private List<IUser> assignees 	= new ArrayList<IUser>();	//Developers assigned to the BugReport.
+	private List<BugReportObserver> observers = new ArrayList<BugReportObserver>();
 	
 	/**  
 	 * Empty constructor.  
@@ -128,6 +130,11 @@ public class BugReportBuilder {
 		this.comments = comments;
 		return this;
 	}
+	
+	public BugReportBuilder setObservers(List<BugReportObserver> observers) {
+		this.observers = observers;
+		return this;
+	}
 
 	/**
 	 * Build and return a BugReport with set variables.
@@ -136,7 +143,7 @@ public class BugReportBuilder {
 	 */
 	public BugReport getBugReport() {
 		validate();
-		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, bugTag);
+		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag);
 	}
 
 	//Assure all variables are not null.
@@ -146,10 +153,6 @@ public class BugReportBuilder {
 		if (subsystem == null) 		throw new IllegalStateException("Subsystem is null");
 		if (issuedBy == null) 		throw new IllegalStateException("IssuedBy is null");
 		if (dependsOn == null) 		throw new IllegalStateException("DependsOn is null");
-		if (creationDate == null)	throw new IllegalStateException("CreationDate is null");
-		if (bugTag == null) 		throw new IllegalStateException("BugTag is null");
-		if (assignees == null)		throw new IllegalStateException("Assignees is null");
-		if (comments == null)		throw new IllegalStateException("Comments is null");
 	}
 
 }
