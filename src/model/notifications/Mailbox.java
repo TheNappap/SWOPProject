@@ -5,8 +5,14 @@ import model.users.IUser;
 import java.util.List;
 
 public class Mailbox {
+	
     private IUser user;
     private List<INotification> notificationList;
 
+    public Mailbox() {
+    }
 
+    public void addNotification(String text) {
+    	
+    }
 }
