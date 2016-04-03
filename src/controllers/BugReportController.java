@@ -5,7 +5,10 @@ import java.util.List;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
+import model.bugreports.commands.AssignBugReportCommand;
 import model.bugreports.commands.CreateBugReportCommand;
+import model.bugreports.commands.CreateCommentCommand;
+import model.bugreports.commands.UpdateBugReportCommand;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
@@ -61,20 +64,14 @@ public class BugReportController extends Controller {
 	}
 
 	public void createComment(CommentCreationForm form) throws UnauthorizedAccessException {
-		form.allVarsFilledIn();
-
-		getBugTrap().getBugReportManager().addComment(form.getCommentable(), form.getText());
+		new CreateCommentCommand(getBugTrap(), form).execute();
 	}
 
 	public void updateBugReport(BugReportUpdateForm form) throws UnauthorizedAccessException {
-		form.allVarsFilledIn();
-		
-		getBugTrap().getBugReportManager().updateBugReport(form.getBugReport(), form.getBugTag());
+		new UpdateBugReportCommand(getBugTrap(), form).execute();
 	}
 
 	public void assignToBugReport(BugReportAssignForm form) throws UnauthorizedAccessException {
-		form.allVarsFilledIn();
-		
-		getBugTrap().getBugReportManager().assignToBugReport(form.getBugReport(), form.getDeveloper());
+		new AssignBugReportCommand(getBugTrap(), form).execute();
 	}
 }

@@ -10,9 +10,6 @@ import model.bugreports.bugtag.New;
 import model.bugreports.forms.BugReportCreationForm;
 import model.users.IUser;
 
-/**
- * Created by matth on 01-Apr-16.
- */
 public class CreateBugReportCommand extends Command {
 
     private BugReportCreationForm form;
