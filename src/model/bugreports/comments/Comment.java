@@ -26,10 +26,8 @@ public class Comment implements Commentable { //A Comment can be commented on.
 	}
 	
 	@Override
-	public Comment addComment(String commentText) {
-		Comment comment = new Comment(commentText);
-		comments.add(comment);
-		return comment;
+	public void addComment(String commentText) {
+		comments.add(new Comment(commentText));
 	}
 	
 	

@@ -53,10 +53,8 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * Create and add an InitialComment to this BugReport.
 	 * @param commentText The text of the comment.
 	 */
-	public Comment addComment(String commentText) {
-		Comment comment = new Comment(commentText);
-		comments.add(comment);
-		return comment;
+	public void addComment(String commentText) {
+		comments.add(new Comment(commentText));
 	}
 	
 	/**

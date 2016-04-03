@@ -66,7 +66,7 @@ class BugTrapInitializer {
 			}
 			
 		} catch (Exception e) {
-			java.lang.System.out.println("Initialization failed.");
+			e.printStackTrace();
 		}
 	}
 	
