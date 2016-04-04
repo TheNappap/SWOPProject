@@ -2,6 +2,7 @@ package model.notifications;
 
 import model.users.IUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Mailbox {
@@ -14,5 +15,16 @@ public class Mailbox {
 
     public void addNotification(String text) {
     	
+    }
+
+    public IUser getUser() {
+        return user;
+    }
+
+    public List<INotification> getNotifications() {
+        ArrayList<INotification> notifs = new ArrayList<>();
+        for (INotification n : notificationList)
+            notifs.add(n);
+        return notifs;
     }
 }
