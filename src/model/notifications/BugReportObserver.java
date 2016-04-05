@@ -9,7 +9,7 @@ public class BugReportObserver extends Observer {
 	}
 
 	@Override
-	public void signal(IBugReport report) {
-		
+	public void signalBugReportUpdate(IBugReport report) {
+
 	}
 }

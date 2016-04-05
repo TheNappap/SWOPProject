@@ -1,5 +1,6 @@
 package model.notifications;
 
+import model.bugreports.IBugReport;
 import model.bugreports.comments.Comment;
 import model.projects.ISystem;
 
@@ -10,7 +11,7 @@ public class CreateBugReportObserver extends Observer {
 	}
 
 	@Override
-	public void signal(Comment comment, ISystem system) {
+	public void signalBugReportCreation(IBugReport report) {
 
 	}
 

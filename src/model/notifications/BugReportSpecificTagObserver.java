@@ -1,5 +1,6 @@
 package model.notifications;
 
+import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 
 public class BugReportSpecificTagObserver extends BugReportObserver {
@@ -13,7 +14,7 @@ public class BugReportSpecificTagObserver extends BugReportObserver {
 	}
 
 	@Override
-	public void signal() {
+	public void signalBugReportUpdate(IBugReport report) {
 			
 	}
 }
