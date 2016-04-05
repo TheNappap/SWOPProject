@@ -1,5 +1,7 @@
 package model.notifications;
 
+import model.bugreports.IBugReport;
+
 public class BugReportObserver extends Observer {
 
 	public BugReportObserver(Mailbox mailbox) {
@@ -7,8 +9,7 @@ public class BugReportObserver extends Observer {
 	}
 
 	@Override
-	public void signal() {
-		// TODO Auto-generated method stub
+	public void signal(IBugReport report) {
 		
 	}
 }
