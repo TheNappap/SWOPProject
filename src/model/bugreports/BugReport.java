@@ -1,14 +1,15 @@
 package model.bugreports;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import model.bugreports.bugtag.BugTag;
+import model.bugreports.bugtag.BugTagState;
 import model.bugreports.comments.Comment;
 import model.notifications.BugReportObserver;
 import model.projects.ISubsystem;
 import model.users.IUser;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class BugReport implements IBugReport { //A Comment can be commented on.
 
@@ -23,7 +24,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	private final List<IBugReport> dependsOn;	//List of BugReports on which this BugReport depends.
 	private final List<BugReportObserver> observers;
 	//Mutable
-	private BugTag bugTag;			//BugTag that is attached to this BugReport.
+	private BugTagState bugTag;			//BugTag that is attached to this BugReport.
 
 	/**
 	 * BugReport Constructor. 
@@ -38,7 +39,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * @param creationDate The date the BugReport was created.
 	 * @param bugTag The BugTag to assign to the BugReport
 	 */
-	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, List<BugReportObserver> observers, BugTag bugTag) {
+	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, List<BugReportObserver> observers, BugTagState bugTag) {
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
 		this.subsystem		= subsystem;
@@ -47,8 +48,8 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 		this.assignees 		= assignees;
 		this.comments 		= comments;	
 		this.creationDate 	= creationDate;
-		this.bugTag			= bugTag;
 		this.observers		= observers;
+		this.bugTag 		= bugTag;
 	}
 	
 	/**
@@ -80,7 +81,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * 		| getBugTag() == bugTag
 	 */
 	public void updateBugTag(BugTag bugTag) {
-		this.bugTag = getBugTag().confirmBugTag(bugTag);
+		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState());
 	}
 	
 	public void notifyObservers() {
@@ -116,7 +117,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 
 	@Override
 	public BugTag getBugTag() {
-		return bugTag;
+		return bugTag.getTag();
 	}
 
 	@Override

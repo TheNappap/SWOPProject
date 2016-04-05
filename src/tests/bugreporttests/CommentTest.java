@@ -1,13 +1,10 @@
 package tests.bugreporttests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
+import model.bugreports.comments.Comment;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.bugreports.comments.Comment;
+import static org.junit.Assert.*;
 
 public class CommentTest {
 

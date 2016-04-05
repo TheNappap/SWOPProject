@@ -1,20 +1,10 @@
 package tests;
 
 
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
-import model.bugreports.bugtag.New;
+import model.bugreports.bugtag.BugTag;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportAssignForm;
 import model.projects.IProject;
@@ -22,6 +12,15 @@ import model.projects.ISubsystem;
 import model.projects.Version;
 import model.users.Developer;
 import model.users.IUser;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.fail;
 
 public class AssignBugReportUseCaseTest {
 
@@ -49,7 +48,7 @@ public class AssignBugReportUseCaseTest {
 		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project, Version.firstVersion());
 		bugTrap.getUserManager().loginAs(lead);
 		//add bugreport (for dependency)
-		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, lead, new ArrayList<>(), new ArrayList<>(), new New());
+		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 		bugTrap.getUserManager().logOff();	
 	}
 

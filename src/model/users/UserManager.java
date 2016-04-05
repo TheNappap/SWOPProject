@@ -1,10 +1,10 @@
 package model.users;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import model.users.exceptions.NoUserWithUserNameException;
 import model.users.exceptions.NotUniqueUserNameException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The user manager is responsible for managing the users in the system.

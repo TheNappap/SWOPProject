@@ -1,25 +1,24 @@
 package tests;
 
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
-import model.bugreports.bugtag.New;
+import model.bugreports.bugtag.BugTag;
 import model.bugreports.forms.BugReportCreationForm;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Version;
 import model.projects.forms.SubsystemCreationForm;
 import model.users.IUser;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.fail;
 
 public class CreateBugReportUseCaseTest {
 
@@ -45,7 +44,7 @@ public class CreateBugReportUseCaseTest {
 		
 		bugTrap.getUserManager().loginAs(dev);
 		//add bugreport (for dependency)
-		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, dev, new ArrayList<>(), new ArrayList<>(), new New());
+		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, dev, new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 		bugTrap.getUserManager().logOff();
 	}
 
@@ -99,7 +98,7 @@ public class CreateBugReportUseCaseTest {
 		form.setDependsOn(dependencies);
 		//step 10
 		try {
-			bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, dev, dependencies, new ArrayList<IUser>(), new New());
+			bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, dev, dependencies, new ArrayList<IUser>(), BugTag.NEW);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();

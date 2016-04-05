@@ -1,16 +1,6 @@
 package tests;
 
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Date;
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.IProject;
@@ -19,6 +9,15 @@ import model.projects.Version;
 import model.projects.forms.ProjectAssignForm;
 import model.users.Developer;
 import model.users.IUser;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class AssignProjectUseCaseTest {
 

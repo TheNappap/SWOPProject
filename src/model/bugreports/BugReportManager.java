@@ -1,9 +1,5 @@
 package model.bugreports;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
@@ -14,6 +10,10 @@ import model.bugreports.filters.FilterType;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.users.IUser;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 

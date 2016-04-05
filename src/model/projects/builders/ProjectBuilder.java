@@ -1,10 +1,10 @@
 package model.projects.builders;
 
-import java.util.Date;
-
 import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Version;
+
+import java.util.Date;
 
 public class ProjectBuilder {
 	

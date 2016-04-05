@@ -1,18 +1,5 @@
 package model;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.bugtag.BugTag;
 import model.projects.Project;
@@ -21,6 +8,17 @@ import model.projects.Subsystem;
 import model.users.IUser;
 import model.users.Issuer;
 import model.users.UserCategory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 class BugTrapInitializer {
 	private BugTrap bugTrap;
@@ -159,7 +157,7 @@ class BugTrapInitializer {
 		Date creation = (new SimpleDateFormat("dd/MM/yyyy")).parse(node.getAttribute("creationDate"));
 		Subsystem sub = (Subsystem)bugTrap.getProjectManager().getSubsystemWithName(node.getAttribute("subsystem"));
 
-		BugTag tag = BugTag.fromString(node.getAttribute("tag"), null);
+		BugTag tag = BugTag.valueOf(node.getAttribute("tag"));
 		Issuer issuer = (Issuer)bugTrap.getUserManager().getUser(node.getAttribute("issuer"));
 
 		NodeList assignees = node.getElementsByTagName("assignee");

@@ -1,9 +1,9 @@
 package controllers;
 
-import java.util.List;
-
 import model.BugTrap;
 import model.users.IUser;
+
+import java.util.List;
 
 /**
  * Controller for all User related things.

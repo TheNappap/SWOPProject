@@ -1,11 +1,11 @@
 package model.projects;
 
+import model.users.IUser;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import model.users.IUser;
 
 /**
  * This class represents a team for a project.
@@ -80,12 +80,14 @@ public class ProjectTeam {
      */
 	public void setLeadDeveloper(IUser dev) {
 		// Make previous lead a programmer
-		for (DeveloperRoleRelation rel : team) {
+		for (int i = 0; i < team.size(); i++) {
+			DeveloperRoleRelation rel = team.get(i);
 			if (rel.getRole() == Role.LEAD && rel.getUser() == dev)
 				return; // Current lead = new lead
 			
 			if (rel.getRole() == Role.LEAD) {
 				team.remove(rel);
+				i--;
 				addMember(rel.getUser(), Role.PROGRAMMER);
 			}
 		}

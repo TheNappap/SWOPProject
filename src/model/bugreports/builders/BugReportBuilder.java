@@ -1,17 +1,16 @@
 package model.bugreports.builders;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
-import model.bugreports.bugtag.New;
 import model.bugreports.comments.Comment;
 import model.notifications.BugReportObserver;
 import model.projects.ISubsystem;
 import model.users.IUser;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Builder pattern.
@@ -29,7 +28,7 @@ public class BugReportBuilder {
 	
 	//Optional Parameters
 	private Date creationDate 	= new Date();	//The day this BugReport was created.
-	private BugTag bugTag		= new New(); 	//The tag assigned to the BugReport.
+	private BugTag bugTag		= BugTag.NEW; 	//The tag assigned to the BugReport.
 	private List<Comment> comments 	= new ArrayList<Comment>();		//Comments on the BugReport.
 	private List<IUser> assignees 	= new ArrayList<IUser>();	//Developers assigned to the BugReport.
 	private List<BugReportObserver> observers = new ArrayList<BugReportObserver>();
@@ -143,7 +142,7 @@ public class BugReportBuilder {
 	 */
 	public BugReport getBugReport() {
 		validate();
-		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag);
+		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState());
 	}
 
 	//Assure all variables are not null.
