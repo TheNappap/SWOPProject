@@ -1,5 +1,8 @@
 package model.notifications;
 
+import model.bugreports.comments.Comment;
+import model.projects.ISystem;
+
 public class CreateBugReportObserver extends Observer {
 
 	public CreateBugReportObserver(Mailbox mailbox) {
@@ -7,9 +10,8 @@ public class CreateBugReportObserver extends Observer {
 	}
 
 	@Override
-	public void signal() {
-		// TODO Auto-generated method stub
-		
+	public void signal(Comment comment, ISystem system) {
+
 	}
 
 }
