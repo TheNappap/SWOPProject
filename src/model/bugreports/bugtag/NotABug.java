@@ -7,11 +7,6 @@ package model.bugreports.bugtag;
 public class NotABug extends Closed {
 
     @Override
-    public boolean isNotABug() {
-        return true;
-    }
-
-    @Override
     public BugTag getTag() {
         return BugTag.NOTABUG;
     }

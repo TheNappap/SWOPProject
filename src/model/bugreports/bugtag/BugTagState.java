@@ -31,10 +31,4 @@ public abstract class BugTagState {
 	public boolean isClosed() {
 		return false;
 	}
-
-	public boolean isAssigned() { return false; }
-	public boolean isDuplicate() { return false; }
-	public boolean isNotABug() { return false; }
-	public boolean isResolved() { return false; }
-	public boolean isUnderReview() { return false; }
 }

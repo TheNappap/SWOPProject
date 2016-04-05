@@ -8,11 +8,6 @@ package model.bugreports.bugtag;
 public class UnderReview extends InProgress {
 
     @Override
-    public boolean isUnderReview() {
-        return true;
-    }
-
-    @Override
     public BugTag getTag() {
         return BugTag.UNDERREVIEW;
     }

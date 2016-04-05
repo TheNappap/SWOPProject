@@ -8,11 +8,6 @@ package model.bugreports.bugtag;
 public class Assigned extends InProgress {
 
     @Override
-    public boolean isAssigned() {
-        return true;
-    }
-
-    @Override
     public BugTag getTag() {
         return BugTag.ASSIGNED;
     }

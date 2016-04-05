@@ -9,11 +9,6 @@ package model.bugreports.bugtag;
 public class Resolved extends Closed {
 
     @Override
-    public boolean isResolved() {
-        return true;
-    }
-
-    @Override
     public BugTag getTag() {
         return BugTag.RESOLVED;
     }

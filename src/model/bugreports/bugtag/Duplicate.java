@@ -11,11 +11,6 @@ public class Duplicate extends Closed {
 	}
 
 	@Override
-	public boolean isDuplicate() {
-		return true;
-	}
-
-	@Override
 	public BugTag getTag() {
 		return BugTag.DUPLICATE;
 	}
