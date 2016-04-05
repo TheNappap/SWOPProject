@@ -1,23 +1,18 @@
 package tests.projecttests;
 
-import static org.junit.Assert.fail;
-
-import java.util.Date;
-
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
+import model.projects.*;
+import model.users.IUser;
+import model.users.UserManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
-import model.projects.IProject;
-import model.projects.ISubsystem;
-import model.projects.ProjectManager;
-import model.projects.Role;
-import model.projects.Version;
-import model.users.IUser;
-import model.users.UserManager;
+import java.util.Date;
+
+import static org.junit.Assert.fail;
 
 public class ProjectManagerTests {
 

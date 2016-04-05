@@ -1,10 +1,5 @@
 package ui;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import controllers.BugReportController;
 import controllers.ProjectController;
 import controllers.UserController;
@@ -19,19 +14,16 @@ import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
-import model.projects.IProject;
-import model.projects.ISubsystem;
-import model.projects.ISystem;
-import model.projects.Role;
-import model.projects.Version;
-import model.projects.forms.ProjectAssignForm;
-import model.projects.forms.ProjectCreationForm;
-import model.projects.forms.ProjectDeleteForm;
-import model.projects.forms.ProjectForkForm;
-import model.projects.forms.ProjectUpdateForm;
-import model.projects.forms.SubsystemCreationForm;
+import model.projects.*;
+import model.projects.forms.*;
 import model.users.IUser;
 import model.users.Issuer;
+
+import java.lang.System;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -460,8 +452,6 @@ public class Main {
 		System.out.println(" Creation Date: " + bugReport.getCreationDate());
 		System.out.println(" Issued by: " + bugReport.getIssuedBy().getUserName());
 		System.out.println(" Subsystem: " + bugReport.getSubsystem().getName());
-		if (bugReport.getBugTag().isDuplicate())
-			System.out.println(" Duplicate: " + bugReport.getBugTag().getLinkedBugReport().getTitle());
 		System.out.println(" Assignees: ");
 		for (IUser dev : bugReport.getAssignees())
 			System.out.println(" - " + dev.getUserName());
@@ -667,15 +657,15 @@ public class Main {
 			
 			int number = 1;
 
-			for (String tag : BugTag.allTagStrings()){
+			for (BugTag tag : BugTag.values()){
 				System.out.println(number + ". " + tag);
 				number++;
 			}
 			
 			int selected = input.nextInt();
 			input.nextLine();
-			if (selected <= BugTag.allTagStrings().size())
-				return BugTag.fromString(BugTag.allTagStrings().get(selected - 1), null);
+			if (selected <= BugTag.values().length)
+				return BugTag.values()[selected - 1];
 		}
 	}
 

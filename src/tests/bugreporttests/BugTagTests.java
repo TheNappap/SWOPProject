@@ -1,20 +1,12 @@
 package tests.bugreporttests;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import model.bugreports.BugReport;
+import model.bugreports.bugtag.BugTag;
+import model.bugreports.bugtag.BugTagState;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.bugreports.BugReport;
-import model.bugreports.bugtag.Assigned;
-import model.bugreports.bugtag.BugTag;
-import model.bugreports.bugtag.Closed;
-import model.bugreports.bugtag.Duplicate;
-import model.bugreports.bugtag.New;
-import model.bugreports.bugtag.NotABug;
-import model.bugreports.bugtag.Resolved;
-import model.bugreports.bugtag.UnderReview;
+import static org.junit.Assert.*;
 
 public class BugTagTests {
 
@@ -25,7 +17,7 @@ public class BugTagTests {
 
     @Test
     public void newTest() {
-        BugTag tag = new New();
+        BugTagState tag = BugTag.NEW.createState();
         assertTrue(tag.isNew());
         assertFalse(tag.isAssigned());
         assertFalse(tag.isClosed());
@@ -34,26 +26,26 @@ public class BugTagTests {
         assertFalse(tag.isNotABug());
         assertFalse(tag.isResolved());
         assertFalse(tag.isUnderReview());
-        assertTrue(tag.isSameTag(new New()));
+        assertEquals(tag.getTag(), BugTag.NEW);
     }
 
     @Test
     public void assignedTest() {
-        BugTag tag = new Assigned();
+        BugTagState tag = BugTag.ASSIGNED.createState();
         assertTrue(tag.isAssigned());
         assertFalse(tag.isNew());
         assertFalse(tag.isClosed());
         assertFalse(tag.isDuplicate());
-        assertFalse(tag.isInProgress());
+        assertTrue(tag.isInProgress());
         assertFalse(tag.isNotABug());
         assertFalse(tag.isResolved());
         assertFalse(tag.isUnderReview());
-        assertTrue(tag.isSameTag(new Assigned()));
+        assertEquals(tag.getTag(), BugTag.ASSIGNED);
     }
 
     @Test
     public void closedTest() {
-        BugTag tag = new Closed();
+        BugTagState tag = BugTag.CLOSED.createState();
         assertTrue(tag.isClosed());
         assertFalse(tag.isAssigned());
         assertFalse(tag.isNew());
@@ -62,7 +54,7 @@ public class BugTagTests {
         assertFalse(tag.isNotABug());
         assertFalse(tag.isResolved());
         assertFalse(tag.isUnderReview());
-        assertTrue(tag.isSameTag(new Closed()));
+        assertEquals(tag.getTag(), BugTag.CLOSED);
     }
 
     @Test
@@ -70,57 +62,57 @@ public class BugTagTests {
         BugReport report1 = new BugReport(null, null, null, null, null, null, null, null, null, null);
         BugReport report2 = new BugReport(null, null, null, null, null, null, null, null, null, null);
 
-        BugTag tag = new Duplicate(report1);
+        BugTagState tag = BugTag.DUPLICATE.createState();
         assertTrue(tag.isDuplicate());
         assertFalse(tag.isAssigned());
-        assertFalse(tag.isClosed());
+        assertTrue(tag.isClosed());
         assertFalse(tag.isNew());
         assertFalse(tag.isInProgress());
         assertFalse(tag.isNotABug());
         assertFalse(tag.isResolved());
         assertFalse(tag.isUnderReview());
-        assertTrue(tag.isSameTag(new Duplicate(report2)));
+        assertEquals(tag.getTag(), BugTag.DUPLICATE);
     }
 
     @Test
     public void notABugTest() {
-        BugTag tag = new NotABug();
+        BugTagState tag = BugTag.NOTABUG.createState();
         assertTrue(tag.isNotABug());
         assertFalse(tag.isAssigned());
         assertFalse(tag.isNew());
         assertFalse(tag.isDuplicate());
         assertFalse(tag.isInProgress());
-        assertFalse(tag.isClosed());
+        assertTrue(tag.isClosed());
         assertFalse(tag.isResolved());
         assertFalse(tag.isUnderReview());
-        assertTrue(tag.isSameTag(new NotABug()));
+        assertEquals(tag.getTag(), BugTag.NOTABUG);
     }
 
     @Test
     public void resolvedTest() {
-        BugTag tag = new Resolved();
+        BugTagState tag = BugTag.RESOLVED.createState();
         assertTrue(tag.isResolved());
         assertFalse(tag.isAssigned());
         assertFalse(tag.isNew());
         assertFalse(tag.isDuplicate());
         assertFalse(tag.isInProgress());
-        assertFalse(tag.isClosed());
+        assertTrue(tag.isClosed());
         assertFalse(tag.isNotABug());
         assertFalse(tag.isUnderReview());
-        assertTrue(tag.isSameTag(new Resolved()));
+        assertEquals(tag.getTag(), BugTag.RESOLVED);
     }
 
     @Test
     public void underReviewTest() {
-        BugTag tag = new UnderReview();
+        BugTagState tag = BugTag.UNDERREVIEW.createState();
         assertTrue(tag.isUnderReview());
         assertFalse(tag.isAssigned());
         assertFalse(tag.isNew());
         assertFalse(tag.isDuplicate());
-        assertFalse(tag.isInProgress());
+        assertTrue(tag.isInProgress());
         assertFalse(tag.isClosed());
         assertFalse(tag.isResolved());
         assertFalse(tag.isNotABug());
-        assertTrue(tag.isSameTag(new UnderReview()));
+        assertEquals(tag.getTag(), BugTag.UNDERREVIEW);
     }
 }

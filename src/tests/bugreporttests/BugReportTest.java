@@ -1,27 +1,9 @@
 package tests.bugreporttests;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
-import model.bugreports.bugtag.Assigned;
 import model.bugreports.bugtag.BugTag;
-import model.bugreports.bugtag.Closed;
-import model.bugreports.bugtag.Duplicate;
-import model.bugreports.bugtag.New;
-import model.bugreports.bugtag.NotABug;
-import model.bugreports.bugtag.Resolved;
-import model.bugreports.bugtag.UnderReview;
 import model.bugreports.comments.Comment;
 import model.notifications.BugReportObserver;
 import model.projects.ISubsystem;
@@ -30,6 +12,14 @@ import model.users.Administrator;
 import model.users.Developer;
 import model.users.IUser;
 import model.users.Issuer;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class BugReportTest {
 
@@ -44,12 +34,12 @@ public class BugReportTest {
 	List<BugReportObserver> observers = new ArrayList<>();
 	IUser issuedBy = new Issuer(null, null, null, null);
 	Date creationDate = new Date();
-	BugTag bugTag = new New();
+	BugTag bugTag = BugTag.NEW;
 	
 	
 	@Before
 	public void setUp() throws Exception {
-		bugReport = new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag);
+		bugReport = new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState());
 	}
 
 	@Test
@@ -89,13 +79,13 @@ public class BugReportTest {
 	
 	@Test
 	public void updateBugTagTest() {
-		BugTag assignedTag 		= new Assigned();
-		BugTag closedTag 		= new Closed();
-		BugTag duplicateTag 	= new Duplicate(new BugReport(null, null, null, null, null, null, null, null, null, null));
-		BugTag newTag 			= new New();
-		BugTag notABugTag 		= new NotABug();
-		BugTag resolvedTag 		= new Resolved();
-		BugTag underReviewTag 	= new UnderReview();
+		BugTag assignedTag 		= BugTag.ASSIGNED;
+		BugTag closedTag 		= BugTag.CLOSED;
+		BugTag duplicateTag 	= BugTag.DUPLICATE;
+		BugTag newTag 			= BugTag.NEW;
+		BugTag notABugTag 		= BugTag.NOTABUG;
+		BugTag resolvedTag 		= BugTag.RESOLVED;
+		BugTag underReviewTag 	= BugTag.UNDERREVIEW;
 		
 		//From New to New is allowed.
 		bugReport.updateBugTag(newTag);

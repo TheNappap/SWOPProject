@@ -1,18 +1,14 @@
 package model.bugreports.bugtag;
 
-import model.bugreports.BugReport;
-
 /**
  * This class represents the New bug tag.
  * This means that a BugReport has recently been
  * created and is not yet assigned a tag.
  */
-public class New extends BugTag {
-
-	static final String TAGSTRING = "NEW";
+public class New extends BugTagState {
 
 	@Override
-	public BugTag confirmBugTag(BugTag bugTag) {
+	public BugTagState confirmBugTag(BugTagState bugTag) {
 		return bugTag;
 	}
 
@@ -22,14 +18,7 @@ public class New extends BugTag {
 	}
 
 	@Override
-	protected String getTagString() {
-		return TAGSTRING;
-	}
-
-	static BugTag fromStringChain(String tag, BugReport report) {
-		if (tag.equals(TAGSTRING))
-			return new New();
-
-		return NotABug.fromStringChain(tag, report);
+	public BugTag getTag() {
+		return BugTag.NEW;
 	}
 }

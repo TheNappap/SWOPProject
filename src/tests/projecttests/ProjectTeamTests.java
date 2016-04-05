@@ -1,18 +1,15 @@
 package tests.projecttests;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import model.projects.ProjectTeam;
 import model.projects.Role;
 import model.users.Developer;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class ProjectTeamTests {
 
@@ -74,11 +71,11 @@ public class ProjectTeamTests {
     public void setLeadDeveloperTest() {
         assertEquals(lead, team1.getLeadDeveloper());
         team1.setLeadDeveloper(prog);
-        assertEquals(lead, team1.getProgrammers().get(0));
+        assertEquals(lead, team1.getProgrammers().get(team1.getProgrammers().size() - 1));
         assertEquals(prog, team1.getLeadDeveloper());
         //set lead to already lead
         team1.setLeadDeveloper(prog);
-        assertEquals(lead, team1.getProgrammers().get(0));
+        assertEquals(lead, team1.getProgrammers().get(team1.getProgrammers().size() - 1));
         assertEquals(prog, team1.getLeadDeveloper());
     }
     

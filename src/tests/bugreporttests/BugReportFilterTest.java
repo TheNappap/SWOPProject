@@ -1,14 +1,5 @@
 package tests.bugreporttests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 import model.bugreports.filters.BugReportFilter;
@@ -16,6 +7,14 @@ import model.bugreports.filters.FilterType;
 import model.users.Developer;
 import model.users.IUser;
 import model.users.Issuer;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BugReportFilterTest {
 
