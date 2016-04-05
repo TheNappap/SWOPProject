@@ -11,5 +11,4 @@ public class BugReportObserver extends Observer {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
