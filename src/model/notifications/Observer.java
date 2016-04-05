@@ -12,11 +12,15 @@ public abstract class Observer {
 		this.mailbox = mailbox;
 	}
 	
-	public void signal(Comment comment, ISystem system) {
+	public void signalCommentCreation(Comment comment, ISystem system) {
 
 	}
 
-	public void signal(IBugReport bugReport) {
+	public void signalBugReportUpdate(IBugReport bugReport) {
+
+	}
+
+	public void signalBugReportCreation(IBugReport bugReport) {
 
 	}
 	
