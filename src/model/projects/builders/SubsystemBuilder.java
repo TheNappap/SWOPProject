@@ -3,6 +3,7 @@ package model.projects.builders;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.projects.AchievedMilestone;
 import model.projects.Project;
 import model.projects.Subsystem;
 import model.projects.System;
@@ -16,6 +17,8 @@ public class SubsystemBuilder {
 	private System parent;
 	//-Optional
 	private List<Subsystem> subsystems = new ArrayList<Subsystem>();
+	//-Restricted
+	private AchievedMilestone milestone = new AchievedMilestone();
 	
 	//Subsystem variables.
 	//-Required.
@@ -80,7 +83,7 @@ public class SubsystemBuilder {
 	 */
 	public Subsystem getSubsystem() {
 		validate();
-		return new Subsystem(name, description, parent, subsystems, project);
+		return new Subsystem(name, description, parent, subsystems, project, milestone);
 	}
 	
 	private void validate() {

@@ -18,10 +18,10 @@ public class SystemTests {
 
     @Before
     public void setUp() throws Exception {
-        sys 		= new Project("", "", new ArrayList<Subsystem>(), Version.firstVersion(), null, null, 12345, null);
-        subsys 		= new Subsystem("", "", sys, new ArrayList<Subsystem>(), sys);
-        subsubsys	= new Subsystem("", "", subsys, new ArrayList<Subsystem>(), sys);
-        subsys2 	= new Subsystem("", "", sys, new ArrayList<Subsystem>(), sys);
+        sys 		= new Project("", "", new ArrayList<Subsystem>(), Version.firstVersion(), null, null, 12345, null, null);
+        subsys 		= new Subsystem("", "", sys, new ArrayList<Subsystem>(), sys, null);
+        subsubsys	= new Subsystem("", "", subsys, new ArrayList<Subsystem>(), sys, null);
+        subsys2 	= new Subsystem("", "", sys, new ArrayList<Subsystem>(), sys, null);
     }
 
     @Test
@@ -35,7 +35,7 @@ public class SystemTests {
 
     @Test
     public void testAddSubsystem() {
-        Subsystem s = new Subsystem("sub", "descr", subsubsys, new ArrayList<Subsystem>(), sys);
+        Subsystem s = new Subsystem("sub", "descr", subsubsys, new ArrayList<Subsystem>(), sys, null);
 
         Assert.assertEquals(s.getParent(), subsubsys);
         Assert.assertEquals(s.getSubsystems().size(), 0);

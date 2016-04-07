@@ -9,8 +9,8 @@ public class Subsystem extends System implements ISubsystem {
 
 	private final Project project;
 	
-	public Subsystem(String name, String description, System parent, List<Subsystem> subsystems, Project project) {
-		super(name, description, parent, subsystems);
+	public Subsystem(String name, String description, System parent, List<Subsystem> subsystems, Project project, AchievedMilestone achievedMilestone) {
+		super(name, description, parent, subsystems, achievedMilestone);
 		
 		this.project = project;
 		

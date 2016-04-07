@@ -27,7 +27,7 @@ public class BugReportTest {
 	
 	String title = "BugReport";
 	String description = "Awesome BugReport";
-	ISubsystem subsystem = new Subsystem(null, null, null, null, null);
+	ISubsystem subsystem = new Subsystem(null, null, null, null, null, null);
 	List<IBugReport> dependsOn = new ArrayList<>();
 	List<IUser> assignees = new ArrayList<>();
 	List<Comment> comments = new ArrayList<>();
