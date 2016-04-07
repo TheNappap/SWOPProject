@@ -1,5 +1,6 @@
 package tests.projecttests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.IProject;
 import model.projects.ISubsystem;
+import model.projects.Project;
 import model.projects.Role;
 import model.projects.Version;
 import model.users.IUser;
@@ -23,24 +25,37 @@ public class ProjectManagerTests {
 
     @Before
     public void setUp() throws Exception {
+    	//New Bugtrap system.
         bugTrap = new BugTrap();
-        IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
+        
+        //Create Administrator/Developer.
+        bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
         bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-        bugTrap.getUserManager().loginAs(admin);
+        
+        //Log in with Administrator.
+        bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
     }
 
     @SuppressWarnings("deprecation")
     @Test
     public void testCreateProject() throws UnauthorizedAccessException {
-    	bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
-        IProject project = bugTrap.getProjectManager().getProjects().get(0);
+    	
+    	bugTrap.getProjectManager().createProject("New Project", "Description", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+        Project project = (Project) bugTrap.getProjectManager().getProjects().get(0);
 
-        Assert.assertEquals(project.getName(), "n");
-        Assert.assertEquals(project.getDescription(), "d");
-        Assert.assertEquals(project.getBudgetEstimate(), 123, 0.0000001);
-        Assert.assertEquals(project.getVersion(), new Version(1, 0, 0));
-        Assert.assertEquals(project.getStartDate(), new Date(2015, 9, 1));
-        Assert.assertEquals(project.getCreationDate(), new Date(2015, 8, 18));
+        //System variables.
+        assertEquals("New Project", 		project.getName());
+        assertEquals("Description", 		project.getDescription());
+        assertEquals(null,					project.getParent());
+        assertEquals(0,						project.getSubsystems());
+        assertEquals("M0", 					project.getAchievedMilestone().toString());
+        
+        //Project variables.
+        assertEquals(new Version(1, 0, 0), 	project.getVersion());
+        assertEquals(new Date(2015, 8, 18), project.getCreationDate());
+        assertEquals(new Date(2015, 9, 1), 	project.getStartDate());
+        assertEquals(123, 					project.getBudgetEstimate(), 0.0000001);
+  
     }
 
     @SuppressWarnings("deprecation")
