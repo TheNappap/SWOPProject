@@ -53,7 +53,7 @@ public class BugReportManagerTest {
 		String title = "BugReport";
 		String description = "Terrible bug";
 		Date creationDate = new Date();
-		Subsystem subsystem = new Subsystem(null, null, null, null, null);
+		Subsystem subsystem = new Subsystem(null, null, null, null, null, null);
 		Issuer issuer = new Issuer(null, null, null, null);
 		List<IBugReport> dependencies = new ArrayList<IBugReport>();
 		List<IUser> assignees = new ArrayList<IUser>();
@@ -93,9 +93,9 @@ public class BugReportManagerTest {
 	@Test
 	public void getOrderedListTest() {
 		try {
-			bugTrap.getBugReportManager().addBugReport("Urgent!!!", "This is a BugReport", new Date(), new Subsystem(null, null, null, null, null), new Issuer(null, null, null, "Michael"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-			bugTrap.getBugReportManager().addBugReport("Some BugReport", "Low Priority", new Date(), new Subsystem(null, null, null, null, null), new Issuer(null, null, null,"George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-			bugTrap.getBugReportManager().addBugReport("CRITICAL", "BEEP BOOP BEEP", new Date(), new Subsystem(null, null, null, null, null), new Issuer(null, null, null, "George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+			bugTrap.getBugReportManager().addBugReport("Urgent!!!", "This is a BugReport", new Date(), new Subsystem(null, null, null, null, null, null), new Issuer(null, null, null, "Michael"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+			bugTrap.getBugReportManager().addBugReport("Some BugReport", "Low Priority", new Date(), new Subsystem(null, null, null, null, null, null), new Issuer(null, null, null,"George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+			bugTrap.getBugReportManager().addBugReport("CRITICAL", "BEEP BOOP BEEP", new Date(), new Subsystem(null, null, null, null, null, null), new Issuer(null, null, null, "George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
@@ -126,7 +126,7 @@ public class BugReportManagerTest {
 		IUser notDev = new Administrator(null, null, null, "John von Neumann");
 		try {
 			Project p = (Project)bugTrap.getProjectManager().getProjects().get(0);
-			bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+			bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 		} catch (UnauthorizedAccessException e1) {
 			fail("not authorized");
 			e1.printStackTrace();
@@ -160,7 +160,7 @@ public class BugReportManagerTest {
 	public void updateBugTagTest() {
 		try {
 			Project p = (Project)bugTrap.getProjectManager().getProjects().get(0);
-			bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+			bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();

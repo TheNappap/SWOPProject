@@ -15,14 +15,17 @@ public abstract class System implements ISystem, Observable {
 	protected String description;	//System description.
 	protected final System parent;		//Parent System, if any.
 	protected final List<Subsystem> subsystems;	//Subsystems.
+	
+	protected AchievedMilestone milestone;
 
 	protected List<Observer> observables = new ArrayList<Observer>();
 	
-	public System(String name, String description, System parent, List<Subsystem> subsystems) {
+	public System(String name, String description, System parent, List<Subsystem> subsystems, AchievedMilestone milestone) {
 		this.name 			= name;
 		this.description 	= description;
 		this.parent 		= parent;
 		this.subsystems		= subsystems;
+		this.milestone		= milestone;
 	}
 	
 	public String getInfo() {
@@ -91,5 +94,11 @@ public abstract class System implements ISystem, Observable {
 				subs.add(ss);
 		}
 		return subs;
+	}
+	
+
+	@Override
+	public AchievedMilestone getAchievedMilestone() {
+		return milestone;
 	}
 }

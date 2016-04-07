@@ -1,20 +1,29 @@
 package model.bugreports;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TargetMilestone {
 
-	private final int major;
-	private final int minor;
+	private final List<Integer> numbers;
 	
-	public TargetMilestone(int major, int minor) {
-		this.major = major;
-		this.minor = minor;
+	public TargetMilestone() {
+		this.numbers = new ArrayList<Integer>();
+		this.numbers.add(0);
 	}
 
-	public int getMinor() {
-		return minor;
+	public List<Integer> getNumbers() {
+		List<Integer> numbers = new ArrayList<Integer>();
+		numbers.addAll(this.numbers);
+		return numbers;
 	}
-
-	public int getMajor() {
-		return major;
+	
+	@Override
+	public String toString() {
+		String result = "M";
+		
+		for (Integer number : this.numbers) result += number + ".";
+		
+		return result.substring(0, result.length()-1);
 	}
 }
