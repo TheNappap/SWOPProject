@@ -35,11 +35,12 @@ public class BugReportTest {
 	IUser issuedBy = new Issuer(null, null, null, null);
 	Date creationDate = new Date();
 	BugTag bugTag = BugTag.NEW;
+	List<String> optionals = new ArrayList<String>();
 	
 	
 	@Before
 	public void setUp() throws Exception {
-		bugReport = new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState());
+		bugReport = new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState(), optionals);
 	}
 
 	@Test
@@ -52,6 +53,7 @@ public class BugReportTest {
 		assertEquals(bugReport.getIssuedBy(), issuedBy);
 		assertEquals(bugReport.getCreationDate(), creationDate);
 		assertEquals(bugReport.getBugTag(), bugTag);
+		fail(); //optionals
 	}
 	
 	@Test
@@ -113,11 +115,11 @@ public class BugReportTest {
 
 	@Test
 	public void compareTest() {
-		BugReport other = new BugReport("CugReport", null, null, null, null, null, null, null, null, null);
+		BugReport other = new BugReport("CugReport", null, null, null, null, null, null, null, null, null, null);
 		assertEquals(-1, bugReport.compareTo(other));
 		assertEquals(1, other.compareTo(bugReport));
 		
-		BugReport other2 = new BugReport("BugReport", null, null, null, null, null, null, null, null, null);
+		BugReport other2 = new BugReport("BugReport", null, null, null, null, null, null, null, null, null, null);
 		assertEquals(0, bugReport.compareTo(other2));
 		assertEquals(0, other2.compareTo(bugReport));
 		

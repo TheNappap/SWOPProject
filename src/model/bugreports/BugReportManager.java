@@ -1,5 +1,10 @@
 package model.bugreports;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Observer;
+
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
@@ -7,24 +12,22 @@ import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
+import model.notifications.Observable;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.users.IUser;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 
  * Class that stores and manages BugReports.
  *
  */
-public class BugReportManager{
+public class BugReportManager implements Observable {
 
-	private final ArrayList<BugReport> bugReportList; //List that keeps BugReports.
+	private final List<BugReport> bugReportList; //List that keeps BugReports.
 	private final BugTrap bugTrap;
 
+	private final List<Observer> observers = new ArrayList<Observer>();
 	/**
 	 * Constructor.
 	 */
@@ -136,5 +139,25 @@ public class BugReportManager{
 			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
 		
 		commentable.addComment(text);
+	}
+
+	@Override
+	public String getInfo() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void attach(Observer observer) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void detach(Observer observer) {
+		throw new UnsupportedOperationException();	
+	}
+
+	@Override
+	public void notifyObservers() {
+		throw new UnsupportedOperationException();
 	}
 }

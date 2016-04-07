@@ -2,23 +2,46 @@ package model.projects;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
+
+import model.notifications.Observable;
 
 /**
  * This class represents a system in BugTrap.
  */
-public abstract class System implements ISystem {
+public abstract class System implements ISystem, Observable {
 
 	protected String name;		//System name.
 	protected String description;	//System description.
 	protected final System parent;		//Parent System, if any.
 	protected final List<Subsystem> subsystems;	//Subsystems.
 
+	protected List<Observer> observables = new ArrayList<Observer>();
 	
 	public System(String name, String description, System parent, List<Subsystem> subsystems) {
 		this.name 			= name;
 		this.description 	= description;
 		this.parent 		= parent;
 		this.subsystems		= subsystems;
+	}
+	
+	public String getInfo() {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void attach(Observer observer) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void detach(Observer observer) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void notifyObservers() {
+		
 	}
 	
 	@Override

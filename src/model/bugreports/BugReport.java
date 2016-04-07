@@ -10,6 +10,7 @@ import model.users.IUser;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Observer;
 
 public class BugReport implements IBugReport { //A Comment can be commented on.
 
@@ -23,6 +24,8 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	private final List<IUser> assignees;	//List of Developers assigned to this BugReport.
 	private final List<IBugReport> dependsOn;	//List of BugReports on which this BugReport depends.
 	private final List<BugReportObserver> observers;
+	private final List<String> optionals;
+	
 	//Mutable
 	private BugTagState bugTag;			//BugTag that is attached to this BugReport.
 
@@ -39,7 +42,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * @param creationDate The date the BugReport was created.
 	 * @param bugTag The BugTag to assign to the BugReport
 	 */
-	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, List<BugReportObserver> observers, BugTagState bugTag) {
+	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, List<BugReportObserver> observers, BugTagState bugTag, List<String> optionals) {
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
 		this.subsystem		= subsystem;
@@ -50,6 +53,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 		this.creationDate 	= creationDate;
 		this.observers		= observers;
 		this.bugTag 		= bugTag;
+		this.optionals		= optionals;
 	}
 	
 	/**
@@ -82,10 +86,6 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 */
 	public void updateBugTag(BugTag bugTag) {
 		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState());
-	}
-	
-	public void notifyObservers() {
-		
 	}
 	
 	@Override
@@ -150,6 +150,25 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 		returnList.addAll(comments);
 		
 		return returnList;
+	}
+
+	@Override
+	public String getInfo() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void attach(Observer observer) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void detach(Observer observer) {
+		throw new UnsupportedOperationException();
+	}
+
+	public void notifyObservers() {
+		
 	}
 	
 }

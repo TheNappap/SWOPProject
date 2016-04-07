@@ -44,8 +44,8 @@ public class BugTagTests {
 
     @Test
     public void duplicateTest() {
-        BugReport report1 = new BugReport(null, null, null, null, null, null, null, null, null, null);
-        BugReport report2 = new BugReport(null, null, null, null, null, null, null, null, null, null);
+        BugReport report1 = new BugReport(null, null, null, null, null, null, null, null, null, null, null);
+        BugReport report2 = new BugReport(null, null, null, null, null, null, null, null, null, null, null);
 
         BugTagState tag = BugTag.DUPLICATE.createState();
         assertTrue(tag.isClosed());

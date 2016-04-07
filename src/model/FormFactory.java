@@ -5,7 +5,14 @@ import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
-import model.projects.forms.*;
+import model.notifications.forms.RegisterNotificationForm;
+import model.notifications.forms.UnregisterNotificationForm;
+import model.projects.forms.ProjectAssignForm;
+import model.projects.forms.ProjectCreationForm;
+import model.projects.forms.ProjectDeleteForm;
+import model.projects.forms.ProjectForkForm;
+import model.projects.forms.ProjectUpdateForm;
+import model.projects.forms.SubsystemCreationForm;
 
 /**
  * Builds forms and checks the authorization to do so.
@@ -140,6 +147,14 @@ public class FormFactory {
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
 		return new CommentCreationForm();
+	}
+	
+	public RegisterNotificationForm makeRegisterNotificationForm() {
+		throw new UnsupportedOperationException();
+	}
+	
+	public UnregisterNotificationForm makeUnregisterNotificationForm() {
+		throw new UnsupportedOperationException();
 	}
 
 }

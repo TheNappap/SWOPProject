@@ -14,7 +14,7 @@ public class Mailbox {
     }
 
     public void addNotification(String text) {
-    	
+    	throw new UnsupportedOperationException();
     }
 
     public IUser getUser() {
