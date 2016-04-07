@@ -7,6 +7,14 @@ import java.util.List;
 
 public class Project extends System implements IProject {
 
+	private Version version;
+	private final Date creationDate;
+	private final ProjectTeam projectTeam;
+	
+	private Date startDate;
+	private double budgetEstimate;
+	
+	
 	/**
 	 * Constructor for a project
 	 * @param name The name for the project
@@ -15,86 +23,49 @@ public class Project extends System implements IProject {
 	 * @param creationDate The date the project was created
 	 * @param startDate The date the project starts
 	 * @param budgetEstimate The budget estimate for the project
-     * @param team The team assigned to the project
+     * @param projectTeam The team assigned to the project
      */
-	public Project(String name, String description, Version version, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam team) {
-		super(name, description, null, version);
-		setCreationDate(creationDate);
-		setStartDate(startDate);
-		setBudgetEstimate(budgetEstimate);
-		setTeam(team);
+	public Project(String name, String description, List<Subsystem> subsystems, Version version, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam projectTeam) {
+		super(name, description, null, subsystems);
+		
+		this.version		= version;
+		this.creationDate	= creationDate;
+		this.startDate		= startDate;
+		this.budgetEstimate	= budgetEstimate;
+		this.projectTeam	= projectTeam;
 	}
 
-	/**
-	 * Copy constructor.
-	 * @param project The Project object to copy.
-     */
-	Project(Project project) {
-		super(project.getName(), project.getDescription(), null, project.getVersion().copy());
-		setCreationDate(new Date(project.getCreationDate().getTime()));
-		setStartDate(new Date(project.getStartDate().getTime()));
-		setBudgetEstimate(project.getBudgetEstimate());
-		setTeam(new ProjectTeam(project.getTeam()));
+	protected Project(Project other) {
+		super(other.name, other.description, null, other.subsystems);
+		
+		this.version		= other.version;
+		this.creationDate 	= new Date(other.getCreationDate().getTime());
+		this.startDate	  	= new Date(other.getStartDate().getTime());
+		this.projectTeam 	= new ProjectTeam(other.getTeam());
+		this.budgetEstimate = other.getBudgetEstimate();
 	}
 
 	public Project copy() {
 		return new Project(this);
 	}
-
-	private Date creationDate;
-	private Date startDate;
-	private double budgetEstimate;
-	private ProjectTeam team;
-
-	/**
-	 * Method to get the creation date for the project
-	 * @return The creation date of the project
-     */
+	
 	@Override
 	public Date getCreationDate() {
 		return creationDate;
 	}
 
-	void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	/**
-	 * Method to get the start date for the project
-	 * @return The start date of the project
-	 */
 	@Override
 	public Date getStartDate() {
 		return startDate;
 	}
 
-	void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	/**
-	 * Method to get the budget estimate for the project
-	 * @return The budget estimate of the project
-	 */
 	@Override
 	public double getBudgetEstimate() {
 		return budgetEstimate;
 	}
 
-	void setBudgetEstimate(double budgetEstimate) {
-		this.budgetEstimate = budgetEstimate;
-	}
-
-	/**
-	 * Method to get the team assigned to the project
-	 * @return The team assigned the project
-	 */
-	ProjectTeam getTeam() {
-		return team;
-	}
-
-	void setTeam(ProjectTeam team) {
-		this.team = team;
+	public ProjectTeam getTeam() {
+		return projectTeam;
 	}
 
 	@Override
@@ -138,44 +109,41 @@ public class Project extends System implements IProject {
 		getTeam().addMember(tester, Role.TESTER);
 	}
 	
-
-	/**
-	 * Returns the roles that are not assigned to a given developer in a given project
-	 * @param dev the given developer
-	 * @return a list of roles not assigned to a developer
-	 */
 	@Override
 	public List<Role> getRolesNotAssignedTo(IUser dev){
 		return getTeam().getRolesNotAssignedTo(dev);
 	}
 	
-	/**
-	 * Returns if a given dev is lead
-	 * @param dev the given developer
-	 * @return if the given dev is lead
-	 */
 	@Override
 	public boolean isLead(IUser dev){
 		return getTeam().isLead(dev);
 	}
-	
-	/**
-	 * Returns if a given dev is a tester
-	 * @param dev the given developer
-	 * @return if the given dev is tester
-	 */
+
 	@Override
 	public boolean isTester(IUser dev){
 		return getTeam().isTester(dev);
 	}
-	
-	/**
-	 * Returns if a given dev is a programmer
-	 * @param dev the given developer
-	 * @return if the given dev is a programmer
-	 */
+
 	@Override
 	public boolean isProgrammer(IUser dev){
 		return getTeam().isProgrammer(dev);
 	}
+
+	@Override
+	public Version getVersion() {
+		return version;
+	}
+	
+	public void setVersion(Version version) {
+		this.version = version;
+	}
+
+	public void setBudgetEstimate(double budgetEstimate) {
+		this.budgetEstimate = budgetEstimate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
 }

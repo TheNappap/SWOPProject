@@ -374,7 +374,6 @@ public class Main {
 			for (ISubsystem system : project.getAllDirectOrIndirectSubsystems()) {
 				System.out.println(" -- " + system.getName() + " -- ");
 				System.out.println(" Description: " + system.getDescription());
-				System.out.println(" Version: " + system.getVersion());
 			}
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());

@@ -10,23 +10,25 @@ import java.util.List;
  */
 public interface IProject extends ISystem {
 
-    Date getCreationDate();
-    Date getStartDate();
-    double getBudgetEstimate();
+    public Date getCreationDate();
+    public Date getStartDate();
+    public double getBudgetEstimate();
 
-    IUser getLeadDeveloper();
-    void setLeadDeveloper(IUser user);
+    public IUser getLeadDeveloper();
+    public void setLeadDeveloper(IUser user);
 
-    List<IUser> getProgrammers();
-    List<IUser> getTesters();
+    public List<IUser> getProgrammers();
+    public List<IUser> getTesters();
 
-	List<IUser> getAllDevelopers();
+    public List<IUser> getAllDevelopers();
 	
-	boolean isLead(IUser dev);
-	boolean isTester(IUser dev);
-	boolean isProgrammer(IUser dev);
+    public boolean isLead(IUser dev);
+    public boolean isTester(IUser dev);
+    public boolean isProgrammer(IUser dev);
 
-    void addProgrammer(IUser programmer);
-    void addTester(IUser tester);
-	List<Role> getRolesNotAssignedTo(IUser developer);
+	public void addProgrammer(IUser programmer);
+	public void addTester(IUser tester);
+	public List<Role> getRolesNotAssignedTo(IUser developer);
+	
+    public Version getVersion();
 }

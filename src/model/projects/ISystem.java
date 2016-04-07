@@ -7,10 +7,10 @@ import java.util.List;
  */
 public interface ISystem {
 
-    String getName();
-    String getDescription();
-    ISystem getParent();
-    List<ISubsystem> getSubsystems();
-    Version getVersion();
-    List<ISubsystem> getAllDirectOrIndirectSubsystems();
+    public String getName();
+    public String getDescription();
+    public ISystem getParent();
+    public List<ISubsystem> getSubsystems();
+    
+    public List<ISubsystem> getAllDirectOrIndirectSubsystems();
 }

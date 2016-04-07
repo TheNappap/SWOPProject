@@ -1,20 +1,31 @@
 package model.projects.builders;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import model.projects.Project;
 import model.projects.ProjectTeam;
+import model.projects.Subsystem;
 import model.projects.Version;
 
-import java.util.Date;
-
 public class ProjectBuilder {
-	
+
+	//System variables.
+	//-Required.
 	private String name;
 	private String description;
-	private Version version;
+	//-Optional.
+	private List<Subsystem> subsystems = new ArrayList<Subsystem>();
+	
+	//Project variables.
+	//-Required
 	private Date creationDate;
-	private Date startDate;
 	private double budgetEstimate;
 	private ProjectTeam team;
+	//-Optional
+	private Date startDate 	= new Date();
+	private Version version = new Version(1,0,0);
 	
 	/**
 	 * Constructor for a ProjectBuilder. 
@@ -44,13 +55,8 @@ public class ProjectBuilder {
 		return this;
 	}
 	
-	/**
-	 * Method to set the version of the Project object being built.
-	 * @param version The version to set for the project
-	 * @return this, with set version.
-	 */
-	public ProjectBuilder setVersion(Version version) {
-		this.version = version;
+	public ProjectBuilder setSubsystem(List<Subsystem> subsystems) {
+		this.subsystems = subsystems;
 		return this;
 	}
 	
@@ -63,7 +69,27 @@ public class ProjectBuilder {
 		this.creationDate = creationDate;
 		return this;
 	}
-	
+
+	/**
+	 * Method to set the budget estimate of the Project object being built.
+	 * @param budgetEstimate The budget estimate to set for the project
+	 * @return this, with set budget estimate.
+	 */
+	public ProjectBuilder setBudgetEstimate(double budgetEstimate) {
+		this.budgetEstimate = budgetEstimate;
+		return this;
+	}
+
+	/**
+	 * Method to set the team of the Project object being built.
+	 * @param team The team to set for the project
+	 * @return this, with set team.
+	 */
+	public ProjectBuilder setTeam(ProjectTeam team) {
+		this.team = team;
+		return this;
+	}
+
 	/**
 	 * Method to set the start date of the Project object being built.
 	 * @param startDate The start date to set for the project
@@ -75,24 +101,14 @@ public class ProjectBuilder {
 	}
 
 	/**
-	 * Method to set the budget estimate of the Project object being built.
-	 * @param budgetEstimate The budget estimate to set for the project
-	 * @return this, with set budget estimate.
+	 * Method to set the version of the Project object being built.
+	 * @param version The version to set for the project
+	 * @return this, with set version.
 	 */
-	public ProjectBuilder setBudgetEstimate(double budgetEstimate) {
-		this.budgetEstimate = budgetEstimate;
+	public ProjectBuilder setVersion(Version version) {
+		this.version = version;
 		return this;
 	}
-	
-	/**
-	 * Method to set the team of the Project object being built.
-	 * @param team The team to set for the project
-	 * @return this, with set team.
-	 */
-	public ProjectBuilder setTeam(ProjectTeam team) {
-		this.team = team;
-		return this;
-	}	
 	
 	/**
 	 * Method to create the Project object with the set properties.
@@ -100,15 +116,17 @@ public class ProjectBuilder {
 	 */
 	public Project getProject() {
 		validate();
-		return new Project(name, description, version, creationDate, startDate, budgetEstimate, team);
+		return new Project(name, description, subsystems, version, creationDate, startDate, budgetEstimate, team);
 	}
 	
 	private void validate() {
-		if (name == null) throw new NullPointerException("Name is null.");
-		if (description == null) throw new NullPointerException("Description is null.");
-		if (version == null) throw new NullPointerException("Version is null.");
-		if (creationDate == null) throw new NullPointerException("CreationDate is null");
-		if (startDate == null) throw new NullPointerException("StartDate is null");
-		if (budgetEstimate <= 0) throw new IllegalArgumentException("Budget estimate must be strictly positive.");
+		if (name == null) 			throw new NullPointerException("Name is null.");
+		if (description == null) 	throw new NullPointerException("Description is null.");
+		if (subsystems == null) 	throw new NullPointerException("Subsystems is null");
+		if (creationDate == null) 	throw new NullPointerException("CreationDate is null");
+		if (team == null) 			throw new NullPointerException("Team is null");
+		if (startDate == null) 		throw new NullPointerException("StartDate is null");
+		if (version == null)		throw new NullPointerException("Version is null");
+		if (budgetEstimate <= 0) 	throw new IllegalArgumentException("Budget estimate must be strictly positive.");
 	}
 }
