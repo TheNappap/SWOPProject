@@ -1,12 +1,14 @@
 package model.projects;
 
+import model.notifications.Observable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This class represents a system in BugTrap.
  */
-public abstract class System implements ISystem {
+public abstract class System extends Observable implements ISystem {
 
 	protected String name;		//System name.
 	protected String description;	//System description.
@@ -68,5 +70,10 @@ public abstract class System implements ISystem {
 				subs.add(ss);
 		}
 		return subs;
+	}
+
+	@Override
+	public String getInfo() {
+		return getName();
 	}
 }
