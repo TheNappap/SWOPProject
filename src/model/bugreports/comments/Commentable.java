@@ -2,10 +2,12 @@ package model.bugreports.comments;
 
 import java.util.List;
 
+import model.notifications.Observable;
+
 /**
  * Class tagging objects that can be commented on.
  */
-public interface Commentable { 
+public interface Commentable extends Observable { 
 	
 	/**  
 	 * Add a Comment to this Commentable with given text.  

@@ -2,7 +2,7 @@ package model.bugreports.bugtag;
 
 import model.bugreports.BugReport;
 
-abstract class InProgress extends BugTagState {
+public abstract class InProgress extends BugTagState {
 
 	@Override
 	public BugReport getLinkedBugReport() {

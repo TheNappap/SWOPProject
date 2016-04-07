@@ -1,19 +1,17 @@
 package model.notifications;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import model.BugTrap;
-import model.bugreports.IBugReport;
-import model.bugreports.comments.Comment;
-import model.projects.ISystem;
 import model.users.IUser;
 
-import java.util.ArrayList;
-
 public class NotificationManager {
-    private final BugTrap bugTrap;
 
-    private final ArrayList<Mailbox> mailboxes;
+	private final BugTrap bugTrap;
 
-    private final ArrayList<Observer> observers;
+    private final List<Mailbox> mailboxes;
+    private final List<Observer> observers;
 
     public NotificationManager(BugTrap bugTrap) {
         this.bugTrap = bugTrap;
@@ -29,16 +27,20 @@ public class NotificationManager {
 
         return null;
     }
-
-    public void signalCommentCreation(Comment comment, ISystem system) {
-
+    
+    public List<INotification> getNotifications(int nbOfNotifications) {
+    	throw new UnsupportedOperationException();
+    }
+    
+    public void registerForNotification(Observable observable, Registration registration) {
+    	throw new UnsupportedOperationException();
+    }
+    
+    public void unregisterForNotification(Registration registration) {
+    	throw new UnsupportedOperationException();
     }
 
-    public void signalBugReportCreation(IBugReport report) {
-
-    }
-
-    public void signalBugReportUpdate(IBugReport report) {
-
+    public List<Registration> getRegistrationsLoggedInUser() {
+    	throw new UnsupportedOperationException();
     }
 }
