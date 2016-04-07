@@ -138,7 +138,7 @@ class BugTrapInitializer {
 		String name = node.getAttribute("name");
 		String descr = node.getAttribute("description");
 		
-		bugTrap.getProjectManager().createSubsystem(name, descr, project, parent, null);
+		bugTrap.getProjectManager().createSubsystem(name, descr, project, parent);
 		Subsystem sub = (Subsystem) bugTrap.getProjectManager().getSubsystemWithName(name);
 		
 		ArrayList<Node> subsystems = getDirectElementsWithTagName((Element)getFirstDirectElementWithTagName(node, "subsystems"), "subsystem");

@@ -5,28 +5,14 @@ package model.projects;
  */
 public class Version implements Comparable<Version> {
 
-	private int major;
-	private int minor;
-	private int revision;
+	private final int major;
+	private final int minor;
+	private final int revision;
 	
 	public Version(int major, int minor, int revision) {
-		this.major = major;
-		this.minor = minor;
-		this.revision =  revision;
-	}
-
-	/**
-	 * Copy constructor.
-	 * @param version The Version object to copy.
-     */
-	private Version(Version version) {
-		this.major = version.getMajor();
-		this.minor = version.getMinor();
-		this.revision = version.getRevision();
-	}
-
-	public Version copy() {
-		return new Version(this);
+		this.major 		= major;
+		this.minor 		= minor;
+		this.revision 	=  revision;
 	}
 	
 	public int getMajor() {

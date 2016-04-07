@@ -3,7 +3,6 @@ package model.projects.commands;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.Command;
-import model.projects.Version;
 import model.projects.forms.SubsystemCreationForm;
 
 public class CreateSubsystemCommand extends Command {
@@ -17,6 +16,6 @@ public class CreateSubsystemCommand extends Command {
     @Override
     public void execute() throws UnauthorizedAccessException {
         form.allVarsFilledIn();
-        getBugTrap().getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
+        getBugTrap().getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent());
     }
 }

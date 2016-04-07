@@ -37,10 +37,10 @@ public class CreateBugReportUseCaseTest {
 		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		IProject project = bugTrap.getProjectManager().getProjects().get(0);
 		//add subsystem to project
-		bugTrap.getProjectManager().createSubsystem("name", "description", project, project, Version.firstVersion());
+		bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
 		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
 		
-		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project, Version.firstVersion());
+		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
 		
 		bugTrap.getUserManager().loginAs(dev);
 		//add bugreport (for dependency)
@@ -136,7 +136,7 @@ public class CreateBugReportUseCaseTest {
 		
 		try {
 			SubsystemCreationForm form = bugTrap.getFormFactory().makeSubsystemCreationForm();
-			bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent(), Version.firstVersion());
+			bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent());
 			fail("should throw exception");
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
@@ -152,7 +152,7 @@ public class CreateBugReportUseCaseTest {
 		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
-			bugTrap.getProjectManager().createSubsystem(null, null, null, null, null);
+			bugTrap.getProjectManager().createSubsystem(null, null, null, null);
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) {
