@@ -1,13 +1,16 @@
 package tests.projecttests;
 
-import model.projects.Project;
-import model.projects.ProjectTeam;
-import model.projects.Version;
+import java.util.ArrayList;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Date;
+import model.projects.Project;
+import model.projects.ProjectTeam;
+import model.projects.Subsystem;
+import model.projects.Version;
 
 public class ProjectTests {
 
@@ -20,10 +23,11 @@ public class ProjectTests {
     @Test
     public void testConstructor(){
         ProjectTeam team = new ProjectTeam();
-        Project p = new Project("name", "descr", Version.firstVersion(), new Date(2012, 7, 28), new Date(2013, 1, 1), 12345, team);
+        Project p = new Project("name", "descr", new ArrayList<Subsystem>(), Version.firstVersion(), new Date(2012, 7, 28), new Date(2013, 1, 1), 12345, team);
 
         Assert.assertEquals(p.getName(), "name");
         Assert.assertEquals(p.getDescription(), "descr");
+        Assert.assertEquals(p.getSubsystems(), new ArrayList<Subsystem>());
         Assert.assertEquals(p.getVersion(), Version.firstVersion());
         Assert.assertEquals(p.getCreationDate(), new Date(2012, 7, 28));
         Assert.assertEquals(p.getStartDate(), new Date(2013, 1, 1));

@@ -1,17 +1,25 @@
 package model.projects.builders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import model.projects.Project;
 import model.projects.Subsystem;
 import model.projects.System;
-import model.projects.Version;
 
 public class SubsystemBuilder {
-	
+
+	//System variables.
+	//-Required
 	private String name;
 	private String description;
 	private System parent;
+	//-Optional
+	private List<Subsystem> subsystems = new ArrayList<Subsystem>();
+	
+	//Subsystem variables.
+	//-Required.
 	private Project project;
-	private Version version;
 	
 	/**
 	 * Constructor for a SubsystemBuilder. 
@@ -50,6 +58,11 @@ public class SubsystemBuilder {
 		this.parent = parent;
 		return this;
 	}
+	
+	public SubsystemBuilder setSubsystems(List<Subsystem> subsystems) {
+		this.subsystems = subsystems;
+		return this;
+	}
 
 	/**
 	 * Method to set the project of the Subsystem object being built.
@@ -60,16 +73,6 @@ public class SubsystemBuilder {
 		this.project = project;
 		return this;
 	}
-
-	/**
-	 * Method to set the version of the Subsystem object being built.
-	 * @param version The version to set for the subsystem.
-	 * @return this, with set version.
-	 */
-	public SubsystemBuilder setVersion(Version version) {
-		this.version = version;
-		return this;
-	}
 	
 	/**
 	 * Method to create the Subsystem object with the set properties.
@@ -77,14 +80,14 @@ public class SubsystemBuilder {
 	 */
 	public Subsystem getSubsystem() {
 		validate();
-		return new Subsystem(name, description, parent, version, project);
+		return new Subsystem(name, description, parent, subsystems, project);
 	}
 	
 	private void validate() {
-		if (name == null) throw new NullPointerException("Name is null");
-		if (description == null) throw new NullPointerException("Description is null");
-		if (parent == null) throw new NullPointerException("Parent is null");
-		if (project == null) throw new NullPointerException("Project is null");
-		if (version == null) throw new NullPointerException("Version is null");
+		if (name == null) 			throw new NullPointerException("Name is null");
+		if (description == null) 	throw new NullPointerException("Description is null");
+		if (parent == null) 		throw new NullPointerException("Parent is null");
+		if (subsystems == null) 	throw new NullPointerException("Subsystems is null");
+		if (project == null) 		throw new NullPointerException("Project is null");
 	}
 }

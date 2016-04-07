@@ -56,14 +56,16 @@ public class ProjectManager {
 		for (Project p : projectList)
 			if (p == project)
 				toFork = p;
-
+		
 		Project fork = toFork.copy();
 		
-		fork.setBudgetEstimate(budgetEstimate);
 		fork.setVersion(version);
+		fork.setBudgetEstimate(budgetEstimate);
 		fork.setStartDate(startDate);
 		
 		projectList.add(fork);
+		
+		
 	}
 
 	public void updateProject(IProject project, String name, String description, double budgetEstimate, Date startDate) throws UnauthorizedAccessException {
@@ -152,15 +154,12 @@ public class ProjectManager {
 	}
 
 
-	public void createSubsystem(String name, String description, IProject iproject, ISystem iparent, Version version) throws UnauthorizedAccessException {
+	public void createSubsystem(String name, String description, IProject iproject, ISystem iparent) throws UnauthorizedAccessException {
 		if (!bugTrap.isAdminLoggedIn())
 			throw new UnauthorizedAccessException("An admin needs to be logged in to perform this action.");
 
 		if (name == null || description == null || iproject == null || iparent == null)
 			throw  new IllegalArgumentException("Arguments should not be null.");
-
-		if (version == null)
-			version = new Version(1, 0, 0);
 
 		Project project = null;
 		for (Project p : projectList)
@@ -173,14 +172,12 @@ public class ProjectManager {
 			if (s == iparent)
 				system = s;
 
-		Subsystem sub = (new SubsystemBuilder())
+		(new SubsystemBuilder())
 				.setDescription(description)
 				.setName(name)
 				.setProject(project)
-				.setVersion(version)
 				.setParent(system)
 				.getSubsystem();
-		system.addSubsystem(sub);
 	}
 
 	/**

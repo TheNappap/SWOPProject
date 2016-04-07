@@ -223,7 +223,7 @@ public class ProjectManagerTests {
 		try {
 			projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
 			project = projectManager.getProjects().get(0);
-			projectManager.createSubsystem("name", "description", project, project, new Version(1, 0, 0));
+			projectManager.createSubsystem("name", "description", project, project);
 			sub = projectManager.getSubsystemWithName("name");
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
@@ -232,7 +232,6 @@ public class ProjectManagerTests {
 
         Assert.assertEquals(sub.getName(), "name");
         Assert.assertEquals(sub.getDescription(), "description");
-        Assert.assertEquals(sub.getVersion(), new Version(1, 0, 0));
         Assert.assertEquals(sub.getProject(), project);
         Assert.assertEquals(sub.getParent(), project);
         Assert.assertEquals(sub.getSubsystems().size(), 0);
@@ -240,7 +239,7 @@ public class ProjectManagerTests {
 
         ISubsystem subsub = null;
 		try {
-			projectManager.createSubsystem("name2", "descr2", project, sub, new Version(1, 0, 1));
+			projectManager.createSubsystem("name2", "descr2", project, sub);
 			subsub = projectManager.getSubsystemWithName("name2");
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
@@ -248,7 +247,6 @@ public class ProjectManagerTests {
 		}
         Assert.assertEquals(subsub.getName(), "name2");
         Assert.assertEquals(subsub.getDescription(), "descr2");
-        Assert.assertEquals(subsub.getVersion(), new Version(1, 0, 1));
         Assert.assertEquals(subsub.getProject(), project);
         Assert.assertEquals(subsub.getParent(), sub);
         Assert.assertEquals(subsub.getSubsystems().size(), 0);
@@ -267,7 +265,7 @@ public class ProjectManagerTests {
 			projectManager.createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
 			
 			project = projectManager.getProjects().get(0);
-	        projectManager.createSubsystem("name", "description", project, project, new Version(1, 0, 0));
+	        projectManager.createSubsystem("name", "description", project, project);
 
 	        Assert.assertEquals(projectManager.getSubsystemWithName("name").getName(), "name");
 		} catch (UnauthorizedAccessException e) {

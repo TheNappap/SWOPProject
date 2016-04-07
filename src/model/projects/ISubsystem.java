@@ -5,5 +5,5 @@ package model.projects;
  */
 public interface ISubsystem extends ISystem {
 
-    IProject getProject();
+    public IProject getProject();
 }
