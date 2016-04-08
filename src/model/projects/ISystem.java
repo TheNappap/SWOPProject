@@ -2,10 +2,12 @@ package model.projects;
 
 import java.util.List;
 
+import model.notifications.Observable;
+
 /**
  * Interface for the system objects.
  */
-public interface ISystem {
+public interface ISystem extends Observable {
 
     public String getName();
     public String getDescription();

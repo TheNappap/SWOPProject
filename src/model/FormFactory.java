@@ -149,8 +149,11 @@ public class FormFactory {
 		return new CommentCreationForm();
 	}
 	
-	public RegisterNotificationForm makeRegisterNotificationForm() {
-		throw new UnsupportedOperationException();
+	public RegisterNotificationForm makeRegisterNotificationForm() throws UnauthorizedAccessException {
+		if (!getBugTrap().isLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
+		
+		return new RegisterNotificationForm();
 	}
 	
 	public UnregisterNotificationForm makeUnregisterNotificationForm() {

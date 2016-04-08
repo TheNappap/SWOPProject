@@ -1,6 +1,5 @@
 package model.notifications;
 
-import java.util.Observer;
 
 public interface Observable {
 

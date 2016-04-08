@@ -1,9 +1,9 @@
 package model.projects;
 
-import model.users.IUser;
-
 import java.util.Date;
 import java.util.List;
+
+import model.users.IUser;
 
 public class Project extends System implements IProject {
 

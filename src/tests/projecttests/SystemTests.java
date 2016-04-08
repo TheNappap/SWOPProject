@@ -35,7 +35,7 @@ public class SystemTests {
 
     @Test
     public void testAddSubsystem() {
-        Subsystem s = new Subsystem("sub", "descr", subsubsys, new ArrayList<Subsystem>(), sys, null);
+        Subsystem s = new Subsystem("sub", "descr", subsubsys, new ArrayList<Subsystem>(), sys, null	);
 
         Assert.assertEquals(s.getParent(), subsubsys);
         Assert.assertEquals(s.getSubsystems().size(), 0);

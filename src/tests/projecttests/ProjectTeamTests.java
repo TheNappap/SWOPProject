@@ -1,15 +1,18 @@
 package tests.projecttests;
 
 
-import model.projects.ProjectTeam;
-import model.projects.Role;
-import model.users.Developer;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import model.projects.ProjectTeam;
+import model.projects.Role;
+import model.users.Developer;
 
 public class ProjectTeamTests {
 

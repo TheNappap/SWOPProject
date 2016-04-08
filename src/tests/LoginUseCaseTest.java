@@ -1,13 +1,14 @@
 package tests;
 
-import model.BugTrap;
-import model.users.IUser;
-import model.users.exceptions.NoUserWithUserNameException;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
+import model.BugTrap;
+import model.users.IUser;
+import model.users.exceptions.NoUserWithUserNameException;
 
 
 public class LoginUseCaseTest {

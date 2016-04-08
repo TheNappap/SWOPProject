@@ -1,11 +1,11 @@
 package model.projects;
 
-import model.users.IUser;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import model.users.IUser;
 
 /**
  * This class represents a team for a project.

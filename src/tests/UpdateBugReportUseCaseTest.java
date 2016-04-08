@@ -1,5 +1,15 @@
 package tests;
 
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
@@ -10,15 +20,6 @@ import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Version;
 import model.users.IUser;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.junit.Assert.fail;
 
 public class UpdateBugReportUseCaseTest {
 
@@ -48,16 +49,14 @@ private BugTrap bugTrap;
 
 	@Test
 	public void updateBugReportTest() {
-		//login
-		IUser dev = bugTrap.getUserManager().getUser("DEV");
-		bugTrap.getUserManager().loginAs(dev);
+		//Log in as Developer.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		
 		
-		//step 1
+		//1. The administrator indicates he wants to update a project.
 		BugReportUpdateForm form = null;
 		try {
 			form = bugTrap.getFormFactory().makeBugReportUpdateForm();
-			
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();

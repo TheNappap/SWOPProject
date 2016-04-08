@@ -9,10 +9,6 @@ public class RegisterNotificationForm implements Form {
 	private Observable observable;
 	private Registration registration;
 	
-	public void setObservable() {
-
-	}
-	
 	public Observable getObservable() {
 		return observable;
 	}

@@ -1,5 +1,15 @@
 package tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
@@ -10,15 +20,6 @@ import model.projects.ISubsystem;
 import model.projects.Version;
 import model.projects.forms.SubsystemCreationForm;
 import model.users.IUser;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.junit.Assert.fail;
 
 public class CreateBugReportUseCaseTest {
 
@@ -26,106 +27,123 @@ public class CreateBugReportUseCaseTest {
 
 	@Before
 	public void setUp() throws Exception {
+		//Make System.
 		bugTrap = new BugTrap();
 		
-		//add user
-		IUser dev = bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		bugTrap.getUserManager().loginAs(admin);
-
-		//add project
+		//Make Users.
+		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
+		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
+		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
+		
+		//Log in as Administrator and create project/subsystem.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
 		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		IProject project = bugTrap.getProjectManager().getProjects().get(0);
-		//add subsystem to project
 		bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
 		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
-		
 		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
 		
-		bugTrap.getUserManager().loginAs(dev);
-		//add bugreport (for dependency)
-		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, dev, new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		//Log in as Developer, add BugReport and log off.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, bugTrap.getUserManager().getUser("DEV"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 		bugTrap.getUserManager().logOff();
 	}
 
 	@Test
 	public void createBugReportTest() {
-		//login
-		IUser dev = bugTrap.getUserManager().getUser("DEV");
-		bugTrap.getUserManager().loginAs(dev);		
-				
+		String[] users = new String[]{"DEV", "ISSUER"};
+		//Log in as Developer.
 		
-		//step 1
-		BugReportCreationForm form = null;
-		try {
-			form = bugTrap.getFormFactory().makeBugReportCreationForm();
-		} catch (UnauthorizedAccessException e1) {
-			fail("not authorized");
-			e1.printStackTrace();
+		for (int iter = 0; iter < users.length; iter++) {
+			IUser user = bugTrap.getUserManager().getUser(users[iter]);
+			bugTrap.getUserManager().loginAs(user);		
+					
+			
+			//1. The issuer indicates he wants to file a bug report.
+			BugReportCreationForm form = null;
+			try {
+				form = bugTrap.getFormFactory().makeBugReportCreationForm();
+			} catch (UnauthorizedAccessException e) { fail("not authorized"); }
+			
+			//2. The system shows a list of projects.
+			List<IProject> projects = null;
+			try {
+				projects = bugTrap.getProjectManager().getProjects();
+			} catch (UnauthorizedAccessException e) { fail("not authorized"); }
+			
+			//3. The issuer selects a project.
+			IProject project = projects.get(0);
+			
+			//4. The system shows a list of subsystems of the selected project.
+			List<ISubsystem> subsystems = project.getAllDirectOrIndirectSubsystems();
+			
+			//5. The issuer selects a subsystem.	
+			ISubsystem subsystem = subsystems.get(0);
+			form.setSubsystem(subsystem);
+			
+			//6. The system shows the bug report creation form.
+			form.setIssuer(user);
+			
+			//7. The issuer enters the bug report details: title and description.
+			form.setTitle("Bug");
+			form.setDescription("a Bug");
+			
+			//8. The system asks which of the optional attributes of a bug report the
+			//issuer wants to add: how to reproduce the bug, a stack trace or an
+			//error message.
+			//9. The issuer enters the selected optional attributes as text
+			List<String> optionals = new ArrayList<String>();
+			optionals.add("Reproduce by calling (...) with parameter (...)");
+			optionals.add("Exception in thread \"main\" java.lang.NullPointerException");
+			optionals.add("ERROR! You messed up!");
+			form.setOptionals(optionals);
+			
+			List<IBugReport> bugReports = null;
+			try {
+				bugReports = bugTrap.getBugReportManager().getBugReportsForProject(project);
+			} catch (UnauthorizedAccessException e) { fail("not authorized"); }
+			
+			//12. The system shows a list of possible dependencies of this bug report.
+			//These are the bug reports of the same project
+			//13. The issuer selects the dependencies.
+			List<IBugReport> dependencies = new ArrayList<IBugReport>();
+			dependencies.add(bugReports.get(0));
+			form.setDependsOn(dependencies);
+			
+			//14. The system creates the bug report
+			try {
+				bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, user, dependencies, new ArrayList<IUser>(), BugTag.NEW);
+			} catch (UnauthorizedAccessException e) { fail("not authorized"); }
+			
+			//Confirm.
+			IBugReport bugReport = null;
+			try {
+				bugReport = bugTrap.getBugReportManager().getBugReportList().get(iter + 1);
+			} catch (UnauthorizedAccessException e) { fail("Not Authorised."); }
+			
+			assertEquals("Bug",				bugReport.getTitle());
+			assertEquals("a Bug",			bugReport.getDescription());
+			assertEquals(subsystem,			bugReport.getSubsystem());
+			assertEquals(project,			bugReport.getSubsystem().getProject());
+			assertEquals(dependencies,		bugReport.getDependsOn());
+			assertEquals(user,				bugReport.getIssuedBy());	
 		}
-		//step 2
-		List<IProject> projects = null;
-		try {
-			projects = bugTrap.getProjectManager().getProjects();
-		} catch (UnauthorizedAccessException e1) {
-			fail("not authorized");
-			e1.printStackTrace();
-		}
-		//step 3
-		IProject project = projects.get(0);
-		//step 4
-		List<ISubsystem> subsystems = project.getAllDirectOrIndirectSubsystems();
-		//step 5
-		ISubsystem subsystem = subsystems.get(0);
-		form.setSubsystem(subsystem);
-		//step 6
-		form.setIssuer(dev);
-
-		//step 7
-		form.setTitle("Bug");
-		form.setDescription("a Bug");
-		//step 8
-		List<IBugReport> bugReports = null;
-		try {
-			bugReports = bugTrap.getBugReportManager().getBugReportsForProject(project);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		//step 9
-		List<IBugReport> dependencies = new ArrayList<IBugReport>();
-		dependencies.add(bugReports.get(0));
-		form.setDependsOn(dependencies);
-		//step 10
-		try {
-			bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, dev, dependencies, new ArrayList<IUser>(), BugTag.NEW);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-
-		IBugReport bugReport = null;
-		try {
-			bugReport = bugTrap.getBugReportManager().getBugReportList().get(1);
-		} catch (UnauthorizedAccessException e) {
-			e.printStackTrace();
-		}
-		
-		Assert.assertEquals("Bug",bugReport.getTitle());
-		Assert.assertEquals("a Bug",bugReport.getDescription());
-		Assert.assertEquals(subsystem,bugReport.getSubsystem());
-		Assert.assertEquals(project,bugReport.getSubsystem().getProject());
-		Assert.assertEquals(dependencies,bugReport.getDependsOn());
-		Assert.assertEquals(dev,bugReport.getIssuedBy());	
 	}
 	
 	@Test
 	public void notAuthorizedTest() {
+		//Can't create BugReport when not logged in.
 		try {
 			bugTrap.getFormFactory().makeSubsystemCreationForm();
-			fail("should throw exception");
-		} catch (UnauthorizedAccessException e) {
-		}
+			fail("Can't create BugReport when not logged in.");
+		} catch (UnauthorizedAccessException e) { }
+		
+		//Can't create BugReport as Administrator.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		try {
+			bugTrap.getFormFactory().makeSubsystemCreationForm();
+			fail("Can't create BugReport as Administrator");
+		} catch (UnauthorizedAccessException e) { }
 	}
 	
 	@Test

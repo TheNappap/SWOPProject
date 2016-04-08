@@ -1,5 +1,9 @@
 package model.notifications;
 
 public enum Registration {
-	//De mogelijke notification vormen.
+	PROJECT_CHANGE,
+	BUGREPORT_CHANGE,
+	BUGREPORT_SPECIFIC_TAG,
+	CREATE_COMMENT,
+	CREATE_BUGREPORT;
 }
