@@ -63,10 +63,8 @@ public class RegisterForNotificationsUseCaseTest {
 		//4. The system shows a list of projects.
 		//5. The issuer selects a project.
 		IProject project = null;
-		try {
-			project = bugTrap.getProjectManager().getProjects().get(0);
-		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
-		
+		project = bugTrap.getProjectManager().getProjects().get(0);
+
 		form.setObservable(project);
 		
 		//6. The system presents a form describing the specific system changes that

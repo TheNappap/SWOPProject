@@ -118,13 +118,9 @@ public class BugReportManagerTest {
 	public void assignToBugReportTest() {
 		IUser developer = new Developer(null, null, null, "Jacques");
 		IUser notDev = new Administrator(null, null, null, "John von Neumann");
-		try {
-			Project p = (Project)bugTrap.getProjectManager().getProjects().get(0);
-			bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		} catch (UnauthorizedAccessException e1) {
-			fail("not authorized");
-			e1.printStackTrace();
-		}
+		Project p = (Project)bugTrap.getProjectManager().getProjects().get(0);
+		bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+
 		IBugReport added = null;
 		try {
 			added = bugTrap.getBugReportManager().getBugReportList().get(0);
@@ -152,14 +148,9 @@ public class BugReportManagerTest {
 	
 	@Test
 	public void updateBugTagTest() {
-		try {
-			Project p = (Project)bugTrap.getProjectManager().getProjects().get(0);
-			bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		
+		Project p = (Project)bugTrap.getProjectManager().getProjects().get(0);
+		bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+
 		IBugReport added = null;
 		try {
 			added = bugTrap.getBugReportManager().getBugReportList().get(0);

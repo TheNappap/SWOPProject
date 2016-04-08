@@ -67,10 +67,8 @@ public class CreateBugReportUseCaseTest {
 			
 			//2. The system shows a list of projects.
 			List<IProject> projects = null;
-			try {
-				projects = bugTrap.getProjectManager().getProjects();
-			} catch (UnauthorizedAccessException e) { fail("not authorized"); }
-			
+			projects = bugTrap.getProjectManager().getProjects();
+
 			//3. The issuer selects a project.
 			IProject project = projects.get(0);
 			

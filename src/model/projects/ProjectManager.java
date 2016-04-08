@@ -101,10 +101,7 @@ public class ProjectManager {
 	 * Method to get all the projects in the system.
 	 * @return List containing all the projects in the system.
      */
-	public List<IProject> getProjects() throws UnauthorizedAccessException {
-		if (!bugTrap.isLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
-
+	public List<IProject> getProjects() {
 		ArrayList<IProject> projects = new ArrayList<IProject>();
 		for (Project p : projectList)
 			projects.add(p);
@@ -169,10 +166,7 @@ public class ProjectManager {
 	 * @return Subsystem with the given name.
 	 * @throws UnauthorizedAccessException 
      */
-	public ISubsystem getSubsystemWithName(String name) throws UnauthorizedAccessException {
-		if (!bugTrap.isLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
-
+	public ISubsystem getSubsystemWithName(String name) {
 		if (name == null) throw new IllegalArgumentException("Subsystem name can not be null!");
 
 		for (Project p : projectList) {

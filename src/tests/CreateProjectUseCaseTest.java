@@ -64,14 +64,9 @@ public class CreateProjectUseCaseTest {
 		
 		//6. The system creates the project and shows an overview.
 		Date creationDate = new Date();
-		try {
-			bugTrap.getProjectManager().createProject(form.getName(), form.getDescription(), creationDate, form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
-			project = bugTrap.getProjectManager().getProjects().get(0);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		
+		bugTrap.getProjectManager().createProject(form.getName(), form.getDescription(), creationDate, form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
+		project = bugTrap.getProjectManager().getProjects().get(0);
+
 		//Confirm.
 		//-From input (form).
 		assertEquals("name",					project.getName());
@@ -115,12 +110,7 @@ public class CreateProjectUseCaseTest {
 		//create fork
 		//1. The system shows a list of existing projects
 		List<IProject> projects = null;
-		try {
-			projects = bugTrap.getProjectManager().getProjects();
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		projects = bugTrap.getProjectManager().getProjects();
 
 		//2. The administrator selects an existing project
 		IProject project = projects.get(0);
@@ -149,13 +139,8 @@ public class CreateProjectUseCaseTest {
 		
 		//7. The system creates the project and shows an overview.
 		IProject fork = null;
-		try {
-			bugTrap.getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
-			fork = bugTrap.getProjectManager().getProjects().get(1);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		bugTrap.getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
+		fork = bugTrap.getProjectManager().getProjects().get(1);
 
 		//Confirm.
 		//-Forked values.

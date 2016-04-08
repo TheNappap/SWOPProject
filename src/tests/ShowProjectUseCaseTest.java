@@ -59,14 +59,4 @@ public class ShowProjectUseCaseTest {
 			assertEquals(0, 					project.getSubsystems().size());
 		}
 	}
-	
-	@Test
-	public void notAuthorizedTest() {
-		//Should be logged in.
-		try {
-			bugTrap.getProjectManager().getProjects();
-			fail("Should be logged in.");
-		} catch (UnauthorizedAccessException e) { }
-	}
-
 }
