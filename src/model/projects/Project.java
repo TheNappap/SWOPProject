@@ -25,8 +25,8 @@ public class Project extends System implements IProject {
 	 * @param budgetEstimate The budget estimate for the project
      * @param projectTeam The team assigned to the project
      */
-	public Project(String name, String description, List<Subsystem> subsystems, Version version, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam projectTeam) {
-		super(name, description, null, subsystems);
+	public Project(String name, String description, List<Subsystem> subsystems, Version version, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam projectTeam, List<AchievedMilestone> milestones) {
+		super(name, description, null, subsystems, milestones);
 		
 		this.version		= version;
 		this.creationDate	= creationDate;
@@ -36,7 +36,7 @@ public class Project extends System implements IProject {
 	}
 
 	protected Project(Project other) {
-		super(other.name, other.description, null, other.subsystems);
+		super(other.name, other.description, null, other.subsystems, other.milestones);
 		
 		this.version		= other.version;
 		this.creationDate 	= new Date(other.getCreationDate().getTime());

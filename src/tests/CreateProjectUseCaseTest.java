@@ -31,10 +31,15 @@ public class CreateProjectUseCaseTest {
 	@SuppressWarnings("deprecation")
 	@Test
 	public void createNewProjectTest() {
+		//Log in as a administrator, they create Projects.
 		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
 		bugTrap.getUserManager().loginAs(admin);
 		
-		//step 1 & 2
+		//Holds the project we're creating.
+		IProject project = null; 
+		
+		//1. The administrator indicates he wants to create a new project.
+		//2.  The system shows a form to enter the project details: name, description, starting date and budget estimate.
 		ProjectCreationForm form = null;
 		try {
 			form = bugTrap.getFormFactory().makeProjectCreationForm();
@@ -43,35 +48,55 @@ public class CreateProjectUseCaseTest {
 			e.printStackTrace();
 		}
 		
-		//step 3
+		//3. The administrator enters all the project details
 		form.setName("name");
 		form.setDescription("descr");
 		form.setStartDate(new Date(2005, 2, 12));
 		form.setBudgetEstimate(1234);
 		
-		//step 4
+		//4. The system shows a list of possible lead developers
 		List<IUser> devs = bugTrap.getUserManager().getDevelopers();
 		
-		//step 5
+		//5. The administrator selects a lead developer.
 		IUser dev = devs.get(0);
 		form.setLeadDeveloper(dev);
 		
-		//step 6
-		IProject p = null;
+		//6. The system creates the project and shows an overview.
+		Date creationDate = new Date();
 		try {
-			bugTrap.getProjectManager().createProject(form.getName(), form.getDescription(), new Date(), form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
-			p = bugTrap.getProjectManager().getProjects().get(0);
+			bugTrap.getProjectManager().createProject(form.getName(), form.getDescription(), creationDate, form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
+			project = bugTrap.getProjectManager().getProjects().get(0);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
 		}
 		
-		
-		assertEquals(p.getName(), "name");
-		assertEquals(p.getDescription(), "descr");
-		assertEquals(p.getStartDate(), new Date(2005, 2, 12));
-		assertEquals(1234, p.getBudgetEstimate(), 0.01);
-		assertEquals(p.getVersion(), new Version(1, 0, 0));
+		//Confirm.
+		//-From input (form).
+		assertEquals("name",					project.getName());
+		assertEquals("descr", 					project.getDescription());
+		assertEquals(new Date(2005, 2, 12), 	project.getStartDate());
+		assertEquals(1234, 						project.getBudgetEstimate(), 0.01);
+		//-First Version.
+		assertEquals(Version.firstVersion(), 	project.getVersion());
+		//-Has one Developer, the Lead.
+		assertEquals(1,							project.getAllDevelopers().size());
+		assertEquals(dev,						project.getAllDevelopers().get(0));
+		assertEquals(dev,						project.getLeadDeveloper());
+		//-Has no Programmers (yet).
+		assertEquals(0,							project.getProgrammers().size());
+		//-Has no Testers (yet).
+		assertEquals(0,							project.getTesters().size());
+		//-Has no Subsystems yet.
+		assertEquals(0,							project.getAllDirectOrIndirectSubsystems().size());
+		assertEquals(0,							project.getSubsystems().size());
+		//-Has no parent system.
+		assertEquals(null,						project.getParent());
+		//-Has correct CreationDate.
+		assertEquals(creationDate,				project.getCreationDate());
+		//-Has one Achieved Milestone: M0
+		assertEquals(1, 						project.getAchievedMilestones().size());
+		assertEquals("M0",						project.getAchievedMilestones().get(0).toString());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -80,6 +105,7 @@ public class CreateProjectUseCaseTest {
 		//login
 		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
+		
 		//addProject
 		try {
 			bugTrap.getProjectManager().createProject("name", "description", new Date(2005, 1, 2), new Date(2005, 2, 12), 1234, null, new Version(1, 0, 0));
@@ -89,7 +115,7 @@ public class CreateProjectUseCaseTest {
 		}
 		
 		//create fork
-		//step 1a
+		//1. The system shows a list of existing projects
 		List<IProject> projects = null;
 		try {
 			projects = bugTrap.getProjectManager().getProjects();
@@ -98,10 +124,10 @@ public class CreateProjectUseCaseTest {
 			e.printStackTrace();
 		}
 
-		//step 2a
+		//2. The administrator selects an existing project
 		IProject project = projects.get(0);
 
-		//step 3a
+		//3. The system shows a form to enter the missing project details: new incremented version identifier, starting date and budget estimate.
 		ProjectForkForm form = null;
 		try {
 			form = bugTrap.getFormFactory().makeProjectForkForm();
@@ -110,16 +136,20 @@ public class CreateProjectUseCaseTest {
 			e.printStackTrace();
 		}
 
-		//step 4a
+		//4. The administrator enters all the missing project details.
 		form.setProject(project);
 		form.setStartDate(new Date(2010, 3, 21));
 		form.setBudgetEstimate(1234);
 		form.setVersion(new Version(2, 0, 1));
 
-		//step 5a
+		//5. The system shows a list of possible lead developers.
 		List<IUser> devs = bugTrap.getUserManager().getDevelopers();
+		
+		//6. The administrator selects a lead developer.
 		IUser dev = devs.get(0);
 		form.setLeadDeveloper(dev);
+		
+		//7. The system creates the project and shows an overview.
 		IProject fork = null;
 		try {
 			bugTrap.getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
@@ -129,6 +159,7 @@ public class CreateProjectUseCaseTest {
 			e.printStackTrace();
 		}
 
+		//Confirm.
 		assertEquals(fork.getName(), project.getName());
 		assertEquals(fork.getDescription(), project.getDescription());
 		assertEquals(fork.getVersion(), new Version(2, 0, 1));

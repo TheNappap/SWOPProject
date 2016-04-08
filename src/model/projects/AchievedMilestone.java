@@ -1,20 +1,17 @@
 package model.projects;
 
-public class AchievedMilestone {
+import java.util.List;
 
-	private final int major;
-	private final int minor;
+import model.Milestone;
 
-	public AchievedMilestone(int major, int minor) {
-		this.major = major;
-		this.minor = minor;
-	}
+public class AchievedMilestone extends Milestone {
 	
-	public int getMajor() {
-		return major;
+	public AchievedMilestone(List<Integer> numbers) {
+		super(numbers);
 	}
-	
-	public int getMinor() {
-		return minor;
+
+	@Override
+	public int compareTo(Milestone o) {
+		throw new UnsupportedOperationException();
 	}
 }

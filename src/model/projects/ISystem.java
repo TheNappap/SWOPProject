@@ -11,6 +11,8 @@ public interface ISystem {
     public String getDescription();
     public ISystem getParent();
     public List<ISubsystem> getSubsystems();
+    public List<AchievedMilestone> getAchievedMilestones();
+    
     
     public List<ISubsystem> getAllDirectOrIndirectSubsystems();
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.projects.AchievedMilestone;
 import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Subsystem;
@@ -17,6 +18,7 @@ public class ProjectBuilder {
 	private String description;
 	//-Optional.
 	private List<Subsystem> subsystems = new ArrayList<Subsystem>();
+	private List<AchievedMilestone> milestones = new ArrayList<AchievedMilestone>();
 	
 	//Project variables.
 	//-Required
@@ -55,11 +57,16 @@ public class ProjectBuilder {
 		return this;
 	}
 	
-	public ProjectBuilder setSubsystem(List<Subsystem> subsystems) {
+	public ProjectBuilder setSubsystems(List<Subsystem> subsystems) {
 		this.subsystems = subsystems;
 		return this;
 	}
 	
+	public ProjectBuilder setMilestone(List<AchievedMilestone> milestones) {
+		this.milestones = milestones;
+		return this;
+	}
+
 	/**
 	 * Method to set the creation date of the Project object being built.
 	 * @param creationDate The creation date to set for the project
@@ -116,7 +123,7 @@ public class ProjectBuilder {
 	 */
 	public Project getProject() {
 		validate();
-		return new Project(name, description, subsystems, version, creationDate, startDate, budgetEstimate, team);
+		return new Project(name, description, subsystems, version, creationDate, startDate, budgetEstimate, team, milestones);
 	}
 	
 	private void validate() {
@@ -128,5 +135,6 @@ public class ProjectBuilder {
 		if (startDate == null) 		throw new NullPointerException("StartDate is null");
 		if (version == null)		throw new NullPointerException("Version is null");
 		if (budgetEstimate <= 0) 	throw new IllegalArgumentException("Budget estimate must be strictly positive.");
+		if (milestones == null)		throw new NullPointerException("Milestones is null");
 	}
 }

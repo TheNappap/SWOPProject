@@ -23,7 +23,7 @@ public class ProjectTests {
     @Test
     public void testConstructor(){
         ProjectTeam team = new ProjectTeam();
-        Project p = new Project("name", "descr", new ArrayList<Subsystem>(), Version.firstVersion(), new Date(2012, 7, 28), new Date(2013, 1, 1), 12345, team);
+        Project p = new Project("name", "descr", new ArrayList<Subsystem>(), Version.firstVersion(), new Date(2012, 7, 28), new Date(2013, 1, 1), 12345, team, null);
 
         Assert.assertEquals(p.getName(), "name");
         Assert.assertEquals(p.getDescription(), "descr");

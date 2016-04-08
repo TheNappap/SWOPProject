@@ -1,15 +1,15 @@
 package model.notifications;
 
-import model.bugreports.IBugReport;
+import model.bugreports.BugReport;
 
 public class BugReportObserver extends Observer {
 
-	public BugReportObserver(Mailbox mailbox) {
-		super(mailbox);
+	public BugReportObserver(Mailbox mailbox, BugReport bugReport) {
+		super(mailbox, bugReport);
 	}
 
 	@Override
-	public void signalBugReportUpdate(IBugReport report) {
-
+	public void signal() {
+		throw new UnsupportedOperationException();
 	}
 }

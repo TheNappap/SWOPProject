@@ -3,6 +3,7 @@ package model.projects.builders;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.projects.AchievedMilestone;
 import model.projects.Project;
 import model.projects.Subsystem;
 import model.projects.System;
@@ -16,6 +17,7 @@ public class SubsystemBuilder {
 	private System parent;
 	//-Optional
 	private List<Subsystem> subsystems = new ArrayList<Subsystem>();
+	private List<AchievedMilestone> milestones = new ArrayList<AchievedMilestone>();
 	
 	//Subsystem variables.
 	//-Required.
@@ -63,6 +65,11 @@ public class SubsystemBuilder {
 		this.subsystems = subsystems;
 		return this;
 	}
+	
+	public SubsystemBuilder setMilestone(List<AchievedMilestone> milestones) {
+		this.milestones = milestones;
+		return this;
+	}
 
 	/**
 	 * Method to set the project of the Subsystem object being built.
@@ -80,7 +87,7 @@ public class SubsystemBuilder {
 	 */
 	public Subsystem getSubsystem() {
 		validate();
-		return new Subsystem(name, description, parent, subsystems, project);
+		return new Subsystem(name, description, parent, subsystems, project, milestones);
 	}
 	
 	private void validate() {
@@ -88,6 +95,7 @@ public class SubsystemBuilder {
 		if (description == null) 	throw new NullPointerException("Description is null");
 		if (parent == null) 		throw new NullPointerException("Parent is null");
 		if (subsystems == null) 	throw new NullPointerException("Subsystems is null");
+		if (milestones == null)		throw new NullPointerException("Milestone is null");
 		if (project == null) 		throw new NullPointerException("Project is null");
 	}
 }

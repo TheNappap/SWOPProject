@@ -1,22 +1,11 @@
 package model.notifications;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Observer;
 
-public abstract class Observable {
-    private final List<Observer> observers;
+public interface Observable {
 
-    public Observable() {
-        this.observers = new ArrayList<Observer>();
-    }
-
-    public abstract String getInfo();
-
-    public void attach(Observer observer) {
-
-    }
-
-    public void detach(Observer observer) {
-
-    }
+	public String getInfo();
+	public void attach(Observer observer);
+	public void detach(Observer observer);
+	public void notifyObservers();
 }

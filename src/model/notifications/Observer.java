@@ -1,30 +1,22 @@
 package model.notifications;
 
-import model.bugreports.IBugReport;
-import model.bugreports.comments.Comment;
-import model.projects.ISystem;
-
 public abstract class Observer {
 
-	private Mailbox mailbox;
+	private final Mailbox mailbox;
+	private final Observable observes;
 	
-	public Observer(Mailbox mailbox) {
+	public Observer(Mailbox mailbox, Observable observes) {
 		this.mailbox = mailbox;
+		this.observes = observes;
 	}
 	
-	public void signalCommentCreation(Comment comment, ISystem system) {
-
-	}
-
-	public void signalBugReportUpdate(IBugReport bugReport) {
-
-	}
-
-	public void signalBugReportCreation(IBugReport bugReport) {
-
-	}
+	public abstract void signal();
 	
 	public Mailbox getMailbox() {
 		return mailbox;
+	}
+	
+	public Observable observes() {
+		return observes;
 	}
 }
