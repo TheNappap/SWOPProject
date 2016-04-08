@@ -109,7 +109,6 @@ public class DeleteProjectUseCaseTest {
 			bugTrap.getProjectManager().deleteProject(null);
 			fail("Can't pass nulls.");
 		}
-		catch (IllegalArgumentException e) { } 
-		catch (UnauthorizedAccessException e) { fail("not authorized"); }
+		catch (IllegalArgumentException e) { }
 	}
 }

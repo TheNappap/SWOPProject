@@ -77,10 +77,8 @@ public class RegisterForNotificationsUseCaseTest {
 		project.attach(new SystemObserver(box, project));
 		
 		//Confirm
-		try {
-			bugTrap.getProjectManager().updateProject(project, "newName", "newDescription", 314e10, new Date(2016,4,8));
-		} catch (UnauthorizedAccessException e) { fail("Not authorised"); }
-		
+		bugTrap.getProjectManager().updateProject(project, "newName", "newDescription", 314e10, new Date(2016,4,8));
+
 		//Name, Description, Budget and startDate (4 things) changed.
 		assertEquals(4, box.getNotifications().size());
 	}
@@ -116,14 +114,10 @@ public class RegisterForNotificationsUseCaseTest {
 		//Confirm
 		//Initially no notifications.
 		assertEquals(0, box.getNotifications().size());
-		try {
-			bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.UNDERREVIEW);
-		} catch (UnauthorizedAccessException e) { System.out.println("Not authorised."); }
+		bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.UNDERREVIEW);
 		//Not requested tag, still no notification.
 		assertEquals(0, box.getNotifications().size());
-		try {
-			bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.NOTABUG);
-		} catch (UnauthorizedAccessException e) { System.out.println("Not authorised."); }
+		bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.NOTABUG);
 		//Requested tag, so notification.
 		assertEquals(1, box.getNotifications().size());
 	}

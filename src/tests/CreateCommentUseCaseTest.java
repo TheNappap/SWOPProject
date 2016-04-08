@@ -88,12 +88,7 @@ public class CreateCommentUseCaseTest {
 		//step 5 & 6
 		form.setText("comment2");
 		//step 7
-		try {
-			bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
 
 		assertEquals(2, bugReport.getComments().size());
 		assertTrue(bugReport.getComments().get(1).getText().equals("comment2"));
@@ -135,12 +130,7 @@ public class CreateCommentUseCaseTest {
 		//step 5 & 6
 		form.setText("comment2");
 		//step 7
-		try {
-			bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
 
 		assertEquals(1, comments.get(0).getComments().size());
 		assertTrue(comments.get(0).getComments().get(0).getText().equals("comment2"));
@@ -183,10 +173,6 @@ public class CreateCommentUseCaseTest {
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) {
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
 		}
 	}
-
 }

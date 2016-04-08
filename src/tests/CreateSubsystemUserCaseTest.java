@@ -140,8 +140,6 @@ public class CreateSubsystemUserCaseTest {
 			bugTrap.getProjectManager().createSubsystem(null, null, null, null);
 			fail("Can't pass nulls.");
 		}
-		catch (UnauthorizedAccessException e) { fail("not authorized"); }
 		catch (IllegalArgumentException e) { }
-
 	}
 }

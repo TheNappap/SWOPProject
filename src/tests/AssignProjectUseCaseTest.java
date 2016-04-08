@@ -110,12 +110,7 @@ public class AssignProjectUseCaseTest {
 		//step 7
 		form.setRole(Role.LEAD);
 
-		try {
-			bugTrap.getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		bugTrap.getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 
 		Assert.assertEquals(project.getLeadDeveloper(), developer);
 	}
@@ -158,12 +153,7 @@ public class AssignProjectUseCaseTest {
 		assertTrue(role == Role.TESTER);
 		form.setRole(role);
 
-		try {
-			bugTrap.getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		bugTrap.getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
 
 		Assert.assertEquals(project.getTesters().get(0), developer);
 	}
@@ -211,11 +201,6 @@ public class AssignProjectUseCaseTest {
 		IUser dev = bugTrap.getUserManager().getUser("DEV");
 		bugTrap.getUserManager().loginAs(dev);
 		
-		try {
-			bugTrap.getProjectManager().assignToProject(null, null, null);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		bugTrap.getProjectManager().assignToProject(null, null, null);
 	}
 }

@@ -80,12 +80,7 @@ private BugTrap bugTrap;
 		BugTag tag = BugTag.RESOLVED;
 		form.setBugTag(tag);
 		//step 4
-		try {
-			bugTrap.getBugReportManager().updateBugReport(form.getBugReport(), form.getBugTag());
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		bugTrap.getBugReportManager().updateBugReport(form.getBugReport(), form.getBugTag());
 
 		Assert.assertEquals(tag, bugReport.getBugTag());
 	}
@@ -118,7 +113,7 @@ private BugTrap bugTrap;
 		bugTrap.getUserManager().loginAs(admin);
 		//step 4a
 		try {
-			bugTrap.getBugReportManager().updateBugReport(bugReport, tag);
+			bugTrap.getFormFactory().makeBugReportAssignForm();
 			fail("should throw exception");
 		} catch (UnauthorizedAccessException e) {
 			//stop use case
@@ -162,10 +157,6 @@ private BugTrap bugTrap;
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) {
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
 		}
 	}
-
 }

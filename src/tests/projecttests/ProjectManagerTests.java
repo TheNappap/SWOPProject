@@ -120,12 +120,7 @@ public class ProjectManagerTests {
 		}
         UserManager um = new UserManager();
         um.createDeveloper("", "", "", "D");
-        try {
-        	bugTrap.getProjectManager().updateProject(project, "nn", "dd", 3883, new Date(2015, 11, 1));
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+        bugTrap.getProjectManager().updateProject(project, "nn", "dd", 3883, new Date(2015, 11, 1));
 
         Assert.assertEquals(project.getName(), "nn");
         Assert.assertEquals(project.getDescription(), "dd");
@@ -169,33 +164,18 @@ public class ProjectManagerTests {
         um.createDeveloper("", "", "", "D2");
         IUser d2 = um.getDevelopers().get(2);
 
-        try {
-        	bugTrap.getProjectManager().assignToProject(project, d0, Role.PROGRAMMER);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-        Assert.assertTrue(project.getProgrammers().contains(d0));
+        bugTrap.getProjectManager().assignToProject(project, d0, Role.PROGRAMMER);
+		Assert.assertTrue(project.getProgrammers().contains(d0));
         Assert.assertFalse(project.getProgrammers().contains(d1));
         Assert.assertFalse(project.getProgrammers().contains(d2));
 
-        try {
-        	bugTrap.getProjectManager().assignToProject(project, d1, Role.TESTER);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-        Assert.assertFalse(project.getTesters().contains(d0));
+        bugTrap.getProjectManager().assignToProject(project, d1, Role.TESTER);
+		Assert.assertFalse(project.getTesters().contains(d0));
         Assert.assertTrue(project.getTesters().contains(d1));
         Assert.assertFalse(project.getTesters().contains(d2));
 
-        try {
-        	bugTrap.getProjectManager().assignToProject(project, d2, Role.LEAD);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-        Assert.assertNotEquals(project.getLeadDeveloper(), d0);
+        bugTrap.getProjectManager().assignToProject(project, d2, Role.LEAD);
+		Assert.assertNotEquals(project.getLeadDeveloper(), d0);
         Assert.assertNotEquals(project.getLeadDeveloper(), d1);
         Assert.assertEquals(project.getLeadDeveloper(), d2);
     }

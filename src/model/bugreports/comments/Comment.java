@@ -1,9 +1,10 @@
 package model.bugreports.comments;
 
+import model.notifications.Observer;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Observer;
 
 /**
  * Class that represents a Comment.

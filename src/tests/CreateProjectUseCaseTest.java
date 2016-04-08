@@ -110,13 +110,8 @@ public class CreateProjectUseCaseTest {
 		bugTrap.getUserManager().loginAs(admin);
 		
 		//Add some project to the system to fork.
-		try {
-			bugTrap.getProjectManager().createProject("name", "description", new Date(2005, 1, 2), new Date(2005, 2, 12), 1234, null, new Version(1, 0, 0));
-		} catch (UnauthorizedAccessException e1) {
-			fail("not authorized");
-			e1.printStackTrace();
-		}
-		
+		bugTrap.getProjectManager().createProject("name", "description", new Date(2005, 1, 2), new Date(2005, 2, 12), 1234, null, new Version(1, 0, 0));
+
 		//create fork
 		//1. The system shows a list of existing projects
 		List<IProject> projects = null;
@@ -223,20 +218,12 @@ public class CreateProjectUseCaseTest {
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) {
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
 		}
-		
 		try {
 			bugTrap.getProjectManager().createFork(null, 0, null, null);
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e){
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
 		}
 	}
-	
 }

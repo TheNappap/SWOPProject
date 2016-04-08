@@ -111,10 +111,8 @@ public class CreateBugReportUseCaseTest {
 			form.setDependsOn(dependencies);
 			
 			//14. The system creates the bug report
-			try {
-				bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, user, dependencies, new ArrayList<IUser>(), BugTag.NEW);
-			} catch (UnauthorizedAccessException e) { fail("not authorized"); }
-			
+			bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, user, dependencies, new ArrayList<IUser>(), BugTag.NEW);
+
 			//Confirm.
 			IBugReport bugReport = null;
 			try {
@@ -141,7 +139,7 @@ public class CreateBugReportUseCaseTest {
 		//Can't create BugReport as Administrator.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
 		try {
-			bugTrap.getFormFactory().makeSubsystemCreationForm();
+			bugTrap.getFormFactory().makeBugReportCreationForm();
 			fail("Can't create BugReport as Administrator");
 		} catch (UnauthorizedAccessException e) { }
 	}
@@ -174,10 +172,6 @@ public class CreateBugReportUseCaseTest {
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) {
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
 		}
 	}
-
 }
