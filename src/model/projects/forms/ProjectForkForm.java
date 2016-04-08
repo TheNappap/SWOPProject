@@ -19,10 +19,11 @@ public class ProjectForkForm implements Form {
 	private IUser leadDeveloper;
 
     public ProjectForkForm() {
-		project = null;
-		budgetEstimate = 0;
-		startDate = null;
-		leadDeveloper = null;
+		project 		= null;
+		startDate 		= null;
+		leadDeveloper 	= null;
+		version 		= null;
+		budgetEstimate 	= 0;
     }
 
     public double getBudgetEstimate() {
@@ -51,8 +52,7 @@ public class ProjectForkForm implements Form {
 
     public void setVersion(Version version) {
         if (version == null) throw new NullPointerException("Given version is null.");
-        if (this.project != null && this.getProject().getVersion().compareTo(version) == 1) throw new IllegalArgumentException("New version can not be less than previous version.");
-
+        
         this.version = version;
     }
 
