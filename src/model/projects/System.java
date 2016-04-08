@@ -16,16 +16,16 @@ public abstract class System implements ISystem, Observable {
 	protected final System parent;		//Parent System, if any.
 	protected final List<Subsystem> subsystems;	//Subsystems.
 	
-	protected AchievedMilestone milestone;
+	protected List<AchievedMilestone> milestones;
 
 	protected List<Observer> observables = new ArrayList<Observer>();
 	
-	public System(String name, String description, System parent, List<Subsystem> subsystems, AchievedMilestone milestone) {
+	public System(String name, String description, System parent, List<Subsystem> subsystems, List<AchievedMilestone> milestones) {
 		this.name 			= name;
 		this.description 	= description;
 		this.parent 		= parent;
 		this.subsystems		= subsystems;
-		this.milestone		= milestone;
+		this.milestones		= milestones;
 	}
 	
 	public String getInfo() {
@@ -98,7 +98,7 @@ public abstract class System implements ISystem, Observable {
 	
 
 	@Override
-	public AchievedMilestone getAchievedMilestone() {
-		return milestone;
+	public List<AchievedMilestone> getAchievedMilestones() {
+		return milestones;
 	}
 }

@@ -1,8 +1,20 @@
 package tests.bugreporttests;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
+import model.bugreports.TargetMilestone;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
 import model.notifications.BugReportObserver;
@@ -12,35 +24,28 @@ import model.users.Administrator;
 import model.users.Developer;
 import model.users.IUser;
 import model.users.Issuer;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class BugReportTest {
 
-	BugReport bugReport;
+	private BugReport bugReport;
 	
-	String title = "BugReport";
-	String description = "Awesome BugReport";
-	ISubsystem subsystem = new Subsystem(null, null, null, null, null, null);
-	List<IBugReport> dependsOn = new ArrayList<>();
-	List<IUser> assignees = new ArrayList<>();
-	List<Comment> comments = new ArrayList<>();
-	List<BugReportObserver> observers = new ArrayList<>();
-	IUser issuedBy = new Issuer(null, null, null, null);
-	Date creationDate = new Date();
-	BugTag bugTag = BugTag.NEW;
-	List<String> optionals = new ArrayList<String>();
+	private String title = "BugReport";
+	private String description = "Awesome BugReport";
+	private ISubsystem subsystem = new Subsystem(null, null, null, null, null, null);
+	private List<IBugReport> dependsOn = new ArrayList<>();
+	private List<IUser> assignees = new ArrayList<>();
+	private List<Comment> comments = new ArrayList<>();
+	private List<BugReportObserver> observers = new ArrayList<>();
+	private IUser issuedBy = new Issuer(null, null, null, null);
+	private Date creationDate = new Date();
+	private BugTag bugTag = BugTag.NEW;
+	private List<String> optionals = new ArrayList<String>();
+	private TargetMilestone targetMilestone = new TargetMilestone();
 	
 	
 	@Before
 	public void setUp() throws Exception {
-		bugReport = new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState(), optionals);
+		bugReport = new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState(), optionals, targetMilestone);
 	}
 
 	@Test
@@ -115,11 +120,11 @@ public class BugReportTest {
 
 	@Test
 	public void compareTest() {
-		BugReport other = new BugReport("CugReport", null, null, null, null, null, null, null, null, null, null);
+		BugReport other = new BugReport("CugReport", null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(-1, bugReport.compareTo(other));
 		assertEquals(1, other.compareTo(bugReport));
 		
-		BugReport other2 = new BugReport("BugReport", null, null, null, null, null, null, null, null, null, null);
+		BugReport other2 = new BugReport("BugReport", null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(0, bugReport.compareTo(other2));
 		assertEquals(0, other2.compareTo(bugReport));
 		

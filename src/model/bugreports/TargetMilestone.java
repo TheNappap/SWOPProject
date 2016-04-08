@@ -3,27 +3,26 @@ package model.bugreports;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TargetMilestone {
+import model.Milestone;
 
-	private final List<Integer> numbers;
+public class TargetMilestone extends Milestone {
+	
+	public TargetMilestone(List<Integer> numbers) {
+		super(numbers);
+	}
 	
 	public TargetMilestone() {
-		this.numbers = new ArrayList<Integer>();
-		this.numbers.add(0);
-	}
-
-	public List<Integer> getNumbers() {
-		List<Integer> numbers = new ArrayList<Integer>();
-		numbers.addAll(this.numbers);
-		return numbers;
+		super(makeInitialTargetMilestone());
 	}
 	
+	private static List<Integer> makeInitialTargetMilestone() {
+		List<Integer> numbers = new ArrayList<Integer>();
+		numbers.add(0);
+		return numbers;
+	}
+
 	@Override
-	public String toString() {
-		String result = "M";
-		
-		for (Integer number : this.numbers) result += number + ".";
-		
-		return result.substring(0, result.length()-1);
+	public int compareTo(Milestone o) {
+		throw new UnsupportedOperationException();
 	}
 }

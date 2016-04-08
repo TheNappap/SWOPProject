@@ -23,8 +23,9 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	private final List<Comment> comments;		//Comments on this BugReport.
 	private final List<IUser> assignees;	//List of Developers assigned to this BugReport.
 	private final List<IBugReport> dependsOn;	//List of BugReports on which this BugReport depends.
-	private final List<BugReportObserver> observers;
 	private final List<String> optionals;
+	private final TargetMilestone milestone;
+	private final List<BugReportObserver> observers;
 	
 	//Mutable
 	private BugTagState bugTag;			//BugTag that is attached to this BugReport.
@@ -42,7 +43,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * @param creationDate The date the BugReport was created.
 	 * @param bugTag The BugTag to assign to the BugReport
 	 */
-	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, List<BugReportObserver> observers, BugTagState bugTag, List<String> optionals) {
+	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, List<BugReportObserver> observers, BugTagState bugTag, List<String> optionals, TargetMilestone milestone) {
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
 		this.subsystem		= subsystem;
@@ -54,6 +55,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 		this.observers		= observers;
 		this.bugTag 		= bugTag;
 		this.optionals		= optionals;
+		this.milestone		= milestone;
 	}
 	
 	/**
@@ -150,6 +152,10 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 		returnList.addAll(comments);
 		
 		return returnList;
+	}
+	
+	public TargetMilestone getTargetMilestone() {
+		return milestone;
 	}
 
 	@Override
