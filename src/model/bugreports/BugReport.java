@@ -4,6 +4,7 @@ import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
 import model.bugreports.comments.Comment;
 import model.notifications.BugReportObserver;
+import model.notifications.Observable;
 import model.projects.ISubsystem;
 import model.users.IUser;
 
@@ -176,5 +177,4 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	public void notifyObservers() {
 		
 	}
-	
 }
