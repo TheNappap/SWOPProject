@@ -17,6 +17,7 @@ public class AssignProjectCommand extends Command {
     @Override
     public void execute() throws UnauthorizedAccessException {
         form.allVarsFilledIn();
+
         getBugTrap().getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
     }
 }

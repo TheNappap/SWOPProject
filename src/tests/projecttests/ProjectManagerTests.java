@@ -64,35 +64,28 @@ public class ProjectManagerTests {
     	IProject project = null;
         IProject fork = null;
         		
-		try {
-			//Make a Project as usual.
-			bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(2, 1, 0));
-			project = bugTrap.getProjectManager().getProjects().get(0);
-			
-			//Three cases where fork's Version isn't incremented.
-			try {
-				bugTrap.getProjectManager().createFork(project, 123592929, new Version(1, 0, 0), new Date(2016, 1 , 1));
-				fail("Fork version should be higher than original Version");
-			} catch(Exception e) { }
-			try {
-				bugTrap.getProjectManager().createFork(project, 123592929, new Version(2, 1, 1), new Date(2016, 1 , 1));
-				fail("Fork version should be higher than original Version");
-			} catch(Exception e) { }
-			try {
-				bugTrap.getProjectManager().createFork(project, 123592929, new Version(2, 1, 0), new Date(2016, 1 , 1));
-				fail("Fork version should be higher than original Version");
-			} catch(Exception e) { }
-			
-			//Version is actually incremented.
-			bugTrap.getProjectManager().createFork(project, 123592929, new Version(2, 1, 1), new Date(2016, 1, 1));
-			fork = bugTrap.getProjectManager().getProjects().get(1);
-			
-		} catch (UnauthorizedAccessException e) {
-			//Should be authorized user.
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		
+        //Make a Project as usual.
+        bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(2, 1, 0));
+        project = bugTrap.getProjectManager().getProjects().get(0);
+
+        //Three cases where fork's Version isn't incremented.
+        try {
+            bugTrap.getProjectManager().createFork(project, 123592929, new Version(1, 0, 0), new Date(2016, 1 , 1));
+            fail("Fork version should be higher than original Version");
+        } catch(Exception e) { }
+        try {
+            bugTrap.getProjectManager().createFork(project, 123592929, new Version(2, 1, 1), new Date(2016, 1 , 1));
+            fail("Fork version should be higher than original Version");
+        } catch(Exception e) { }
+        try {
+            bugTrap.getProjectManager().createFork(project, 123592929, new Version(2, 1, 0), new Date(2016, 1 , 1));
+            fail("Fork version should be higher than original Version");
+        } catch(Exception e) { }
+
+        //Version is actually incremented.
+        bugTrap.getProjectManager().createFork(project, 123592929, new Version(2, 1, 1), new Date(2016, 1, 1));
+        fork = bugTrap.getProjectManager().getProjects().get(1);
+
 		//Check if forked values are correct.
         Assert.assertEquals(project.getName(), 			fork.getName());
         Assert.assertEquals(project.getDescription(), 	fork.getDescription());
@@ -111,21 +104,12 @@ public class ProjectManagerTests {
     @Test
     public void testUpdateProject() {
         IProject project = null;
-		try {
-			bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
-			project = bugTrap.getProjectManager().getProjects().get(0);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+		project = bugTrap.getProjectManager().getProjects().get(0);
+
         UserManager um = new UserManager();
         um.createDeveloper("", "", "", "D");
-        try {
-        	bugTrap.getProjectManager().updateProject(project, "nn", "dd", 3883, new Date(2015, 11, 1));
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+        bugTrap.getProjectManager().updateProject(project, "nn", "dd", 3883, new Date(2015, 11, 1));
 
         Assert.assertEquals(project.getName(), "nn");
         Assert.assertEquals(project.getDescription(), "dd");
@@ -148,14 +132,9 @@ public class ProjectManagerTests {
     public void testAssignToProject() {
     	
         IProject project = null;
-		try {
-			bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
-			project = bugTrap.getProjectManager().getProjects().get(0);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		
+		bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+		project = bugTrap.getProjectManager().getProjects().get(0);
+
 		//to assign, need to be logged in as dev
 		IUser dev =  bugTrap.getUserManager().getUser("DEV");
     	bugTrap.getUserManager().loginAs(dev);
@@ -169,33 +148,18 @@ public class ProjectManagerTests {
         um.createDeveloper("", "", "", "D2");
         IUser d2 = um.getDevelopers().get(2);
 
-        try {
-        	bugTrap.getProjectManager().assignToProject(project, d0, Role.PROGRAMMER);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-        Assert.assertTrue(project.getProgrammers().contains(d0));
+        bugTrap.getProjectManager().assignToProject(project, d0, Role.PROGRAMMER);
+		Assert.assertTrue(project.getProgrammers().contains(d0));
         Assert.assertFalse(project.getProgrammers().contains(d1));
         Assert.assertFalse(project.getProgrammers().contains(d2));
 
-        try {
-        	bugTrap.getProjectManager().assignToProject(project, d1, Role.TESTER);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-        Assert.assertFalse(project.getTesters().contains(d0));
+        bugTrap.getProjectManager().assignToProject(project, d1, Role.TESTER);
+		Assert.assertFalse(project.getTesters().contains(d0));
         Assert.assertTrue(project.getTesters().contains(d1));
         Assert.assertFalse(project.getTesters().contains(d2));
 
-        try {
-        	bugTrap.getProjectManager().assignToProject(project, d2, Role.LEAD);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-        Assert.assertNotEquals(project.getLeadDeveloper(), d0);
+        bugTrap.getProjectManager().assignToProject(project, d2, Role.LEAD);
+		Assert.assertNotEquals(project.getLeadDeveloper(), d0);
         Assert.assertNotEquals(project.getLeadDeveloper(), d1);
         Assert.assertEquals(project.getLeadDeveloper(), d2);
     }
@@ -214,18 +178,14 @@ public class ProjectManagerTests {
         IProject p1 = null;
         IProject p2 = null;
         IProject p3 = null;
-		try {
-			bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d1, new Version(1, 0, 0));
-			bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d2, new Version(1, 0, 0));
-			bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d3, new Version(1, 0, 0));
-	        p1 = bugTrap.getProjectManager().getProjects().get(0);
-	        p2 = bugTrap.getProjectManager().getProjects().get(1);
-	        p3 = bugTrap.getProjectManager().getProjects().get(2);
-		} catch (UnauthorizedAccessException e1) {
-			fail("not authorized");
-			e1.printStackTrace();
-		}
-        
+
+        bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d1, new Version(1, 0, 0));
+        bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d2, new Version(1, 0, 0));
+        bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, d3, new Version(1, 0, 0));
+        p1 = bugTrap.getProjectManager().getProjects().get(0);
+        p2 = bugTrap.getProjectManager().getProjects().get(1);
+        p3 = bugTrap.getProjectManager().getProjects().get(2);
+
         
         try {
         	bugTrap.getUserManager().loginAs(d1);
@@ -254,15 +214,10 @@ public class ProjectManagerTests {
 
         IProject project = null;
         ISubsystem sub = null;
-		try {
-			bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
-			project = bugTrap.getProjectManager().getProjects().get(0);
-			bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
-			sub = bugTrap.getProjectManager().getSubsystemWithName("name");
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+        bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+        project = bugTrap.getProjectManager().getProjects().get(0);
+        bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
+        sub = bugTrap.getProjectManager().getSubsystemWithName("name");
 
         Assert.assertEquals(sub.getName(), "name");
         Assert.assertEquals(sub.getDescription(), "description");
@@ -272,13 +227,9 @@ public class ProjectManagerTests {
         Assert.assertTrue(project.getSubsystems().contains(sub));
 
         ISubsystem subsub = null;
-		try {
-			bugTrap.getProjectManager().createSubsystem("name2", "descr2", project, sub);
-			subsub = bugTrap.getProjectManager().getSubsystemWithName("name2");
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		bugTrap.getProjectManager().createSubsystem("name2", "descr2", project, sub);
+		subsub = bugTrap.getProjectManager().getSubsystemWithName("name2");
+
         Assert.assertEquals(subsub.getName(), "name2");
         Assert.assertEquals(subsub.getDescription(), "descr2");
         Assert.assertEquals(subsub.getProject(), project);
@@ -295,16 +246,11 @@ public class ProjectManagerTests {
     @Test
     public void testGetSubsystemWithName() {
         IProject project;
-		try {
-			bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+		bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
 			
-			project = bugTrap.getProjectManager().getProjects().get(0);
-			bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
+        project = bugTrap.getProjectManager().getProjects().get(0);
+        bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
 
-	        Assert.assertEquals(bugTrap.getProjectManager().getSubsystemWithName("name").getName(), "name");
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+        Assert.assertEquals(bugTrap.getProjectManager().getSubsystemWithName("name").getName(), "name");
     }
 }

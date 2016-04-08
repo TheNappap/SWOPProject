@@ -3,7 +3,6 @@ package model.bugreports;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Observer;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
@@ -13,6 +12,7 @@ import model.bugreports.comments.Commentable;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
 import model.notifications.Observable;
+import model.notifications.Observer;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.users.IUser;
@@ -81,10 +81,7 @@ public class BugReportManager implements Observable {
 		return projectReports;
 	}
 
-	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) throws UnauthorizedAccessException {
-		if (!bugTrap.isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
-
+	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) {
 		bugReportList.add(new BugReportBuilder().setTitle(title)
 				.setDescription(description)
 				.setSubsystem(subsystem)
@@ -97,9 +94,7 @@ public class BugReportManager implements Observable {
 	}
 
 	public void assignToBugReport(IBugReport bugReport, IUser dev) throws UnauthorizedAccessException {
-		if (!bugTrap.isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("An developer needs to be logged in to perform this action.");
-		if (bugReport == null || dev == null) 
+		if (bugReport == null || dev == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
 		if (!dev.isDeveloper()) throw new IllegalArgumentException("The given user should be a developer.");
 		
@@ -117,10 +112,8 @@ public class BugReportManager implements Observable {
 		report.assignDeveloper(dev);
 	}
 	
-	public void updateBugReport(IBugReport bugReport, BugTag tag) throws UnauthorizedAccessException {
-		if (!bugTrap.isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("An developer needs to be logged in to perform this action.");
-		if (bugReport == null || tag == null) 
+	public void updateBugReport(IBugReport bugReport, BugTag tag) {
+		if (bugReport == null || tag == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
 
 		BugReport report = null;
@@ -131,12 +124,9 @@ public class BugReportManager implements Observable {
 		report.updateBugTag(tag);
 	}
 
-	public void addComment(Commentable commentable, String text) throws UnauthorizedAccessException {
+	public void addComment(Commentable commentable, String text) {
 		if (commentable == null || text == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
-		
-		if (!bugTrap.isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
 		
 		commentable.addComment(text);
 	}

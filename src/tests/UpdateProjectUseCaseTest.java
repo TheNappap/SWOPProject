@@ -113,7 +113,6 @@ public class UpdateProjectUseCaseTest {
 			bugTrap.getProjectManager().updateProject(null, null, null, 0, null);
 			fail("Can't update with null values.");
 		}
-		catch (IllegalArgumentException e) { } 
-		catch (UnauthorizedAccessException e) { fail("not authorized"); }
+		catch (IllegalArgumentException e) { }
 	}
 }
