@@ -1,20 +1,18 @@
 package tests;
 
-import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
-import model.projects.IProject;
-import model.projects.ISubsystem;
-import model.projects.Version;
-import model.users.IUser;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.Test;
+
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
+import model.projects.IProject;
+import model.projects.Version;
 
 public class ShowProjectUseCaseTest {
 	
@@ -22,53 +20,53 @@ public class ShowProjectUseCaseTest {
 
 	@Before
 	public void setUp() throws Exception {
+		//Make system.
 		bugTrap = new BugTrap();
 		
-		//add user
+		//Add Users.
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		bugTrap.getUserManager().loginAs(admin);
+		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
+		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		
+		//Log in as Administrator, create Project, log off.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
 		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		bugTrap.getUserManager().logOff();
 	}
 
 	@Test
 	public void showProjectTest() throws UnauthorizedAccessException {
-		//login
-		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
-		bugTrap.getUserManager().loginAs(admin);
-
-		//step 1
-		//user indicates he wants to inspect a project
-		//step 2
-		List<IProject> list = null;
-		try {
-			list = bugTrap.getProjectManager().getProjects();
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		//step 3
-		IProject project = list.get(0);
-		//step 4
-		List<ISubsystem> subsystems = project.getSubsystems();
+		String[] users = new String[]{"ISSUER", "DEV", "ADMIN"};
 		
-		assertEquals(project.getName(), "name");
-		assertEquals(project.getDescription(), "description");
-		assertEquals(project.getStartDate(), new Date(1302));
-		assertEquals(1234, project.getBudgetEstimate(), 0.01);
-		assertEquals(project.getVersion(), new Version(1, 0, 0));
-		Assert.assertEquals(0, subsystems.size());
+		//All users should be able to show Projects.
+		for (String user : users) {
+			//Log in as Administrator.
+			bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser(user));
+				
+			//1. The user indicates he wants to take a look at some project.
+			//2. The system shows a list of all projects.
+			List<IProject> list = bugTrap.getProjectManager().getProjects();
+			//3. The user selects a project.
+			IProject project = list.get(0);
+			//4. The system shows a detailed overview of the selected project and all its subsystems.
+			
+			//Confirm.
+			assertEquals("name",				project.getName());
+			assertEquals("description",			project.getDescription());
+			assertEquals(new Date(1302),		project.getStartDate());
+			assertEquals(1234, 					project.getBudgetEstimate(), 0.01);
+			assertEquals(new Version(1, 0, 0),	project.getVersion());
+			assertEquals(0, 					project.getSubsystems().size());
+		}
 	}
 	
 	@Test
 	public void notAuthorizedTest() {
+		//Should be logged in.
 		try {
 			bugTrap.getProjectManager().getProjects();
-			fail("should throw exception");
-		} catch (UnauthorizedAccessException e) {
-		}
+			fail("Should be logged in.");
+		} catch (UnauthorizedAccessException e) { }
 	}
 
 }

@@ -1,16 +1,16 @@
 package model.bugreports;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Observer;
+
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
 import model.bugreports.comments.Comment;
 import model.notifications.BugReportObserver;
 import model.projects.ISubsystem;
 import model.users.IUser;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Observer;
 
 public class BugReport implements IBugReport { //A Comment can be commented on.
 

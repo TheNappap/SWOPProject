@@ -1,14 +1,14 @@
 package model.projects;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.builders.ProjectBuilder;
 import model.projects.builders.SubsystemBuilder;
 import model.users.IUser;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class ProjectManager {
 

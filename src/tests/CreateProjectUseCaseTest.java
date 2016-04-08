@@ -1,5 +1,14 @@
 package tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.IProject;
@@ -7,14 +16,6 @@ import model.projects.Version;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectForkForm;
 import model.users.IUser;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Date;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class CreateProjectUseCaseTest {
 
@@ -24,6 +25,7 @@ public class CreateProjectUseCaseTest {
 	public void setUp() throws Exception {
 		bugTrap = new BugTrap();
 		//add users
+		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
 		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
 	}
@@ -32,8 +34,7 @@ public class CreateProjectUseCaseTest {
 	@Test
 	public void createNewProjectTest() {
 		//Log in as a administrator, they create Projects.
-		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
-		bugTrap.getUserManager().loginAs(admin);
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
 		
 		//Holds the project we're creating.
 		IProject project = null; 
@@ -102,11 +103,13 @@ public class CreateProjectUseCaseTest {
 	@SuppressWarnings("deprecation")
 	@Test
 	public void createForkProjectTest() {
-		//login
+		fail("Should test this more carefully");
+		
+		//Log in as an Administrator, they create forks.
 		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
 		bugTrap.getUserManager().loginAs(admin);
 		
-		//addProject
+		//Add some project to the system to fork.
 		try {
 			bugTrap.getProjectManager().createProject("name", "description", new Date(2005, 1, 2), new Date(2005, 2, 12), 1234, null, new Version(1, 0, 0));
 		} catch (UnauthorizedAccessException e1) {
@@ -160,33 +163,60 @@ public class CreateProjectUseCaseTest {
 		}
 
 		//Confirm.
-		assertEquals(fork.getName(), project.getName());
-		assertEquals(fork.getDescription(), project.getDescription());
-		assertEquals(fork.getVersion(), new Version(2, 0, 1));
-		assertEquals(fork.getCreationDate(), project.getCreationDate());
-		assertEquals(fork.getStartDate(), new Date(2010, 3, 21));
-		assertEquals(1234, fork.getBudgetEstimate(), 0.01);
+		//-Forked values.
+		assertEquals(project.getName(),			fork.getName());
+		assertEquals(project.getDescription(),	fork.getDescription());
+		assertEquals(project.getCreationDate(),	fork.getCreationDate());
+		//-New values for fork.
+		assertEquals(new Version(2, 0, 1),		fork.getVersion());
+		assertEquals(new Date(2010, 3, 21), 	fork.getStartDate());
+		assertEquals(1234,						fork.getBudgetEstimate(), 0.01);
+		//--Forks should have initial Milestone M0.
+		assertEquals(1,							fork.getAchievedMilestones().size());
+		assertEquals("M0",						fork.getAchievedMilestones().get(0));
+		//--Forks hav
 	}
 	
 	@Test
 	public void notAuthorizedTest() {
+		//Can't make project/forks when not logged in.
 		try {
 			bugTrap.getFormFactory().makeProjectCreationForm();
-			fail("should throw exception");
-		} catch (UnauthorizedAccessException e) {
-		}
+			fail("Should be logged in!");
+		} catch (UnauthorizedAccessException e) { }
 		try {
 			bugTrap.getFormFactory().makeProjectForkForm();
-			fail("should throw exception");
-		} catch (UnauthorizedAccessException e) {
-		}
+			fail("Should be logged in!");
+		} catch (UnauthorizedAccessException e) { }
+		
+		//Developers shouldn't be able to make projects/forks. 
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		try {
+			bugTrap.getFormFactory().makeProjectCreationForm();
+			fail("Developer's can't create Projects!");
+		} catch (UnauthorizedAccessException e) { }
+		try {
+			bugTrap.getFormFactory().makeProjectForkForm();
+			fail("Developer's can't fork Projects!");
+		} catch (UnauthorizedAccessException e) { }
+		
+		//Issuers shouldn't be able to make projects/forks. 
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
+		try {
+			bugTrap.getFormFactory().makeProjectCreationForm();
+			fail("Issuers can't create Projects!");
+		} catch (UnauthorizedAccessException e) { }
+		try {
+			bugTrap.getFormFactory().makeProjectForkForm();
+			fail("Issuer's can't fork Projects!");
+		} catch (UnauthorizedAccessException e) { }
 	}
 
 	@Test
 	public void nullFormTest() {
 		//login
-		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
-		bugTrap.getUserManager().loginAs(admin);
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		
 		
 		try {
 			bugTrap.getProjectManager().createProject(null, null, null, null, 0, null, null);

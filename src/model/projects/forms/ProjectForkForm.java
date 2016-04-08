@@ -1,11 +1,11 @@
 package model.projects.forms;
 
+import java.util.Date;
+
 import model.Form;
 import model.projects.IProject;
 import model.projects.Version;
 import model.users.IUser;
-
-import java.util.Date;
 
 /**
  * Form used to store temporary data to fork project.

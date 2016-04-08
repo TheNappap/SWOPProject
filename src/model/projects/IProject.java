@@ -1,9 +1,9 @@
 package model.projects;
 
-import model.users.IUser;
-
 import java.util.Date;
 import java.util.List;
+
+import model.users.IUser;
 
 /**
  * Interface for the Project objects.

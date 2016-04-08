@@ -1,11 +1,12 @@
 package tests.usertests;
 
-import model.users.Administrator;
-import model.users.Developer;
-import model.users.Issuer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import model.users.Administrator;
+import model.users.Developer;
+import model.users.Issuer;
 
 public class UsersTests {
 	

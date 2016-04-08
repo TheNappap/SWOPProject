@@ -1,10 +1,10 @@
 package model.notifications;
 
-import model.bugreports.BugReport;
+import model.bugreports.IBugReport;
 
 public class BugReportObserver extends Observer {
 
-	public BugReportObserver(Mailbox mailbox, BugReport bugReport) {
+	public BugReportObserver(Mailbox mailbox, IBugReport bugReport) {
 		super(mailbox, bugReport);
 	}
 

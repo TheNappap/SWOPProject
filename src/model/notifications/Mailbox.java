@@ -1,9 +1,9 @@
 package model.notifications;
 
-import model.users.IUser;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import model.users.IUser;
 
 public class Mailbox {
 	

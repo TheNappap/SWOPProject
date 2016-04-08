@@ -1,11 +1,11 @@
 package model.bugreports.forms;
 
+import java.util.List;
+
 import model.Form;
 import model.bugreports.IBugReport;
 import model.projects.ISubsystem;
 import model.users.IUser;
-
-import java.util.List;
 
 public class BugReportCreationForm implements Form {
 
@@ -14,7 +14,8 @@ public class BugReportCreationForm implements Form {
 	private String title;	//A Title for the BugReport.
 	private String description;	//A description for the BugReport.
 	private ISubsystem subsystem;	//The Subsystem the BugReport is about.
-	private List<IBugReport> dependsOn;	//List of BugReports the BugReport depends on.
+	private List<IBugReport> dependsOn;	//List of BugReports the BugReport depends on.7
+	private List<String> optionals;
 	
 	public BugReportCreationForm() {
 		//Explicitly settings this to null.
@@ -23,6 +24,7 @@ public class BugReportCreationForm implements Form {
 		this.description 	= null;
 		this.subsystem		= null;
 		this.dependsOn		= null;
+		this.optionals 		= null;
 	}
 
 	@Override
@@ -32,6 +34,7 @@ public class BugReportCreationForm implements Form {
 		if (getDescription() == null) throw new NullPointerException("Description is null");
 		if (getSubsystem() == null) throw new NullPointerException("Subsystem is null");
 		if (getDependsOn() == null) throw new NullPointerException("DependsOn is null");
+		if (getOptionals() == null) throw new NullPointerException("Optionals is null");
 	}
 
 	//Getters and Setters
@@ -85,5 +88,15 @@ public class BugReportCreationForm implements Form {
 		if (!issuer.isIssuer()) throw new IllegalArgumentException("Issuer should be an issuer.");
 
 		this.issuer = issuer;
+	}
+
+	public List<String> getOptionals() {
+		return optionals;
+	}
+
+	public void setOptionals(List<String> optionals) {
+		if (optionals == null) throw new NullPointerException("Optionals is null.");
+		
+		this.optionals = optionals;
 	}
 }

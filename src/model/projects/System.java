@@ -2,14 +2,13 @@ package model.projects;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
 
-import model.notifications.Observable;
+import model.notifications.Observer;
 
 /**
  * This class represents a system in BugTrap.
  */
-public abstract class System implements ISystem, Observable {
+public abstract class System implements ISystem {
 
 	protected String name;		//System name.
 	protected String description;	//System description.
@@ -44,7 +43,7 @@ public abstract class System implements ISystem, Observable {
 	
 	@Override
 	public void notifyObservers() {
-		
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override

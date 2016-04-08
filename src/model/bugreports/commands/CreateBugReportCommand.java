@@ -1,14 +1,14 @@
 package model.bugreports.commands;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.Command;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.forms.BugReportCreationForm;
 import model.users.IUser;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 public class CreateBugReportCommand extends Command {
 
