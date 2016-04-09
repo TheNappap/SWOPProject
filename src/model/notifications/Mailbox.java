@@ -17,6 +17,10 @@ public class Mailbox {
     	throw new UnsupportedOperationException();
     }
 
+    public List<INotification> getNotifications(int nbOfNotifications) {
+    	throw new UnsupportedOperationException();
+    }
+    
     public IUser getUser() {
         return user;
     }

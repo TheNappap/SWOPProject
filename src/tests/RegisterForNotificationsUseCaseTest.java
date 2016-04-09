@@ -15,6 +15,7 @@ import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 import model.notifications.BugReportSpecificTagObserver;
 import model.notifications.Mailbox;
+import model.notifications.Registration;
 import model.notifications.SystemObserver;
 import model.notifications.forms.RegisterNotificationForm;
 import model.projects.IProject;
@@ -66,6 +67,7 @@ public class RegisterForNotificationsUseCaseTest {
 		project = bugTrap.getProjectManager().getProjects().get(0);
 
 		form.setObservable(project);
+		form.setRegistration(Registration.PROJECT_CHANGE);
 		
 		//6. The system presents a form describing the specific system changes that
 		//can be subscribed to for the selected object of interest: (...)
@@ -95,10 +97,7 @@ public class RegisterForNotificationsUseCaseTest {
 		//2. The system asks if he wants to register for a Project, Subsystem or BugReport.
 		//3. The issuer indicates he wants to register for a bug report.
 		//4/5. (...)
-		IBugReport bugReport = null;
-		try {
-			bugReport = bugTrap.getBugReportManager().getBugReportList().get(0);
-		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
+		IBugReport bugReport = bugTrap.getBugReportManager().getBugReportList().get(0);
 		
 		form.setObservable(bugReport);
 		

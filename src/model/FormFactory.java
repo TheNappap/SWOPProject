@@ -6,6 +6,7 @@ import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
 import model.notifications.forms.RegisterNotificationForm;
+import model.notifications.forms.ShowChronologicalNotificationForm;
 import model.notifications.forms.UnregisterNotificationForm;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
@@ -156,7 +157,11 @@ public class FormFactory {
 		return new RegisterNotificationForm();
 	}
 	
-	public UnregisterNotificationForm makeUnregisterNotificationForm() {
+	public UnregisterNotificationForm makeUnregisterNotificationForm() throws UnauthorizedAccessException {
+		throw new UnsupportedOperationException();
+	}
+	
+	public ShowChronologicalNotificationForm makeShowChronologicalNotificationForm() throws UnauthorizedAccessException {
 		throw new UnsupportedOperationException();
 	}
 
