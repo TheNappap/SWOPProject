@@ -1,7 +1,6 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,7 +9,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
@@ -18,7 +16,6 @@ import model.bugreports.filters.FilterType;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Version;
-import model.users.IUser;
 
 public class SelectBugReportUseCaseTest {
 
@@ -26,64 +23,50 @@ public class SelectBugReportUseCaseTest {
 
 	@Before
 	public void setUp() throws Exception {
+		//Make System.
 		bugTrap = new BugTrap();
 		
-		//add user
-		IUser dev = bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		bugTrap.getUserManager().loginAs(admin);
-		//add project
+		//Make Users.
+		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
+		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
+		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
+	
+		//Add a Project
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
 		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		IProject project = bugTrap.getProjectManager().getProjects().get(0);
-		//add subsystem to project
+		//Add a Subsystem.
 		bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
 		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
 		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
-		bugTrap.getUserManager().loginAs(dev);
-		//add bugreport (for dependency)
-		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, dev, new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
+		//Add a BugReport.
+		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, bugTrap.getUserManager().getUser("ISSUER"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+	
+		//Log off.
 		bugTrap.getUserManager().logOff();
 	}
 
 	@Test
 	public void selectBugReportTest() {
-		//login
-		IUser dev = bugTrap.getUserManager().getUser("DEV");
-		bugTrap.getUserManager().loginAs(dev);
+		//Log in.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 
-		//step 1
-		FilterType[] types = null;
-		try {
-			types = bugTrap.getBugReportManager().getFilterTypes();
-		} catch (UnauthorizedAccessException e) {
-			e.printStackTrace();
-			fail("not authorized");
-		}
-		//step 2
+		//1. The system shows a list of possible searching modes:
+		FilterType[] types = bugTrap.getBugReportManager().getFilterTypes();
+		
+		//2. The issuer selects a searching mode and provides the required search parameters.
 		FilterType type = types[0];
 		String searchingString = "B1";
-		//step 3
-		List<IBugReport> list = null;
-		try {
-			list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		//step 4
+		
+		//3. The system shows an ordered list of bug reports that matched the search query.
+		List<IBugReport> list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
+
+		//4. The issuer selects a bug report from the ordered list.
 		IBugReport bugReport = list.get(0);
 		
+		//Confirm.
 		assertEquals("B1", bugReport.getTitle());	
-	}
-
-	@Test
-	public void notAuthorizedTest() {
-		try {
-			bugTrap.getBugReportManager().getOrderedList(new FilterType[] { FilterType.CONTAINS_STRING },new String[] { "" });
-			fail("should throw exception");
-		} catch (UnauthorizedAccessException e) {
-		}
 	}
 
 }

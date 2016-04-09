@@ -1,7 +1,7 @@
 package tests;
 
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,108 +29,87 @@ public class AssignBugReportUseCaseTest {
 
 	@Before
 	public void setUp() throws Exception {
+		//Make System.
 		bugTrap = new BugTrap();
 		
-		//add user
+		//Add Users.
 		IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		Developer lead = bugTrap.getUserManager().createDeveloper("", "", "", "LEAD");
 		Developer prog = bugTrap.getUserManager().createDeveloper("", "", "", "PROG");
 		Developer tester = bugTrap.getUserManager().createDeveloper("", "", "", "TESTER");
 		bugTrap.getUserManager().loginAs(admin);
 		
+		//Add Project, assign some people.
 		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		IProject project = bugTrap.getProjectManager().getProjects().get(0);
 		project.setLeadDeveloper(lead);
 		project.addProgrammer(prog);
 		project.addTester(tester);
-		//add subsystem to project
+		//Add Subsystem.
 		bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
 		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
 		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
 		bugTrap.getUserManager().loginAs(lead);
-		//add bugreport (for dependency)
+		//Add BugReport.
 		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		
+		//Log off.
 		bugTrap.getUserManager().logOff();	
 	}
 
 	@Test
 	public void assignBugReportAsLeadTest() throws UnauthorizedAccessException {
-		//login
-		IUser dev = bugTrap.getUserManager().getUser("LEAD");
-		bugTrap.getUserManager().loginAs(dev);
+		//Log in.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("LEAD"));
 
-		//step 1
+		//1. The developer indicates he wants to assign a developer to a bug report.
 		BugReportAssignForm form = null;
 		try {
 			form = bugTrap.getFormFactory().makeBugReportAssignForm();
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		//step 2 SELECT BUGREPORT USE CASE
-		FilterType[] types = null;
-		IBugReport bugReport = null;
-		try {
-			types = bugTrap.getBugReportManager().getFilterTypes();
-			FilterType type = types[0];
-			String searchingString = "B1";
-			List<IBugReport> list = null;
-			list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
-			bugReport = list.get(0);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}	
-		form.setBugReport(bugReport);
-		//step 3
-		IProject project =  bugReport.getSubsystem().getProject();
-		List<IUser> devs = project.getAllDevelopers();
-		//step 4
+		} catch (UnauthorizedAccessException e) { fail("not authorized");	}
+		
+		//2. Include use case Select Bug Report.
+		List<IBugReport> list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { bugTrap.getBugReportManager().getFilterTypes()[0] }, new String[] { "B1" });
+		form.setBugReport(list.get(0));
+		
+		//3. The system shows a list of developers that are involved in the project.
+		List<IUser> devs = list.get(0).getSubsystem().getProject().getAllDevelopers();
+		
+		//4. The logged in developer selects one or more of the developers to assign
+		//to the selected bug report on top of those already assigned.
 		form.setDeveloper(devs.get(0));
-		//step 5
+		
+		//5. The systems assigns the selected developers to the selected bug report.
 		bugTrap.getBugReportManager().assignToBugReport(form.getBugReport(), form.getDeveloper());
 
-		Assert.assertTrue(bugReport.getAssignees().get(0) == form.getDeveloper());
+		assertTrue(list.get(0).getAssignees().get(0) == form.getDeveloper());
 	}
 	
 	@Test
 	public void assignBugReportAsTesterTest() throws UnauthorizedAccessException {
-		//login
-		IUser dev = bugTrap.getUserManager().getUser("TESTER");
-		bugTrap.getUserManager().loginAs(dev);
+		//Log in.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("TESTER"));
 
-		//step 1
+		//1. The developer indicates he wants to assign a developer to a bug report.
 		BugReportAssignForm form = null;
 		try {
 			form = bugTrap.getFormFactory().makeBugReportAssignForm();
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		//step 2 SELECT BUGREPORT USE CASE
-		FilterType[] types = null;
-		IBugReport bugReport = null;
-		try {
-			types = bugTrap.getBugReportManager().getFilterTypes();
-			FilterType type = types[0];
-			String searchingString = "B1";
-			List<IBugReport> list = null;
-			list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
-			bugReport = list.get(0);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}	
-		form.setBugReport(bugReport);
-		//step 3
-		IProject project =  bugReport.getSubsystem().getProject();
-		List<IUser> devs = project.getAllDevelopers();
-		//step 4
+		} catch (UnauthorizedAccessException e) { fail("not authorized"); }
+		
+		//2. Include use case Select Bug Report
+		List<IBugReport> list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { bugTrap.getBugReportManager().getFilterTypes()[0] }, new String[] { "B1" });
+		form.setBugReport(list.get(0));
+		
+		//3. The system shows a list of developers that are involved in the project.
+		List<IUser> devs = list.get(0).getSubsystem().getProject().getAllDevelopers();
+		
+		//4. The logged in developer selects one or more of the developers to assign to the selected bug report on top of those already assigned.
 		form.setDeveloper(devs.get(0));
-		//step 5
+		
+		//5. The systems assigns the selected developers to the selected bug report.
 		bugTrap.getBugReportManager().assignToBugReport(form.getBugReport(), form.getDeveloper());
 
-		Assert.assertTrue(bugReport.getAssignees().get(0) == form.getDeveloper());
+		assertTrue(list.get(0).getAssignees().get(0) == form.getDeveloper());
 	}
 	
 	@Test
