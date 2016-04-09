@@ -2,7 +2,6 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +10,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
@@ -19,7 +17,6 @@ import model.bugreports.filters.FilterType;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Version;
-import model.users.IUser;
 
 public class InspectBugReportUseCaseTest {
 
@@ -27,64 +24,46 @@ public class InspectBugReportUseCaseTest {
 
 	@Before
 	public void setUp() throws Exception {
+		//Make System.
 		bugTrap = new BugTrap();
 		
-		//add user
-		IUser dev = bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		bugTrap.getUserManager().loginAs(admin);
+		//Add Users.
+		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
+		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
+		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 
-		//add project
+		//Add Project
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
 		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		IProject project = bugTrap.getProjectManager().getProjects().get(0);
-		//add subsystem to project
+		//Add Subsystem to Project
 		bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
 		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
 		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
-		
-		bugTrap.getUserManager().loginAs(dev);
-		//add bugreport (for dependency)
-		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, dev, new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		//Add BugReport.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
+		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, bugTrap.getUserManager().getUser("ISSUER"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		//Log off.
 		bugTrap.getUserManager().logOff();		
 	}
 
 	@Test
 	public void inspectBugReportTest() {
-		//login
-		IUser dev = bugTrap.getUserManager().getUser("DEV");
-		bugTrap.getUserManager().loginAs(dev);
+		//Log in.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
 
-		//SELECT BUGREPORT USE CASE
-		FilterType[] types = null;
-		IBugReport bugReport = null;
-		try {
-			types = bugTrap.getBugReportManager().getFilterTypes();
-			FilterType type = types[0];
-			String searchingString = "B1";
-			List<IBugReport> list = null;
-			list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
-			bugReport = list.get(0);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		//1. The issuer indicates he wants to inspect some bug report.
+		//2. Include use case Select Bug Report.
+		List<IBugReport> list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { bugTrap.getBugReportManager().getFilterTypes()[0] }, new String[] { "B1" });		
+		//3. The system shows a detailed overview of the selected bug report and all its comments.
+		IBugReport bugReport = list.get(0);
 		
-		//Inspect Bug report
-		
+		//Confirm.
 		assertEquals("B1", bugReport.getTitle());
 		assertEquals("B1 is a bug", bugReport.getDescription());	
 		assertTrue(bugReport.getComments().isEmpty());	
-		assertEquals(dev, bugReport.getIssuedBy());	
+		assertEquals(bugTrap.getUserManager().getUser("ISSUER"), bugReport.getIssuedBy());	
 		assertTrue(bugReport.getAssignees().isEmpty());	
-	}
-
-	@Test
-	public void notAuthorizedTest() {
-		try {
-			bugTrap.getBugReportManager().getOrderedList(new FilterType[] { FilterType.CONTAINS_STRING },new String[] { "" });
-			fail("should throw exception");
-		} catch (UnauthorizedAccessException e) {
-		}
 	}
 
 }

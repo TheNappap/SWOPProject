@@ -125,15 +125,12 @@ public class ProjectManager {
 		return projs;
 	}
 
-	public List<IProject> getProjectsForSignedInLeadDeveloper() throws UnauthorizedAccessException {
-		if (!bugTrap.isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("You must be logged in as a developer to get a list of projects for which you are lead.");
-
-		List<IProject> list = getProjectsForLeadDeveloper(bugTrap.getUserManager().getLoggedInUser());
-		if (list.size() == 0)
-			throw new UnsupportedOperationException("You are not leading any projects");
-
-		return list;
+	public List<IProject> getProjectsForSignedInLeadDeveloper() {
+		List<IProject> projects = getProjectsForLeadDeveloper(bugTrap.getUserManager().getLoggedInUser());
+		
+		if (projects.size() == 0) throw new IllegalArgumentException();
+		
+		return projects;
 	}
 
 
