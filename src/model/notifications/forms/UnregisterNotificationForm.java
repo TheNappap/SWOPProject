@@ -1,26 +1,36 @@
 package model.notifications.forms;
 
 import model.Form;
-import model.notifications.Observer;
+import model.notifications.Observable;
+import model.notifications.Registration;
 
 public class UnregisterNotificationForm implements Form {
 
-	private Observer observer;
+	private Observable observable;
+	private Registration registration;
 	
 	public UnregisterNotificationForm() {
 		
 	}
-	
-	public Observer getObserver() {
-		return observer;
-	}
-
-	public void setObserver(Observer observer) {
-		this.observer = observer;
-	}
 
 	@Override
 	public void allVarsFilledIn() {
+		throw new UnsupportedOperationException();
+	}
+
+	public Observable getObservable() {
+		throw new UnsupportedOperationException();
+	}
+
+	public void setObservable(Observable observable) {
+		throw new UnsupportedOperationException();
+	}
+
+	public Registration getRegistration() {
+		throw new UnsupportedOperationException();
+	}
+
+	public void setRegistration(Registration registration) {
 		throw new UnsupportedOperationException();
 	}
 

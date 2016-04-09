@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.builders.BugReportBuilder;
@@ -36,16 +35,11 @@ public class BugReportManager implements Observable {
 		this.bugTrap = bugTrap;
 	}
 	
-	public FilterType[] getFilterTypes() throws UnauthorizedAccessException{
-		if (!bugTrap.isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
+	public FilterType[] getFilterTypes() {
 		return FilterType.values();
 	}
 
-	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
-		if (!bugTrap.isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
-		
+	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) {
 		List<IBugReport> filteredList = getBugReportList();
 		
 		BugReportFilter filter = new BugReportFilter(filteredList);
@@ -56,21 +50,13 @@ public class BugReportManager implements Observable {
 		return filter.getFilteredList();
 	}
 
-	public List<IBugReport> getBugReportList() throws UnauthorizedAccessException {
-		if (!bugTrap.isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
-		
+	public List<IBugReport> getBugReportList(){
 		ArrayList<IBugReport> clonedList = new ArrayList<IBugReport>();
 		clonedList.addAll(bugReportList);
 		return clonedList;
 	}
 
-	public List<IBugReport> getBugReportsForProject(IProject project) throws UnauthorizedAccessException {
-		if (!bugTrap.isIssuerLoggedIn())
-			throw new UnauthorizedAccessException("An issuer needs to be logged in to perform this action.");
-		if (project == null) 
-			throw new IllegalArgumentException("Arguments should not be null.");
-
+	public List<IBugReport> getBugReportsForProject(IProject project) {
 		List<ISubsystem> projectSubs = project.getAllDirectOrIndirectSubsystems();
 		List<IBugReport> projectReports = new ArrayList<IBugReport>();
 
@@ -93,17 +79,7 @@ public class BugReportManager implements Observable {
 				.getBugReport());
 	}
 
-	public void assignToBugReport(IBugReport bugReport, IUser dev) throws UnauthorizedAccessException {
-		if (bugReport == null || dev == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-		if (!dev.isDeveloper()) throw new IllegalArgumentException("The given user should be a developer.");
-		
-		IProject project = bugReport.getSubsystem().getProject();
-		IUser loggedInUser = bugTrap.getUserManager().getLoggedInUser();
-		if(!project.isLead(loggedInUser) && !project.isTester(loggedInUser)){
-			throw new UnauthorizedAccessException("The logged in developer should be lead or tester in the project");
-		}
-
+	public void assignToBugReport(IBugReport bugReport, IUser dev){
 		BugReport report = null;
 		for (BugReport b : bugReportList)
 			if (b == bugReport)

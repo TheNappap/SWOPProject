@@ -28,10 +28,6 @@ public class NotificationManager {
         return null;
     }
     
-    public List<INotification> getNotifications(int nbOfNotifications) {
-    	throw new UnsupportedOperationException();
-    }
-    
     public void registerForNotification(Observable observable, Registration registration) {
     	throw new UnsupportedOperationException();
     }

@@ -96,10 +96,7 @@ public class CreateBugReportUseCaseTest {
 			optionals.add("ERROR! You messed up!");
 			form.setOptionals(optionals);
 			
-			List<IBugReport> bugReports = null;
-			try {
-				bugReports = bugTrap.getBugReportManager().getBugReportsForProject(project);
-			} catch (UnauthorizedAccessException e) { fail("not authorized"); }
+			List<IBugReport> bugReports = bugTrap.getBugReportManager().getBugReportsForProject(project);
 			
 			//12. The system shows a list of possible dependencies of this bug report.
 			//These are the bug reports of the same project
@@ -112,10 +109,7 @@ public class CreateBugReportUseCaseTest {
 			bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, user, dependencies, new ArrayList<IUser>(), BugTag.NEW);
 
 			//Confirm.
-			IBugReport bugReport = null;
-			try {
-				bugReport = bugTrap.getBugReportManager().getBugReportList().get(iter + 1);
-			} catch (UnauthorizedAccessException e) { fail("Not Authorised."); }
+			IBugReport bugReport = bugTrap.getBugReportManager().getBugReportList().get(iter + 1);
 			
 			assertEquals("Bug",				bugReport.getTitle());
 			assertEquals("a Bug",			bugReport.getDescription());
