@@ -7,12 +7,13 @@ import java.util.List;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
 import model.bugreports.comments.Comment;
-import model.notifications.BugReportObserver;
+import model.notifications.Observable;
 import model.notifications.Observer;
 import model.projects.ISubsystem;
+import model.projects.Subsystem;
 import model.users.IUser;
 
-public class BugReport implements IBugReport { //A Comment can be commented on.
+public class BugReport implements IBugReport, Observable { //A Comment can be commented on.
 
 	//Immutable
 	private final Date creationDate;	//Creation Date of the BugReport.
@@ -25,7 +26,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	private final List<IBugReport> dependsOn;	//List of BugReports on which this BugReport depends.
 	private final List<String> optionals;
 	private final TargetMilestone milestone;
-	private final List<BugReportObserver> observers;
+	private final List<Observer> observers;
 	
 	//Mutable
 	private BugTagState bugTag;			//BugTag that is attached to this BugReport.
@@ -43,7 +44,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 * @param creationDate The date the BugReport was created.
 	 * @param bugTag The BugTag to assign to the BugReport
 	 */
-	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, List<BugReportObserver> observers, BugTagState bugTag, List<String> optionals, TargetMilestone milestone) {
+	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, List<Observer> observers, BugTagState bugTag, List<String> optionals, TargetMilestone milestone) {
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
 		this.subsystem		= subsystem;
@@ -64,6 +65,12 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 */
 	public void addComment(String commentText) {
 		comments.add(new Comment(commentText));
+
+		for (Observer observer : this.observers) {
+			if (observer.isCreateCommentObserver()) {
+				observer.signal("New comment on bug report " + getTitle() + ": '" + commentText + "'");
+			}
+		}
 	}
 	
 	/**
@@ -88,6 +95,12 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	 */
 	public void updateBugTag(BugTag bugTag) {
 		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState());
+
+		for (Observer observer : this.observers) {
+			if (observer.isBugReportObserver()) {
+				observer.signal("Bugreport " + getTitle() + " has received the tag " + getBugTag());
+			}
+		}
 	}
 	
 	@Override
@@ -159,21 +172,24 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	}
 
 	@Override
-	public String getInfo() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void attach(Observer observer) {
-		throw new UnsupportedOperationException();
+		if (!this.observers.contains(observer))
+			this.observers.add(observer);
 	}
 
 	@Override
 	public void detach(Observer observer) {
-		throw new UnsupportedOperationException();
+		if (observers.contains(observer))
+			observers.remove(observer);
 	}
 
-	public void notifyObservers() {
-		
+	void signalNewComment(String bugReportName) {
+		((Subsystem)this.subsystem).signalNewComment(bugReportName);
+
+		for (Observer observer : this.observers) {
+			if (observer.isCreateCommentObserver()) {
+				observer.signal("New comment or reply to comment created on bug report '" + bugReportName + "'");
+			}
+		}
 	}
 }

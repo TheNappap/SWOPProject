@@ -7,14 +7,14 @@ public class BugReportSpecificTagObserver extends BugReportObserver {
 
 	private BugTag bugTag;
 	
-	public BugReportSpecificTagObserver(Mailbox mailbox, IBugReport bugReport, BugTag bugTag) {
+	public BugReportSpecificTagObserver(Mailbox mailbox, Observable bugReport, BugTag bugTag) {
 		super(mailbox, bugReport);
 		
 		this.bugTag = bugTag;
 	}
 	
 	@Override
-	public void signal() {
-		throw new UnsupportedOperationException();
+	public void signal(String notificationText) {
+		this.getMailbox().addNotification(notificationText);
 	}
 }

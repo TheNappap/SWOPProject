@@ -10,15 +10,22 @@ public class Mailbox {
     private IUser user;
     private List<INotification> notificationList;
 
-    public Mailbox() {
+    public Mailbox(IUser user) {
+        this.user = user;
+        this.notificationList = new ArrayList<>();
     }
 
     public void addNotification(String text) {
-    	throw new UnsupportedOperationException();
+    	Notification notification = new Notification(text);
+        notificationList.add(0, notification);
     }
 
     public List<INotification> getNotifications(int nbOfNotifications) {
-    	throw new UnsupportedOperationException();
+    	ArrayList<INotification> notifications = new ArrayList<>();
+        for (int i = 0; i < nbOfNotifications && i < this.notificationList.size(); i++) {
+            notifications.add(this.notificationList.get(i));
+        }
+        return notifications;
     }
     
     public IUser getUser() {

@@ -3,12 +3,13 @@ package model.projects;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.notifications.Observable;
 import model.notifications.Observer;
 
 /**
  * This class represents a system in BugTrap.
  */
-public abstract class System implements ISystem {
+public abstract class System implements ISystem, Observable {
 
 	protected String name;		//System name.
 	protected String description;	//System description.
@@ -17,7 +18,7 @@ public abstract class System implements ISystem {
 	
 	protected List<AchievedMilestone> milestones;
 
-	protected List<Observer> observables = new ArrayList<Observer>();
+	protected List<Observer> observers = new ArrayList<Observer>();
 	
 	public System(String name, String description, System parent, List<Subsystem> subsystems, List<AchievedMilestone> milestones) {
 		this.name 			= name;
@@ -26,24 +27,17 @@ public abstract class System implements ISystem {
 		this.subsystems		= subsystems;
 		this.milestones		= milestones;
 	}
-	
-	public String getInfo() {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	@Override
 	public void attach(Observer observer) {
-		throw new UnsupportedOperationException();
+		if (!this.observers.contains(observer))
+			this.observers.add(observer);
 	}
-	
+
 	@Override
 	public void detach(Observer observer) {
-		throw new UnsupportedOperationException();
-	}
-	
-	@Override
-	public void notifyObservers() {
-		throw new UnsupportedOperationException();
+		if (this.observers.contains(observer))
+			this.observers.remove(observer);
 	}
 	
 	@Override
@@ -94,10 +88,30 @@ public abstract class System implements ISystem {
 		}
 		return subs;
 	}
-	
 
 	@Override
 	public List<AchievedMilestone> getAchievedMilestones() {
 		return milestones;
+	}
+
+
+	public void signalNewBugReport(String subsystemName) {
+		if (this.parent != null)
+			this.parent.signalNewBugReport(subsystemName);
+
+		for (Observer observer : this.observers)
+			if (observer.isCreateBugReportObserver())
+				observer.signal("New bug report created for system " + subsystemName);
+	}
+
+	public void signalNewComment(String bugReportName) {
+		if (this.parent != null)
+			this.parent.signalNewComment(bugReportName);
+
+		for (Observer observer : this.observers) {
+			if (observer.isCreateCommentObserver()) {
+				observer.signal("New comment or reply to comment created on bug report '" + bugReportName + "'");
+			}
+		}
 	}
 }

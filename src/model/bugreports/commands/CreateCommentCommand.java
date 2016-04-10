@@ -17,6 +17,6 @@ public class CreateCommentCommand extends Command {
     @Override
     public void execute() throws UnauthorizedAccessException {
         form.allVarsFilledIn();
-        getBugTrap().getBugReportManager().addComment(form.getCommentable(), form.getText());
+        getBugTrap().getBugReportManager().addComment(form.getCommentable(), form.getText(), form.getBugReport());
     }
 }

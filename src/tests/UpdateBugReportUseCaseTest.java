@@ -64,17 +64,13 @@ private BugTrap bugTrap;
 		//step 2 SELECT BUGREPORT USE CASE
 		FilterType[] types = null;
 		IBugReport bugReport = null;
-		try {
-			types = bugTrap.getBugReportManager().getFilterTypes();
-			FilterType type = types[0];
-			String searchingString = "B1";
-			List<IBugReport> list = null;
-			list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
-			bugReport = list.get(0);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		types = bugTrap.getBugReportManager().getFilterTypes();
+		FilterType type = types[0];
+		String searchingString = "B1";
+		List<IBugReport> list = null;
+		list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
+		bugReport = list.get(0);
+
 		//step 3
 		form.setBugReport(bugReport);
 		BugTag tag = BugTag.RESOLVED;
@@ -95,17 +91,13 @@ private BugTrap bugTrap;
 		//step 2 SELECT BUGREPORT USE CASE
 		FilterType[] types = null;
 		IBugReport bugReport = null;
-		try {
-			types = bugTrap.getBugReportManager().getFilterTypes();
-			FilterType type = types[0];
-			String searchingString = "B1";
-			List<IBugReport> list = null;
-			list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
-			bugReport = list.get(0);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		types = bugTrap.getBugReportManager().getFilterTypes();
+		FilterType type = types[0];
+		String searchingString = "B1";
+		List<IBugReport> list = null;
+		list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
+		bugReport = list.get(0);
+
 		//step 3
 		BugTag tag = BugTag.RESOLVED;
 		

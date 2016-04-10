@@ -3,35 +3,28 @@ package model.notifications.forms;
 import model.Form;
 import model.notifications.Observable;
 import model.notifications.Registration;
+import model.notifications.RegistrationType;
 
 public class UnregisterNotificationForm implements Form {
 
-	private Observable observable;
 	private Registration registration;
 	
 	public UnregisterNotificationForm() {
 		
 	}
 
-	@Override
-	public void allVarsFilledIn() {
-		throw new UnsupportedOperationException();
-	}
-
-	public Observable getObservable() {
-		throw new UnsupportedOperationException();
-	}
-
-	public void setObservable(Observable observable) {
-		throw new UnsupportedOperationException();
-	}
-
 	public Registration getRegistration() {
-		throw new UnsupportedOperationException();
+		return registration;
 	}
 
 	public void setRegistration(Registration registration) {
-		throw new UnsupportedOperationException();
+		if (registration == null) throw new NullPointerException("Registration may not be null.");
+
+		this.registration = registration;
 	}
 
+	@Override
+	public void allVarsFilledIn() {
+		if (registration == null) throw new NullPointerException("Registration may not be null.");
+	}
 }

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.notifications.RegistrationType;
+import model.projects.Project;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +18,6 @@ import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 import model.notifications.BugReportObserver;
 import model.notifications.INotification;
-import model.notifications.SystemObserver;
 import model.notifications.forms.ShowChronologicalNotificationForm;
 import model.projects.IProject;
 import model.projects.Version;
@@ -43,12 +44,12 @@ public class ShowNotificationsUseCaseTest {
 		//Log in as Developer and add BugReport.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), bugTrap.getProjectManager().getProjects().get(0).getSubsystems().get(0), bugTrap.getUserManager().getUser("DEV"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		
-		
-		//Log in as an Issuer, register for  notification and log off.
+
+		//Log in as an Issuer, register for notification and log off.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
 		bugTrap.getBugReportManager().getBugReportList().get(0).attach(new BugReportObserver(bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")), bugTrap.getBugReportManager().getBugReportList().get(0)));
-		bugTrap.getProjectManager().getProjects().get(0).attach(new SystemObserver(bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")), bugTrap.getProjectManager().getProjects().get(0)));
+
+		bugTrap.getNotificationManager().registerForNotification(RegistrationType.CREATE_BUGREPORT, (Project)bugTrap.getProjectManager().getProjects().get(0), null);
 		bugTrap.getUserManager().logOff();
 	}
 
@@ -60,18 +61,19 @@ public class ShowNotificationsUseCaseTest {
 		//Initially, no notifications.
 		assertEquals(0, bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")).getNotifications().size());
 		
-		IProject project = bugTrap.getProjectManager().getProjects().get(0);
+		IBugReport report = bugTrap.getBugReportManager().getBugReportList().get(0);
 		
 		//Update project with 2 new values.
-		bugTrap.getProjectManager().updateProject(project, "newName", project.getDescription(), 125478963, project.getStartDate());	
+		bugTrap.getBugReportManager().updateBugReport(report, BugTag.ASSIGNED);
+		bugTrap.getBugReportManager().updateBugReport(report, BugTag.UNDERREVIEW);
 	
-		//2 new values, 2 new notifications.
+		//2 new tags, 2 new notifications.
 		assertEquals(2, bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")).getNotifications().size());
 		
 		IBugReport bugReport = bugTrap.getBugReportManager().getBugReportList().get(0);
 		
 		//Update Bug Report with new tag..
-		bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.UNDERREVIEW);
+		bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.RESOLVED);
 		//After this, 2+1=3 notifications.
 		assertEquals(3, bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")).getNotifications().size());
 		
@@ -94,9 +96,9 @@ public class ShowNotificationsUseCaseTest {
 		//-Not marked as read yet.
 		assertFalse(reqNotifications.get(0).isRead());
 		assertFalse(reqNotifications.get(1).isRead());
-		//-Chronological.
-		assertTrue(reqNotifications.get(0).getText().contains("BugReport"));
-		assertTrue(reqNotifications.get(1).getText().contains("Project"));
+		//-Chronological. Most recent first.
+		assertTrue(reqNotifications.get(0).getText().contains("RESOLVED"));
+		assertTrue(reqNotifications.get(1).getText().contains("UNDERREVIEW"));
 	}
 
 }

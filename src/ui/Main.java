@@ -475,6 +475,7 @@ public class Main {
 			CommentCreationForm form = bugReportController.getCommentCreationForm();
 			
 			IBugReport chosenBugReport = selectBugReport();
+			form.setBugReport(chosenBugReport);
 			boolean valid = false;
 			while (!valid) {
 				System.out.println("Comment directly on this bug report or on one of its comments?");

@@ -186,26 +186,20 @@ public class ProjectManagerTests {
         p2 = bugTrap.getProjectManager().getProjects().get(1);
         p3 = bugTrap.getProjectManager().getProjects().get(2);
 
-        
-        try {
-        	bugTrap.getUserManager().loginAs(d1);
-			Assert.assertTrue(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p1));
-	        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p2));
-	        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p3));
-	        
-	        bugTrap.getUserManager().loginAs(d2);
-	        Assert.assertTrue(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p2));
-	        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p3));
-	        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p1));
-	        
-	        bugTrap.getUserManager().loginAs(d3);
-	        Assert.assertTrue(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p3));
-	        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p1));
-	        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p2));
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+        bugTrap.getUserManager().loginAs(d1);
+        Assert.assertTrue(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p1));
+        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p2));
+        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p3));
+
+        bugTrap.getUserManager().loginAs(d2);
+        Assert.assertTrue(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p2));
+        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p3));
+        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p1));
+
+        bugTrap.getUserManager().loginAs(d3);
+        Assert.assertTrue(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p3));
+        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p1));
+        Assert.assertFalse(bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper().contains(p2));
     }
 
     @SuppressWarnings("deprecation")
