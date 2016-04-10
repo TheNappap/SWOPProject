@@ -7,6 +7,8 @@ import java.util.List;
 
 import model.notifications.CreateBugReportObserver;
 import model.notifications.Registration;
+import model.notifications.RegistrationType;
+import model.notifications.forms.RegisterNotificationForm;
 import model.projects.Project;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +36,12 @@ public class UnregisterForNotificationUseCaseTest {
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
 		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		bugTrap.getProjectManager().createSubsystem("name", "description", bugTrap.getProjectManager().getProjects().get(0), bugTrap.getProjectManager().getProjects().get(0));
-		((Project)bugTrap.getProjectManager().getProjects().get(0)).attach(new CreateBugReportObserver(bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ADMIN")), ((Project)bugTrap.getProjectManager().getProjects().get(0))));
+
+		RegisterNotificationForm form = bugTrap.getFormFactory().makeRegisterNotificationForm();
+		form.setRegistrationType(RegistrationType.CREATE_BUGREPORT);
+		form.setObservable(((Project)bugTrap.getProjectManager().getProjects().get(0)));
+		bugTrap.getNotificationManager().registerForNotification(form.getRegistrationType(), form.getObservable(), form.getTag());
+
 		bugTrap.getUserManager().logOff();
 	}
 

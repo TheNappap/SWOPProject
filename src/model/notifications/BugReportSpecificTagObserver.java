@@ -6,15 +6,18 @@ import model.bugreports.bugtag.BugTag;
 public class BugReportSpecificTagObserver extends BugReportObserver {
 
 	private BugTag bugTag;
+	private IBugReport report;
 	
-	public BugReportSpecificTagObserver(Mailbox mailbox, Observable bugReport, BugTag bugTag) {
+	public BugReportSpecificTagObserver(Mailbox mailbox, IBugReport bugReport, BugTag bugTag) {
 		super(mailbox, bugReport);
 		
 		this.bugTag = bugTag;
+		this.report = bugReport;
 	}
 	
 	@Override
 	public void signal(String notificationText) {
-		this.getMailbox().addNotification(notificationText);
+		if (this.report.getBugTag() == this.bugTag)
+			this.getMailbox().addNotification(notificationText);
 	}
 }
