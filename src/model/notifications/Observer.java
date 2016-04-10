@@ -10,7 +10,7 @@ public abstract class Observer {
 		this.observes = observes;
 	}
 	
-	public abstract void signal();
+	public abstract void signal(String notification);
 	
 	public Mailbox getMailbox() {
 		return mailbox;
@@ -18,5 +18,21 @@ public abstract class Observer {
 	
 	public Observable observes() {
 		return observes;
+	}
+
+	public boolean isBugReportObserver() {
+		return false;
+	}
+
+	public boolean isSystemObserver() {
+		return false;
+	}
+
+	public boolean isCreateBugReportObserver() {
+		return false;
+	}
+
+	public boolean isCreateCommentObserver() {
+		return false;
 	}
 }

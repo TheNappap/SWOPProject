@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.notifications.Observer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +36,7 @@ public class BugReportTest {
 	private List<IBugReport> dependsOn = new ArrayList<>();
 	private List<IUser> assignees = new ArrayList<>();
 	private List<Comment> comments = new ArrayList<>();
-	private List<BugReportObserver> observers = new ArrayList<>();
+	private List<Observer> observers = new ArrayList<>();
 	private IUser issuedBy = new Issuer(null, null, null, null);
 	private Date creationDate = new Date();
 	private BugTag bugTag = BugTag.NEW;

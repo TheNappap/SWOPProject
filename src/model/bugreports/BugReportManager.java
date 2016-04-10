@@ -17,9 +17,7 @@ import model.projects.ISubsystem;
 import model.users.IUser;
 
 /**
- * 
  * Class that stores and manages BugReports.
- *
  */
 public class BugReportManager implements Observable {
 
@@ -77,6 +75,11 @@ public class BugReportManager implements Observable {
 				.setAssignees(assignees)
 				.setBugTag(tag)
 				.getBugReport());
+
+		for (Observer observer : this.observers) {
+			if (observer.isCreateBugReportObserver())
+				observer.signal("New bug report: " + title + " by " + issuer.getFirstName() + " " + issuer.getLastName());
+		}
 	}
 
 	public void assignToBugReport(IBugReport bugReport, IUser dev){
@@ -108,22 +111,14 @@ public class BugReportManager implements Observable {
 	}
 
 	@Override
-	public String getInfo() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void attach(Observer observer) {
-		throw new UnsupportedOperationException();
+		if (observer.isCreateBugReportObserver() && !this.observers.contains(observer))
+			this.observers.add(observer);
 	}
 
 	@Override
 	public void detach(Observer observer) {
-		throw new UnsupportedOperationException();	
-	}
-
-	@Override
-	public void notifyObservers() {
-		throw new UnsupportedOperationException();
+		if (this.observers.contains(observer))
+			this.observers.remove(observer);
 	}
 }

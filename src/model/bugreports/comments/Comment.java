@@ -31,6 +31,12 @@ public class Comment implements Commentable { //A Comment can be commented on.
 	@Override
 	public void addComment(String commentText) {
 		comments.add(new Comment(commentText));
+
+		for (Observer observer : this.observers) {
+			if (observer.isCreateCommentObserver()) {
+				observer.signal("New reply to comment: '" + commentText + "'");
+			}
+		}
 	}
 	
 	
@@ -49,23 +55,14 @@ public class Comment implements Commentable { //A Comment can be commented on.
 	}
 
 	@Override
-	public String getInfo() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void attach(Observer observer) {
-		throw new UnsupportedOperationException();
+		if (observer.isCreateCommentObserver() && !this.observers.contains(observer))
+			this.observers.add(observer);
 	}
 
 	@Override
 	public void detach(Observer observer) {
-		throw new UnsupportedOperationException();
+		if (this.observers.contains(observer))
+			this.observers.remove(observer);
 	}
-
-	@Override
-	public void notifyObservers() {
-		throw new UnsupportedOperationException();
-	}
-
 }

@@ -14,7 +14,9 @@ public class BugReportSpecificTagObserver extends BugReportObserver {
 	}
 	
 	@Override
-	public void signal() {
-		throw new UnsupportedOperationException();
+	public void signal(String notificationText) {
+		if (this.report.getBugTag() == this.bugTag) {
+			this.getMailbox().addNotification(notificationText);
+		}
 	}
 }

@@ -10,6 +10,7 @@ import model.bugreports.TargetMilestone;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
 import model.notifications.BugReportObserver;
+import model.notifications.Observer;
 import model.projects.ISubsystem;
 import model.users.IUser;
 
@@ -32,7 +33,7 @@ public class BugReportBuilder {
 	private BugTag bugTag		= BugTag.NEW; 	//The tag assigned to the BugReport.
 	private List<Comment> comments 	= new ArrayList<Comment>();		//Comments on the BugReport.
 	private List<IUser> assignees 	= new ArrayList<IUser>();	//Developers assigned to the BugReport.
-	private List<BugReportObserver> observers = new ArrayList<BugReportObserver>();
+	private List<Observer> observers = new ArrayList<Observer>();
 	private List<String> optionals = new ArrayList<String>();
 	private TargetMilestone milestone = new TargetMilestone();
 	
@@ -133,7 +134,7 @@ public class BugReportBuilder {
 		return this;
 	}
 	
-	public BugReportBuilder setObservers(List<BugReportObserver> observers) {
+	public BugReportBuilder setObservers(List<Observer> observers) {
 		this.observers = observers;
 		return this;
 	}

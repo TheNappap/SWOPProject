@@ -129,17 +129,14 @@ public class AssignBugReportUseCaseTest {
 		//step 2 SELECT BUGREPORT USE CASE
 		FilterType[] types = null;
 		IBugReport bugReport = null;
-		try {
-			types = bugTrap.getBugReportManager().getFilterTypes();
-			FilterType type = types[0];
-			String searchingString = "B1";
-			List<IBugReport> list = null;
-			list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
-			bugReport = list.get(0);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}	
+
+		types = bugTrap.getBugReportManager().getFilterTypes();
+		FilterType type = types[0];
+		String searchingString = "B1";
+		List<IBugReport> list = null;
+		list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
+		bugReport = list.get(0);
+
 		form.setBugReport(bugReport);
 		
 		//step 3a
@@ -163,7 +160,7 @@ public class AssignBugReportUseCaseTest {
 		}
 	}
 	
-	@Test (expected = IllegalArgumentException.class)
+	@Test (expected = NullPointerException.class)
 	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("LEAD");
@@ -173,17 +170,11 @@ public class AssignBugReportUseCaseTest {
 		bugTrap.getBugReportManager().assignToBugReport(form.getBugReport(), form.getDeveloper());
 	}
 	
-	@Test (expected = IllegalArgumentException.class)
+	@Test (expected = NullPointerException.class)
 	public void nullFormTest() {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("LEAD");
 		bugTrap.getUserManager().loginAs(dev);
-		
-		try {
-			bugTrap.getBugReportManager().assignToBugReport(null, null);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		bugTrap.getBugReportManager().assignToBugReport(null, null);
 	}
 }

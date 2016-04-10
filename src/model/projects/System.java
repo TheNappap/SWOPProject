@@ -17,7 +17,7 @@ public abstract class System implements ISystem {
 	
 	protected List<AchievedMilestone> milestones;
 
-	protected List<Observer> observables = new ArrayList<Observer>();
+	protected List<Observer> observers = new ArrayList<Observer>();
 	
 	public System(String name, String description, System parent, List<Subsystem> subsystems, List<AchievedMilestone> milestones) {
 		this.name 			= name;
@@ -26,23 +26,15 @@ public abstract class System implements ISystem {
 		this.subsystems		= subsystems;
 		this.milestones		= milestones;
 	}
-	
-	public String getInfo() {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	@Override
 	public void attach(Observer observer) {
-		throw new UnsupportedOperationException();
+		if (observer.isSystemObserver() && this.observers.contains(observer))
+			this.observers.add(observer);
 	}
 	
 	@Override
 	public void detach(Observer observer) {
-		throw new UnsupportedOperationException();
-	}
-	
-	@Override
-	public void notifyObservers() {
 		throw new UnsupportedOperationException();
 	}
 	

@@ -9,8 +9,8 @@ public class SystemObserver extends Observer {
 	}
 
 	@Override
-	public void signal() {
-		throw new UnsupportedOperationException();
+	public void signal(String notificationText) {
+		this.getMailbox().addNotification(notificationText);
 	}
 
 }

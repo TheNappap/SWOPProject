@@ -7,16 +7,16 @@ public class ShowChronologicalNotificationForm implements Form {
 	private int nbOfNotifications;
 	
 	public void setNbOfNotifications(int nbOfNotifications) {
-		throw new UnsupportedOperationException();
+		this.nbOfNotifications = nbOfNotifications;
 	}
 	
 	public int getNbOfNotifications() {
-		throw new UnsupportedOperationException();
+		return nbOfNotifications;
 	}
 	
 	@Override
 	public void allVarsFilledIn() {
-		throw new UnsupportedOperationException();
+		if (nbOfNotifications <= 0) throw new IllegalArgumentException("Number of notifications should be strictly positive.");
 	}
 
 }

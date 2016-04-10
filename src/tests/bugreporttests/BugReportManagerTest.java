@@ -44,12 +44,7 @@ public class BugReportManagerTest {
 
 	@Test
 	public void constructorTest() {
-		try {
-			assertNotNull(bugTrap.getBugReportManager().getBugReportList());
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		assertNotNull(bugTrap.getBugReportManager().getBugReportList());
 	}
 	
 	@Test
@@ -64,21 +59,11 @@ public class BugReportManagerTest {
 		BugTag tag = BugTag.NEW;
 		bugTrap.getBugReportManager().addBugReport(title, description, creationDate, subsystem, issuer, dependencies, assignees, tag);
 
-		try {
-			assertEquals(1, bugTrap.getBugReportManager().getBugReportList().size());
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		
+		assertEquals(1, bugTrap.getBugReportManager().getBugReportList().size());
+
 		IBugReport added = null;
-		try {
-			added = bugTrap.getBugReportManager().getBugReportList().get(0);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		
+		added = bugTrap.getBugReportManager().getBugReportList().get(0);
+
 		assertTrue(added.getTitle().equals(title));
 		assertTrue(added.getDescription().equals(description));
 		assertEquals(creationDate, added.getCreationDate());
@@ -96,13 +81,8 @@ public class BugReportManagerTest {
 		bugTrap.getBugReportManager().addBugReport("CRITICAL", "BEEP BOOP BEEP", new Date(), new Subsystem(null, null, null, null, null, null), new Issuer(null, null, null, "George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 
 		List<IBugReport> ordered = null;
-		try {
-			ordered = bugTrap.getBugReportManager().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING, FilterType.FILED_BY_USER}, new String[]{"BugReport", "Michael"});
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		
+		ordered = bugTrap.getBugReportManager().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING, FilterType.FILED_BY_USER}, new String[]{"BugReport", "Michael"});
+
 		//Correct list returned.
 		//Filters themselves are tested in BugReportFilterTest.
 		assertEquals(1, ordered.size());
@@ -122,27 +102,13 @@ public class BugReportManagerTest {
 		bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 
 		IBugReport added = null;
-		try {
-			added = bugTrap.getBugReportManager().getBugReportList().get(0);
-		} catch (UnauthorizedAccessException e1) {
-			fail("not authorized");
-			e1.printStackTrace();
-		}
-		
+		added = bugTrap.getBugReportManager().getBugReportList().get(0);
+
 		try { bugTrap.getBugReportManager().assignToBugReport(added, notDev); fail(); } 
 		catch (IllegalArgumentException e) { }
-		catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		
+
 		assertEquals(0, added.getAssignees().size());
-		try {
-			bugTrap.getBugReportManager().assignToBugReport(added, developer);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		bugTrap.getBugReportManager().assignToBugReport(added, developer);
 		assertEquals(1, added.getAssignees().size());
 	}
 	
@@ -152,13 +118,8 @@ public class BugReportManagerTest {
 		bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 
 		IBugReport added = null;
-		try {
-			added = bugTrap.getBugReportManager().getBugReportList().get(0);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		
+		added = bugTrap.getBugReportManager().getBugReportList().get(0);
+
 		assertEquals(added.getBugTag(), BugTag.NEW);
 		
 		bugTrap.getBugReportManager().updateBugReport(added, BugTag.ASSIGNED);
@@ -168,12 +129,7 @@ public class BugReportManagerTest {
 	
 	@Test
 	public void getBugReportsForProject() {
-		try {
-			IProject project = bugTrap.getProjectManager().getProjects().get(0);
-			bugTrap.getBugReportManager().getBugReportsForProject(project);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		IProject project = bugTrap.getProjectManager().getProjects().get(0);
+		bugTrap.getBugReportManager().getBugReportsForProject(project);
 	}
 }
