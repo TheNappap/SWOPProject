@@ -7,11 +7,13 @@ import java.util.List;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
 import model.bugreports.comments.Comment;
+import model.notifications.Observable;
 import model.notifications.Observer;
 import model.projects.ISubsystem;
+import model.projects.Subsystem;
 import model.users.IUser;
 
-public class BugReport implements IBugReport { //A Comment can be commented on.
+public class BugReport implements IBugReport, Observable { //A Comment can be commented on.
 
 	//Immutable
 	private final Date creationDate;	//Creation Date of the BugReport.
@@ -171,7 +173,7 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 
 	@Override
 	public void attach(Observer observer) {
-		if ((observer.isBugReportObserver() || observer.isCreateCommentObserver()) && !this.observers.contains(observer))
+		if (!this.observers.contains(observer))
 			this.observers.add(observer);
 	}
 
@@ -179,5 +181,15 @@ public class BugReport implements IBugReport { //A Comment can be commented on.
 	public void detach(Observer observer) {
 		if (observers.contains(observer))
 			observers.remove(observer);
+	}
+
+	void signalNewComment(String bugReportName) {
+		((Subsystem)this.subsystem).signalNewComment(bugReportName);
+
+		for (Observer observer : this.observers) {
+			if (observer.isCreateCommentObserver()) {
+				observer.signal("New comment or reply to comment created on bug report '" + bugReportName + "'");
+			}
+		}
 	}
 }

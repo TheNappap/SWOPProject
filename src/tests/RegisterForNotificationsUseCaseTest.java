@@ -13,12 +13,9 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
-import model.notifications.BugReportSpecificTagObserver;
 import model.notifications.Mailbox;
-import model.notifications.Registration;
-import model.notifications.SystemObserver;
+import model.notifications.RegistrationType;
 import model.notifications.forms.RegisterNotificationForm;
-import model.projects.IProject;
 import model.projects.Version;
 
 public class RegisterForNotificationsUseCaseTest {
@@ -47,42 +44,6 @@ public class RegisterForNotificationsUseCaseTest {
 		bugTrap.getUserManager().logOff();
 	}
 
-	@SuppressWarnings("deprecation")
-	@Test
-	public void registerForNotificationProjectTest() {
-		//Log in.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
-		
-		//1. The issuer indicates that he wants to register for receiving notifications.
-		RegisterNotificationForm form = null;
-		try {
-			form = bugTrap.getFormFactory().makeRegisterNotificationForm();
-		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
-		
-		//2. The system asks if he wants to register for a Project, Subsystem or BugReport.
-		//3. The issuer indicates he wants to register for a Project.
-		//4. The system shows a list of projects.
-		//5. The issuer selects a project.
-		IProject project = null;
-		project = bugTrap.getProjectManager().getProjects().get(0);
-
-		form.setObservable(project);
-		form.setRegistration(Registration.PROJECT_CHANGE);
-		
-		//6. The system presents a form describing the specific system changes that
-		//can be subscribed to for the selected object of interest: (...)
-		//7. The issuer selects the system change he wants to be notified of.
-		//8. The system registers this issuer to receive notifications about the selected object of interest for the specified changes
-		Mailbox box = bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER"));
-		project.attach(new SystemObserver(box, project));
-		
-		//Confirm
-		bugTrap.getProjectManager().updateProject(project, "newName", "newDescription", 314e10, new Date(2016,4,8));
-
-		//Name, Description, Budget and startDate (4 things) changed.
-		assertEquals(4, box.getNotifications().size());
-	}
-	
 	@Test
 	public void registerForNotificationSpecificTest() {
 		//Log in.
@@ -98,16 +59,24 @@ public class RegisterForNotificationsUseCaseTest {
 		//3. The issuer indicates he wants to register for a bug report.
 		//4/5. (...)
 		IBugReport bugReport = bugTrap.getBugReportManager().getBugReportList().get(0);
-		
 		form.setObservable(bugReport);
 		
 		//6. The system presents a form describing the specific system changes that
 		//can be subscribed to for the selected object of interest: (...)
 		//7. The issuer selects the system change he wants to be notified of.
 		//8. The system registers this issuer to receive notifications about the selected object of interest for the specified changes
-		Mailbox box = bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER"));
-		bugReport.attach(new BugReportSpecificTagObserver(box, bugReport, BugTag.NOTABUG));
-		
+		form.setTag(BugTag.NOTABUG);
+		form.setRegistrationType(RegistrationType.BUGREPORT_SPECIFIC_TAG);
+
+		Mailbox box = null;
+		try {
+			bugTrap.getNotificationManager().registerForNotification(form.getRegistrationType(), form.getObservable(), form.getTag());
+			box = bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("DEV"));
+		} catch (UnauthorizedAccessException e) {
+			fail("Not authorized.");
+			e.printStackTrace();
+		}
+
 		//Confirm
 		//Initially no notifications.
 		assertEquals(0, box.getNotifications().size());

@@ -53,16 +53,4 @@ public class Comment implements Commentable { //A Comment can be commented on.
 	public List<Comment> getComments() {
 		return comments;
 	}
-
-	@Override
-	public void attach(Observer observer) {
-		if (observer.isCreateCommentObserver() && !this.observers.contains(observer))
-			this.observers.add(observer);
-	}
-
-	@Override
-	public void detach(Observer observer) {
-		if (this.observers.contains(observer))
-			this.observers.remove(observer);
-	}
 }

@@ -158,11 +158,16 @@ public class FormFactory {
 	}
 	
 	public UnregisterNotificationForm makeUnregisterNotificationForm() throws UnauthorizedAccessException {
-		throw new UnsupportedOperationException();
+		if (!getBugTrap().isLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
+
+		return new UnregisterNotificationForm();
 	}
 	
 	public ShowChronologicalNotificationForm makeShowChronologicalNotificationForm() throws UnauthorizedAccessException {
-		throw new UnsupportedOperationException();
-	}
+		if (!getBugTrap().isLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
 
+		return new ShowChronologicalNotificationForm();
+	}
 }

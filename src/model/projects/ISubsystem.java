@@ -1,8 +1,7 @@
 package model.projects;
 
-/**
- * Created by matth on 21-Mar-16.
- */
+import model.notifications.Observable;
+
 public interface ISubsystem extends ISystem {
 
     public IProject getProject();

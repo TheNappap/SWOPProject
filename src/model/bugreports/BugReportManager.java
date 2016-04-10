@@ -10,21 +10,19 @@ import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
-import model.notifications.Observable;
 import model.notifications.Observer;
 import model.projects.IProject;
 import model.projects.ISubsystem;
+import model.projects.Subsystem;
 import model.users.IUser;
 
 /**
  * Class that stores and manages BugReports.
  */
-public class BugReportManager implements Observable {
+public class BugReportManager {
 
 	private final List<BugReport> bugReportList; //List that keeps BugReports.
 	private final BugTrap bugTrap;
-
-	private final List<Observer> observers = new ArrayList<Observer>();
 	/**
 	 * Constructor.
 	 */
@@ -66,7 +64,7 @@ public class BugReportManager implements Observable {
 	}
 
 	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) {
-		bugReportList.add(new BugReportBuilder().setTitle(title)
+		BugReport report = new BugReportBuilder().setTitle(title)
 				.setDescription(description)
 				.setSubsystem(subsystem)
 				.setIssuer(issuer)
@@ -74,12 +72,9 @@ public class BugReportManager implements Observable {
 				.setCreationDate(creationDate)
 				.setAssignees(assignees)
 				.setBugTag(tag)
-				.getBugReport());
-
-		for (Observer observer : this.observers) {
-			if (observer.isCreateBugReportObserver())
-				observer.signal("New bug report: " + title + " by " + issuer.getFirstName() + " " + issuer.getLastName());
-		}
+				.getBugReport();
+		bugReportList.add(report);
+		((Subsystem)subsystem).signalNewBugReport(subsystem.getName());
 	}
 
 	public void assignToBugReport(IBugReport bugReport, IUser dev){
@@ -103,22 +98,12 @@ public class BugReportManager implements Observable {
 		report.updateBugTag(tag);
 	}
 
-	public void addComment(Commentable commentable, String text) {
+	public void addComment(Commentable commentable, String text, IBugReport report) {
 		if (commentable == null || text == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
 		
 		commentable.addComment(text);
-	}
 
-	@Override
-	public void attach(Observer observer) {
-		if (observer.isCreateBugReportObserver() && !this.observers.contains(observer))
-			this.observers.add(observer);
-	}
-
-	@Override
-	public void detach(Observer observer) {
-		if (this.observers.contains(observer))
-			this.observers.remove(observer);
+		((BugReport)report).signalNewComment(report.getTitle());
 	}
 }

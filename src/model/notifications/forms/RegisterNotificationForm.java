@@ -1,13 +1,15 @@
 package model.notifications.forms;
 
 import model.Form;
+import model.bugreports.bugtag.BugTag;
 import model.notifications.Observable;
-import model.notifications.Registration;
+import model.notifications.RegistrationType;
 
 public class RegisterNotificationForm implements Form {
 
 	private Observable observable;
-	private Registration registration;
+	private RegistrationType registrationType;
+	private BugTag tag;
 	
 	public Observable getObservable() {
 		return observable;
@@ -19,20 +21,30 @@ public class RegisterNotificationForm implements Form {
 		this.observable = observable;
 	}
 	
-	public Registration getRegistration() {
-		return registration;
+	public RegistrationType getRegistrationType() {
+		return registrationType;
 	}
 	
-	public void setRegistration(Registration registration) {
-		if (registration == null) throw new NullPointerException("Registration may not be null.");
+	public void setRegistrationType(RegistrationType registrationType) {
+		if (registrationType == null) throw new NullPointerException("RegistrationType may not be null.");
 
-		this.registration = registration;
+		this.registrationType = registrationType;
 	}
-	
+
+	public BugTag getTag() {
+		return tag;
+	}
+
+	public void setTag(BugTag tag) {
+		if (registrationType == RegistrationType.BUGREPORT_SPECIFIC_TAG && tag == null) throw new NullPointerException("BugTag may not be null.");
+
+		this.tag = tag;
+	}
+
 	@Override
 	public void allVarsFilledIn() {
 		if (observable == null) throw new NullPointerException("Observable may not be null.");
-		if (registration == null) throw new NullPointerException("Registration may not be null.");
+		if (registrationType == null) throw new NullPointerException("RegistrationType may not be null.");
+		if (registrationType == RegistrationType.BUGREPORT_SPECIFIC_TAG && tag == null) throw new NullPointerException("BugTag may not be null.");
 	}
-
 }

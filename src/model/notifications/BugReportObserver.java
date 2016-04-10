@@ -1,14 +1,12 @@
 package model.notifications;
 
+import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 
 public class BugReportObserver extends Observer {
 
-	protected IBugReport report;
-
-	public BugReportObserver(Mailbox mailbox, IBugReport bugReport) {
+	public BugReportObserver(Mailbox mailbox, Observable bugReport) {
 		super(mailbox, bugReport);
-		this.report = bugReport;
 	}
 
 	@Override

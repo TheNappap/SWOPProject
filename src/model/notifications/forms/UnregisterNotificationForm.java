@@ -3,24 +3,14 @@ package model.notifications.forms;
 import model.Form;
 import model.notifications.Observable;
 import model.notifications.Registration;
+import model.notifications.RegistrationType;
 
 public class UnregisterNotificationForm implements Form {
 
-	private Observable observable;
 	private Registration registration;
 	
 	public UnregisterNotificationForm() {
 		
-	}
-
-	public Observable getObservable() {
-		return observable;
-	}
-
-	public void setObservable(Observable observable) {
-		if (observable == null) throw new NullPointerException("Observable may not be null.");
-
-		this.observable = observable;
 	}
 
 	public Registration getRegistration() {
@@ -35,7 +25,6 @@ public class UnregisterNotificationForm implements Form {
 
 	@Override
 	public void allVarsFilledIn() {
-		if (observable == null) throw new NullPointerException("Observable may not be null.");
 		if (registration == null) throw new NullPointerException("Registration may not be null.");
 	}
 }

@@ -4,7 +4,7 @@ import model.bugreports.comments.Commentable;
 
 public class CreateCommentObserver extends Observer {
 	
-	public CreateCommentObserver(Mailbox mailbox, Commentable commentable) {
+	public CreateCommentObserver(Mailbox mailbox, Observable commentable) {
 		super(mailbox, commentable);
 	}
 

@@ -7,7 +7,7 @@ public class BugReportSpecificTagObserver extends BugReportObserver {
 
 	private BugTag bugTag;
 	
-	public BugReportSpecificTagObserver(Mailbox mailbox, IBugReport bugReport, BugTag bugTag) {
+	public BugReportSpecificTagObserver(Mailbox mailbox, Observable bugReport, BugTag bugTag) {
 		super(mailbox, bugReport);
 		
 		this.bugTag = bugTag;
@@ -15,8 +15,6 @@ public class BugReportSpecificTagObserver extends BugReportObserver {
 	
 	@Override
 	public void signal(String notificationText) {
-		if (this.report.getBugTag() == this.bugTag) {
-			this.getMailbox().addNotification(notificationText);
-		}
+		this.getMailbox().addNotification(notificationText);
 	}
 }

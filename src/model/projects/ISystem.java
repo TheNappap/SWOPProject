@@ -7,7 +7,7 @@ import model.notifications.Observable;
 /**
  * Interface for the system objects.
  */
-public interface ISystem extends Observable {
+public interface ISystem {
 
     public String getName();
     public String getDescription();
