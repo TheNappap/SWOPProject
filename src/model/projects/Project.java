@@ -5,6 +5,9 @@ import java.util.List;
 
 import model.users.IUser;
 
+/**
+ * This class represents a project in BugTrap.
+ */
 public class Project extends System implements IProject {
 
 	private Version version;

@@ -8,6 +8,7 @@ import model.notifications.Observer;
 
 /**
  * This class represents a system in BugTrap.
+ * A system is a project or subsystem, both can be composed of subsystems.
  */
 public abstract class System implements ISystem, Observable {
 

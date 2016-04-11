@@ -5,6 +5,9 @@ import java.util.List;
 
 import model.Milestone;
 
+/**
+ * This class represents a target milestone in BugTrap.
+ */
 public class TargetMilestone extends Milestone {
 	
 	public TargetMilestone(List<Integer> numbers) {

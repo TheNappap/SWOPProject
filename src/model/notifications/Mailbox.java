@@ -5,6 +5,9 @@ import java.util.List;
 
 import model.users.IUser;
 
+/**
+ * This class collects notifications for a user.
+ */
 public class Mailbox {
 	
     private IUser user;

@@ -1,7 +1,8 @@
 package model.projects;
 
-import model.notifications.Observable;
-
+/**
+ * Interface for the Subsystem class.
+ */
 public interface ISubsystem extends ISystem {
 
     public IProject getProject();

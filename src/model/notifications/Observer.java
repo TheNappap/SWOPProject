@@ -1,5 +1,8 @@
 package model.notifications;
 
+/**
+ * An abstract class for an observer, an observer can observe an observable object.
+ */
 public abstract class Observer {
 
 	private final Mailbox mailbox;

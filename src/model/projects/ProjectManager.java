@@ -10,6 +10,9 @@ import model.projects.builders.ProjectBuilder;
 import model.projects.builders.SubsystemBuilder;
 import model.users.IUser;
 
+/**
+ * Class that stores and manages projects.
+ */
 public class ProjectManager {
 
 	private final ArrayList<Project> projectList;

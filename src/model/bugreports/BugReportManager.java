@@ -31,10 +31,20 @@ public class BugReportManager {
 		this.bugTrap = bugTrap;
 	}
 	
+	/**
+	 * returns an array of all the different filter types
+	 * @return an array of filter types
+	 */
 	public FilterType[] getFilterTypes() {
 		return FilterType.values();
 	}
 
+	/**
+	 * returns an ordered list of bug reports
+	 * @param types filter types
+	 * @param arguments
+	 * @return an ordered list of bug reports
+	 */
 	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) {
 		List<IBugReport> filteredList = getBugReportList();
 		
@@ -46,12 +56,21 @@ public class BugReportManager {
 		return filter.getFilteredList();
 	}
 
+	/**
+	 * returns a copy of the bug report list
+	 * @return list of bug reports
+	 */
 	public List<IBugReport> getBugReportList(){
 		ArrayList<IBugReport> clonedList = new ArrayList<IBugReport>();
 		clonedList.addAll(bugReportList);
 		return clonedList;
 	}
 
+	/**
+	 * returns all the bug reports for a given project
+	 * @param project
+	 * @return list of bug reports
+	 */
 	public List<IBugReport> getBugReportsForProject(IProject project) {
 		List<ISubsystem> projectSubs = project.getAllDirectOrIndirectSubsystems();
 		List<IBugReport> projectReports = new ArrayList<IBugReport>();
@@ -63,6 +82,17 @@ public class BugReportManager {
 		return projectReports;
 	}
 
+	/**
+	 * adds a bug report
+	 * @param title
+	 * @param description
+	 * @param creationDate
+	 * @param subsystem
+	 * @param issuer
+	 * @param dependencies
+	 * @param assignees
+	 * @param tag
+	 */
 	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) {
 		BugReport report = new BugReportBuilder().setTitle(title)
 				.setDescription(description)
@@ -77,6 +107,11 @@ public class BugReportManager {
 		((Subsystem)subsystem).signalNewBugReport(subsystem.getName());
 	}
 
+	/**
+	 * assigns a given developer to a bugreport
+	 * @param bugReport
+	 * @param dev given developer
+	 */
 	public void assignToBugReport(IBugReport bugReport, IUser dev){
 		BugReport report = null;
 		for (BugReport b : bugReportList)
@@ -86,6 +121,11 @@ public class BugReportManager {
 		report.assignDeveloper(dev);
 	}
 	
+	/**
+	 * update a bug report with a tag
+	 * @param bugReport
+	 * @param tag
+	 */
 	public void updateBugReport(IBugReport bugReport, BugTag tag) {
 		if (bugReport == null || tag == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
@@ -98,6 +138,12 @@ public class BugReportManager {
 		report.updateBugTag(tag);
 	}
 
+	/**
+	 * adds a comment to a commentable object
+	 * @param commentable
+	 * @param text
+	 * @param report
+	 */
 	public void addComment(Commentable commentable, String text, IBugReport report) {
 		if (commentable == null || text == null || report == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
@@ -107,6 +153,12 @@ public class BugReportManager {
 		((BugReport)report).signalNewComment(report.getTitle());
 	}
 	
+	/**
+	 * proposes a test to a given bug report
+	 * @param report given bug report
+	 * @param test
+	 * @throws UnauthorizedAccessException if the logged in user is not a tester for this bugreport
+	 */
 	public void proposeTest(IBugReport report, String test) throws UnauthorizedAccessException {
 		if (report == null || test == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
@@ -118,6 +170,12 @@ public class BugReportManager {
 		bugReport.addTest(test);
 	}
 	
+	/**
+	 * proposes a patch to a given bug report
+	 * @param report given bug report
+	 * @param patch
+	 * @throws UnauthorizedAccessException if the logged in user is not a programmer for this bugreport
+	 */
 	public void proposePatch(IBugReport report, String patch) throws UnauthorizedAccessException {
 		if (report == null || patch == null)
 			throw new IllegalArgumentException("Arguments should not be null.");

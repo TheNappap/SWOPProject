@@ -10,7 +10,7 @@ import model.projects.ISubsystem;
 import model.users.IUser;
 
 /**
- * Interface for the BugReport object.
+ * Interface for the BugReport class.
  */
 public interface IBugReport extends Comparable<IBugReport>, Commentable, Observable {
 

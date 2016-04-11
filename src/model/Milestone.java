@@ -3,6 +3,9 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents a milestone in BugTrap.
+ */
 public abstract class Milestone implements Comparable<Milestone> {
 
 	private final List<Integer> numbers;

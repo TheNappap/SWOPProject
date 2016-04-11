@@ -2,10 +2,8 @@ package model.projects;
 
 import java.util.List;
 
-import model.notifications.Observable;
-
 /**
- * Interface for the system objects.
+ * Interface for the System class.
  */
 public interface ISystem {
 

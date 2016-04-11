@@ -1,5 +1,8 @@
 package model.bugreports;
 
+/**
+ * This class represents a test in BugTrap.
+ */
 public class Test {
 
 	private final String test;

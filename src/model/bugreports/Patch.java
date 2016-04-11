@@ -1,5 +1,8 @@
 package model.bugreports;
 
+/**
+ * This class represents a patch in BugTrap.
+ */
 public class Patch {
 
 	private final String patch;

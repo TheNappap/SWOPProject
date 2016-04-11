@@ -13,6 +13,9 @@ import model.projects.ISubsystem;
 import model.projects.Subsystem;
 import model.users.IUser;
 
+/**
+ * This class represents a bugreport in BugTrap.
+ */
 public class BugReport implements IBugReport, Observable { //A Comment can be commented on.
 
 	//Immutable
@@ -203,14 +206,26 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 		return returnList;
 	}
 	
+	/**
+	 * adds a test to the bug report
+	 * @param test given test
+	 */
 	public void addTest(String test) {
 		tests.add(new Test(test));
 	}
 	
+	/**
+	 * adds a patch to the bug report
+	 * @param patch given patch
+	 */
 	public void addPatch(String patch) {
 		patches.add(new Patch(patch));
 	}
 	
+	/**
+	 * accepts a given test if its for this bug report
+	 * @param test given test
+	 */
 	public void acceptTest(Test test) {
 		if(!tests.contains(test))
 			throw new IllegalArgumentException("given test is not a test for this bugreport");
@@ -218,6 +233,10 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 		test.accept();
 	}
 	
+	/**
+	 * rejects a given test if its for this bug report
+	 * @param test given test
+	 */
 	public void rejectTest(Test test) {
 		if(!tests.contains(test))
 			throw new IllegalArgumentException("given test is not a test for this bugreport");
@@ -225,6 +244,10 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 		tests.remove(test);
 	}
 	
+	/**
+	 * accepts a given patch if its for this bug report
+	 * @param patch given patch
+	 */
 	public void acceptPatch(Test patch) {
 		if(!patches.contains(patch))
 			throw new IllegalArgumentException("given test is not a test for this bugreport");
@@ -232,6 +255,10 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 		patch.accept();
 	}
 	
+	/**
+	 * rejects a given patch if its for this bug report
+	 * @param patch given patch
+	 */
 	public void rejectPatch(Test patch) {
 		if(!patches.contains(patch))
 			throw new IllegalArgumentException("given test is not a test for this bugreport");
@@ -239,12 +266,20 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 		patches.remove(patch);
 	}
 
+	/**
+	 * attaches a given observer to this bug report
+	 * @param observer
+	 */
 	@Override
 	public void attach(Observer observer) {
 		if (!this.observers.contains(observer))
 			this.observers.add(observer);
 	}
 
+	/**
+	 * detaches a given observer from tis bug report
+	 * @param observer
+	 */
 	@Override
 	public void detach(Observer observer) {
 		if (observers.contains(observer))

@@ -9,6 +9,9 @@ import model.bugreports.bugtag.BugTag;
 import model.notifications.builders.RegistrationBuilder;
 import model.users.IUser;
 
+/**
+ * Class that stores and manages mailboxes and registrations.
+ */
 public class NotificationManager {
 
 	private final BugTrap bugTrap;

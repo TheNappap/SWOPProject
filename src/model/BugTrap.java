@@ -5,6 +5,10 @@ import model.notifications.NotificationManager;
 import model.projects.ProjectManager;
 import model.users.UserManager;
 
+/**
+ * This class represents the complete BugTrap system.
+ * It contains several managers and a form factory.
+ */
 public class BugTrap {
 
 	private final UserManager userManager;

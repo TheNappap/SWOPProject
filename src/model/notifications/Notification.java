@@ -1,5 +1,8 @@
 package model.notifications;
 
+/**
+ * This class represents a notification in BugTrap.
+ */
 public class Notification implements INotification {
 
     private String text;
