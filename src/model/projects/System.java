@@ -92,9 +92,13 @@ public abstract class System implements ISystem, Observable {
 
 	@Override
 	public List<AchievedMilestone> getAchievedMilestones() {
-		return milestones;
+		List<AchievedMilestone> copy = new ArrayList<>(); copy.addAll(milestones);
+		return copy;
 	}
 
+	public void declareAchievedMilestone(List<Integer> numbers) {
+		milestones.add(new AchievedMilestone(numbers));
+	}
 
 	public void signalNewBugReport(String subsystemName) {
 		if (this.parent != null)

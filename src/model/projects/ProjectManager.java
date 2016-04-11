@@ -177,5 +177,17 @@ public class ProjectManager {
 		}
 		return null;
 	}
+
+	/**
+	 * Declares achieved milestone to a system
+	 * @param system
+	 * @param numbers
+	 */
+	public void declareAchievedMilestone(ISystem system, List<Integer> numbers) {
+		if (numbers == null || numbers.isEmpty()) throw new IllegalArgumentException("Numbers can not be null or empty!");
+		if (system == null) throw new IllegalArgumentException("System can not be null!");
+		
+		((System) system).declareAchievedMilestone(numbers);
+	}
 	
 }

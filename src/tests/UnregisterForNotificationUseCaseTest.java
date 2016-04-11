@@ -92,5 +92,27 @@ public class UnregisterForNotificationUseCaseTest {
 			fail("Not authorized.");
 		}
 	}
+	
+	@Test
+	public void authorisationTest() {
+		//Can't unregister when not logged in.
+		try {
+			bugTrap.getFormFactory().makeUnregisterNotificationForm();
+			fail("Can't unregister for notification when not logged in.");
+		} catch (UnauthorizedAccessException e) { }
+	}
+	
+	@Test
+	public void varsNotFilledTest() {
+		//Log in as Administrator.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		
+		try {
+			bugTrap.getFormFactory().makeUnregisterNotificationForm().allVarsFilledIn();
+			fail("should throw exception");
+		} 
+		catch (UnauthorizedAccessException e) 	{ fail("not authorized"); }
+		catch (NullPointerException e) 			{ }
+	}	
 
 }

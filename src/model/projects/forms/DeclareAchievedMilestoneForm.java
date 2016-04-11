@@ -29,6 +29,14 @@ public class DeclareAchievedMilestoneForm implements Form {
 		this.system = system;
 	}
 
+	public List<Integer> getNumbers() {
+		return numbers;
+	}
+
+	public void setNumbers(List<Integer> numbers) {
+		this.numbers = numbers;
+	}
+
 	@Override
 	public void allVarsFilledIn() {
 		if (getSystem() == null) 	throw new NullPointerException("System is null");
