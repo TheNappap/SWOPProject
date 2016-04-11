@@ -1,21 +1,21 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
 
-import model.notifications.CreateBugReportObserver;
-import model.notifications.Registration;
-import model.notifications.RegistrationType;
-import model.notifications.forms.RegisterNotificationForm;
-import model.projects.Project;
 import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
+import model.notifications.Registration;
+import model.notifications.RegistrationType;
+import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.UnregisterNotificationForm;
+import model.projects.Project;
 import model.projects.Version;
 
 public class UnregisterForNotificationUseCaseTest {

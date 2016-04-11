@@ -12,7 +12,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;

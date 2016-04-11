@@ -22,4 +22,6 @@ public interface IBugReport extends Comparable<IBugReport>, Commentable, Observa
     List<IUser> getAssignees();
     List<IBugReport> getDependsOn();
     IUser getIssuedBy();
+	List<Test> getTests();
+	List<Patch> getPatches();
 }

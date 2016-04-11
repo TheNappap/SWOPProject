@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
-import model.notifications.Observer;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Subsystem;
@@ -99,11 +99,33 @@ public class BugReportManager {
 	}
 
 	public void addComment(Commentable commentable, String text, IBugReport report) {
-		if (commentable == null || text == null)
+		if (commentable == null || text == null || report == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
 		
 		commentable.addComment(text);
 
 		((BugReport)report).signalNewComment(report.getTitle());
+	}
+	
+	public void proposeTest(IBugReport report, String test) throws UnauthorizedAccessException {
+		if (report == null || test == null)
+			throw new IllegalArgumentException("Arguments should not be null.");
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		BugReport bugReport = (BugReport) report;
+		if(!bugReport.getSubsystem().getProject().isTester(user))
+			throw new UnauthorizedAccessException("The logged in user needs to be a tester to propose a test");
+		
+		bugReport.addTest(test);
+	}
+	
+	public void proposePatch(IBugReport report, String patch) throws UnauthorizedAccessException {
+		if (report == null || patch == null)
+			throw new IllegalArgumentException("Arguments should not be null.");
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		BugReport bugReport = (BugReport) report;
+		if(!bugReport.getSubsystem().getProject().isProgrammer(user))
+			throw new UnauthorizedAccessException("The logged in user needs to be a programmer to propose a patch");
+		
+		((BugReport)bugReport).addPatch(patch);
 	}
 }

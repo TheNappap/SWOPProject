@@ -5,9 +5,12 @@ import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.BugReportCreationForm;
 import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
+import model.bugreports.forms.ProposePatchForm;
+import model.bugreports.forms.ProposeTestForm;
 import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.ShowChronologicalNotificationForm;
 import model.notifications.forms.UnregisterNotificationForm;
+import model.projects.forms.DeclareAchievedMilestoneForm;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectDeleteForm;
@@ -150,6 +153,11 @@ public class FormFactory {
 		return new CommentCreationForm();
 	}
 	
+	/**
+	 * Creates and returns a register notification form
+	 * @return register notification form
+	 * @throws UnauthorizedAccessException if no user is logged in
+	 */
 	public RegisterNotificationForm makeRegisterNotificationForm() throws UnauthorizedAccessException {
 		if (!getBugTrap().isLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
@@ -157,6 +165,11 @@ public class FormFactory {
 		return new RegisterNotificationForm();
 	}
 	
+	/**
+	 * Creates and returns a unregister notification form
+	 * @return unregister notification form
+	 * @throws UnauthorizedAccessException if no user is logged in
+	 */
 	public UnregisterNotificationForm makeUnregisterNotificationForm() throws UnauthorizedAccessException {
 		if (!getBugTrap().isLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
@@ -164,10 +177,51 @@ public class FormFactory {
 		return new UnregisterNotificationForm();
 	}
 	
+	/**
+	 * Creates and returns a show chronological notification form
+	 * @return show chronological notification form
+	 * @throws UnauthorizedAccessException if no user is logged in
+	 */
 	public ShowChronologicalNotificationForm makeShowChronologicalNotificationForm() throws UnauthorizedAccessException {
 		if (!getBugTrap().isLoggedIn())
 			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
 
 		return new ShowChronologicalNotificationForm();
+	}
+
+	/**
+	 * Creates and returns a propose test form
+	 * @return propose test form
+	 * @throws UnauthorizedAccessException if the logged in user is not dev
+	 */
+	public ProposeTestForm makeProposeTestForm() throws UnauthorizedAccessException {
+		if (!getBugTrap().isDeveloperLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
+		
+		return new ProposeTestForm();
+	}
+	
+	/**
+	 * Creates and returns a propose patch form
+	 * @return propose patch form
+	 * @throws UnauthorizedAccessException if the logged in user is not dev
+	 */
+	public ProposePatchForm makeProposePatchForm() throws UnauthorizedAccessException {
+		if (!getBugTrap().isDeveloperLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
+		
+		return new ProposePatchForm();
+	}
+	
+	/**
+	 * Creates and returns a declare achieved milestone form
+	 * @return propose patch form
+	 * @throws UnauthorizedAccessException if the logged in user is not dev
+	 */
+	public DeclareAchievedMilestoneForm makeDeclareAchievedMilestoneForm() throws UnauthorizedAccessException {
+		if (!getBugTrap().isDeveloperLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
+		
+		return new DeclareAchievedMilestoneForm();
 	}
 }

@@ -6,10 +6,11 @@ import java.util.List;
 
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
+import model.bugreports.Patch;
 import model.bugreports.TargetMilestone;
+import model.bugreports.Test;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
-import model.notifications.BugReportObserver;
 import model.notifications.Observer;
 import model.projects.ISubsystem;
 import model.users.IUser;
@@ -35,6 +36,8 @@ public class BugReportBuilder {
 	private List<IUser> assignees 	= new ArrayList<IUser>();	//Developers assigned to the BugReport.
 	private List<Observer> observers = new ArrayList<Observer>();
 	private List<String> optionals = new ArrayList<String>();
+	private List<Test> tests = new ArrayList<Test>();
+	private List<Patch> patches = new ArrayList<Patch>();
 	private TargetMilestone milestone = new TargetMilestone();
 	
 	/**  
@@ -144,6 +147,16 @@ public class BugReportBuilder {
 		return this;
 	}
 	
+	public BugReportBuilder setTests(List<Test> tests) {
+		this.tests = tests;
+		return this;
+	}
+	
+	public BugReportBuilder setPatches(List<Patch> patches) {
+		this.patches = patches;
+		return this;
+	}
+	
 	/**
 	 * Build and return a BugReport with set variables.
 	 * @throws NullPointerException if one of variables is null.
@@ -151,7 +164,7 @@ public class BugReportBuilder {
 	 */
 	public BugReport getBugReport() {
 		validate();
-		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState(), optionals, milestone);
+		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState(), optionals, milestone, tests, patches);
 	}
 
 	//Assure all variables are not null.
@@ -167,6 +180,8 @@ public class BugReportBuilder {
 		if (assignees == null)		throw new NullPointerException("Assignees is null");
 		if (observers == null)		throw new NullPointerException("Observers is null");
 		if (optionals == null)		throw new NullPointerException("optionals is null");
+		if (tests == null)		throw new NullPointerException("tests is null");
+		if (patches == null)		throw new NullPointerException("patches is null");
 	}
 
 }

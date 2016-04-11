@@ -31,6 +31,7 @@ private BugTrap bugTrap;
 		
 		//add user
 		IUser dev = bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
+		bugTrap.getUserManager().createDeveloper("", "", "", "ISSUER");
 		IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		bugTrap.getUserManager().loginAs(admin);
 		
@@ -49,11 +50,11 @@ private BugTrap bugTrap;
 
 	@Test
 	public void updateBugReportTest() {
-		//Log in as Developer.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		//Log in as Issuer.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
 		
 		
-		//1. The administrator indicates he wants to update a project.
+		//1.
 		BugReportUpdateForm form = null;
 		try {
 			form = bugTrap.getFormFactory().makeBugReportUpdateForm();
@@ -76,6 +77,11 @@ private BugTrap bugTrap;
 		BugTag tag = BugTag.RESOLVED;
 		form.setBugTag(tag);
 		//step 4
+		The system asks for the corresponding information for that tag. 
+		//step 5
+		The issuer provides the requested information.
+		
+		//step 6
 		bugTrap.getBugReportManager().updateBugReport(form.getBugReport(), form.getBugTag());
 
 		Assert.assertEquals(tag, bugReport.getBugTag());
@@ -104,12 +110,8 @@ private BugTrap bugTrap;
 		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
 		bugTrap.getUserManager().loginAs(admin);
 		//step 4a
-		try {
-			bugTrap.getFormFactory().makeBugReportAssignForm();
-			fail("should throw exception");
-		} catch (UnauthorizedAccessException e) {
-			//stop use case
-		}		
+		The issuer does not have the permission to assign the tag
+		1. The use case ends here.		
 	}
 
 	@Test

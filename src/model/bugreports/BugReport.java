@@ -24,9 +24,11 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	private final List<Comment> comments;		//Comments on this BugReport.
 	private final List<IUser> assignees;	//List of Developers assigned to this BugReport.
 	private final List<IBugReport> dependsOn;	//List of BugReports on which this BugReport depends.
-	private final List<String> optionals;
-	private final TargetMilestone milestone;
-	private final List<Observer> observers;
+	private final List<String> optionals; 	//List of optional addons.
+	private final TargetMilestone milestone; //target milestone.
+	private final List<Observer> observers; //list of observers.
+	private final List<Test> tests; //list of tests.
+	private final List<Patch> patches; //list of patches.
 	
 	//Mutable
 	private BugTagState bugTag;			//BugTag that is attached to this BugReport.
@@ -44,7 +46,9 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	 * @param creationDate The date the BugReport was created.
 	 * @param bugTag The BugTag to assign to the BugReport
 	 */
-	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, IUser issuedBy, Date creationDate, List<Observer> observers, BugTagState bugTag, List<String> optionals, TargetMilestone milestone) {
+	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, 
+						IUser issuedBy, Date creationDate, List<Observer> observers, BugTagState bugTag, List<String> optionals, 
+						TargetMilestone milestone, List<Test> tests, List<Patch> patches) {
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
 		this.subsystem		= subsystem;
@@ -57,6 +61,8 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 		this.bugTag 		= bugTag;
 		this.optionals		= optionals;
 		this.milestone		= milestone;
+		this.tests 			= tests;
+		this.patches		= patches;
 	}
 	
 	/**
@@ -169,6 +175,68 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	
 	public TargetMilestone getTargetMilestone() {
 		return milestone;
+	}
+	
+	public List<String> getOptionals() {
+		List<String> returnList = new ArrayList<String>(); 
+		
+		returnList.addAll(optionals);
+		
+		return returnList;
+	}
+
+	@Override
+	public List<Test> getTests() {
+		List<Test> returnList = new ArrayList<Test>(); 
+		
+		returnList.addAll(tests);
+		
+		return returnList;
+	}
+
+	@Override
+	public List<Patch> getPatches() {
+		List<Patch> returnList = new ArrayList<Patch>(); 
+		
+		returnList.addAll(patches);
+		
+		return returnList;
+	}
+	
+	public void addTest(String test) {
+		tests.add(new Test(test));
+	}
+	
+	public void addPatch(String patch) {
+		patches.add(new Patch(patch));
+	}
+	
+	public void acceptTest(Test test) {
+		if(!tests.contains(test))
+			throw new IllegalArgumentException("given test is not a test for this bugreport");
+		
+		test.accept();
+	}
+	
+	public void rejectTest(Test test) {
+		if(!tests.contains(test))
+			throw new IllegalArgumentException("given test is not a test for this bugreport");
+		
+		tests.remove(test);
+	}
+	
+	public void acceptPatch(Test patch) {
+		if(!patches.contains(patch))
+			throw new IllegalArgumentException("given test is not a test for this bugreport");
+		
+		patch.accept();
+	}
+	
+	public void rejectPatch(Test patch) {
+		if(!patches.contains(patch))
+			throw new IllegalArgumentException("given test is not a test for this bugreport");
+		
+		patches.remove(patch);
 	}
 
 	@Override
