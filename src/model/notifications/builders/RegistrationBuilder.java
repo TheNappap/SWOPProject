@@ -5,7 +5,6 @@ import model.notifications.Mailbox;
 import model.notifications.Observable;
 import model.notifications.Registration;
 import model.notifications.RegistrationType;
-import model.users.IUser;
 
 public class RegistrationBuilder {
 
@@ -13,7 +12,6 @@ public class RegistrationBuilder {
     private Observable observable;
     public Mailbox box;
     private BugTag tag;
-    private IUser user;
 
     /**
      * This class is used to construct Registration objects
@@ -37,11 +35,6 @@ public class RegistrationBuilder {
         return this;
     }
 
-    public RegistrationBuilder setUser(IUser user) {
-        this.user = user;
-        return this;
-    }
-
     public RegistrationBuilder setMailbox(Mailbox box) {
         this.box = box;
         return this;
@@ -49,11 +42,10 @@ public class RegistrationBuilder {
 
     public Registration getRegistration() {
         validate();
-        return new Registration(type, observable, tag, user, box);
+        return new Registration(type, observable, box, tag);
     }
 
     private void validate() {
-        if (user == null) throw new NullPointerException("User may not be null.");
         if (observable == null) throw new NullPointerException("Observable may not be null.");
         if (type == null) throw new NullPointerException("Registration type may not be null.");
         if (box == null) throw new NullPointerException("Mailbox may not be null.");

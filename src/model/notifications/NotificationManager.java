@@ -44,8 +44,7 @@ public class NotificationManager {
 
         IUser user = bugTrap.getUserManager().getLoggedInUser();
         Mailbox box = getMailboxForUser(user);
-        Registration registration =  (new RegistrationBuilder()).setUser(user)
-                                                                .setObservable(observable)
+        Registration registration =  (new RegistrationBuilder()).setObservable(observable)
                                                                 .setType(registrationType).setTag(tag)
                                                                 .setMailbox(box)
                                                                 .getRegistration();
