@@ -1,5 +1,7 @@
 package model.notifications;
 
+import model.notifications.observers.Observer;
+
 /**
  * Interface for objects that are observable.
  */

@@ -2,6 +2,7 @@ package model.notifications;
 
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
+import model.notifications.observers.*;
 import model.users.IUser;
 
 /**
@@ -24,7 +25,7 @@ public class Registration {
 
         switch (registrationType) {
             case BUGREPORT_CHANGE:
-                this.observer = new BugReportObserver(box, observable);
+                this.observer = new BugReportChangeObserver(box, observable);
                 break;
             case BUGREPORT_SPECIFIC_TAG:
                 this.observer = new BugReportSpecificTagObserver(box, (IBugReport)observable, tag);

@@ -11,7 +11,7 @@ import model.bugreports.TargetMilestone;
 import model.bugreports.Test;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
-import model.notifications.Observer;
+import model.notifications.observers.Observer;
 import model.projects.ISubsystem;
 import model.users.IUser;
 

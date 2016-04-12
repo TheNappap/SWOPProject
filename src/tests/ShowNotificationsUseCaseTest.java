@@ -17,7 +17,7 @@ import model.BugTrap;
 import model.FormFactory;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
-import model.notifications.BugReportObserver;
+import model.notifications.observers.BugReportChangeObserver;
 import model.notifications.INotification;
 import model.notifications.RegistrationType;
 import model.notifications.forms.ShowChronologicalNotificationForm;
@@ -49,7 +49,7 @@ public class ShowNotificationsUseCaseTest {
 
 		//Log in as an Issuer, register for notification and log off.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
-		bugTrap.getBugReportManager().getBugReportList().get(0).attach(new BugReportObserver(bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")), bugTrap.getBugReportManager().getBugReportList().get(0)));
+		bugTrap.getBugReportManager().getBugReportList().get(0).attach(new BugReportChangeObserver(bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")), bugTrap.getBugReportManager().getBugReportList().get(0)));
 
 		bugTrap.getNotificationManager().registerForNotification(RegistrationType.CREATE_BUGREPORT, (Project)bugTrap.getProjectManager().getProjects().get(0), null);
 		bugTrap.getUserManager().logOff();

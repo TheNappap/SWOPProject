@@ -1,6 +1,6 @@
 package model.bugreports.comments;
 
-import model.notifications.Observer;
+import model.notifications.observers.Observer;
 
 import java.util.ArrayList;
 import java.util.Date;
