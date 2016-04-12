@@ -77,9 +77,9 @@ private BugTrap bugTrap;
 		BugTag tag = BugTag.RESOLVED;
 		form.setBugTag(tag);
 		//step 4
-		The system asks for the corresponding information for that tag. 
+		//The system asks for the corresponding information for that tag.
 		//step 5
-		The issuer provides the requested information.
+		//The issuer provides the requested information.
 		
 		//step 6
 		bugTrap.getBugReportManager().updateBugReport(form.getBugReport(), form.getBugTag());
@@ -110,8 +110,8 @@ private BugTrap bugTrap;
 		IUser admin = bugTrap.getUserManager().getUser("ADMIN");
 		bugTrap.getUserManager().loginAs(admin);
 		//step 4a
-		The issuer does not have the permission to assign the tag
-		1. The use case ends here.		
+		//The issuer does not have the permission to assign the tag
+		//1. The use case ends here.
 	}
 
 	@Test
