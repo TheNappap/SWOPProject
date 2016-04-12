@@ -1,6 +1,5 @@
 package model.notifications;
 
-import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 import model.notifications.observers.*;
 import model.users.IUser;
@@ -19,20 +18,7 @@ public class Registration {
         this.observable = observable;
         this.box = box;
 
-        switch (registrationType) {
-            case BUGREPORT_CHANGE:
-                this.observer = new BugReportChangeObserver(box, observable);
-                break;
-            case BUGREPORT_SPECIFIC_TAG:
-                this.observer = new BugReportSpecificTagObserver(box, observable, tag);
-                break;
-            case CREATE_BUGREPORT:
-                this.observer = new CreateBugReportObserver(box, observable);
-                break;
-            case CREATE_COMMENT:
-                this.observer = new CreateCommentObserver(box, observable);
-                break;
-        }
+        this.observer = type.createObserver(box, observable, tag);
 
         this.observable.attach(this.observer);
     }
