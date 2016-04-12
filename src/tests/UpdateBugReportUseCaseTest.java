@@ -80,6 +80,7 @@ private BugTrap bugTrap;
 		//The system asks for the corresponding information for that tag.
 		//step 5
 		//The issuer provides the requested information.
+		//TODO
 		
 		//step 6
 		bugTrap.getBugReportManager().updateBugReport(form.getBugReport(), form.getBugTag());
@@ -112,6 +113,7 @@ private BugTrap bugTrap;
 		//step 4a
 		//The issuer does not have the permission to assign the tag
 		//1. The use case ends here.
+		//TODO
 	}
 
 	@Test

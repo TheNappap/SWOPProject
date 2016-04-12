@@ -38,7 +38,7 @@ public class BugReportBuilder {
 	private List<String> optionals = new ArrayList<String>();
 	private List<Test> tests = new ArrayList<Test>();
 	private List<Patch> patches = new ArrayList<Patch>();
-	private TargetMilestone milestone = new TargetMilestone();
+	private TargetMilestone milestone;
 	
 	/**  
 	 * Empty constructor.  
@@ -154,6 +154,11 @@ public class BugReportBuilder {
 	
 	public BugReportBuilder setPatches(List<Patch> patches) {
 		this.patches = patches;
+		return this;
+	}
+	
+	public BugReportBuilder setMilestone(List<Integer> milestone) {
+		this.milestone = new TargetMilestone(milestone);
 		return this;
 	}
 	

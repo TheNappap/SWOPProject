@@ -3,6 +3,7 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -12,13 +13,12 @@ import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
-import model.notifications.RegistrationType;
-import model.notifications.forms.RegisterNotificationForm;
+import model.bugreports.bugtag.BugTag;
 import model.projects.IProject;
 import model.projects.ISubsystem;
-import model.projects.Project;
 import model.projects.Version;
 import model.projects.forms.DeclareAchievedMilestoneForm;
+import model.users.IUser;
 
 public class DeclaredAchievedMilestoneUseCaseTest {
 
@@ -38,11 +38,6 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
 		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
 		bugTrap.getProjectManager().createSubsystem("name", "description", bugTrap.getProjectManager().getProjects().get(0), bugTrap.getProjectManager().getProjects().get(0));
-
-		RegisterNotificationForm form = bugTrap.getFormFactory().makeRegisterNotificationForm();
-		form.setRegistrationType(RegistrationType.CREATE_BUGREPORT);
-		form.setObservable(((Project)bugTrap.getProjectManager().getProjects().get(0)));
-		bugTrap.getNotificationManager().registerForNotification(form.getRegistrationType(), form.getObservable(), form.getTag());
 
 		bugTrap.getUserManager().logOff();
 	}
@@ -76,7 +71,7 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
-		form.setNumbers(numbers); System.out.println(numbers.size());
+		form.setNumbers(numbers);
 		
 		//Step 8. system updates the achieved milestone of the selected component. 
 		//If necessary, the system first recursively updates the achieved milestone of all the subsystems that the component contains.
@@ -90,6 +85,54 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 	
 	@Test
 	public void DeclareAchievedMilestoneToProjectTest() {
+		//Log in.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		
+		//set subsystem to new milestone to prevent error
+		List<IProject> ps = bugTrap.getProjectManager().getProjects();
+		IProject p = ps.get(0);
+		List<ISubsystem> ss = p.getAllDirectOrIndirectSubsystems();
+		ISubsystem s = ss.get(0);
+		bugTrap.getProjectManager().declareAchievedMilestone(s, Arrays.asList(new Integer[] {1,2,3}));
+		
+		
+		//Step 1. The developer indicates that he wants to declare an achieved milestone.
+		DeclareAchievedMilestoneForm form = null;
+		try {
+			form = bugTrap.getFormFactory().makeDeclareAchievedMilestoneForm();
+		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
+		
+		//Step 2. The system shows a list of projects.
+		List<IProject> projects = bugTrap.getProjectManager().getProjects();
+		
+		//Step 3. The developer selects a project.
+		IProject project = projects.get(0);
+		
+		//Step 4. system shows a list of subsystems of the selected project.
+		project.getAllDirectOrIndirectSubsystems();
+		
+		//Step 5a. The developer indicates he wants to change the achieved milestone of the entire project.
+		form.setSystem(project);
+		
+		//Step 6. The system shows the currently achieved milestones and asks for a new one.
+		project.getAchievedMilestones();
+		
+		//Step 7. The developer proposes a new achieved milestone.
+		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
+		form.setNumbers(numbers);
+		
+		//Step 8. system updates the achieved milestone of the selected component. 
+		//If necessary, the system first recursively updates the achieved milestone of all the subsystems that the component contains.
+		bugTrap.getProjectManager().declareAchievedMilestone(form.getSystem(), form.getNumbers());
+		
+		//Confirm
+		//Initially no notifications.
+		assertEquals("M1.2.3",project.getAchievedMilestones().get(project.getAchievedMilestones().size()-1).toString());
+					
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void MilestoneTooHighTest() {
 		//Log in.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		
@@ -116,21 +159,58 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
-		form.setNumbers(numbers); System.out.println(numbers.size());
+		form.setNumbers(numbers);
 		
 		//Step 8. system updates the achieved milestone of the selected component. 
 		//If necessary, the system first recursively updates the achieved milestone of all the subsystems that the component contains.
 		bugTrap.getProjectManager().declareAchievedMilestone(form.getSystem(), form.getNumbers());
-		
-		//Confirm
-		//Initially no notifications.
-		assertEquals("M1.2.3",project.getAchievedMilestones().get(project.getAchievedMilestones().size()-1).toString());
-					
+
 	}
 	
-	@Test
-	public void ConstraintsNotMetTest() {
-		fail("Not yet implemented");
+	@Test (expected = IllegalArgumentException.class)
+	public void EarlyBugReportNotClosedTest() {
+		//Log in.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		IUser dev = bugTrap.getUserManager().getUser("DEV");
+		
+		//create bugreport with lower target milestone
+		List<IProject> ps = bugTrap.getProjectManager().getProjects();
+		IProject p = ps.get(0);
+		List<ISubsystem> ss = p.getAllDirectOrIndirectSubsystems();
+		ISubsystem s = ss.get(0);
+		bugTrap.getBugReportManager().addBugReportWithTargetMilestone("title", "description", new Date(3), s, dev, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, Arrays.asList(new Integer[] {0,2}));
+		
+		
+		
+		//Step 1. The developer indicates that he wants to declare an achieved milestone.
+		DeclareAchievedMilestoneForm form = null;
+		try {
+			form = bugTrap.getFormFactory().makeDeclareAchievedMilestoneForm();
+		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
+		
+		//Step 2. The system shows a list of projects.
+		List<IProject> projects = bugTrap.getProjectManager().getProjects();
+		
+		//Step 3. The developer selects a project.
+		IProject project = projects.get(0);
+		
+		//Step 4. system shows a list of subsystems of the selected project.
+		project.getAllDirectOrIndirectSubsystems();
+		
+		//Step 5a. The developer indicates he wants to change the achieved milestone of the entire project.
+		form.setSystem(project);
+		
+		//Step 6. The system shows the currently achieved milestones and asks for a new one.
+		project.getAchievedMilestones();
+		
+		//Step 7. The developer proposes a new achieved milestone.
+		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
+		form.setNumbers(numbers);
+		
+		//Step 8. system updates the achieved milestone of the selected component. 
+		//If necessary, the system first recursively updates the achieved milestone of all the subsystems that the component contains.
+		bugTrap.getProjectManager().declareAchievedMilestone(form.getSystem(), form.getNumbers());
+
 	}
 	
 	@Test

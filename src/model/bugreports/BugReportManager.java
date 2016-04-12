@@ -107,6 +107,21 @@ public class BugReportManager {
 		bugReportList.add(report);
 		((Subsystem)subsystem).signal(new BugReportCreationSignalisation(report));
 	}
+	
+	public void addBugReportWithTargetMilestone(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag, List<Integer> milestone) {
+		BugReport report = new BugReportBuilder().setTitle(title)
+				.setDescription(description)
+				.setSubsystem(subsystem)
+				.setIssuer(issuer)
+				.setDependsOn(dependencies)
+				.setCreationDate(creationDate)
+				.setAssignees(assignees)
+				.setBugTag(tag)
+				.setMilestone(milestone)
+				.getBugReport();
+		bugReportList.add(report);
+		((Subsystem)subsystem).signal(new BugReportCreationSignalisation(report));
+	}
 
 	/**
 	 * assigns a given developer to a bugreport
