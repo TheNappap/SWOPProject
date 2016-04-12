@@ -13,8 +13,8 @@ import model.notifications.signalisations.Signalisation;
  */
 public abstract class System implements ISystem, Observable {
 
-	protected String name;		//System name.
-	protected String description;	//System description.
+	protected final String name;		//System name.
+	protected final String description;	//System description.
 	protected final System parent;		//Parent System, if any.
 	protected final List<Subsystem> subsystems;	//Subsystems.
 	
@@ -45,14 +45,6 @@ public abstract class System implements ISystem, Observable {
 	@Override
 	public String getName() {
 		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public void setDescription(String description) {
-		this.description = description;
 	}
 	
 	@Override
