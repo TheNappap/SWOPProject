@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.notifications.Observable;
-import model.notifications.Observer;
+import model.notifications.observers.Observer;
+import model.notifications.signalisations.Signalisation;
 
 /**
  * This class represents a system in BugTrap.
@@ -100,23 +101,11 @@ public abstract class System implements ISystem, Observable {
 		milestones.add(new AchievedMilestone(numbers));
 	}
 
-	public void signalNewBugReport(String subsystemName) {
+	public void signal(Signalisation signalisation) {
 		if (this.parent != null)
-			this.parent.signalNewBugReport(subsystemName);
+			this.parent.signal(signalisation);
 
 		for (Observer observer : this.observers)
-			if (observer.isCreateBugReportObserver())
-				observer.signal("New bug report created for system " + subsystemName);
-	}
-
-	public void signalNewComment(String bugReportName) {
-		if (this.parent != null)
-			this.parent.signalNewComment(bugReportName);
-
-		for (Observer observer : this.observers) {
-			if (observer.isCreateCommentObserver()) {
-				observer.signal("New comment or reply to comment created on bug report '" + bugReportName + "'");
-			}
-		}
+			observer.signal(signalisation);
 	}
 }

@@ -18,7 +18,7 @@ import model.bugreports.Patch;
 import model.bugreports.TargetMilestone;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
-import model.notifications.Observer;
+import model.notifications.observers.Observer;
 import model.projects.ISubsystem;
 import model.projects.Subsystem;
 import model.users.Administrator;

@@ -8,7 +8,10 @@ import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
 import model.bugreports.comments.Comment;
 import model.notifications.Observable;
-import model.notifications.Observer;
+import model.notifications.observers.Observer;
+import model.notifications.signalisations.BugReportChangeSignalisation;
+import model.notifications.signalisations.CommentCreationSignalisation;
+import model.notifications.signalisations.Signalisation;
 import model.projects.ISubsystem;
 import model.projects.Subsystem;
 import model.users.IUser;
@@ -75,11 +78,12 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	public void addComment(String commentText) {
 		comments.add(new Comment(commentText));
 
+		Signalisation s = new CommentCreationSignalisation(this);
 		for (Observer observer : this.observers) {
-			if (observer.isCreateCommentObserver()) {
-				observer.signal("New comment on bug report " + getTitle() + ": '" + commentText + "'");
-			}
+			observer.signal(s);
 		}
+
+		((Subsystem)getSubsystem()).signal(s);
 	}
 	
 	/**
@@ -105,11 +109,12 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	public void updateBugTag(BugTag bugTag) {
 		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState());
 
+		Signalisation s = new BugReportChangeSignalisation(this);
 		for (Observer observer : this.observers) {
-			if (observer.isBugReportObserver()) {
-				observer.signal("Bugreport " + getTitle() + " has received the tag " + getBugTag());
-			}
+			observer.signal(s);
 		}
+
+		((Subsystem)getSubsystem()).signal(s);
 	}
 	
 	@Override
@@ -284,15 +289,5 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	public void detach(Observer observer) {
 		if (observers.contains(observer))
 			observers.remove(observer);
-	}
-
-	void signalNewComment(String bugReportName) {
-		((Subsystem)this.subsystem).signalNewComment(bugReportName);
-
-		for (Observer observer : this.observers) {
-			if (observer.isCreateCommentObserver()) {
-				observer.signal("New comment or reply to comment created on bug report '" + bugReportName + "'");
-			}
-		}
 	}
 }

@@ -11,6 +11,7 @@ import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
+import model.notifications.signalisations.BugReportCreationSignalisation;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Subsystem;
@@ -104,7 +105,7 @@ public class BugReportManager {
 				.setBugTag(tag)
 				.getBugReport();
 		bugReportList.add(report);
-		((Subsystem)subsystem).signalNewBugReport(subsystem.getName());
+		((Subsystem)subsystem).signal(new BugReportCreationSignalisation(report));
 	}
 
 	/**
@@ -149,8 +150,6 @@ public class BugReportManager {
 			throw new IllegalArgumentException("Arguments should not be null.");
 		
 		commentable.addComment(text);
-
-		((BugReport)report).signalNewComment(report.getTitle());
 	}
 	
 	/**
@@ -184,6 +183,6 @@ public class BugReportManager {
 		if(!bugReport.getSubsystem().getProject().isProgrammer(user))
 			throw new UnauthorizedAccessException("The logged in user needs to be a programmer to propose a patch");
 		
-		((BugReport)bugReport).addPatch(patch);
+		bugReport.addPatch(patch);
 	}
 }

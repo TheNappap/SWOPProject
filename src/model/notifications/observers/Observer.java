@@ -1,4 +1,8 @@
-package model.notifications;
+package model.notifications.observers;
+
+import model.notifications.Mailbox;
+import model.notifications.Observable;
+import model.notifications.signalisations.Signalisation;
 
 /**
  * An abstract class for an observer, an observer can observe an observable object.
@@ -13,7 +17,7 @@ public abstract class Observer {
 		this.observes = observes;
 	}
 	
-	public abstract void signal(String notification);
+	public abstract void signal(Signalisation signalisation);
 	
 	public Mailbox getMailbox() {
 		return mailbox;
@@ -21,21 +25,5 @@ public abstract class Observer {
 	
 	public Observable observes() {
 		return observes;
-	}
-
-	public boolean isBugReportObserver() {
-		return false;
-	}
-
-	public boolean isSystemObserver() {
-		return false;
-	}
-
-	public boolean isCreateBugReportObserver() {
-		return false;
-	}
-
-	public boolean isCreateCommentObserver() {
-		return false;
 	}
 }
