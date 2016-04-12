@@ -13,7 +13,7 @@ public interface ISystem extends Observable{
     public String getDescription();
     public ISystem getParent();
     public List<ISubsystem> getSubsystems();
-    public List<AchievedMilestone> getAchievedMilestones();
+    public AchievedMilestone getAchievedMilestone();
     
     
     public List<ISubsystem> getAllDirectOrIndirectSubsystems();

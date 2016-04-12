@@ -91,8 +91,7 @@ public class CreateProjectUseCaseTest {
 		//-Has correct CreationDate.
 		assertEquals(creationDate,				project.getCreationDate());
 		//-Has one Achieved Milestone: M0
-		assertEquals(1, 						project.getAchievedMilestones().size());
-		assertEquals("M0",						project.getAchievedMilestones().get(0).toString());
+		assertEquals("M0",						project.getAchievedMilestone().toString());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -152,8 +151,7 @@ public class CreateProjectUseCaseTest {
 		assertEquals(new Date(2010, 3, 21), 	fork.getStartDate());
 		assertEquals(1234,						fork.getBudgetEstimate(), 0.01);
 		//--Forks should have initial Milestone M0.
-		assertEquals(1,							fork.getAchievedMilestones().size());
-		assertEquals("M0",						fork.getAchievedMilestones().get(0));
+		assertEquals("M0",						fork.getAchievedMilestone());
 		//--Forks hav
 	}
 	

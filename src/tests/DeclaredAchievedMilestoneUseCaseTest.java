@@ -3,10 +3,13 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.lang.System;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import model.projects.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,10 +17,6 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.notifications.RegistrationType;
 import model.notifications.forms.RegisterNotificationForm;
-import model.projects.IProject;
-import model.projects.ISubsystem;
-import model.projects.Project;
-import model.projects.Version;
 import model.projects.forms.DeclareAchievedMilestoneForm;
 
 public class DeclaredAchievedMilestoneUseCaseTest {
@@ -72,11 +71,13 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		form.setSystem(subsystem);
 		
 		//Step 6. The system shows the currently achieved milestones and asks for a new one.
-		subsystem.getAchievedMilestones();
+		List<AchievedMilestone> stones = new ArrayList<>();
+		for (ISubsystem s : subsystem.getAllDirectOrIndirectSubsystems())
+				stones.add(s.getAchievedMilestone());
 		
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
-		form.setNumbers(numbers); System.out.println(numbers.size());
+		form.setNumbers(numbers);
 		
 		//Step 8. system updates the achieved milestone of the selected component. 
 		//If necessary, the system first recursively updates the achieved milestone of all the subsystems that the component contains.
@@ -84,7 +85,7 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		
 		//Confirm
 		//Initially no notifications.
-		assertEquals("M1.2.3",subsystem.getAchievedMilestones().get(subsystem.getAchievedMilestones().size()-1).toString());
+		assertEquals("M1.2.3",subsystem.getAchievedMilestone().toString());
 				
 	}
 	
@@ -112,11 +113,15 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		form.setSystem(project);
 		
 		//Step 6. The system shows the currently achieved milestones and asks for a new one.
-		project.getAchievedMilestones();
-		
+		List<AchievedMilestone> stones = new ArrayList<>();
+		for (ISubsystem s : project.getAllDirectOrIndirectSubsystems()) {
+			stones.add(s.getAchievedMilestone());
+			System.out.println(s.getAchievedMilestone());
+		}
+
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
-		form.setNumbers(numbers); System.out.println(numbers.size());
+		form.setNumbers(numbers);
 		
 		//Step 8. system updates the achieved milestone of the selected component. 
 		//If necessary, the system first recursively updates the achieved milestone of all the subsystems that the component contains.
@@ -124,7 +129,7 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		
 		//Confirm
 		//Initially no notifications.
-		assertEquals("M1.2.3",project.getAchievedMilestones().get(project.getAchievedMilestones().size()-1).toString());
+		assertEquals("M1.2.3",project.getAchievedMilestone().toString());
 					
 	}
 	
