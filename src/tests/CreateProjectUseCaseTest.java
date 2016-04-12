@@ -182,7 +182,6 @@ public class CreateProjectUseCaseTest {
 		//login
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
 		
-		
 		try {
 			bugTrap.getProjectManager().createProject(null, null, null, null, 0, null, null);
 			fail("should throw exception");
