@@ -8,26 +8,22 @@ import model.users.IUser;
  * Represents a registration for a certain notification
  */
 public class Registration {
-    private RegistrationType registrationType;
-    private Observable observable;
-    private Mailbox mailbox;
-    private Observer observer;
-    private IUser user;
-    private BugTag tag;
+    private final RegistrationType registrationType;
+    private final Observable observable;
+    private final Observer observer;
+    private final Mailbox box;
 
-    public Registration(RegistrationType type, Observable observable, BugTag tag, IUser user, Mailbox box) {
+    public Registration(RegistrationType type, Observable observable, Mailbox box, BugTag tag) {
         this.registrationType = type;
         this.observable = observable;
-        this.user = user;
-        this.tag = tag;
-        this.mailbox = box;
+        this.box = box;
 
         switch (registrationType) {
             case BUGREPORT_CHANGE:
                 this.observer = new BugReportObserver(box, observable);
                 break;
             case BUGREPORT_SPECIFIC_TAG:
-                this.observer = new BugReportSpecificTagObserver(box, (IBugReport)observable, tag);
+                this.observer = new BugReportSpecificTagObserver(box, observable, tag);
                 break;
             case CREATE_BUGREPORT:
                 this.observer = new CreateBugReportObserver(box, observable);
@@ -40,16 +36,12 @@ public class Registration {
         this.observable.attach(this.observer);
     }
 
-    void setObservable(Observable observable) {
-        this.observable = observable;
+    public Mailbox getMailbox() {
+        return box;
     }
-
-    void setUser(IUser user) {
-        this.user = user;
-    }
-
+    
     public IUser getUser() {
-        return user;
+        return getMailbox().getUser();
     }
 
     public Observable getObservable() {
