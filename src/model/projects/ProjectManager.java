@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
+import model.Milestone;
+import model.bugreports.BugReport;
+import model.bugreports.IBugReport;
+import model.bugreports.bugtag.BugTag;
 import model.projects.builders.ProjectBuilder;
 import model.projects.builders.SubsystemBuilder;
 import model.users.IUser;
@@ -85,7 +88,7 @@ public class ProjectManager {
 
 		for (int i = 0; i < projectList.size(); i++) {
 			if (projectList.get(i) == project)
-				projectList.remove(i);
+				projectList.remove(i);//TODO Recursively delete subsystems and bugReports
 		}
 	}
 
@@ -164,7 +167,6 @@ public class ProjectManager {
 	 * Method to get the subsystem in BugTrap with the given name.
 	 * @param name The name for which to search.
 	 * @return Subsystem with the given name.
-	 * @throws UnauthorizedAccessException 
      */
 	public ISubsystem getSubsystemWithName(String name) {
 		if (name == null) throw new IllegalArgumentException("Subsystem name can not be null!");
@@ -186,6 +188,20 @@ public class ProjectManager {
 	public void declareAchievedMilestone(ISystem system, List<Integer> numbers) {
 		if (numbers == null || numbers.isEmpty()) throw new IllegalArgumentException("Numbers can not be null or empty!");
 		if (system == null) throw new IllegalArgumentException("System can not be null!");
+		
+		List<IBugReport> bugreports = bugTrap.getBugReportManager().getBugReportsForSystem(system);
+		AchievedMilestone achieved = new AchievedMilestone(numbers);
+		for (IBugReport bugreport : bugreports) {
+			BugTag tag = bugreport.getBugTag();
+			if(tag == BugTag.CLOSED || tag == BugTag.NOTABUG || tag == BugTag.DUPLICATE){
+				continue;
+			}
+			
+			Milestone target = ((BugReport) bugreport).getTargetMilestone();
+			if(target == null || achieved.compareTo(target) >= 0){
+				throw new IllegalArgumentException("The new declared achieved milestone should be less than a target milestone of a bugreport in progress");
+			}
+		}
 		
 		((System) system).declareAchievedMilestone(numbers);
 	}

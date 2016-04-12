@@ -14,6 +14,7 @@ import model.bugreports.filters.FilterType;
 import model.notifications.signalisations.BugReportCreationSignalisation;
 import model.projects.IProject;
 import model.projects.ISubsystem;
+import model.projects.ISystem;
 import model.projects.Subsystem;
 import model.users.IUser;
 
@@ -73,14 +74,18 @@ public class BugReportManager {
 	 * @return list of bug reports
 	 */
 	public List<IBugReport> getBugReportsForProject(IProject project) {
-		List<ISubsystem> projectSubs = project.getAllDirectOrIndirectSubsystems();
-		List<IBugReport> projectReports = new ArrayList<IBugReport>();
+		return getBugReportsForSystem(project);
+	}
+	
+	public List<IBugReport> getBugReportsForSystem(ISystem system) {
+		List<ISubsystem> subs = system.getAllDirectOrIndirectSubsystems();
+		List<IBugReport> reports = new ArrayList<IBugReport>();
 
 		for (IBugReport r : bugReportList)
-			if (projectSubs.contains(r.getSubsystem()))
-				projectReports.add(r);
+			if (subs.contains(r.getSubsystem()))
+				reports.add(r);
 
-		return projectReports;
+		return reports;
 	}
 
 	/**
@@ -109,6 +114,9 @@ public class BugReportManager {
 	}
 	
 	public void addBugReportWithTargetMilestone(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag, List<Integer> milestone) {
+		TargetMilestone target = new TargetMilestone(milestone);
+		if(target.compareTo(subsystem.getAchievedMilestone()) <= 0) throw new IllegalArgumentException("The target milestone should be strict higher than the achieved milestone of the subsystem");
+		
 		BugReport report = new BugReportBuilder().setTitle(title)
 				.setDescription(description)
 				.setSubsystem(subsystem)
@@ -127,8 +135,13 @@ public class BugReportManager {
 	 * assigns a given developer to a bugreport
 	 * @param bugReport
 	 * @param dev given developer
+	 * @throws UnauthorizedAccessException 
 	 */
-	public void assignToBugReport(IBugReport bugReport, IUser dev){
+	public void assignToBugReport(IBugReport bugReport, IUser dev) throws UnauthorizedAccessException{
+		IProject project = bugReport.getSubsystem().getProject();
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if(!project.isLead(user) && !project.isTester(user)) throw new UnauthorizedAccessException("A lead or tester should be logged in to assign bug report");
+		
 		BugReport report = null;
 		for (BugReport b : bugReportList)
 			if (b == bugReport)
@@ -158,10 +171,9 @@ public class BugReportManager {
 	 * adds a comment to a commentable object
 	 * @param commentable
 	 * @param text
-	 * @param report
 	 */
-	public void addComment(Commentable commentable, String text, IBugReport report) {
-		if (commentable == null || text == null || report == null)
+	public void addComment(Commentable commentable, String text) {
+		if (commentable == null || text == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
 		
 		commentable.addComment(text);

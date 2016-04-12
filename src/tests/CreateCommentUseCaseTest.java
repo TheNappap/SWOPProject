@@ -49,7 +49,7 @@ public class CreateCommentUseCaseTest {
 		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, bugTrap.getUserManager().getLoggedInUser(), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 		IBugReport bugreport = bugTrap.getBugReportManager().getBugReportList().get(0);
 		//Add Comment.
-		bugTrap.getBugReportManager().addComment(bugreport, "comment1", bugreport);
+		bugTrap.getBugReportManager().addComment(bugreport, "comment1");
 		bugTrap.getUserManager().logOff();
 	}
 
@@ -72,14 +72,13 @@ public class CreateCommentUseCaseTest {
 		
 		//4. The issuer indicates if he wants to comment directly on the bug report or on some other comment.
 		form.setCommentable(list.get(0));
-		form.setBugReport(list.get(0));
 		
 		//5. The system asks for the text of the comment.
 		//6. The issuer writes his comment.
 		form.setText("comment2");
 		
 		//7. The system adds the comment to the selected use case.
-		bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText(), form.getBugReport());
+		bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
 
 		//Confirm.
 		assertEquals(2, list.get(0).getComments().size());
@@ -105,14 +104,13 @@ public class CreateCommentUseCaseTest {
 		
 		//4. The issuer indicates if he wants to comment directly on the bug report or on some other comment.
 		form.setCommentable(comments.get(0));
-		form.setBugReport(list.get(0));
 		
 		//5. The system asks for the text of the comment.
 		//6. The issuer writes his comment.
 		form.setText("comment2");
 		
 		//7. The system adds the comment to the selected use case.
-		bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText(), form.getBugReport());
+		bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
 
 		//Confirm.
 		assertEquals(1, comments.get(0).getComments().size());
@@ -134,7 +132,7 @@ public class CreateCommentUseCaseTest {
 		
 		try {
 			CommentCreationForm form = bugTrap.getFormFactory().makeCommentCreationForm();
-			bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText(), form.getBugReport());
+			bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
 			fail("should throw exception");
 		} 
 		catch (UnauthorizedAccessException e) { fail("not authorized"); }
@@ -147,7 +145,7 @@ public class CreateCommentUseCaseTest {
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		
 		try {
-			bugTrap.getBugReportManager().addComment(null, null, null);
+			bugTrap.getBugReportManager().addComment(null, null);
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) { }

@@ -77,7 +77,7 @@ public class CreateSubsystemUserCaseTest {
 			//2. The system shows a list of projects and subsystems.
 			List<IProject> list = bugTrap.getProjectManager().getProjects();
 			//3. The administrator selects the project or subsystem that the new subsystem will be part of.
-			ISubsystem system = list.get(0).getSubsystems().get(0);
+			ISubsystem system = list.get(0).getAllDirectOrIndirectSubsystems().get(0);
 			//4. The system shows the subsystem creation form.
 			form.setParent(system);
 			//5. The administrator enters the subsystem details: name and description.

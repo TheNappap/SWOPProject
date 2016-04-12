@@ -23,9 +23,4 @@ public class TargetMilestone extends Milestone {
 		numbers.add(0);
 		return numbers;
 	}
-
-	@Override
-	public int compareTo(Milestone o) {
-		throw new UnsupportedOperationException();
-	}
 }

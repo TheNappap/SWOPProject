@@ -12,6 +12,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
@@ -104,10 +105,18 @@ public class BugReportManagerTest {
 		added = bugTrap.getBugReportManager().getBugReportList().get(0);
 
 		try { bugTrap.getBugReportManager().assignToBugReport(added, notDev); fail(); } 
-		catch (IllegalArgumentException e) { }
+		catch (IllegalArgumentException e) { } catch (UnauthorizedAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		assertEquals(0, added.getAssignees().size());
-		bugTrap.getBugReportManager().assignToBugReport(added, developer);
+		try {
+			bugTrap.getBugReportManager().assignToBugReport(added, developer);
+		} catch (UnauthorizedAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		assertEquals(1, added.getAssignees().size());
 	}
 	

@@ -14,6 +14,7 @@ import org.junit.Test;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
+import model.projects.AchievedMilestone;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Version;
@@ -67,7 +68,10 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		form.setSystem(subsystem);
 		
 		//Step 6. The system shows the currently achieved milestones and asks for a new one.
-		subsystem.getAchievedMilestones();
+		List<AchievedMilestone> stones = new ArrayList<>();
+		stones.add(subsystem.getAchievedMilestone());
+		for (ISubsystem s : subsystem.getAllDirectOrIndirectSubsystems())
+			stones.add(s.getAchievedMilestone());
 		
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
@@ -79,7 +83,7 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		
 		//Confirm
 		//Initially no notifications.
-		assertEquals("M1.2.3",subsystem.getAchievedMilestones().get(subsystem.getAchievedMilestones().size()-1).toString());
+		assertEquals("M1.2.3",subsystem.getAchievedMilestone().toString());
 				
 	}
 	
@@ -92,8 +96,8 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		List<IProject> ps = bugTrap.getProjectManager().getProjects();
 		IProject p = ps.get(0);
 		List<ISubsystem> ss = p.getAllDirectOrIndirectSubsystems();
-		ISubsystem s = ss.get(0);
-		bugTrap.getProjectManager().declareAchievedMilestone(s, Arrays.asList(new Integer[] {1,2,3}));
+		ISubsystem sub = ss.get(0);
+		bugTrap.getProjectManager().declareAchievedMilestone(sub, Arrays.asList(new Integer[] {1,2,3}));
 		
 		
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
@@ -115,8 +119,11 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		form.setSystem(project);
 		
 		//Step 6. The system shows the currently achieved milestones and asks for a new one.
-		project.getAchievedMilestones();
-		
+		List<AchievedMilestone> stones = new ArrayList<>();
+		stones.add(project.getAchievedMilestone());
+		for (ISubsystem s : project.getAllDirectOrIndirectSubsystems())
+			stones.add(s.getAchievedMilestone());
+
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
 		form.setNumbers(numbers);
@@ -127,7 +134,7 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		
 		//Confirm
 		//Initially no notifications.
-		assertEquals("M1.2.3",project.getAchievedMilestones().get(project.getAchievedMilestones().size()-1).toString());
+		assertEquals("M1.2.3",project.getAchievedMilestone().toString());
 					
 	}
 	
@@ -155,7 +162,11 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		form.setSystem(project);
 		
 		//Step 6. The system shows the currently achieved milestones and asks for a new one.
-		project.getAchievedMilestones();
+		List<AchievedMilestone> stones = new ArrayList<>();
+		stones.add(project.getAchievedMilestone());
+		for (ISubsystem s : project.getAllDirectOrIndirectSubsystems())
+			stones.add(s.getAchievedMilestone());
+
 		
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
@@ -173,13 +184,13 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		IUser dev = bugTrap.getUserManager().getUser("DEV");
 		
-		//create bugreport with lower target milestone
+		//create bugreport with lower target milestone and set subsystem to new milestone to prevent error
 		List<IProject> ps = bugTrap.getProjectManager().getProjects();
 		IProject p = ps.get(0);
 		List<ISubsystem> ss = p.getAllDirectOrIndirectSubsystems();
-		ISubsystem s = ss.get(0);
-		bugTrap.getBugReportManager().addBugReportWithTargetMilestone("title", "description", new Date(3), s, dev, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, Arrays.asList(new Integer[] {0,2}));
-		
+		ISubsystem sub = ss.get(0);
+		bugTrap.getProjectManager().declareAchievedMilestone(sub, Arrays.asList(new Integer[] {0,1}));
+		bugTrap.getBugReportManager().addBugReportWithTargetMilestone("title", "description", new Date(3), sub, dev, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, Arrays.asList(new Integer[] {0,2}));
 		
 		
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
@@ -201,7 +212,11 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		form.setSystem(project);
 		
 		//Step 6. The system shows the currently achieved milestones and asks for a new one.
-		project.getAchievedMilestones();
+		List<AchievedMilestone> stones = new ArrayList<>();
+		stones.add(project.getAchievedMilestone());
+		for (ISubsystem s : project.getAllDirectOrIndirectSubsystems())
+			stones.add(s.getAchievedMilestone());
+
 		
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});

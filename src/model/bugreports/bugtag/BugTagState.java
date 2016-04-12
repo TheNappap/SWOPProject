@@ -16,10 +16,6 @@ public abstract class BugTagState {
 		throw new IllegalStateException();
 	}
 
-	public BugReport 	getLinkedBugReport() {
-		throw new IllegalStateException();
-	}
-
 	public abstract BugTag getTag();
 
 	public boolean isNew() {

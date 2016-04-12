@@ -18,16 +18,16 @@ public abstract class System implements ISystem, Observable {
 	protected final System parent;		//Parent System, if any.
 	protected final List<Subsystem> subsystems;	//Subsystems.
 	
-	protected List<AchievedMilestone> milestones;
+	protected AchievedMilestone milestone;
 
 	protected List<Observer> observers = new ArrayList<Observer>();
 	
-	public System(String name, String description, System parent, List<Subsystem> subsystems, List<AchievedMilestone> milestones) {
+	public System(String name, String description, System parent, List<Subsystem> subsystems, AchievedMilestone milestone) {
 		this.name 			= name;
 		this.description 	= description;
 		this.parent 		= parent;
 		this.subsystems		= subsystems;
-		this.milestones		= milestones;
+		this.milestone		= milestone;
 	}
 
 	@Override
@@ -92,13 +92,28 @@ public abstract class System implements ISystem, Observable {
 	}
 
 	@Override
-	public List<AchievedMilestone> getAchievedMilestones() {
-		List<AchievedMilestone> copy = new ArrayList<>(); copy.addAll(milestones);
-		return copy;
+	public AchievedMilestone getAchievedMilestone() {
+		return milestone;
 	}
 
 	public void declareAchievedMilestone(List<Integer> numbers) {
-		milestones.add(new AchievedMilestone(numbers));
+		AchievedMilestone highest = highestAchievedMilestone();
+		AchievedMilestone achieved = new AchievedMilestone(numbers);
+
+		if ((highest == null) || achieved.compareTo(highest) <= 0 && (this.milestone == null || achieved.compareTo(this.milestone) >= 0)) {
+			milestone = achieved;
+		} else {
+			throw new IllegalArgumentException("The given milestone should be equal to or less than the higheset milestone of its (in)direct subsystems and the declared milestone must be larger than the current milestone.");
+		}
+	}
+
+	private AchievedMilestone highestAchievedMilestone() {
+		AchievedMilestone highest = null;
+		for (ISubsystem s : getAllDirectOrIndirectSubsystems()) {
+			if (highest == null || s.getAchievedMilestone().compareTo(highest) == 1)
+				highest = s.getAchievedMilestone();
+		}
+		return highest;
 	}
 
 	public void signal(Signalisation signalisation) {

@@ -18,7 +18,7 @@ public class ProjectBuilder {
 	private String description;
 	//-Optional.
 	private List<Subsystem> subsystems = new ArrayList<Subsystem>();
-	private List<AchievedMilestone> milestones = new ArrayList<AchievedMilestone>();
+	private AchievedMilestone milestone = new AchievedMilestone();
 	
 	//Project variables.
 	//-Required
@@ -62,8 +62,8 @@ public class ProjectBuilder {
 		return this;
 	}
 	
-	public ProjectBuilder setMilestone(List<AchievedMilestone> milestones) {
-		this.milestones = milestones;
+	public ProjectBuilder setMilestone(AchievedMilestone milestone) {
+		this.milestone = milestone;
 		return this;
 	}
 
@@ -123,7 +123,7 @@ public class ProjectBuilder {
 	 */
 	public Project getProject() {
 		validate();
-		return new Project(name, description, subsystems, version, creationDate, startDate, budgetEstimate, team, milestones);
+		return new Project(name, description, subsystems, version, creationDate, startDate, budgetEstimate, team, milestone);
 	}
 	
 	private void validate() {
@@ -135,6 +135,6 @@ public class ProjectBuilder {
 		if (startDate == null) 		throw new NullPointerException("StartDate is null");
 		if (version == null)		throw new NullPointerException("Version is null");
 		if (budgetEstimate <= 0) 	throw new IllegalArgumentException("Budget estimate must be strictly positive.");
-		if (milestones == null)		throw new NullPointerException("Milestones is null");
+		if (milestone == null)		throw new NullPointerException("Milestone is null");
 	}
 }

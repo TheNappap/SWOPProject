@@ -112,8 +112,8 @@ public class AssignBugReportUseCaseTest {
 		assertTrue(list.get(0).getAssignees().get(0) == form.getDeveloper());
 	}
 	
-	@Test
-	public void loggedInDevIsNotLeadOrTester() {
+	@Test (expected = UnauthorizedAccessException.class)
+	public void loggedInDevIsNotLeadOrTester() throws UnauthorizedAccessException {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("PROG");
 		bugTrap.getUserManager().loginAs(dev);
@@ -142,12 +142,17 @@ public class AssignBugReportUseCaseTest {
 		//step 3a
 		IProject project =  bugReport.getSubsystem().getProject();
 		IUser loggedInUser = bugTrap.getUserManager().getLoggedInUser();
+		form.setDeveloper(loggedInUser);
 		if(!project.isLead(loggedInUser) && !project.isTester(loggedInUser)){
 			//step 2
 			//...
 		}
 		else
 			fail("should not be lead or tester");
+		
+		bugTrap.getBugReportManager().assignToBugReport(form.getBugReport(), form.getDeveloper());
+
+		assertTrue(list.get(0).getAssignees().get(0) == form.getDeveloper());
 			
 	}
 
@@ -171,7 +176,7 @@ public class AssignBugReportUseCaseTest {
 	}
 	
 	@Test (expected = NullPointerException.class)
-	public void nullFormTest() {
+	public void nullFormTest() throws UnauthorizedAccessException {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("LEAD");
 		bugTrap.getUserManager().loginAs(dev);
