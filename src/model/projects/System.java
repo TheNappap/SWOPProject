@@ -3,9 +3,11 @@ package model.projects;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Milestone;
 import model.notifications.Observable;
 import model.notifications.observers.Observer;
 import model.notifications.signalisations.Signalisation;
+import sun.nio.cs.Surrogate;
 
 /**
  * This class represents a system in BugTrap.
@@ -18,16 +20,16 @@ public abstract class System implements ISystem, Observable {
 	protected final System parent;		//Parent System, if any.
 	protected final List<Subsystem> subsystems;	//Subsystems.
 	
-	protected List<AchievedMilestone> milestones;
+	protected AchievedMilestone milestone;
 
 	protected List<Observer> observers = new ArrayList<Observer>();
 	
-	public System(String name, String description, System parent, List<Subsystem> subsystems, List<AchievedMilestone> milestones) {
+	public System(String name, String description, System parent, List<Subsystem> subsystems, AchievedMilestone milestone) {
 		this.name 			= name;
 		this.description 	= description;
 		this.parent 		= parent;
 		this.subsystems		= subsystems;
-		this.milestones		= milestones;
+		this.milestone		= milestone;
 	}
 
 	@Override
@@ -92,13 +94,28 @@ public abstract class System implements ISystem, Observable {
 	}
 
 	@Override
-	public List<AchievedMilestone> getAchievedMilestones() {
-		List<AchievedMilestone> copy = new ArrayList<>(); copy.addAll(milestones);
-		return copy;
+	public AchievedMilestone getAchievedMilestone() {
+		return milestone;
 	}
 
 	public void declareAchievedMilestone(List<Integer> numbers) {
-		milestones.add(new AchievedMilestone(numbers));
+		AchievedMilestone highest = highestAchievedMilestone();
+		AchievedMilestone achieved = new AchievedMilestone(numbers);
+
+		if (achieved.compareTo(highest) >= 0 && (this.milestone == null || achieved.compareTo(this.milestone) >= 0)) {
+			milestone = achieved;
+		} else {
+			throw new IllegalArgumentException("The milestones of all (in)direct subsystems should be equal to or larger than given milestone and the declared milestone must be larger than the current milestone.");
+		}
+	}
+
+	public AchievedMilestone highestAchievedMilestone() {
+		AchievedMilestone highest = getAchievedMilestone();
+		for (ISubsystem s : getAllDirectOrIndirectSubsystems()) {
+			if (highest == null || s.getAchievedMilestone().compareTo(highest) == 1)
+				highest = s.getAchievedMilestone();
+		}
+		return highest;
 	}
 
 	public void signal(Signalisation signalisation) {

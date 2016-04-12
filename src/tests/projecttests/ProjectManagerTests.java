@@ -48,7 +48,7 @@ public class ProjectManagerTests {
         assertEquals("Description", 		project.getDescription());
         assertEquals(null,					project.getParent());
         assertEquals(0,						project.getSubsystems().size());
-        assertEquals("M0", 					project.getAchievedMilestones().get(0).toString());
+        assertEquals("M0", 					project.getAchievedMilestone().toString());
         
         //Project variables.
         assertEquals(new Version(1, 0, 0), 	project.getVersion());
@@ -97,7 +97,7 @@ public class ProjectManagerTests {
         Assert.assertEquals(new Version(2, 1, 1), 	fork.getVersion());
         Assert.assertEquals(123592929,				fork.getBudgetEstimate(), 0.0000001);
         Assert.assertEquals(new Date(2016, 1, 1),	fork.getStartDate());
-        Assert.assertEquals("M0",					fork.getAchievedMilestones().get(0).toString());
+        Assert.assertEquals("M0",					fork.getAchievedMilestone().toString());
     }
 
     @SuppressWarnings("deprecation")

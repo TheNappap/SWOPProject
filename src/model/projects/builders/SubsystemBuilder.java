@@ -17,7 +17,7 @@ public class SubsystemBuilder {
 	private System parent;
 	//-Optional
 	private List<Subsystem> subsystems = new ArrayList<Subsystem>();
-	private List<AchievedMilestone> milestones = new ArrayList<AchievedMilestone>();
+	private AchievedMilestone milestone = new AchievedMilestone();
 	
 	//Subsystem variables.
 	//-Required.
@@ -66,8 +66,8 @@ public class SubsystemBuilder {
 		return this;
 	}
 	
-	public SubsystemBuilder setMilestone(List<AchievedMilestone> milestones) {
-		this.milestones = milestones;
+	public SubsystemBuilder setMilestone(AchievedMilestone milestone) {
+		this.milestone = milestone;
 		return this;
 	}
 
@@ -87,7 +87,7 @@ public class SubsystemBuilder {
 	 */
 	public Subsystem getSubsystem() {
 		validate();
-		return new Subsystem(name, description, parent, subsystems, project, milestones);
+		return new Subsystem(name, description, parent, subsystems, project, milestone);
 	}
 	
 	private void validate() {
@@ -95,7 +95,7 @@ public class SubsystemBuilder {
 		if (description == null) 	throw new NullPointerException("Description is null");
 		if (parent == null) 		throw new NullPointerException("Parent is null");
 		if (subsystems == null) 	throw new NullPointerException("Subsystems is null");
-		if (milestones == null)		throw new NullPointerException("Milestone is null");
+		if (milestone == null)		throw new NullPointerException("Milestone is null");
 		if (project == null) 		throw new NullPointerException("Project is null");
 	}
 }
