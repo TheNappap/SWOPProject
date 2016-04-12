@@ -1,7 +1,7 @@
 package model.notifications;
 
 import model.bugreports.bugtag.BugTag;
-import model.notifications.observers.*;
+import model.notifications.observers.Observer;
 import model.users.IUser;
 
 /**
