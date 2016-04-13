@@ -90,8 +90,13 @@ public class ShowNotificationsUseCaseTest {
 		form.setNbOfNotifications(2);
 	
 		//4. The system shows the requested number of received notifications in chronological order with the most recent notification first.
-		List<INotification> reqNotifications = bugTrap.getNotificationManager().getNotifications(form.getNbOfNotifications()); //TODO: implement method to see notifications for logged in user
-		List<INotification> reqNotifications = bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")).getNotifications(form.getNbOfNotifications());
+		List<INotification> reqNotifications = null;
+		try {
+			reqNotifications = bugTrap.getNotificationManager().getNotifications(form.getNbOfNotifications());
+		} catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
 		
 		//Confirm.
 		//-2 Notifications requested.

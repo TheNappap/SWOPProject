@@ -64,7 +64,7 @@ public class RegisterForNotificationsUseCaseTest {
 		form.setObservable(project);
 		
 		//6. The system presents a form describing the specific system changes that
-		bugTrap.getNotificationManager().getRegistrationTypes();//TODO: make this method
+		bugTrap.getNotificationManager().getRegistrationTypes();
 		//7. The issuer selects the system change he wants to be notified of.
 		form.setRegistrationType(RegistrationType.BUGREPORT_SPECIFIC_TAG);
 		form.setTag(BugTag.NOTABUG);

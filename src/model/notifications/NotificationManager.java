@@ -70,4 +70,18 @@ public class NotificationManager {
 
         return regs;
     }
+
+	public List<INotification> getNotifications(int nbOfNotifications) throws UnauthorizedAccessException {
+		 if (!bugTrap.isLoggedIn())
+	            throw new UnauthorizedAccessException("You must be logged in to retrieve notifications.");
+		
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		Mailbox box = getMailboxForUser(user);
+		
+		return box.getNotifications(nbOfNotifications);
+	}
+
+	public RegistrationType[] getRegistrationTypes() {
+		return RegistrationType.values();
+	}
 }
