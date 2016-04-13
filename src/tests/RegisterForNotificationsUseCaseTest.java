@@ -64,21 +64,20 @@ public class RegisterForNotificationsUseCaseTest {
 		form.setObservable(project);
 		
 		//6. The system presents a form describing the specific system changes that
-		//can be subscribed to for the selected object of interest: (...)
+		bugTrap.getNotificationManager().getRegistrationTypes();//TODO: make this method
 		//7. The issuer selects the system change he wants to be notified of.
-		//8. The system registers this issuer to receive notifications about the selected object of interest for the specified changes
-		form.setTag(BugTag.NOTABUG);
 		form.setRegistrationType(RegistrationType.BUGREPORT_SPECIFIC_TAG);
-
-		Mailbox box = null;
+		form.setTag(BugTag.NOTABUG);
+		//8. The system registers this issuer to receive notifications about the selected object of interest for the specified changes
 		try {
 			bugTrap.getNotificationManager().registerForNotification(form.getRegistrationType(), form.getObservable(), form.getTag());
-			box = bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("DEV"));
+			
 		} catch (UnauthorizedAccessException e) {
 			fail("Not authorized.");
 			e.printStackTrace();
 		}
 
+		Mailbox box = bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("DEV"));
 		IBugReport bugReport = bugTrap.getBugReportManager().getBugReportList().get(0);
 		//Confirm
 		//Initially no notifications.
