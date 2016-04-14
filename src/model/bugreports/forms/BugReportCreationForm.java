@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.Form;
 import model.bugreports.IBugReport;
+import model.bugreports.TargetMilestone;
 import model.projects.ISubsystem;
 import model.users.IUser;
 
@@ -15,7 +16,12 @@ public class BugReportCreationForm implements Form {
 	private String description;	//A description for the BugReport.
 	private ISubsystem subsystem;	//The Subsystem the BugReport is about.
 	private List<IBugReport> dependsOn;	//List of BugReports the BugReport depends on.7
-	private List<String> optionals;
+
+	// Optional
+	private String errorMessage;
+	private String stackTrace;
+	private String reproduction;
+	private TargetMilestone targetMilestone;
 	
 	public BugReportCreationForm() {
 		//Explicitly settings this to null.
@@ -24,7 +30,10 @@ public class BugReportCreationForm implements Form {
 		this.description 	= null;
 		this.subsystem		= null;
 		this.dependsOn		= null;
-		this.optionals 		= null;
+		this.errorMessage	= null;
+		this.stackTrace 	= null;
+		this.reproduction	= null;
+		this.targetMilestone = null;
 	}
 
 	@Override
@@ -34,7 +43,6 @@ public class BugReportCreationForm implements Form {
 		if (getDescription() == null) throw new NullPointerException("Description is null");
 		if (getSubsystem() == null) throw new NullPointerException("Subsystem is null");
 		if (getDependsOn() == null) throw new NullPointerException("DependsOn is null");
-		if (getOptionals() == null) throw new NullPointerException("Optionals is null");
 	}
 
 	//Getters and Setters
@@ -90,13 +98,35 @@ public class BugReportCreationForm implements Form {
 		this.issuer = issuer;
 	}
 
-	public List<String> getOptionals() {
-		return optionals;
+	public String getErrorMessage() {
+		return errorMessage;
 	}
 
-	public void setOptionals(List<String> optionals) {
-		if (optionals == null) throw new NullPointerException("Optionals is null.");
-		
-		this.optionals = optionals;
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+
+	public String getReproduction() {
+		return reproduction;
+	}
+
+	public void setReproduction(String reproduction) {
+		this.reproduction = reproduction;
+	}
+
+	public String getStackTrace() {
+		return stackTrace;
+	}
+
+	public void setStackTrace(String stackTrace) {
+		this.stackTrace = stackTrace;
+	}
+
+	public TargetMilestone getTargetMilestone() {
+		return targetMilestone;
+	}
+
+	public void setTargetMilestone(TargetMilestone targetMilestone) {
+		this.targetMilestone = targetMilestone;
 	}
 }

@@ -1,12 +1,16 @@
 package tests;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import model.bugreports.TargetMilestone;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -91,10 +95,10 @@ public class CreateBugReportUseCaseTest {
 			//error message.
 			//9. The issuer enters the selected optional attributes as text
 			List<String> optionals = new ArrayList<String>();
-			optionals.add("Reproduce by calling (...) with parameter (...)");
-			optionals.add("Exception in thread \"main\" java.lang.NullPointerException");
-			optionals.add("ERROR! You messed up!");
-			form.setOptionals(optionals);
+			form.setReproduction("Reproduce by calling (...) with parameter (...)");
+			form.setStackTrace("Exception in thread \"main\" java.lang.NullPointerException");
+			form.setErrorMessage("ERROR! You messed up!");
+			form.setTargetMilestone(new TargetMilestone(Arrays.asList(new Integer[] { 1, 2, 3 })));
 			
 			List<IBugReport> bugReports = bugTrap.getBugReportManager().getBugReportsForProject(project);
 			
@@ -113,13 +117,13 @@ public class CreateBugReportUseCaseTest {
 			
 			assertEquals("Bug",				bugReport.getTitle());
 			assertEquals("a Bug",			bugReport.getDescription());
-			assertEquals(subsystem,			bugReport.getSubsystem());
-			assertEquals(project,			bugReport.getSubsystem().getProject());
+			assertTrue(subsystem == bugReport.getSubsystem());
+			assertTrue(project == bugReport.getSubsystem().getProject());
 			assertEquals(dependencies,		bugReport.getDependsOn());
 			assertEquals(user,				bugReport.getIssuedBy());	
 		}
 	}
-	
+
 	@Test
 	public void notAuthorizedTest() {
 		//Can't create BugReport when not logged in.

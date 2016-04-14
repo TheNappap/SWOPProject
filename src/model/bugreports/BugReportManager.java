@@ -82,8 +82,9 @@ public class BugReportManager {
 		List<IBugReport> reports = new ArrayList<IBugReport>();
 
 		for (IBugReport r : bugReportList)
-			if (subs.contains(r.getSubsystem()))
-				reports.add(r);
+			for (ISubsystem s : subs)
+				if (r.getSubsystem() == s)
+					reports.add(r);
 
 		return reports;
 	}
