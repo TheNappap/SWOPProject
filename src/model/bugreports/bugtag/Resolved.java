@@ -1,5 +1,6 @@
 package model.bugreports.bugtag;
 
+import model.bugreports.BugReport;
 
 /**
  * This class represents the Resolved bug tag.
@@ -8,7 +9,12 @@ package model.bugreports.bugtag;
 
 public class Resolved extends Closed {
 
-    @Override
+    public Resolved(BugReport bugReport) {
+		super(bugReport);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
     public BugTag getTag() {
         return BugTag.RESOLVED;
     }

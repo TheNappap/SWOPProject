@@ -2,8 +2,6 @@ package model.bugreports.comments;
 
 import java.util.List;
 
-import model.notifications.Observable;
-
 /**
  * Class tagging objects that can be commented on.
  */

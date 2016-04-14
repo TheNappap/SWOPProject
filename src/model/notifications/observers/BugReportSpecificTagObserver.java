@@ -1,6 +1,5 @@
 package model.notifications.observers;
 
-import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 import model.notifications.Mailbox;
 import model.notifications.Observable;

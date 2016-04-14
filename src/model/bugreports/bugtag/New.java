@@ -1,5 +1,8 @@
 package model.bugreports.bugtag;
 
+import model.bugreports.BugReport;
+import model.bugreports.IBugReport;
+
 /**
  * This class represents the New bug tag.
  * This means that a BugReport has recently been
@@ -7,8 +10,21 @@ package model.bugreports.bugtag;
  */
 public class New extends BugTagState {
 
+	public New(BugReport bugReport) {
+		super(bugReport);
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public BugTagState confirmBugTag(BugTagState bugTag) {
+		if (bugTag.isClosed())
+			throw new IllegalArgumentException();
+			
+		for (IBugReport dependency : bugReport.getDependsOn())
+			if (	dependency.getBugTag() != BugTag.CLOSED ||
+					dependency.getBugTag() != BugTag.RESOLVED)
+				throw new IllegalStateException();
+		
 		return bugTag;
 	}
 

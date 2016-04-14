@@ -1,9 +1,7 @@
 package model.notifications.forms;
 
 import model.Form;
-import model.notifications.Observable;
 import model.notifications.Registration;
-import model.notifications.RegistrationType;
 
 public class UnregisterNotificationForm implements Form {
 

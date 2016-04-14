@@ -159,7 +159,7 @@ public class BugReportManager {
 	public void updateBugReport(IBugReport bugReport, BugTag tag) {
 		if (bugReport == null || tag == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
-
+		
 		BugReport report = null;
 		for (BugReport b : bugReportList)
 			if (b == bugReport)

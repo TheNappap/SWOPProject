@@ -186,7 +186,7 @@ public class BugReportBuilder {
 	 */
 	public BugReport getBugReport() {
 		validate();
-		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState(), stackTrace, errorMessage, reproduction, milestone, tests, patches);
+		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, milestone, tests, patches);
 	}
 
 	//Assure all variables are not null.

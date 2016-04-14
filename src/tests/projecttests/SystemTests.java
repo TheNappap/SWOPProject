@@ -2,12 +2,12 @@ package tests.projecttests;
 
 import java.util.ArrayList;
 
-import model.projects.ProjectTeam;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import model.projects.Project;
+import model.projects.ProjectTeam;
 import model.projects.Subsystem;
 import model.projects.Version;
 

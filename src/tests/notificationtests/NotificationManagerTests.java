@@ -1,6 +1,7 @@
 package tests.notificationtests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
