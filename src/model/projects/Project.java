@@ -42,9 +42,9 @@ public class Project extends System implements IProject {
 		super(other.name, other.description, null, other.subsystems, other.milestone);
 		
 		this.version		= other.version;
-		this.creationDate 	= new Date(other.getCreationDate().getTime());
+		this.creationDate 	= new Date();
 		this.startDate	  	= new Date(other.getStartDate().getTime());
-		this.projectTeam 	= new ProjectTeam(other.getTeam());
+		this.projectTeam 	= new ProjectTeam();
 		this.budgetEstimate = other.getBudgetEstimate();
 	}
 
@@ -149,4 +149,14 @@ public class Project extends System implements IProject {
 		this.startDate = startDate;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (!super.equals(o))
+			return false;
+
+		// Budget estimate, team, version etc are allowed to change
+		// when forking, so those are not compared here.
+
+		return true;
+	}
 }

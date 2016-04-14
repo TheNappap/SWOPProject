@@ -51,6 +51,8 @@ public class ProjectManager {
 	public void createFork(IProject project, double budgetEstimate, Version version, Date startDate) {
 		if (project == null || version == null || startDate == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
+		if (project.getVersion().compareTo(version) != -1)
+			throw new IllegalArgumentException("Fork version should be higher than current project version.");
 
 		Project toFork = null;
 		for (Project p : projectList)

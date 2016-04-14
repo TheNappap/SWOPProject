@@ -21,4 +21,15 @@ public class Subsystem extends System implements ISubsystem {
 	public IProject getProject() {
 		return project;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!super.equals(o))
+			return false;
+
+		// System.equals compares parents until the root.
+		// If same root, then same project.
+		// No need to compare here.
+		return true;
+	}
 }

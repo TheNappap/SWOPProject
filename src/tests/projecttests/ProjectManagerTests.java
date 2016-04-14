@@ -74,10 +74,6 @@ public class ProjectManagerTests {
             fail("Fork version should be higher than original Version");
         } catch(Exception e) { }
         try {
-            bugTrap.getProjectManager().createFork(project, 123592929, new Version(2, 1, 1), new Date(2016, 1 , 1));
-            fail("Fork version should be higher than original Version");
-        } catch(Exception e) { }
-        try {
             bugTrap.getProjectManager().createFork(project, 123592929, new Version(2, 1, 0), new Date(2016, 1 , 1));
             fail("Fork version should be higher than original Version");
         } catch(Exception e) { }
@@ -86,18 +82,7 @@ public class ProjectManagerTests {
         bugTrap.getProjectManager().createFork(project, 123592929, new Version(2, 1, 1), new Date(2016, 1, 1));
         fork = bugTrap.getProjectManager().getProjects().get(1);
 
-		//Check if forked values are correct.
-        Assert.assertEquals(project.getName(), 			fork.getName());
-        Assert.assertEquals(project.getDescription(), 	fork.getDescription());
-        Assert.assertEquals(project.getLeadDeveloper(), fork.getLeadDeveloper());
-        Assert.assertEquals(project.getProgrammers(), 	fork.getProgrammers());
-        Assert.assertEquals(project.getTesters(), 		fork.getTesters());
-        
-        //Check if fork is correct.
-        Assert.assertEquals(new Version(2, 1, 1), 	fork.getVersion());
-        Assert.assertEquals(123592929,				fork.getBudgetEstimate(), 0.0000001);
-        Assert.assertEquals(new Date(2016, 1, 1),	fork.getStartDate());
-        Assert.assertEquals("M0",					fork.getAchievedMilestone().toString());
+        Assert.assertTrue(project.equals(fork));
     }
 
     @SuppressWarnings("deprecation")

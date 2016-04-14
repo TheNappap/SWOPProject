@@ -51,4 +51,30 @@ public abstract class Milestone implements Comparable<Milestone> {
 		}
 		return 0;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Milestone))
+			return false;
+
+		Milestone stone = (Milestone)o;
+
+		int maxLen = this.getNumbers().size();
+		if (stone.getNumbers().size() > maxLen)
+			maxLen = stone.getNumbers().size();
+
+		for (int i = 0; i < maxLen; i++)
+		{
+			int a = 0, b = 0;
+			if (i < this.getNumbers().size())
+				a = this.getNumbers().get(i);
+			if (i < stone.getNumbers().size())
+				b = stone.getNumbers().get(i);
+
+			if (a != b)
+				return false;
+		}
+
+		return true;
+	}
 }
