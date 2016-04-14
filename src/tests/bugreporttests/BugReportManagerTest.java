@@ -49,10 +49,12 @@ public class BugReportManagerTest {
 	
 	@Test
 	public void addBugReportTest() {
+		Project project = new Project("n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
+
 		String title = "BugReport";
 		String description = "Terrible bug";
 		Date creationDate = new Date();
-		Subsystem subsystem = new Subsystem(null, null, null, null, null, null);
+		Subsystem subsystem = new Subsystem(null, null, project, null, project, null);
 		Issuer issuer = new Issuer(null, null, null, null);
 		List<IBugReport> dependencies = new ArrayList<IBugReport>();
 		List<IUser> assignees = new ArrayList<IUser>();
@@ -76,9 +78,10 @@ public class BugReportManagerTest {
 	
 	@Test
 	public void getOrderedListTest() {
-		bugTrap.getBugReportManager().addBugReport("Urgent!!!", "This is a BugReport", new Date(), new Subsystem(null, null, null, null, null, null), new Issuer(null, null, null, "Michael"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		bugTrap.getBugReportManager().addBugReport("Some BugReport", "Low Priority", new Date(), new Subsystem(null, null, null, null, null, null), new Issuer(null, null, null,"George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		bugTrap.getBugReportManager().addBugReport("CRITICAL", "BEEP BOOP BEEP", new Date(), new Subsystem(null, null, null, null, null, null), new Issuer(null, null, null, "George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		Project project = new Project("n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
+		bugTrap.getBugReportManager().addBugReport("Urgent!!!", "This is a BugReport", new Date(), new Subsystem(null, null, project, null, project, null), new Issuer(null, null, null, "Michael"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		bugTrap.getBugReportManager().addBugReport("Some BugReport", "Low Priority", new Date(), new Subsystem(null, null, project, null, project, null), new Issuer(null, null, null,"George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		bugTrap.getBugReportManager().addBugReport("CRITICAL", "BEEP BOOP BEEP", new Date(), new Subsystem(null, null, project, null, project, null), new Issuer(null, null, null, "George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 
 		List<IBugReport> ordered = null;
 		ordered = bugTrap.getBugReportManager().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING, FilterType.FILED_BY_USER}, new String[]{"BugReport", "Michael"});

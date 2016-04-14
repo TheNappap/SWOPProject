@@ -26,11 +26,9 @@ public abstract class System implements ISystem, Observable {
 		this.name 			= name;
 		this.description 	= description;
 		this.parent 		= parent;
-		this.subsystems		= subsystems;
 		this.milestone		= milestone;
-
-		if (this.milestone == null)
-			this.milestone = new AchievedMilestone();
+		this.subsystems 	= subsystems == null ? new ArrayList<>() : subsystems;
+		this.milestone 		= milestone == null ? new AchievedMilestone() : milestone;
 	}
 
 	@Override
