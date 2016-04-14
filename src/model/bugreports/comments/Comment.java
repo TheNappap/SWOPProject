@@ -1,8 +1,5 @@
 package model.bugreports.comments;
 
-import model.notifications.observers.Observer;
-import model.notifications.signalisations.CommentCreationSignalisation;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

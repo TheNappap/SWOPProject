@@ -114,9 +114,8 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState());
 
 		Signalisation s = new BugReportChangeSignalisation(this);
-		for (Observer observer : this.observers) {
+		for (Observer observer : this.observers)
 			observer.signal(s);
-		}
 
 		((Subsystem)getSubsystem()).signal(s);
 	}

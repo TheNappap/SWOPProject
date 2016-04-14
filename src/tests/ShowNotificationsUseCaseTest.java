@@ -17,10 +17,10 @@ import model.BugTrap;
 import model.FormFactory;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
-import model.notifications.observers.BugReportChangeObserver;
 import model.notifications.INotification;
 import model.notifications.RegistrationType;
 import model.notifications.forms.ShowChronologicalNotificationForm;
+import model.notifications.observers.BugReportChangeObserver;
 import model.projects.Project;
 import model.projects.Version;
 

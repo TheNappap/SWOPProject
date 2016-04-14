@@ -12,6 +12,12 @@ import model.bugreports.BugReport;
  */
 public abstract class BugTagState {
 	
+	protected BugReport bugReport;
+	
+	public BugTagState(BugReport bugReport) {
+		this.bugReport = bugReport;
+	}
+	
 	public BugTagState confirmBugTag(BugTagState bugTag) {
 		throw new IllegalStateException();
 	}
