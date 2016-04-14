@@ -13,8 +13,8 @@ import model.notifications.signalisations.Signalisation;
  */
 public abstract class System implements ISystem, Observable {
 
-	protected final String name;		//System name.
-	protected final String description;	//System description.
+	protected String name;		//System name.
+	protected String description;	//System description.
 	protected final System parent;		//Parent System, if any.
 	protected final List<Subsystem> subsystems;	//Subsystems.
 	
@@ -26,8 +26,9 @@ public abstract class System implements ISystem, Observable {
 		this.name 			= name;
 		this.description 	= description;
 		this.parent 		= parent;
-		this.subsystems		= subsystems;
 		this.milestone		= milestone;
+		this.subsystems 	= subsystems == null ? new ArrayList<>() : subsystems;
+		this.milestone 		= milestone == null ? new AchievedMilestone() : milestone;
 	}
 
 	@Override
@@ -46,10 +47,18 @@ public abstract class System implements ISystem, Observable {
 	public String getName() {
 		return name;
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 	
 	@Override
 	public String getDescription() {
 		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	@Override
@@ -114,5 +123,71 @@ public abstract class System implements ISystem, Observable {
 
 		for (Observer observer : this.observers)
 			observer.signal(signalisation);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+
+		if (!(o instanceof System))
+			return false;
+
+		System sys = (System)o;
+
+		if (this.getSubsystems().size() != sys.getSubsystems().size())
+			return false;
+
+		if (!this.getName().equals(sys.getName()))
+			return false;
+		if (!this.getDescription().equals(sys.getDescription()))
+			return false;
+		if (!this.getAchievedMilestone().equals(sys.getAchievedMilestone()))
+			return false;
+		if ((this.getParent() == null ^ sys.getParent() == null))
+			return false;
+		if (this.getParent() != null && sys.getParent() != null && !this.parent.simpleEquals(sys.getParent()))
+			return false;
+
+		for (ISubsystem sub : this.getSubsystems()) {
+			boolean foundEquals = false;
+			for (ISubsystem sub2 : sys.getSubsystems()) {
+				if (sub.equals(sub2)) {
+					foundEquals = true;
+					break;
+				}
+			}
+
+			if (!foundEquals)
+				return false;
+		}
+
+		return true;
+	}
+
+	// Simple equals only travels up and does not compare the subsystems.
+	// Otherwise endless loop:
+	// Subsystem compare subsystems, those compare parents, those compare subs etc...
+	private boolean simpleEquals(Object o) {
+		if (!(o instanceof System))
+			return false;
+
+		System sys = (System)o;
+
+		if (this.getSubsystems().size() != sys.getSubsystems().size())
+			return false;
+
+		if (!this.getName().equals(sys.getName()))
+			return false;
+		if (!this.getDescription().equals(sys.getDescription()))
+			return false;
+		if (!this.getAchievedMilestone().equals(sys.getAchievedMilestone()))
+			return false;
+		if ((this.getParent() == null ^ sys.getParent() == null))
+			return false;
+		if (this.getParent() != null && sys.getParent() != null && !this.parent.simpleEquals(sys.getParent()))
+			return false;
+
+		return true;
 	}
 }

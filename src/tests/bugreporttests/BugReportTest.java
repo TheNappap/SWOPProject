@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.projects.Project;
+import model.projects.Version;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,7 +34,7 @@ public class BugReportTest {
 	
 	private String title = "BugReport";
 	private String description = "Awesome BugReport";
-	private ISubsystem subsystem = new Subsystem(null, null, null, null, null, null);
+	private ISubsystem subsystem;
 	private List<IBugReport> dependsOn = new ArrayList<>();
 	private List<IUser> assignees = new ArrayList<>();
 	private List<Comment> comments = new ArrayList<>();
@@ -40,7 +42,9 @@ public class BugReportTest {
 	private IUser issuedBy = new Issuer(null, null, null, null);
 	private Date creationDate = new Date();
 	private BugTag bugTag = BugTag.NEW;
-	private List<String> optionals = new ArrayList<String>();
+	private String stackTrace;
+	private String errorMessage;
+	private String reproduction;
 	private TargetMilestone targetMilestone = new TargetMilestone();
 	private List<model.bugreports.Test> tests = new ArrayList<model.bugreports.Test>();
 	private List<Patch> patches = new ArrayList<Patch>();
@@ -48,7 +52,9 @@ public class BugReportTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		bugReport = new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState(), optionals, targetMilestone, tests, patches);
+		Project project = new Project("n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
+		subsystem = new Subsystem(null, null, project, null, project, null);
+		bugReport = new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState(), stackTrace, errorMessage, reproduction, targetMilestone, tests, patches);
 	}
 
 	@Test
@@ -61,7 +67,10 @@ public class BugReportTest {
 		assertEquals(bugReport.getIssuedBy(), issuedBy);
 		assertEquals(bugReport.getCreationDate(), creationDate);
 		assertEquals(bugReport.getBugTag(), bugTag);
-		fail(); //optionals
+		assertEquals(bugReport.getErrorMessage(), errorMessage);
+		assertEquals(bugReport.getReproduction(), reproduction);
+		assertEquals(bugReport.getTargetMilestone(), targetMilestone);
+		assertEquals(bugReport.getStackTrace(), stackTrace);
 	}
 	
 	@Test
@@ -123,14 +132,12 @@ public class BugReportTest {
 
 	@Test
 	public void compareTest() {
-		BugReport other = new BugReport("CugReport", null, null, null, null, null, null, null, null, null, null, null, null, null);
+		BugReport other = new BugReport("CugReport", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(-1, bugReport.compareTo(other));
 		assertEquals(1, other.compareTo(bugReport));
 		
-		BugReport other2 = new BugReport("BugReport", null, null, null, null, null, null, null, null, null, null, null, null, null);
+		BugReport other2 = new BugReport("BugReport", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(0, bugReport.compareTo(other2));
 		assertEquals(0, other2.compareTo(bugReport));
-		
-		
 	}
 }

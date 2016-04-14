@@ -24,4 +24,8 @@ public interface IBugReport extends Comparable<IBugReport>, Commentable, Observa
     IUser getIssuedBy();
 	List<Test> getTests();
 	List<Patch> getPatches();
+    String getErrorMessage();
+    String getStackTrace();
+    String getReproduction();
+    TargetMilestone getTargetMilestone();
 }

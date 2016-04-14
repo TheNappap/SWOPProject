@@ -51,4 +51,13 @@ public abstract class Milestone implements Comparable<Milestone> {
 		}
 		return 0;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Milestone))
+			return false;
+
+		Milestone stone = (Milestone)o;
+		return this.compareTo(stone) == 0;
+	}
 }

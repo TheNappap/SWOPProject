@@ -35,7 +35,9 @@ public class BugReportBuilder {
 	private List<Comment> comments 	= new ArrayList<Comment>();		//Comments on the BugReport.
 	private List<IUser> assignees 	= new ArrayList<IUser>();	//Developers assigned to the BugReport.
 	private List<Observer> observers = new ArrayList<Observer>();
-	private List<String> optionals = new ArrayList<String>();
+	private String stackTrace = "";
+	private String errorMessage = "";
+	private String reproduction = "";
 	private List<Test> tests = new ArrayList<Test>();
 	private List<Patch> patches = new ArrayList<Patch>();
 	private TargetMilestone milestone;
@@ -142,11 +144,26 @@ public class BugReportBuilder {
 		return this;
 	}
 
-	public BugReportBuilder setOptionals(List<String> optionals) {
-		this.optionals = optionals;
+	public BugReportBuilder setStackTrace(String stackTrace) {
+		this.stackTrace = stackTrace;
 		return this;
 	}
-	
+
+	public BugReportBuilder setReproduction(String reproduction) {
+		this.reproduction = reproduction;
+		return this;
+	}
+
+	public BugReportBuilder setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+		return this;
+	}
+
+	public BugReportBuilder setMilestone(TargetMilestone milestone) {
+		this.milestone = milestone;
+		return this;
+	}
+
 	public BugReportBuilder setTests(List<Test> tests) {
 		this.tests = tests;
 		return this;
@@ -169,7 +186,7 @@ public class BugReportBuilder {
 	 */
 	public BugReport getBugReport() {
 		validate();
-		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState(), optionals, milestone, tests, patches);
+		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag.createState(), stackTrace, errorMessage, reproduction, milestone, tests, patches);
 	}
 
 	//Assure all variables are not null.
@@ -184,7 +201,6 @@ public class BugReportBuilder {
 		if (comments == null) 		throw new NullPointerException("Comments is null");
 		if (assignees == null)		throw new NullPointerException("Assignees is null");
 		if (observers == null)		throw new NullPointerException("Observers is null");
-		if (optionals == null)		throw new NullPointerException("optionals is null");
 		if (tests == null)		throw new NullPointerException("tests is null");
 		if (patches == null)		throw new NullPointerException("patches is null");
 	}
