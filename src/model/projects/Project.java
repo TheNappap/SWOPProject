@@ -35,7 +35,11 @@ public class Project extends System implements IProject {
 		this.creationDate	= creationDate;
 		this.startDate		= startDate;
 		this.budgetEstimate	= budgetEstimate;
-		this.projectTeam	= projectTeam;
+
+		if (projectTeam == null)
+			this.projectTeam = new ProjectTeam();
+		else
+			this.projectTeam	= projectTeam;
 	}
 
 	protected Project(Project other) {
@@ -156,6 +160,13 @@ public class Project extends System implements IProject {
 
 		// Budget estimate, team, version etc are allowed to change
 		// when forking, so those are not compared here.
+
+		Project project = (Project)o;
+		if (this.getLeadDeveloper() == null ^ project.getLeadDeveloper() == null)
+			return false;
+
+		if (this.getLeadDeveloper() != null && !this.getLeadDeveloper().equals(project.getLeadDeveloper()))
+			return false;
 
 		return true;
 	}

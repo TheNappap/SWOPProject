@@ -1,6 +1,5 @@
 package tests;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -10,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 import model.bugreports.TargetMilestone;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -117,8 +115,8 @@ public class CreateBugReportUseCaseTest {
 			
 			assertEquals("Bug",				bugReport.getTitle());
 			assertEquals("a Bug",			bugReport.getDescription());
-			assertTrue(subsystem == bugReport.getSubsystem());
-			assertTrue(project == bugReport.getSubsystem().getProject());
+			assertEquals(subsystem,			bugReport.getSubsystem());
+			assertEquals(project,			bugReport.getSubsystem().getProject());
 			assertEquals(dependencies,		bugReport.getDependsOn());
 			assertEquals(user,				bugReport.getIssuedBy());	
 		}

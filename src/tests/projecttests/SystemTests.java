@@ -2,6 +2,7 @@ package tests.projecttests;
 
 import java.util.ArrayList;
 
+import model.projects.ProjectTeam;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,7 @@ public class SystemTests {
 
     @Before
     public void setUp() throws Exception {
-        sys 		= new Project("", "", new ArrayList<Subsystem>(), Version.firstVersion(), null, null, 12345, null, null);
+        sys 		= new Project("", "", new ArrayList<Subsystem>(), Version.firstVersion(), null, null, 12345, new ProjectTeam(), null);
         subsys 		= new Subsystem("", "", sys, new ArrayList<Subsystem>(), sys, null);
         subsubsys	= new Subsystem("", "", subsys, new ArrayList<Subsystem>(), sys, null);
         subsys2 	= new Subsystem("", "", sys, new ArrayList<Subsystem>(), sys, null);
@@ -42,5 +43,21 @@ public class SystemTests {
         Assert.assertFalse(subsys.getSubsystems().contains(s));
         Assert.assertTrue(subsys.getAllDirectOrIndirectSubsystems().contains(s));
         Assert.assertTrue(subsubsys.getSubsystems().contains(s));
+    }
+
+    @Test
+    public void testEquals() {
+       // Assert.assertFalse(subsys.equals(subsys2)); // Different amount of subsystems
+        Assert.assertTrue(subsys2.equals(new Subsystem("", "", sys, new ArrayList<Subsystem>(), sys, null)));
+        // Compare "identical" Projects but with different subs
+        Project p2 = new Project("", "", new ArrayList<Subsystem>(), Version.firstVersion(), null, null, 12345, null, null);
+        Assert.assertFalse(sys.equals(p2));
+
+        Project projA = new Project("n", "d", new ArrayList<Subsystem>(), Version.firstVersion(), null, null, 12345, null, null);
+        Project projB = new Project("n", "d", new ArrayList<Subsystem>(), Version.firstVersion(), null, null, 12345, null, null);
+        Subsystem subA = new Subsystem("", "", projA, new ArrayList<Subsystem>(), projA, null);
+        Subsystem subB = new Subsystem("", "", projB, new ArrayList<Subsystem>(), projB, null);
+        Assert.assertTrue(projA.equals(projB));
+        Assert.assertEquals(projA, projB);
     }
 }

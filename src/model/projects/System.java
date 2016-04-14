@@ -28,6 +28,9 @@ public abstract class System implements ISystem, Observable {
 		this.parent 		= parent;
 		this.subsystems		= subsystems;
 		this.milestone		= milestone;
+
+		if (this.milestone == null)
+			this.milestone = new AchievedMilestone();
 	}
 
 	@Override
@@ -126,6 +129,9 @@ public abstract class System implements ISystem, Observable {
 
 	@Override
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+
 		if (!(o instanceof System))
 			return false;
 
@@ -177,7 +183,7 @@ public abstract class System implements ISystem, Observable {
 			return false;
 		if (!this.getDescription().equals(sys.getDescription()))
 			return false;
-		if (!this.getAchievedMilestone().equals(sys.getDescription()))
+		if (!this.getAchievedMilestone().equals(sys.getAchievedMilestone()))
 			return false;
 		if ((this.getParent() == null ^ sys.getParent() == null))
 			return false;
