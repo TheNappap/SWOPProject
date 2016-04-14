@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
+import model.bugreports.bugtag.BugTag;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
 import model.users.Developer;
@@ -36,9 +37,9 @@ public class BugReportFilterTest {
 		assignees2.add(developer2); assignees2.add(developer3);
 		assignees3.add(developer1); assignees3.add(developer3);
 		
-		BugReport bugReport1 = new BugReport("This is a BugReport", "Typo, low priority", null, null, assignees1, null, new Issuer(null, null, null, "George"), null, null, null, null, null, null, null, null, null);
-		BugReport bugReport2 = new BugReport("Urgent!!!!", "Please take a look at this BugReport!", null, null, assignees2, null, new Issuer(null, null, null, "Michael"), null, null, null, null, null, null, null, null, null);
-		BugReport bugReport3 = new BugReport("CRITICAL ERROR", "BEEP BOOP", null, null, assignees3, null, new Issuer(null, null, null, "George"), null, null, null, null, null, null, null, null, null);
+		BugReport bugReport1 = new BugReport("This is a BugReport", "Typo, low priority", null, null, assignees1, null, new Issuer(null, null, null, "George"), null, null, BugTag.NEW, null, null, null, null, null, null);
+		BugReport bugReport2 = new BugReport("Urgent!!!!", "Please take a look at this BugReport!", null, null, assignees2, null, new Issuer(null, null, null, "Michael"), null, null, BugTag.NEW, null, null, null, null, null, null);
+		BugReport bugReport3 = new BugReport("CRITICAL ERROR", "BEEP BOOP", null, null, assignees3, null, new Issuer(null, null, null, "George"), null, null, BugTag.NEW, null, null, null, null, null, null);
 		
  		bugReports.add(bugReport1); bugReports.add(bugReport2); bugReports.add(bugReport3);
 		

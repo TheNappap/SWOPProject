@@ -17,6 +17,8 @@ public class UnderReview extends InProgress {
     
 	@Override
 	public BugTagState confirmBugTag(BugTagState bugTagState) {
+		super.confirmBugTag(bugTagState);
+		
 		for (IBugReport dependency : bugReport.getDependsOn())
 			if (	dependency.getBugTag() != BugTag.CLOSED ||
 					dependency.getBugTag() != BugTag.RESOLVED)

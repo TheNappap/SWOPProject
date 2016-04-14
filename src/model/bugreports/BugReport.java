@@ -55,7 +55,7 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	 * @param bugTag The BugTag to assign to the BugReport
 	 */
 	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, 
-						IUser issuedBy, Date creationDate, List<Observer> observers, BugTagState bugTag, String stackTrace, String errorMessage, String reproduction,
+						IUser issuedBy, Date creationDate, List<Observer> observers, BugTag bugTag, String stackTrace, String errorMessage, String reproduction,
 						TargetMilestone milestone, List<Test> tests, List<Patch> patches) {
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
@@ -66,7 +66,7 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 		this.comments 		= comments;	
 		this.creationDate 	= creationDate;
 		this.observers		= observers;
-		this.bugTag 		= bugTag;
+		this.bugTag 		= bugTag.createState(this);
 		this.errorMessage	= errorMessage;
 		this.stackTrace 	= stackTrace;
 		this.reproduction	= reproduction;
@@ -111,7 +111,7 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	 * 		| getBugTag() == bugTag
 	 */
 	public void updateBugTag(BugTag bugTag) {
-		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState());
+		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState(this));
 
 		Signalisation s = new BugReportChangeSignalisation(this);
 		for (Observer observer : this.observers)
@@ -150,6 +150,10 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	@Override
 	public BugTag getBugTag() {
 		return bugTag.getTag();
+	}
+	
+	public BugTagState getBugTagState() {
+		return bugTag;
 	}
 
 	@Override

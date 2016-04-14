@@ -74,7 +74,7 @@ private BugTrap bugTrap;
 
 		//step 3
 		form.setBugReport(bugReport);
-		BugTag tag = BugTag.RESOLVED;
+		BugTag tag = BugTag.ASSIGNED;
 		form.setBugTag(tag);
 		//step 4
 		//The system asks for the corresponding information for that tag.
