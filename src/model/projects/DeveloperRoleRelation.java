@@ -8,10 +8,16 @@ import model.users.IUser;
  * one user can occur in multiple UserRoleRelation objects.
  */
 public class DeveloperRoleRelation {
-	private IUser user;
-	private Role role;
 	
-	DeveloperRoleRelation(IUser user, Role role) {
+	private IUser user;	//User
+	private Role role;	//Role
+	
+	/**
+	 * Constructor.
+	 * @param user User to assign a Role to.
+	 * @param role The Role to assign to given User.
+	 */
+	public DeveloperRoleRelation(IUser user, Role role) {
 		if (!user.isDeveloper())
 			throw new IllegalArgumentException("User should be a developer!");
 
@@ -48,7 +54,7 @@ public class DeveloperRoleRelation {
 	 * Set the role involved in this relation
 	 * @param role The new role for this relation
 	 */
-	void setRole(Role role) {
+	public void setRole(Role role) {
 		this.role = role; 
 	}
 

@@ -42,16 +42,21 @@ public class Project extends System implements IProject {
 			this.projectTeam	= projectTeam;
 	}
 
+	//Copy constructor.
 	protected Project(Project other) {
 		super(other.name, other.description, null, other.subsystems, other.milestone);
 		
 		this.version		= other.version;
 		this.creationDate 	= new Date();
 		this.startDate	  	= new Date(other.getStartDate().getTime());
-		this.projectTeam 	= new ProjectTeam();
+		this.projectTeam 	= new ProjectTeam(other.projectTeam);
 		this.budgetEstimate = other.getBudgetEstimate();
 	}
 
+	/**
+	 * 
+	 * @return A clone of this Project
+	 */
 	public Project copy() {
 		return new Project(this);
 	}
@@ -71,6 +76,10 @@ public class Project extends System implements IProject {
 		return budgetEstimate;
 	}
 
+	/**
+	 * 
+	 * @return The Team that works on this Project.
+	 */
 	public ProjectTeam getTeam() {
 		return projectTeam;
 	}
@@ -141,19 +150,35 @@ public class Project extends System implements IProject {
 		return version;
 	}
 	
+	/**
+	 * Set the version of the Project.
+	 * @param version The new version of the Project.
+	 */
 	public void setVersion(Version version) {
 		this.version = version;
 	}
 
+	/**
+	 * Set the budget estimate of the Project.
+	 * @param budgetEstimate The new budget estimate of the Project.
+	 */
 	public void setBudgetEstimate(double budgetEstimate) {
 		this.budgetEstimate = budgetEstimate;
 	}
 
+	/**
+	 * Set the start Date of the Project.
+	 * @param startDate The new start Date of the Project.
+	 */
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	void setAchievedMilestone(AchievedMilestone milestone) {
+	/**
+	 * Set Achieved Milestone of the Project.
+	 * @param milestone The new Achieved Milestone of the System.
+	 */
+	public void setAchievedMilestone(AchievedMilestone milestone) {
 		this.milestone = milestone;
 	}
 

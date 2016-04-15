@@ -14,6 +14,7 @@ import model.notifications.signalisations.CommentCreationSignalisation;
 import model.notifications.signalisations.Signalisation;
 import model.projects.IProject;
 import model.projects.ISubsystem;
+import model.projects.Subsystem;
 import model.users.IUser;
 
 /**
@@ -86,7 +87,7 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	 * @param commentText The text of the comment.
 	 */
 	public void addComment(String commentText) {
-		comments.add(new Comment(commentText));
+		comments.add(new Comment(this, commentText));
 
 		notifyObservers(new CommentCreationSignalisation(this));
 	}
@@ -299,7 +300,10 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 
 	@Override
 	public void notifyObservers(Signalisation s) {
+		for (Observer observer : this.observers)
+			observer.signal(s);
 		
+		 ((Subsystem)getSubsystem()).signal(s);
 	}
 	
 	@Override

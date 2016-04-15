@@ -3,7 +3,8 @@ package model;
 import controllers.exceptions.UnauthorizedAccessException;
 
 public abstract class Command {
-    private BugTrap bugTrap;
+	
+    private BugTrap bugTrap; //BugTrap system
 
     /**
      * Command to do this with the System.
