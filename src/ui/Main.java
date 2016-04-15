@@ -6,41 +6,44 @@ import java.util.List;
 import java.util.Scanner;
 
 import controllers.BugReportController;
+import controllers.NotificationController;
 import controllers.ProjectController;
 import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
+import model.FormFactory;
 import model.bugreports.IBugReport;
 import model.bugreports.TargetMilestone;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.FilterType;
-import model.bugreports.forms.BugReportAssignForm;
-import model.bugreports.forms.BugReportCreationForm;
-import model.bugreports.forms.BugReportUpdateForm;
-import model.bugreports.forms.CommentCreationForm;
+import model.bugreports.forms.*;
+import model.notifications.INotification;
+import model.notifications.Observable;
+import model.notifications.Registration;
+import model.notifications.RegistrationType;
+import model.notifications.forms.RegisterNotificationForm;
+import model.notifications.forms.ShowChronologicalNotificationForm;
+import model.notifications.forms.UnregisterNotificationForm;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.ISystem;
 import model.projects.Role;
 import model.projects.Version;
-import model.projects.forms.ProjectAssignForm;
-import model.projects.forms.ProjectCreationForm;
-import model.projects.forms.ProjectDeleteForm;
-import model.projects.forms.ProjectForkForm;
-import model.projects.forms.ProjectUpdateForm;
-import model.projects.forms.SubsystemCreationForm;
+import model.projects.forms.*;
 import model.users.IUser;
 import model.users.Issuer;
+
+import static org.junit.Assert.fail;
 
 public class Main {
 
 	private static boolean quit;
-	private static BugTrap bugTrap;
 	private static UserController userController;
 	private static ProjectController projectController;
-	private static BugReportController bugReportController; 
+	private static BugReportController bugReportController;
+	private static NotificationController notificationController;
 	private static Scanner input;
 	
 	public static void main(String[] args) {
@@ -68,10 +71,11 @@ public class Main {
 	}
 	
 	public static void init() {
-		bugTrap = new BugTrap();
+		BugTrap bugTrap = new BugTrap();
 		userController = new UserController(bugTrap);
 		projectController = new ProjectController(bugTrap);
 		bugReportController = new BugReportController(bugTrap);
+		notificationController = new NotificationController(bugTrap);
 		
 		bugTrap.initialize();
 	}
@@ -107,7 +111,20 @@ public class Main {
 			assignToBugReport();
 		} else if (cmd.equals("updatebugreport")) {
 			updateBugReport();
-		} else
+		} else if (cmd.equals("shownotifications")) {
+			showNotifications();
+		} else if (cmd.equals("registernotification")) {
+			registerNotification();
+		} else if (cmd.equals("unregisternotification")) {
+			unregisterNotification();
+		} else if (cmd.equals("proposetest")) {
+			proposeTest();
+		} else if (cmd.equals("proposepatch")) {
+			proposePatch();
+		} else if (cmd.equals("declareachievedmilestone")) {
+			declareAchievedMilestone();
+		}
+		else
 			System.out.println("Command not recognized.");
 	}
 	
@@ -126,6 +143,12 @@ public class Main {
 		System.out.println("assignproject : Assign a Developer to a Project.");
 		System.out.println("assignbugreport : Assign a Developer to a BugReport.");
 		System.out.println("updatebugreport : Update the details of a BugReport.");
+		System.out.println("shownotifications : Show a list of notifications.");
+		System.out.println("registernotification : Register for a notification.");
+		System.out.println("unregisternotification : Unregister from a notification.");
+		System.out.println("proposetest : Propose a test.");
+		System.out.println("proposepatch : Propose a patch.");
+		System.out.println("declareachievedmilestone : Declare an achieved milestone.");
 	}
 
 	// -- Use cases -- //
@@ -450,6 +473,7 @@ public class Main {
 			form.setDependsOn(selectedDependencies);
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
+			return;
 		}
 		
 		try {
@@ -559,6 +583,218 @@ public class Main {
 		}
 	}
 
+	public static void showNotifications() {
+		ShowChronologicalNotificationForm form = null;
+		try {
+			form = notificationController.getShowChronologicalNotificationForm();
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		System.out.println("Enter the number of notifications you want to see: ");
+		int numberOfNotifications = input.nextInt();
+		input.nextLine();
+		form.setNbOfNotifications(numberOfNotifications);
+
+		List<INotification> reqNotifications = null;
+		try {
+			reqNotifications = notificationController.showNotifications(form);
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		for (INotification n : reqNotifications)
+			System.out.println((n.isRead() ? "" : "[new] ") + n.getText());
+	}
+
+	public static void registerNotification() {
+		RegisterNotificationForm form = null;
+		try {
+			form = notificationController.getRegisterNotificationForm();
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		int selection = 0;
+		while (selection == 0) {
+			System.out.println("Do you want to register for: ");
+			System.out.println(" 1. Project");
+			System.out.println(" 2. Subsystem");
+			System.out.println(" 3. Bug report");
+			selection = input.nextInt();
+			input.nextLine();
+			if (selection < 1 || selection > 3)
+				selection = 0;
+		}
+
+		try {
+			Observable observable = null;
+			switch (selection) {
+				case 1:
+					observable = selectProject(projectController.getProjectList());
+					break;
+				case 2:
+					List<IProject> ps = projectController.getProjectList();
+					IProject p = selectProject(ps);
+					observable = selectSubsystem(p.getAllDirectOrIndirectSubsystems());
+					break;
+				case 3:
+					observable = selectBugReport();
+					break;
+			}
+			form.setObservable(observable);
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		form.setRegistrationType(selectRegistrationType());
+		if (form.getRegistrationType() == RegistrationType.BUGREPORT_SPECIFIC_TAG)
+			form.setTag(selectBugTag());
+
+		try {
+			notificationController.registerForNotification(form);
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		System.out.println("You are registered for this notification.");
+	}
+
+	public static void unregisterNotification() {
+		UnregisterNotificationForm form = null;
+		try {
+			form = notificationController.getUnregisterNotificationForm();
+		} catch(UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		List<Registration> registrations = null;
+		try {
+			registrations = notificationController.getRegistrations();
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		form.setRegistration(selectRegistration(registrations));
+
+		try {
+			notificationController.unregisterForNotification(form);
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		System.out.println("You are now unregistered from this notification.");
+	}
+
+	public static void proposeTest() {
+		ProposeTestForm form = null;
+		try {
+			form = bugReportController.getProposeTestForm();
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		IBugReport report = selectBugReport();
+		form.setBugReport(report);
+
+		System.out.println("Enter the test: ");
+		form.setTest(input.nextLine());
+
+		try {
+			bugReportController.proposeTest(form);
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		System.out.println("Test successfully proposed.");
+	}
+
+	public static void proposePatch() {
+		ProposePatchForm form = null;
+		try {
+			form = bugReportController.getProposePatchForm();
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		IBugReport report = selectBugReport();
+		form.setBugReport(report);
+
+		System.out.println("Enter the patch: ");
+		form.setPatch(input.nextLine());
+
+		try {
+			bugReportController.proposePatch(form);
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		System.out.println("Patch successfully proposed.");
+	}
+
+	public static void declareAchievedMilestone() {
+		DeclareAchievedMilestoneForm form = null;
+		try {
+			form = projectController.getDeclareAchievedMilestoneForm();
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		ISystem sys = null;
+		try {
+			IProject project = selectProject(projectController.getProjectList());
+
+			boolean valid = false;
+			while (!valid) {
+				System.out.println("Do you want to declare a milestone for the entire project? (y/n)");
+				String raw = input.nextLine();
+				if (raw.equals("y")) {
+					sys = project;
+					valid = true;
+				} else if (raw.equals("n")) {
+					sys = selectSubsystem(project.getAllDirectOrIndirectSubsystems());
+					valid = true;
+
+					System.out.println("Current milestone: ");
+					System.out.println(" " + sys.getAchievedMilestone());
+				}
+			}
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+		form.setSystem(sys);
+
+		System.out.println("Enter the new milestone number:");
+		form.setNumbers(enterMilestoneNumbers());
+
+		try {
+			projectController.declareAchievedMilestone(form);
+		} catch (IllegalArgumentException e) {
+			System.out.println(e.getMessage());
+			return;
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		System.out.println("Milestone was declared.");
+	}
+
+	// -- Printing --
 	private static void printComments(List<Comment> comments) {
 		for (int index = 0; index < comments.size(); index++) {
 			String level = " " + (index+1) + ".";
@@ -727,17 +963,21 @@ public class Main {
 	
 	private static IProject selectProject(List<IProject> projects) {
 		while (true) {
-			System.out.println("Select a project by entering its number: ");
-			int number = 1;
-			for (IProject project : projects) {
-				System.out.println(number + ". " + project.getName());
-				number++;
+			try {
+				System.out.println("Select a project by entering its number: ");
+				int number = 1;
+				for (IProject project : projects) {
+					System.out.println(number + ". " + project.getName());
+					number++;
+				}
+
+				int selected = input.nextInt();
+				input.nextLine();
+				if (selected <= projects.size())
+					return projects.get(selected - 1);
+			} catch (Exception e) {
+				System.out.println("Invalid input.");
 			}
-			
-			int selected = input.nextInt();
-			input.nextLine();
-			if (selected <= projects.size())
-				return projects.get(selected - 1);
 		}
 	}
 
@@ -774,19 +1014,60 @@ public class Main {
 	}
 
 	private static TargetMilestone selectTargetMilestone() {
-		String inputLine = input.nextLine();
-		
-		if (inputLine.equals("")) return new TargetMilestone();
-		
-		//Split input by "."
-		String[] strings = inputLine.split(".");
-		
-		//Shave off the M.
-		strings[0] = strings[0].substring(1, strings[0].length());
-		
-		List<Integer> numbers = new ArrayList<Integer>();
-		for (String string : strings) numbers.add(Integer.valueOf(string));
-		
+		List<Integer> numbers = enterMilestoneNumbers();
 		return new TargetMilestone(numbers);
+	}
+
+	private static List<Integer> enterMilestoneNumbers() {
+		String inputLine = input.nextLine();
+
+		if (inputLine == null || inputLine.equals("")) return new ArrayList<>();
+
+		if (inputLine.startsWith("M"))
+			inputLine = inputLine.substring(1);
+		//Split input by "."
+		String[] splitted = inputLine.split("\\.");
+
+		List<Integer> numbers = new ArrayList<Integer>();
+		for (String s : splitted) numbers.add(Integer.valueOf(s));
+
+		return numbers;
+	}
+
+	private static RegistrationType selectRegistrationType() {
+		while (true) {
+			System.out.println("Select a registration type by entering its numner");
+
+			int number = 1;
+			for (RegistrationType type : RegistrationType.values()) {
+				System.out.println(number + ". " + type.toString());
+				number++;
+			}
+
+			int selected = input.nextInt();
+			input.nextLine();
+			if (selected <= RegistrationType.values().length)
+				return RegistrationType.values()[selected-1];
+		}
+	}
+
+	private static Registration selectRegistration(List<Registration> registrations) {
+		while (true) {
+			try {
+				System.out.println("Select a registration by entering its number: ");
+				int number = 1;
+				for (Registration registration : registrations) {
+					System.out.println(number + ". " + registration.getRegistrationType() + " " + registration.getObservable());
+					number++;
+				}
+
+				int selected = input.nextInt();
+				input.nextLine();
+				if (selected <= registrations.size())
+					return registrations.get(selected - 1);
+			} catch (Exception e) {
+				System.out.println("Invalid input.");
+			}
+		}
 	}
 }
