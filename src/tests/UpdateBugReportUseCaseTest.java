@@ -43,7 +43,7 @@ private BugTrap bugTrap;
 		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
 		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
 		bugTrap.getUserManager().loginAs(dev);
-		//add bugreport (for dependency)
+		//add BugReport (for dependency)
 		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, dev, new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 		bugTrap.getUserManager().logOff();
 	}
