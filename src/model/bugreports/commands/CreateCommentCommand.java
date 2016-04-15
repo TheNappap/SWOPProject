@@ -9,6 +9,11 @@ public class CreateCommentCommand extends Command {
 
     private CommentCreationForm form;
 
+    /**
+     * Command to create Comments on BugReport.
+     * @param bugTrap BugTrap system.
+     * @param form CreateCommentCommand.
+     */
     public CreateCommentCommand(BugTrap bugTrap, CommentCreationForm form) {
         super(bugTrap);
         this.form = form;
