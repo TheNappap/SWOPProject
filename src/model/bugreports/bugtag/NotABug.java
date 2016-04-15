@@ -9,7 +9,6 @@ public class NotABug extends Closed {
 
     public NotABug(BugReport bugReport) {
 		super(bugReport);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

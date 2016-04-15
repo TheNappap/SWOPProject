@@ -12,7 +12,6 @@ public class New extends BugTagState {
 
 	public New(BugReport bugReport) {
 		super(bugReport);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

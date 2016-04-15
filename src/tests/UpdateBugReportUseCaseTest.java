@@ -80,7 +80,6 @@ private BugTrap bugTrap;
 		//The system asks for the corresponding information for that tag.
 		//step 5
 		//The issuer provides the requested information.
-		//TODO
 		
 		//step 6
 		bugTrap.getBugReportManager().updateBugReport(form.getBugReport(), form.getBugTag());
@@ -88,8 +87,8 @@ private BugTrap bugTrap;
 		Assert.assertEquals(tag, bugReport.getBugTag());
 	}
 	
-	@Test
-	public void noPermissionToAssignTest() {
+	@Test (expected = UnauthorizedAccessException.class)
+	public void noPermissionToAssignTest() throws UnauthorizedAccessException {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("DEV");
 		bugTrap.getUserManager().loginAs(dev);
@@ -113,7 +112,7 @@ private BugTrap bugTrap;
 		//step 4a
 		//The issuer does not have the permission to assign the tag
 		//1. The use case ends here.
-		//TODO
+		bugTrap.getBugReportManager().updateBugReport(bugReport, tag);
 	}
 
 	@Test

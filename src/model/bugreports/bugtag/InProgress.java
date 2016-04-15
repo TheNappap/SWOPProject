@@ -6,7 +6,6 @@ public abstract class InProgress extends BugTagState {
 
 	public InProgress(BugReport bugReport) {
 		super(bugReport);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

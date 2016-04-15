@@ -12,7 +12,6 @@ public class UnderReview extends InProgress {
 
     public UnderReview(BugReport bugReport) {
 		super(bugReport);
-		// TODO Auto-generated constructor stub
 	}
     
 	@Override
