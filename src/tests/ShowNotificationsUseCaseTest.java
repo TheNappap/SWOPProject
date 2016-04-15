@@ -51,7 +51,7 @@ public class ShowNotificationsUseCaseTest {
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
 		bugTrap.getBugReportManager().getBugReportList().get(0).attach(new BugReportChangeObserver(bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")), bugTrap.getBugReportManager().getBugReportList().get(0)));
 
-		bugTrap.getNotificationManager().registerForNotification(RegistrationType.CREATE_BUGREPORT, (Project)bugTrap.getProjectManager().getProjects().get(0), null);
+		bugTrap.getNotificationManager().registerForNotification(RegistrationType.BUGREPORT_CHANGE, (Project)bugTrap.getProjectManager().getProjects().get(0), null);
 		bugTrap.getUserManager().logOff();
 	}
 
@@ -79,10 +79,10 @@ public class ShowNotificationsUseCaseTest {
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.RESOLVED);
 		//Log back in as issuer.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
 		//After this, 2+1=3 notifications.
 		assertEquals(3, bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")).getNotifications().size());
-		
+
 		//1. The issuer indicates he wants to view his notifications
 		ShowChronologicalNotificationForm form = null;
 		try {
