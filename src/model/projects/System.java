@@ -119,11 +119,7 @@ public abstract class System implements ISystem, Observable, Observer {
 
 	@Override
 	public void signal(Signalisation signalisation) {
-		if (this.parent != null)
-			this.parent.signal(signalisation);
-
-		for (Observer observer : this.observers)
-			observer.signal(signalisation);
+		notifyObservers(signalisation);
 	}
 
 	@Override
@@ -188,5 +184,14 @@ public abstract class System implements ISystem, Observable, Observer {
 			return false;
 
 		return true;
+	}
+	
+	@Override
+	public void notifyObservers(Signalisation signalisation) {
+		if (this.parent != null)
+			this.parent.signal(signalisation);
+
+		for (Observer observer : this.observers)
+			observer.signal(signalisation);
 	}
 }

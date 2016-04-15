@@ -12,19 +12,32 @@ import model.bugreports.BugReport;
  */
 public abstract class BugTagState {
 	
-	protected BugReport bugReport;
+	protected BugReport bugReport;	//BugReport this Tag belongs to.
 	
+	/**
+	 * BugTagState Constructor
+	 * @param bugReport BugReport this Tag belongs to.
+	 */
 	public BugTagState(BugReport bugReport) {
 		this.bugReport = bugReport;
 	}
 	
+	/**
+	 * Confirm that this Tag may change in the given Tag
+	 * @param bugTag Tag to conform
+	 * @throws IllegalStateException if the Tag change is not allowed
+	 * @return The given Tag.
+	 */
 	public BugTagState confirmBugTag(BugTagState bugTag) {
 		throw new IllegalStateException();
 	}
 
+	/**
+	 * Get Enum representation of the Tag.
+	 * @return Enum representation of the Tag.
+	 */
 	public abstract BugTag getTag();
 	
-
 	public boolean isNew() {
 		return false;
 	}

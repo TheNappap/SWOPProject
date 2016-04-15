@@ -77,6 +77,11 @@ public class BugReportManager {
 		return getBugReportsForSystem(project);
 	}
 	
+	/**
+	 * Return all BugReports for given System.
+	 * @param system The System to get all BugReports for.
+	 * @return  The BugReports of given System.
+	 */
 	public List<IBugReport> getBugReportsForSystem(ISystem system) {
 		List<ISubsystem> subs = system.getAllDirectOrIndirectSubsystems();
 		List<IBugReport> reports = new ArrayList<IBugReport>();
@@ -89,6 +94,10 @@ public class BugReportManager {
 		return reports;
 	}
 
+	/**
+	 * Delete the BugReports for given System.
+	 * @param system The System for which to delete the BugReports
+	 */
 	public void deleteBugReportsForSystem(ISystem system) {
 		for (IBugReport report : getBugReportsForSystem(system))
 			bugReportList.remove(report);
@@ -96,14 +105,14 @@ public class BugReportManager {
 
 	/**
 	 * adds a bug report
-	 * @param title
-	 * @param description
-	 * @param creationDate
-	 * @param subsystem
-	 * @param issuer
-	 * @param dependencies
-	 * @param assignees
-	 * @param tag
+	 * @param title Title of the BugReport
+	 * @param description Description of the BugReport
+	 * @param creationDate Creation Date of the BugReport
+	 * @param subsystem Subsystem of the BugReport
+	 * @param issuer Issuer of the BugReport
+	 * @param dependencies Dependencies of the BugReport
+	 * @param assignees Assignees of the BugReport
+	 * @param tag Tag of the BugReport
 	 */
 	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) {
 		BugReport report = new BugReportBuilder().setTitle(title)
@@ -119,6 +128,18 @@ public class BugReportManager {
 		((Subsystem)subsystem).signal(new BugReportCreationSignalisation(report));
 	}
 	
+	/**
+	 * Add a BugReport with a Target Milestone
+	 * @param title Title of the BugReport
+	 * @param description Description of the BugReport
+	 * @param creationDate Creation Date of the BugReport
+	 * @param subsystem Subsystem of the BugReport
+	 * @param issuer Issuer of the BugReport
+	 * @param dependencies Dependencies of the BugReport
+	 * @param assignees Assignees of the BugReport
+	 * @param tag Tag of the BugReport
+	 * @param milestone Target Milestone of the BugReport
+	 */
 	public void addBugReportWithTargetMilestone(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag, List<Integer> milestone) {
 		TargetMilestone target = new TargetMilestone(milestone);
 		if(target.compareTo(subsystem.getAchievedMilestone()) <= 0) throw new IllegalArgumentException("The target milestone should be strict higher than the achieved milestone of the subsystem");

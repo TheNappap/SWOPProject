@@ -1,6 +1,7 @@
 package model.notifications;
 
 import model.notifications.observers.Observer;
+import model.notifications.signalisations.Signalisation;
 
 /**
  * Interface for objects that are observable.
@@ -18,4 +19,10 @@ public interface Observable {
 	 * @param observer The Observer to detach.
 	 */
 	public void detach(Observer observer);
+	
+	/**
+	 * Notify all observers 
+	 * @param signilisation Information about the observed change.
+	 */
+	public void notifyObservers(Signalisation signilisation);
 }
