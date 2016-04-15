@@ -12,6 +12,11 @@ public class CreateProjectCommand extends Command {
 
     private ProjectCreationForm form;
 
+    /**
+     * Command that creates a Project when executed.
+     * @param bugTrap BugTrap system.
+     * @param form ProjectCreationForm.
+     */
     public CreateProjectCommand(BugTrap bugTrap, ProjectCreationForm form) {
         super(bugTrap);
         this.form = form;

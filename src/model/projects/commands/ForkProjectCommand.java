@@ -9,6 +9,11 @@ public class ForkProjectCommand extends Command {
 
     private ProjectForkForm form;
 
+    /**
+     * Command that forks a Project when executed.
+     * @param bugTrap BugTrap system.
+     * @param form ProjectForkForm.
+     */
     public ForkProjectCommand(BugTrap bugTrap, ProjectForkForm form) {
         super(bugTrap);
         this.form = form;
