@@ -12,6 +12,7 @@ import model.notifications.observers.Observer;
 import model.notifications.signalisations.BugReportChangeSignalisation;
 import model.notifications.signalisations.CommentCreationSignalisation;
 import model.notifications.signalisations.Signalisation;
+import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Subsystem;
 import model.users.IUser;
@@ -304,5 +305,10 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	public void detach(Observer observer) {
 		if (observers.contains(observer))
 			observers.remove(observer);
+	}
+
+	@Override
+	public IProject getProject() {
+		return subsystem.getProject();
 	}
 }

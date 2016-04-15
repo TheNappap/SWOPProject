@@ -92,7 +92,6 @@ public class CreateBugReportUseCaseTest {
 			//issuer wants to add: how to reproduce the bug, a stack trace or an
 			//error message.
 			//9. The issuer enters the selected optional attributes as text
-			List<String> optionals = new ArrayList<String>();
 			form.setReproduction("Reproduce by calling (...) with parameter (...)");
 			form.setStackTrace("Exception in thread \"main\" java.lang.NullPointerException");
 			form.setErrorMessage("ERROR! You messed up!");

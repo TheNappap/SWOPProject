@@ -6,6 +6,7 @@ import java.util.List;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Commentable;
 import model.notifications.Observable;
+import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.users.IUser;
 
@@ -28,4 +29,5 @@ public interface IBugReport extends Comparable<IBugReport>, Commentable, Observa
     String getStackTrace();
     String getReproduction();
     TargetMilestone getTargetMilestone();
+    IProject getProject();
 }

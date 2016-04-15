@@ -25,7 +25,7 @@ public interface IProject extends ISystem {
     public boolean isLead(IUser dev);
     public boolean isTester(IUser dev);
     public boolean isProgrammer(IUser dev);
-
+    
 	public void addProgrammer(IUser programmer);
 	public void addTester(IUser tester);
 	public List<Role> getRolesNotAssignedTo(IUser developer);

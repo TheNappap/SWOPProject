@@ -160,10 +160,13 @@ public class BugReportManager {
 	 * update a bug report with a tag
 	 * @param bugReport
 	 * @param tag
+	 * @throws UnauthorizedAccessException 
 	 */
-	public void updateBugReport(IBugReport bugReport, BugTag tag) {
+	public void updateBugReport(IBugReport bugReport, BugTag tag) throws UnauthorizedAccessException {
 		if (bugReport == null || tag == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
+		if (tag.hasToBeLeadToSet() && !(bugReport.getProject().getLeadDeveloper() == bugTrap.getUserManager().getLoggedInUser()))
+			throw new UnauthorizedAccessException();
 		
 		BugReport report = null;
 		for (BugReport b : bugReportList)

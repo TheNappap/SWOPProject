@@ -124,7 +124,7 @@ public class BugReportManagerTest {
 	}
 	
 	@Test
-	public void updateBugTagTest() {
+	public void updateBugTagTest() throws UnauthorizedAccessException {
 		Project p = (Project)bugTrap.getProjectManager().getProjects().get(0);
 		bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 

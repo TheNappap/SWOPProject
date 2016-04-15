@@ -23,6 +23,7 @@ public abstract class BugTagState {
 	}
 
 	public abstract BugTag getTag();
+	
 
 	public boolean isNew() {
 		return false;
