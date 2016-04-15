@@ -97,12 +97,16 @@ public class BugReportManager {
 	}
 
 	/**
-	 * Delete the BugReports for given System.
+	 * Delete the BugReports for given System and deletes the registrations for this bug report
 	 * @param system The System for which to delete the BugReports
+	 * @throws UnauthorizedAccessException 
 	 */
-	public void deleteBugReportsForSystem(ISystem system) {
-		for (IBugReport report : getBugReportsForSystem(system))
+	public void deleteBugReportsForSystem(ISystem system) throws UnauthorizedAccessException {
+		for (IBugReport report : getBugReportsForSystem(system)){
+			bugTrap.getNotificationManager().deleteRegistrationsForObservable(report);
+			((BugReport)report).terminate();
 			bugReportList.remove(report);
+		}
 	}
 
 	/**

@@ -57,4 +57,12 @@ public class DeveloperRoleRelation {
 	public void setRole(Role role) {
 		this.role = role; 
 	}
+
+	/**
+	 * Terminates this developer relation
+	 */
+	public void terminate() {
+		user = null;
+		role = null;
+	}
 }

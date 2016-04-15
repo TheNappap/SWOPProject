@@ -79,4 +79,14 @@ public class Comment implements Commentable { //A Comment can be commented on.
 		
 		 ((Subsystem) bugReport.getSubsystem()).signal(signalisation);
 	}
+	
+	/**
+	 * Terminates this comment
+	 */
+	public void terminate() {
+		for (Comment comment : comments) {
+			comment.terminate();
+		}
+		comments.clear();
+	}
 }

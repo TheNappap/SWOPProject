@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class Subsystem extends System implements ISubsystem {
 
-	private final Project project;
+	private Project project;
 	
 	/**
 	 * Constructor.
@@ -40,5 +40,11 @@ public class Subsystem extends System implements ISubsystem {
 		// If same root, then same project.
 		// No need to compare here.
 		return true;
+	}
+
+	@Override
+	public void terminate() {
+		super.terminate();
+		project = null;
 	}
 }

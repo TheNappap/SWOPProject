@@ -12,7 +12,7 @@ public class Project extends System implements IProject {
 
 	private Version version;
 	private final Date creationDate;
-	private final ProjectTeam projectTeam;
+	private ProjectTeam projectTeam;
 	
 	private Date startDate;
 	private double budgetEstimate;
@@ -198,5 +198,12 @@ public class Project extends System implements IProject {
 			return false;
 
 		return true;
+	}
+	
+	@Override
+	public void terminate() {
+		super.terminate();
+		projectTeam.terminate();
+		projectTeam = null;
 	}
 }

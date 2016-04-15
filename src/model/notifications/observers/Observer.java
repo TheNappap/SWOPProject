@@ -7,4 +7,5 @@ import model.notifications.signalisations.Signalisation;
  */
 public interface Observer {
     void signal(Signalisation signalisation);
+
 }

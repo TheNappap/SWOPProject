@@ -1,5 +1,6 @@
 package tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -13,7 +14,9 @@ import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
+import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
+import model.notifications.RegistrationType;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Version;
@@ -44,6 +47,16 @@ public class DeleteProjectUseCaseTest {
 		//Log in as Developer, add BugReport and log off.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, bugTrap.getUserManager().getUser("DEV"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		IBugReport bugreport = bugTrap.getBugReportManager().getBugReportsForSystem(subsystem).get(0);
+		bugTrap.getUserManager().logOff();
+		
+		//Log in as Administrator and register for notifications.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		bugTrap.getNotificationManager().registerForNotification(RegistrationType.CREATE_BUGREPORT, project, null);
+		bugTrap.getNotificationManager().registerForNotification(RegistrationType.BUGREPORT_CHANGE, subsystem, null);
+		bugTrap.getNotificationManager().registerForNotification(RegistrationType.CREATE_COMMENT, bugreport, null);
+		
+		assertEquals(3, bugTrap.getNotificationManager().getRegistrationsLoggedInUser().size());
 		bugTrap.getUserManager().logOff();
 	}
 
@@ -70,9 +83,10 @@ public class DeleteProjectUseCaseTest {
 			//removed from BugTrap.
 			bugTrap.getProjectManager().deleteProject(form.getProject());
 			
-			//Is Project gone?
+			//confirm
 			assertTrue(bugTrap.getProjectManager().getProjects().isEmpty());
 			assertTrue(bugTrap.getBugReportManager().getBugReportList().isEmpty());
+			assertTrue(bugTrap.getNotificationManager().getRegistrationsLoggedInUser().isEmpty());
 		} catch (UnauthorizedAccessException e) { fail("not authorized"); }
 	}
 	
@@ -121,6 +135,9 @@ public class DeleteProjectUseCaseTest {
 			bugTrap.getProjectManager().deleteProject(null);
 			fail("Can't pass nulls.");
 		}
-		catch (IllegalArgumentException e) { }
+		catch (IllegalArgumentException e) { } catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+			e.printStackTrace();
+		}
 	}
 }

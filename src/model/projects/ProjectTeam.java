@@ -208,4 +208,14 @@ public class ProjectTeam {
 		}
 		return new ArrayList<IUser>(list);
 	}
+
+	/**
+	 * Terminates this team
+	 */
+	public void terminate() {
+		for (DeveloperRoleRelation rel : team) {
+			rel.terminate();
+		}
+		team.clear();
+	}
 }
