@@ -5,5 +5,9 @@ package model.projects;
  */
 public interface ISubsystem extends ISystem {
 
+	/**
+	 * 
+	 * @return The Project this Subsystem belongs to.
+	 */
     public IProject getProject();
 }
