@@ -11,7 +11,7 @@ import model.notifications.signalisations.Signalisation;
  * This class represents a system in BugTrap.
  * A system is a project or subsystem, both can be composed of subsystems.
  */
-public abstract class System implements ISystem, Observable {
+public abstract class System implements ISystem, Observable, Observer {
 
 	protected String name;		//System name.
 	protected String description;	//System description.
@@ -117,6 +117,7 @@ public abstract class System implements ISystem, Observable {
 		return highest;
 	}
 
+	@Override
 	public void signal(Signalisation signalisation) {
 		if (this.parent != null)
 			this.parent.signal(signalisation);
@@ -141,8 +142,6 @@ public abstract class System implements ISystem, Observable {
 		if (!this.getName().equals(sys.getName()))
 			return false;
 		if (!this.getDescription().equals(sys.getDescription()))
-			return false;
-		if (!this.getAchievedMilestone().equals(sys.getAchievedMilestone()))
 			return false;
 		if ((this.getParent() == null ^ sys.getParent() == null))
 			return false;

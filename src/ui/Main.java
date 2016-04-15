@@ -1,5 +1,6 @@
 package ui;
 
+import java.lang.annotation.Target;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
+import model.bugreports.TargetMilestone;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
@@ -126,7 +128,8 @@ public class Main {
 		System.out.println("assignbugreport : Assign a Developer to a BugReport.");
 		System.out.println("updatebugreport : Update the details of a BugReport.");
 	}
-	
+
+	// -- Use cases -- //
 	public static void login() {
 		boolean valid = false;
 		int category = 0;
@@ -217,7 +220,8 @@ public class Main {
 				int minor = Integer.parseInt(vNumber.split(".")[1]);
 				int revision = Integer.parseInt(vNumber.split(".")[2]);
 				form.setVersion(new Version(major, minor, revision));
-			} catch (Exception e) { }
+			} catch (IllegalArgumentException ie) { System.out.println(ie.getMessage()); }
+			catch (Exception e) { }
 		}
 
 		try {
@@ -434,6 +438,15 @@ public class Main {
 			System.out.println("Enter a description:");
 			form.setDescription(input.nextLine());
 
+			System.out.println("Enter a stack trace: (optional, press enter to skip)");
+			form.setStackTrace(input.nextLine());
+			System.out.println("Enter an error message: (optional, press enter to skip)");
+			form.setErrorMessage(input.nextLine());
+			System.out.println("Enter a procedure to reproduce the bug: (optional, press enter to skip");
+			form.setReproduction(input.nextLine());
+			System.out.println("Enter a target milestone: (optional, press enter to skip)");
+			form.setTargetMilestone(selectTargetMilestone());
+
 			List<IBugReport> selectedDependencies = selectBugReports(bugReportController.getBugReportsForProject(chosenSubsystem.getProject()));
 			form.setDependsOn(selectedDependencies);
 		} catch (UnauthorizedAccessException e) {
@@ -547,20 +560,6 @@ public class Main {
 		}
 	}
 
-	private static IUser selectUser(List<IUser> users) {
-		while (true) {
-			System.out.println("Select a user by entering the username: ");
-			for (IUser user : users)
-				System.out.println(user.getUserName() + " (" + user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName() + ")");
-			
-			String name = input.nextLine();
-			for (IUser user : users) {
-				if (user.getUserName().equals(name))
-					return user;
-			}
-		}
-	}
-	
 	private static void printComments(List<Comment> comments) {
 		for (int index = 0; index < comments.size(); index++) {
 			String level = " " + (index+1) + ".";
@@ -576,7 +575,21 @@ public class Main {
 			printComments(comments.get(index).getComments(), level);
 		}
 	}
-	
+
+	// -- Selectors -- //
+	private static IUser selectUser(List<IUser> users) {
+		while (true) {
+			System.out.println("Select a user by entering the username: ");
+			for (IUser user : users)
+				System.out.println(user.getUserName() + " (" + user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName() + ")");
+
+			String name = input.nextLine();
+			for (IUser user : users) {
+				if (user.getUserName().equals(name))
+					return user;
+			}
+		}
+	}
 
 	private static IBugReport selectBugReport() {
 		FilterType type = selectFilterType();
@@ -616,7 +629,11 @@ public class Main {
 			}
 			
 			try {
-				String[] rawInput = input.nextLine().split(",");
+				String line = input.nextLine();
+				if (line == null || line.length() == 0)
+					return selected;
+
+				String[] rawInput = line.split(",");
 				for (String raw : rawInput)
 					selected.add(reports.get(Integer.parseInt(raw.trim()) - 1));
 				return selected;
@@ -724,6 +741,7 @@ public class Main {
 				return projects.get(selected - 1);
 		}
 	}
+
 	private static ISystem selectSystem(List<ISystem> systems) {
 		while (true) {
 			System.out.println("Select a project or subsystem by entering its number: ");
@@ -754,5 +772,9 @@ public class Main {
 			if (selected <= subsystems.size())
 				return subsystems.get(selected - 1);
 		}
+	}
+
+	private static TargetMilestone selectTargetMilestone() {
+		// TODO Implement this.
 	}
 }

@@ -5,9 +5,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import model.Milestone;
+import model.projects.AchievedMilestone;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -107,7 +110,8 @@ public class CreateProjectUseCaseTest {
 		
 		//Add some project to the system to fork.
 		bugTrap.getProjectManager().createProject("name", "description", new Date(2005, 1, 2), new Date(2005, 2, 12), 1234, null, new Version(1, 0, 0));
-		
+		bugTrap.getProjectManager().declareAchievedMilestone(bugTrap.getProjectManager().getProjects().get(0), Arrays.asList(new Integer[] {2, 1, 2, 1, 2, 1}));
+
 		//1. The system shows a list of existing projects
 		List<IProject> projects = null;
 		projects = bugTrap.getProjectManager().getProjects();
@@ -141,8 +145,9 @@ public class CreateProjectUseCaseTest {
 		IProject fork = bugTrap.getProjectManager().getProjects().get(1);
 
 		//Confirm.
-		assertTrue(fork.equals(project));
+		assertEquals(fork, project);
 		assertFalse(fork == project);
+		assertEquals("M0", fork.getAchievedMilestone().toString());
 	}
 	
 	@Test

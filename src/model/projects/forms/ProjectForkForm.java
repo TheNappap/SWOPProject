@@ -52,6 +52,8 @@ public class ProjectForkForm implements Form {
 
     public void setVersion(Version version) {
         if (version == null) throw new NullPointerException("Given version is null.");
+        if (project == null) throw new NullPointerException("Project should be set first and not be null.");
+        if (project.getVersion().compareTo(version) >= 0) throw new IllegalArgumentException("The version specified should be larger than the project version.");
         
         this.version = version;
     }

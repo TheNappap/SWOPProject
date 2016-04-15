@@ -64,10 +64,9 @@ public class ProjectManager {
 		fork.setVersion(version);
 		fork.setBudgetEstimate(budgetEstimate);
 		fork.setStartDate(startDate);
+		fork.setAchievedMilestone(new AchievedMilestone());
 		
 		projectList.add(fork);
-		
-		
 	}
 
 	public void updateProject(IProject project, String name, String description, double budgetEstimate, Date startDate) {

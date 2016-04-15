@@ -5,7 +5,7 @@ import model.notifications.Observable;
 import model.notifications.RegistrationType;
 import model.notifications.signalisations.Signalisation;
 
-public class CreateCommentObserver extends Observer {
+public class CreateCommentObserver extends ObserverWithMailbox {
 	
 	public CreateCommentObserver(Mailbox mailbox, Observable commentable) {
 		super(mailbox, commentable);
