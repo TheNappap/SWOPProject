@@ -7,7 +7,7 @@ import model.notifications.signalisations.Signalisation;
 /**
  * An abstract class for an observer, an observer can observe an observable object.
  */
-public abstract class ObserverWithMailbox {
+public abstract class ObserverWithMailbox implements Observer {
 
 	private final Mailbox mailbox;
 	private final Observable observes;
@@ -19,7 +19,11 @@ public abstract class ObserverWithMailbox {
 	
 	public abstract void signal(Signalisation signalisation);
 	
-	public Mailbox getMailbox() {
+	protected Mailbox getMailbox() {
 		return mailbox;
+	}
+	
+	protected Observable getObserves() {
+		return observes;
 	}
 }
