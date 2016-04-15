@@ -14,11 +14,10 @@ import model.notifications.signalisations.CommentCreationSignalisation;
 import model.notifications.signalisations.Signalisation;
 import model.projects.IProject;
 import model.projects.ISubsystem;
-import model.projects.Subsystem;
 import model.users.IUser;
 
 /**
- * This class represents a bugreport in BugTrap.
+ * This class represents a BugReport. in BugTrap.
  */
 public class BugReport implements IBugReport, Observable { //A Comment can be commented on.
 
@@ -43,17 +42,23 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	private BugTagState bugTag;			//BugTag that is attached to this BugReport.
 
 	/**
-	 * BugReport Constructor. 
-	 * Preferably not to be used for direct creation of BugReport. Use BugReportBuilder!
-	 * @param title	The title of the BugReport.
-	 * @param description Description of the BugReport.
-	 * @param subsystem Subsystem this BugReport is attached to.
-	 * @param assignees The Developers assigned to this BugReport.
-	 * @param comments The Comments on this BugReport.
-	 * @param dependsOn	List of BugReports on which this BugReport depends.
-	 * @param issuedBy Issuer who issued this BugReport.
-	 * @param creationDate The date the BugReport was created.
-	 * @param bugTag The BugTag to assign to the BugReport
+	 * BugReport Constructor.
+	 * @param title Title of the BugReport
+	 * @param description Description of the BugReport
+	 * @param subsystem Subsystem of the BugReport
+	 * @param dependsOn Dependencies of the BugReport
+	 * @param assignees Assignees of the BugReport
+	 * @param comments Comments on the BugReport
+	 * @param issuedBy Issuer of the BugReport
+	 * @param creationDate Creation Date of the BugReport
+	 * @param observers Observers of the BugReport
+	 * @param bugTag Tag of the BugReport
+	 * @param stackTrace StackTrace of the Bug
+	 * @param errorMessage Error Message of the Bug
+	 * @param reproduction How to reproduce the Bug 
+	 * @param milestone Target Milestone of the BugReport
+	 * @param tests Tests for the Bug
+	 * @param patches Patches for the Bug
 	 */
 	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, 
 						IUser issuedBy, Date creationDate, List<Observer> observers, BugTag bugTag, String stackTrace, String errorMessage, String reproduction,
@@ -77,18 +82,13 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	}
 	
 	/**
-	 * Create and add an InitialComment to this BugReport.
+	 * Create and add a Comment to this BugReport.
 	 * @param commentText The text of the comment.
 	 */
 	public void addComment(String commentText) {
 		comments.add(new Comment(commentText));
 
-		Signalisation s = new CommentCreationSignalisation(this);
-		for (Observer observer : this.observers) {
-			observer.signal(s);
-		}
-
-		((Subsystem)getSubsystem()).signal(s);
+		notifyObservers(new CommentCreationSignalisation(this));
 	}
 	
 	/**
@@ -113,20 +113,14 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	 */
 	public void updateBugTag(BugTag bugTag) {
 		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState(this));
-
-		Signalisation s = new BugReportChangeSignalisation(this);
-		for (Observer observer : this.observers)
-			observer.signal(s);
-
-		((Subsystem)getSubsystem()).signal(s);
+		
+		notifyObservers(new BugReportChangeSignalisation(this));
 	}
 	
 	@Override
 	public int compareTo(IBugReport otherBugReport) {
 		return getTitle().compareTo(otherBugReport.getTitle());
 	}
-	
-	//Getters and Setters
 
 	@Override
 	public String getDescription() {
@@ -153,6 +147,10 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 		return bugTag.getTag();
 	}
 	
+	/**
+	 * Class of the BugTag.
+	 * @return Class of BugTag
+	 */
 	public BugTagState getBugTagState() {
 		return bugTag;
 	}
@@ -287,26 +285,23 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 		patches.remove(patch);
 	}
 
-	/**
-	 * attaches a given observer to this bug report
-	 * @param observer
-	 */
 	@Override
 	public void attach(Observer observer) {
 		if (!this.observers.contains(observer))
 			this.observers.add(observer);
 	}
 
-	/**
-	 * detaches a given observer from tis bug report
-	 * @param observer
-	 */
 	@Override
 	public void detach(Observer observer) {
 		if (observers.contains(observer))
 			observers.remove(observer);
 	}
 
+	@Override
+	public void notifyObservers(Signalisation s) {
+		
+	}
+	
 	@Override
 	public IProject getProject() {
 		return subsystem.getProject();

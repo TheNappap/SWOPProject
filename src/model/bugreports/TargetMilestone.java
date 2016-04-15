@@ -10,10 +10,17 @@ import model.Milestone;
  */
 public class TargetMilestone extends Milestone {
 	
+	/**
+	 * Constructor
+	 * @param numbers Numbers in the Milestone.
+	 */
 	public TargetMilestone(List<Integer> numbers) {
 		super(numbers);
 	}
 	
+	/**
+	 * Constructor to make the initial TargetMilestone i.e. M0.
+	 */
 	public TargetMilestone() {
 		super(makeInitialTargetMilestone());
 	}

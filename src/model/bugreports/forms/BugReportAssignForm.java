@@ -20,8 +20,6 @@ public class BugReportAssignForm implements Form {
 		if (getBugReport() == null) throw new NullPointerException("Bugreport is null");
 		if (getDeveloper() == null) throw new NullPointerException("Developer is null");
 	}
-
-	//Getters and Setters
 	
 	public IBugReport getBugReport() {
 		return bugReport;

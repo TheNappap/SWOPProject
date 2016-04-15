@@ -15,19 +15,91 @@ import model.users.IUser;
  */
 public interface IBugReport extends Comparable<IBugReport>, Commentable, Observable {
 
+	/**
+	 * 
+	 * @return Description of the BugReport
+	 */
     String getDescription();
+    
+    /**
+     * 
+     * @return Title of the BugReport
+     */
     String getTitle();
+    
+    /**
+     * 
+     * @return Creation Date of the BugReport.
+     */
     Date getCreationDate();
+    
+    /**
+     * 
+     * @return Subsystem of the BugReport.
+     */
     ISubsystem getSubsystem();
+    
+    /**
+     * 
+     * @return BugTag of the BugReport.
+     */
     BugTag getBugTag();
+    
+    /**
+     * @return Assignees of the BugReport.
+     */
     List<IUser> getAssignees();
+    
+    /**
+     * @return Dependencies of the BugReport
+     */
     List<IBugReport> getDependsOn();
+    
+    /**
+     * 
+     * @return Issuer of the BugReport.
+     */
     IUser getIssuedBy();
+    
+    /**
+     * 
+     * @return Tests of the BugReport.
+     */
 	List<Test> getTests();
+	
+	/**
+	 * 
+	 * @return Patches of the BugReport.
+	 */
 	List<Patch> getPatches();
+	
+	/**
+	 * 
+	 * @return Error message of the BugReport.
+	 */
     String getErrorMessage();
+    
+    /**
+     * 
+     * @return Stack Trace of the BugReport
+     */
     String getStackTrace();
+    
+    /**
+     * 
+     * @return How to reproduce the Bug of the BugReport.
+     */
     String getReproduction();
+    
+    /**
+     * 
+     * @return Target Milestone of the BugReport.
+     */
     TargetMilestone getTargetMilestone();
+    
+    /**
+     * 
+     * @return Project of the BugReport.
+     */
     IProject getProject();
 }

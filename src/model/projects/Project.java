@@ -3,6 +3,7 @@ package model.projects;
 import java.util.Date;
 import java.util.List;
 
+import model.notifications.signalisations.Signalisation;
 import model.users.IUser;
 
 /**
