@@ -12,7 +12,6 @@ public class Duplicate extends Closed {
 
 	public Duplicate(BugReport bugReport) {
 		super(bugReport);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

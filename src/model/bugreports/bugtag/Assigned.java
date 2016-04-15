@@ -11,7 +11,6 @@ public class Assigned extends InProgress {
 
     public Assigned(BugReport bugReport) {
 		super(bugReport);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

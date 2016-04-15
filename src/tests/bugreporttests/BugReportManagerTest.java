@@ -109,7 +109,7 @@ public class BugReportManagerTest {
 
 		try { bugTrap.getBugReportManager().assignToBugReport(added, notDev); fail(); } 
 		catch (IllegalArgumentException e) { } catch (UnauthorizedAccessException e) {
-			// TODO Auto-generated catch block
+			fail("not authorized");
 			e.printStackTrace();
 		}
 
@@ -117,7 +117,7 @@ public class BugReportManagerTest {
 		try {
 			bugTrap.getBugReportManager().assignToBugReport(added, developer);
 		} catch (UnauthorizedAccessException e) {
-			// TODO Auto-generated catch block
+			fail("not authorized");
 			e.printStackTrace();
 		}
 		assertEquals(1, added.getAssignees().size());

@@ -11,7 +11,6 @@ public class Resolved extends Closed {
 
     public Resolved(BugReport bugReport) {
 		super(bugReport);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
