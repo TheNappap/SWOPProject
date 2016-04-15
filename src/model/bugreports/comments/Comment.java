@@ -41,4 +41,14 @@ public class Comment implements Commentable { //A Comment can be commented on.
 	public List<Comment> getComments() {
 		return comments;
 	}
+
+	/**
+	 * Terminates this comment
+	 */
+	public void terminate() {
+		for (Comment comment : comments) {
+			comment.terminate();
+		}
+		comments.clear();
+	}
 }

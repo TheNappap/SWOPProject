@@ -15,7 +15,7 @@ public abstract class System implements ISystem, Observable, Observer {
 
 	protected String name;		//System name.
 	protected String description;	//System description.
-	protected final System parent;		//Parent System, if any.
+	protected System parent;		//Parent System, if any.
 	protected final List<Subsystem> subsystems;	//Subsystems.
 	
 	protected AchievedMilestone milestone;
@@ -193,5 +193,15 @@ public abstract class System implements ISystem, Observable, Observer {
 
 		for (Observer observer : this.observers)
 			observer.signal(signalisation);
+	}
+	
+	/**
+	 * Terminates this system.
+	 * Subclasses should always call the super method
+	 */
+	public void terminate() {
+		parent = null;
+		subsystems.clear();
+		observers.clear();
 	}
 }

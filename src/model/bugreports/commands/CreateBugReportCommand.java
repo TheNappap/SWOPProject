@@ -14,11 +14,6 @@ public class CreateBugReportCommand extends Command {
 
     private BugReportCreationForm form;
 
-    /**
-     * Command to create BugReport
-     * @param bugTrap BugTrap system.
-     * @param form BugReportCreationForm.
-     */
     public CreateBugReportCommand(BugTrap bugTrap, BugReportCreationForm form) {
         super(bugTrap);
         

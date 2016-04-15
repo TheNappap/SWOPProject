@@ -9,8 +9,8 @@ import model.notifications.signalisations.Signalisation;
  */
 public abstract class ObserverWithMailbox implements Observer {
 
-	private final Mailbox mailbox;
-	private final Observable observes;
+	private Mailbox mailbox;
+	private Observable observes;
 	
 	public ObserverWithMailbox(Mailbox mailbox, Observable observes) {
 		this.mailbox = mailbox;
@@ -25,5 +25,14 @@ public abstract class ObserverWithMailbox implements Observer {
 	
 	protected Observable getObserves() {
 		return observes;
+	}
+	
+	/**
+     * Terminates this observer
+     */
+	public void terminate() {
+		mailbox = null;
+		observes.detach(this);
+		observes = null;
 	}
 }

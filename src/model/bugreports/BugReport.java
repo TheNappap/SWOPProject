@@ -23,8 +23,8 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 
 	//Immutable
 	private final Date creationDate;	//Creation Date of the BugReport.
-	private final IUser issuedBy;		//The Issuer who issued this BugReport.
-	private final ISubsystem subsystem;	//Subsystem to which this BugReport is attached.
+	private IUser issuedBy;		//The Issuer who issued this BugReport.
+	private ISubsystem subsystem;	//Subsystem to which this BugReport is attached.
 	private final String title;			//Title of the BugReport.
 	private final String description;	//Description of the BugReport.
 	private final List<Comment> comments;		//Comments on this BugReport.
@@ -305,5 +305,22 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	@Override
 	public IProject getProject() {
 		return subsystem.getProject();
+	}
+
+	/**
+	 * Terminates this bug report
+	 */
+	public void terminate() {
+		issuedBy = null;
+		subsystem = null;
+		assignees.clear();
+		dependsOn.clear();
+		observers.clear();
+		tests.clear();
+		patches.clear();
+		for (Comment comment : comments) {
+			comment.terminate();
+		}
+		comments.clear();
 	}
 }
