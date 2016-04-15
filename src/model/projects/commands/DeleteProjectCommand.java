@@ -8,6 +8,11 @@ import model.projects.forms.ProjectDeleteForm;
 public class DeleteProjectCommand extends Command {
     private ProjectDeleteForm form;
 
+    /**
+     * Command that deletes Project when executed.
+     * @param bugTrap BugTrap system.
+     * @param form ProjectDeleteForm.
+     */
     public DeleteProjectCommand(BugTrap bugTrap, ProjectDeleteForm form) {
         super(bugTrap);
         this.form = form;

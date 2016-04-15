@@ -8,6 +8,11 @@ import model.projects.forms.SubsystemCreationForm;
 public class CreateSubsystemCommand extends Command {
     private SubsystemCreationForm form;
 
+    /**
+     * Command that creates Subsystem when executed.
+     * @param bugTrap BugTrap system.
+     * @param form SubsystemCreationForm.
+     */
     public CreateSubsystemCommand(BugTrap bugTrap, SubsystemCreationForm form) {
         super(bugTrap);
         this.form = form;

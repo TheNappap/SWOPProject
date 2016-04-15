@@ -9,6 +9,11 @@ public class AssignProjectCommand extends Command {
 
     private ProjectAssignForm form;
 
+    /**
+     * Command that assigns a Developer with Role when executed.
+     * @param bugTrap BugTrap system.
+     * @param form ProjectAssignForm.
+     */
     public AssignProjectCommand(BugTrap bugTrap,ProjectAssignForm form) {
         super(bugTrap);
         this.form = form;

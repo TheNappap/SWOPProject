@@ -774,6 +774,19 @@ public class Main {
 	}
 
 	private static TargetMilestone selectTargetMilestone() {
-		// TODO Implement this.
+		String inputLine = input.nextLine();
+		
+		if (inputLine.equals("")) return new TargetMilestone();
+		
+		//Split input by "."
+		String[] strings = inputLine.split(".");
+		
+		//Shave off the M.
+		strings[0] = strings[0].substring(1, strings[0].length());
+		
+		List<Integer> numbers = new ArrayList<Integer>();
+		for (String string : strings) numbers.add(Integer.valueOf(string));
+		
+		return new TargetMilestone(numbers);
 	}
 }
