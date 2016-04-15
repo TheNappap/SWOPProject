@@ -87,7 +87,7 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	 * @param commentText The text of the comment.
 	 */
 	public void addComment(String commentText) {
-		comments.add(new Comment(commentText));
+		comments.add(new Comment(this, commentText));
 
 		notifyObservers(new CommentCreationSignalisation(this));
 	}

@@ -9,6 +9,15 @@ public class Subsystem extends System implements ISubsystem {
 
 	private final Project project;
 	
+	/**
+	 * Constructor.
+	 * @param name Name of the Subsystem.
+	 * @param description Description of the Subsystem.
+	 * @param parent Parent of the Subsystem.
+	 * @param subsystems Subsystems of the Subsystems.
+	 * @param project Project of the Subsystem.
+	 * @param achievedMilestone Achieved Milestone of the Subsystem.
+	 */
 	public Subsystem(String name, String description, System parent, List<Subsystem> subsystems, Project project, AchievedMilestone achievedMilestone) {
 		super(name, description, parent, subsystems, achievedMilestone);
 		

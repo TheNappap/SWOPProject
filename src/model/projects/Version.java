@@ -5,24 +5,42 @@ package model.projects;
  */
 public class Version implements Comparable<Version> {
 
-	private final int major;
-	private final int minor;
-	private final int revision;
+	private final int major;	//Major version.
+	private final int minor;	//Minor version.
+	private final int revision;	//Revision version.
 	
+	/**
+	 * Constructor.
+	 * @param major Major version.
+	 * @param minor Minor version.
+	 * @param revision Revision version.
+	 */
 	public Version(int major, int minor, int revision) {
 		this.major 		= major;
 		this.minor 		= minor;
 		this.revision 	=  revision;
 	}
 	
+	/**
+	 * 
+	 * @return The major version.
+	 */
 	public int getMajor() {
 		return major;
 	}
 
+	/**
+	 * 
+	 * @return The minor version.
+	 */
 	public int getMinor() {
 		return minor;
 	}
 
+	/**
+	 * 
+	 * @return The revision number.
+	 */
 	public int getRevision() {
 		return revision;
 	}

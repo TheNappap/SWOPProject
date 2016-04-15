@@ -10,9 +10,17 @@ import model.Milestone;
  */
 public class AchievedMilestone extends Milestone {
 
+	/**
+	 * Default constructor.
+	 * Construct "M0" Achieved Milestone.
+	 */
 	public AchievedMilestone() {
 		super(Arrays.asList(new Integer[] {0}));
 	}
+	
+	/**
+	 * Constructor. Create Achieved Milestone with given numbers.
+	 */
 	public AchievedMilestone(List<Integer> numbers) {
 		super(numbers);
 	}

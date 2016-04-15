@@ -20,7 +20,6 @@ public class ProjectTeam {
 	public ProjectTeam() {
 		team = new ArrayList<DeveloperRoleRelation>();
 	}
-
 	/**
 	 * Copy constructor.
 	 * @param pteam The team to copy.
