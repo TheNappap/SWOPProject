@@ -19,12 +19,20 @@ public class NotificationManager {
     private final List<Mailbox> mailboxes;
     private final List<Registration> registrations;
 
+    /**
+	 * Constructor.
+	 */
     public NotificationManager(BugTrap bugTrap) {
         this.bugTrap = bugTrap;
         this.mailboxes = new ArrayList<Mailbox>();
         this.registrations = new ArrayList<Registration>();
     }
 
+    /**
+     * Gets the mailbox of a given user and creates one if none exists
+     * @param user given user
+     * @return the mailbox of the given user
+     */
     public Mailbox getMailboxForUser(IUser user) {
         for(Mailbox box : mailboxes) {
             if (box.getUser() == user)
@@ -38,6 +46,14 @@ public class NotificationManager {
         return box;
     }
     
+    /**
+     * Registers for notifications with a given type, observable and a specific tag.
+     * The tag is only used if the type is BUGREPORT_SPECIFIC_TAG
+     * @param registrationType the type
+     * @param observable the object that is observed
+     * @param tag the specific tag
+     * @throws UnauthorizedAccessException
+     */
     public void registerForNotification(RegistrationType registrationType, Observable observable, BugTag tag) throws UnauthorizedAccessException {
         if (!bugTrap.isLoggedIn())
             throw new UnauthorizedAccessException("You must be logged in to register for notifications.");
@@ -51,6 +67,11 @@ public class NotificationManager {
         this.registrations.add(registration);
     }
     
+    /**
+     * Unregisters for notifications with a given registration
+     * @param registration the given registration
+     * @throws UnauthorizedAccessException
+     */
     public void unregisterForNotification(Registration registration) throws UnauthorizedAccessException {
         if (!bugTrap.isLoggedIn())
             throw new UnauthorizedAccessException("You must be logged in to unregister for notifications.");
@@ -59,6 +80,11 @@ public class NotificationManager {
         this.registrations.remove(registration);
     }
 
+    /**
+     * Returns the registrations of the logged in user
+     * @return a list of registrations for the logged ins user
+     * @throws UnauthorizedAccessException
+     */
     public List<Registration> getRegistrationsLoggedInUser() throws UnauthorizedAccessException {
         if (!bugTrap.isLoggedIn())
             throw new UnauthorizedAccessException("You must be logged in to retrieve a list of registrations for notifications.");
@@ -71,6 +97,12 @@ public class NotificationManager {
         return regs;
     }
 
+    /**
+     * Returns specific number of last received notifications for the logged in user
+     * @param nbOfNotifications the number of notifications
+     * @return a list of notifications with length of the given number
+     * @throws UnauthorizedAccessException
+     */
 	public List<INotification> getNotifications(int nbOfNotifications) throws UnauthorizedAccessException {
 		 if (!bugTrap.isLoggedIn())
 	            throw new UnauthorizedAccessException("You must be logged in to retrieve notifications.");
@@ -81,6 +113,10 @@ public class NotificationManager {
 		return box.getNotifications(nbOfNotifications);
 	}
 
+	/**
+	 * Returns a list of registration types
+	 * @return list of registration types
+	 */
 	public RegistrationType[] getRegistrationTypes() {
 		return RegistrationType.values();
 	}

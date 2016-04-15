@@ -12,7 +12,9 @@ import model.users.exceptions.NotUniqueUserNameException;
  */
 public class UserManager{
 	
-	
+	/**
+	 * Constructor.
+	 */
 	public UserManager(){
 		userList = new ArrayList<User>();
 		loggedInUser = null;

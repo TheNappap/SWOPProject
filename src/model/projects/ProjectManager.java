@@ -21,11 +21,24 @@ public class ProjectManager {
 	private final ArrayList<Project> projectList;
 	private final BugTrap bugTrap;
 
+	/**
+	 * Constructor.
+	 */
 	public ProjectManager(BugTrap bugTrap) {
 		projectList = new ArrayList<Project>();
 		this.bugTrap = bugTrap;
 	}
 	
+	/**
+	 * Creates a project with a given name, description, creation date, start date, budget estimate, lead and version
+	 * @param name 			the name of the project
+	 * @param description	the description of the project
+	 * @param creationDate	the creation date of the project
+	 * @param startDate		the start date of the project
+	 * @param budgetEstimate the budget estimate of the project
+	 * @param lead			the lead developer of the project
+	 * @param version		the version of the project
+	 */
 	public void createProject(String name, String description, Date creationDate, Date startDate, double budgetEstimate, IUser lead, Version version) {
 		if (name == null || description == null || creationDate == null || startDate ==  null)
 			throw new IllegalArgumentException("Arguments should not be null.");
@@ -48,6 +61,13 @@ public class ProjectManager {
 				.getProject());
 	}
 
+	/**
+	 * Creates a fork of an existing project with a given budget estimate, version and start date
+	 * @param project			the project to fork
+	 * @param budgetEstimate	the budget estimate of the fork
+	 * @param version			the version of the fork
+	 * @param startDate			the start date of the fork
+	 */
 	public void createFork(IProject project, double budgetEstimate, Version version, Date startDate) {
 		if (project == null || version == null || startDate == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
@@ -69,6 +89,14 @@ public class ProjectManager {
 		projectList.add(fork);
 	}
 
+	/**
+	 * Updates project with given name, description, budget estimate and start date
+	 * @param project			the project to update
+	 * @param name				the name of the project
+	 * @param description		the description of the project
+	 * @param budgetEstimate	the budget estimate of the project
+	 * @param startDate			the start date of the project
+	 */
 	public void updateProject(IProject project, String name, String description, double budgetEstimate, Date startDate) {
 		if (project == null || name == null || description == null || startDate == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
@@ -83,6 +111,10 @@ public class ProjectManager {
 		}
 	}
 
+	/**
+	 * Deletes a project TODO
+	 * @param project the project to delete
+	 */
 	public void deleteProject(IProject project) {
 		if (project == null)
 			throw new IllegalArgumentException("Project to delete should not be null.");
@@ -97,6 +129,12 @@ public class ProjectManager {
 	}
 
 
+	/**
+	 * Assigns a developer to a project with a given role
+	 * @param project	The project to assign to
+	 * @param dev		The developer to be assigned
+	 * @param role		The role to be assigned
+	 */
 	public void assignToProject(IProject project, IUser dev, Role role) {
 		if (project == null || dev == null || role == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
@@ -135,15 +173,27 @@ public class ProjectManager {
 		return projs;
 	}
 
+	/**
+	 * Returns the projects where the logged in user is lead developer.
+	 * The logged in user should have at least one project where he/she is lead.
+	 * @return a list of project where the logged in user is lead
+	 */
 	public List<IProject> getProjectsForSignedInLeadDeveloper() {
 		List<IProject> projects = getProjectsForLeadDeveloper(bugTrap.getUserManager().getLoggedInUser());
 		
-		if (projects.size() == 0) throw new IllegalArgumentException();
+		if (projects.size() == 0) throw new IllegalArgumentException("The logged in user is nowhere lead developer");
 		
 		return projects;
 	}
 
 
+	/**
+	 * Creates a subsystem in a given project and parent with a given name and description
+	 * @param name			The name of the subsystem
+	 * @param description	The description of the subsystem
+	 * @param iproject		The project of the subsystem
+	 * @param iparent		The parent of the subsystem
+	 */
 	public void createSubsystem(String name, String description, IProject iproject, ISystem iparent) {
 		if (name == null || description == null || iproject == null || iparent == null)
 			throw  new IllegalArgumentException("Arguments should not be null.");
