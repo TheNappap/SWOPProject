@@ -29,9 +29,6 @@ public class Comment implements Commentable { //A Comment can be commented on.
 	public void addComment(String commentText) {
 		comments.add(new Comment(commentText));
 	}
-	
-	
-	//Getters and Setters
 
 	public String getText() {
 		return text;
