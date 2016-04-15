@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,9 @@ import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
+import model.bugreports.bugtag.BugTag;
 import model.projects.IProject;
+import model.projects.ISubsystem;
 import model.projects.Version;
 import model.projects.forms.ProjectDeleteForm;
 
@@ -22,17 +25,25 @@ public class DeleteProjectUseCaseTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		//Make system.
+		//Make System.
 		bugTrap = new BugTrap();
 		
-		//Add Users.
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
+		//Make Users.
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
+		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
 		
-		//Log in as Administrator, create project and log off.
+		//Log in as Administrator and create project/subsystem.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
 		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		IProject project = bugTrap.getProjectManager().getProjects().get(0);
+		bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
+		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
+		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
+		
+		//Log in as Developer, add BugReport and log off.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, bugTrap.getUserManager().getUser("DEV"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 		bugTrap.getUserManager().logOff();
 	}
 
@@ -61,6 +72,7 @@ public class DeleteProjectUseCaseTest {
 			
 			//Is Project gone?
 			assertTrue(bugTrap.getProjectManager().getProjects().isEmpty());
+			assertTrue(bugTrap.getBugReportManager().getBugReportList().isEmpty());
 		} catch (UnauthorizedAccessException e) { fail("not authorized"); }
 	}
 	

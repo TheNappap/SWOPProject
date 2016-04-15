@@ -36,7 +36,7 @@ public class RegisterForNotificationsUseCaseTest {
 		
 		//Log in as Administrator, create Project/Subsystem and log off.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, bugTrap.getUserManager().getUser("DEV"), new Version(1, 0, 0));
 		bugTrap.getProjectManager().createSubsystem("name", "description", bugTrap.getProjectManager().getProjects().get(0), bugTrap.getProjectManager().getProjects().get(0));
 		bugTrap.getUserManager().logOff();
 		

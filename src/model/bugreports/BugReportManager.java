@@ -80,6 +80,8 @@ public class BugReportManager {
 	public List<IBugReport> getBugReportsForSystem(ISystem system) {
 		List<ISubsystem> subs = system.getAllDirectOrIndirectSubsystems();
 		List<IBugReport> reports = new ArrayList<IBugReport>();
+		if(system.getParent() != null)
+			subs.add((Subsystem) system);
 
 		for (IBugReport r : bugReportList)
 			for (ISubsystem s : subs)

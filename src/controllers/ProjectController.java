@@ -60,10 +60,20 @@ public class ProjectController extends Controller {
 		return getBugTrap().getFormFactory().makeSubsystemCreationForm();
 	}
 
+	/**
+	 * Creates a project with the information provided in the form.
+	 * @param form ProjectCreationForm containing all the details about the creation.
+	 * @throws UnauthorizedAccessException 
+	 */
 	public void createProject(ProjectCreationForm form) throws UnauthorizedAccessException {
 		new CreateProjectCommand(getBugTrap(), form).execute();
 	}
 
+	/**
+	 * Forks a project with the information provided in the form.
+	 * @param form ProjectForkForm containing all the details about the fork.
+	 * @throws UnauthorizedAccessException 
+	 */
 	public void forkProject(ProjectForkForm form) throws UnauthorizedAccessException {
 		new ForkProjectCommand(getBugTrap(), form).execute();
 	}

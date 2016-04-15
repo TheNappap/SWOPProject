@@ -59,5 +59,7 @@ public class SystemTests {
         Subsystem subB = new Subsystem("", "", projB, new ArrayList<Subsystem>(), projB, null);
         Assert.assertTrue(projA.equals(projB));
         Assert.assertEquals(projA, projB);
+        Assert.assertTrue(subA.equals(subB));
+        Assert.assertEquals(subA, subB);
     }
 }

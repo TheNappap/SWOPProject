@@ -40,7 +40,7 @@ public class ShowNotificationsUseCaseTest {
 		
 		//Log in as Administrator and create Project/Subsystem.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
+		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, bugTrap.getUserManager().getUser("DEV"), new Version(1, 0, 0));
 		bugTrap.getProjectManager().createSubsystem("name", "description", bugTrap.getProjectManager().getProjects().get(0), bugTrap.getProjectManager().getProjects().get(0));
 		
 		//Log in as Developer and add BugReport.
@@ -75,7 +75,11 @@ public class ShowNotificationsUseCaseTest {
 		IBugReport bugReport = bugTrap.getBugReportManager().getBugReportList().get(0);
 		
 		//Update Bug Report with new tag..
+		//Log in as Lead to update bug report.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.RESOLVED);
+		//Log back in as issuer.
+		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		//After this, 2+1=3 notifications.
 		assertEquals(3, bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")).getNotifications().size());
 		

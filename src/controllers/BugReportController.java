@@ -43,34 +43,76 @@ public class BugReportController extends Controller {
 		return getBugTrap().getFormFactory().makeBugReportUpdateForm();
 	}
 
+	/**
+	 * Returns a list of all bug reports
+	 * @return bug report list
+	 * @throws UnauthorizedAccessException
+	 */
 	public List<IBugReport> getBugReportList() throws UnauthorizedAccessException{
 		return getBugTrap().getBugReportManager().getBugReportList();
 	}
 
+	/**
+	 * Returns a list of all bug reports for a given project
+	 * @return bug report list
+	 * @throws UnauthorizedAccessException
+	 */
 	public List<IBugReport> getBugReportsForProject(IProject project) throws UnauthorizedAccessException {
 		return getBugTrap().getBugReportManager().getBugReportsForProject(project);
 	}
 	
+	/**
+	 * Returns a list of all filter types
+	 * @return filter type list
+	 * @throws UnauthorizedAccessException
+	 */
 	public FilterType[] getFilterTypes() throws UnauthorizedAccessException{
 		return getBugTrap().getBugReportManager().getFilterTypes();
 	}
 
+	/**
+	 * Returns a filtered list of bug reports
+	 * @param types filter types
+	 * @param arguments optional arguments for the filter(s)
+	 * @return a filtered list of bug reports
+	 * @throws UnauthorizedAccessException
+	 */
 	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
 		return getBugTrap().getBugReportManager().getOrderedList(types, arguments);
 	}
 
+	/**
+	 * Creates a bug report with the information provided in the form.
+	 * @param form BugReportCreationForm containing all the details about the creation.
+	 * @throws UnauthorizedAccessException 
+	 */
 	public void createBugReport(BugReportCreationForm form) throws UnauthorizedAccessException {
 		new CreateBugReportCommand(getBugTrap(), form).execute();
 	}
 
+	/**
+	 * Creates a comment with the information provided in the form.
+	 * @param form CommentCreationForm containing all the details about the creation.
+	 * @throws UnauthorizedAccessException 
+	 */
 	public void createComment(CommentCreationForm form) throws UnauthorizedAccessException {
 		new CreateCommentCommand(getBugTrap(), form).execute();
 	}
 
+	/**
+	 * Updates a bug report with the information provided in the form.
+	 * @param form BugReportUpdateForm containing all the details about the creation.
+	 * @throws UnauthorizedAccessException 
+	 */
 	public void updateBugReport(BugReportUpdateForm form) throws UnauthorizedAccessException {
 		new UpdateBugReportCommand(getBugTrap(), form).execute();
 	}
 
+	/**
+	 * Assign a developer to a bug report with the information provided in the form.
+	 * @param form BugReportAssignForm containing the details about the assignment.
+	 * @throws UnauthorizedAccessException 
+	 */
 	public void assignToBugReport(BugReportAssignForm form) throws UnauthorizedAccessException {
 		new AssignBugReportCommand(getBugTrap(), form).execute();
 	}
