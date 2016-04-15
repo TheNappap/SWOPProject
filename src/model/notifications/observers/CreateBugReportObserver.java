@@ -5,7 +5,7 @@ import model.notifications.Observable;
 import model.notifications.RegistrationType;
 import model.notifications.signalisations.Signalisation;
 
-public class CreateBugReportObserver extends Observer {
+public class CreateBugReportObserver extends ObserverWithMailbox {
 
 	public CreateBugReportObserver(Mailbox mailbox, Observable observable) {
 		super(mailbox, observable);

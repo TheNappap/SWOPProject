@@ -153,6 +153,10 @@ public class Project extends System implements IProject {
 		this.startDate = startDate;
 	}
 
+	void setAchievedMilestone(AchievedMilestone milestone) {
+		this.milestone = milestone;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (!super.equals(o))
