@@ -89,8 +89,11 @@ public class ProjectManager {
 			throw new IllegalArgumentException("Project to delete should not be null.");
 
 		for (int i = 0; i < projectList.size(); i++) {
-			if (projectList.get(i) == project)
-				projectList.remove(i);//TODO Recursively delete subsystems and bugReports
+			if (projectList.get(i) == project) {
+				for (ISystem sys : project.getAllDirectOrIndirectSubsystems())
+					bugTrap.getBugReportManager().deleteBugReportsForSystem(sys);
+				projectList.remove(i);
+			}
 		}
 	}
 
@@ -207,5 +210,4 @@ public class ProjectManager {
 		
 		((System) system).declareAchievedMilestone(numbers);
 	}
-	
 }

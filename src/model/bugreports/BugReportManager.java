@@ -89,6 +89,11 @@ public class BugReportManager {
 		return reports;
 	}
 
+	public void deleteBugReportsForSystem(ISystem system) {
+		for (IBugReport report : getBugReportsForSystem(system))
+			bugReportList.remove(report);
+	}
+
 	/**
 	 * adds a bug report
 	 * @param title
