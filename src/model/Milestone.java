@@ -4,18 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents a milestone in BugTrap.
+ * This class represents a Milestone in BugTrap.
  */
 public abstract class Milestone implements Comparable<Milestone> {
 
-	private final List<Integer> numbers;
+	private final List<Integer> numbers; //Numbers in the Milestone.
 	
+	/**
+	 * Constructor. 
+	 * @param numbers The numbers in the Milestone.
+	 */
 	public Milestone(List<Integer> numbers) {
 		if (numbers == null || numbers.size() == 0)
 			throw new IllegalArgumentException("Numbers should not be null and at least contain one number.");
 		this.numbers = numbers;
 	}
 	
+	/**
+	 * 
+	 * @return The numbers in the Milestone.
+	 */
 	public List<Integer> getNumbers() {
 		List<Integer> numbers = new ArrayList<Integer>();
 		numbers.addAll(this.numbers);

@@ -180,7 +180,6 @@ public class RegisterForNotificationsUseCaseTest {
 		bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.UNDERREVIEW);
 		//Not requested tag, still no notification.
 		assertEquals(0, box.getNotifications().size());
-		bugTrap.getUserManager().loginAs(bugReport.getProject().getLeadDeveloper());
 		bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.NOTABUG);
 		//Requested tag, so notification.
 		assertEquals(1, box.getNotifications().size());

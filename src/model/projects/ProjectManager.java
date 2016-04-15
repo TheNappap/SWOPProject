@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.Milestone;
 import model.bugreports.BugReport;
@@ -112,17 +113,24 @@ public class ProjectManager {
 	}
 
 	/**
-	 * Deletes a project TODO
+	 * Deletes a project, its subsystems, the bugreports for the subsystems and the registrations
+	 * for the project, subsystems and bugreports
 	 * @param project the project to delete
+	 * @throws UnauthorizedAccessException 
 	 */
-	public void deleteProject(IProject project) {
+	public void deleteProject(IProject project) throws UnauthorizedAccessException {
 		if (project == null)
 			throw new IllegalArgumentException("Project to delete should not be null.");
 
 		for (int i = 0; i < projectList.size(); i++) {
 			if (projectList.get(i) == project) {
-				for (ISystem sys : project.getAllDirectOrIndirectSubsystems())
+				for (ISubsystem sys : project.getAllDirectOrIndirectSubsystems()){
+					bugTrap.getNotificationManager().deleteRegistrationsForObservable(sys);
 					bugTrap.getBugReportManager().deleteBugReportsForSystem(sys);
+					((Subsystem) sys).terminate();
+				}
+				bugTrap.getNotificationManager().deleteRegistrationsForObservable(project);
+				((Project) project).terminate();
 				projectList.remove(i);
 			}
 		}

@@ -29,6 +29,10 @@ public class FormFactory {
 	
 	private final BugTrap bugTrap;
 	
+	/**
+	 * Return the BugTrap system.
+	 * @return
+	 */
 	public BugTrap getBugTrap() {
 		return bugTrap;
 	}

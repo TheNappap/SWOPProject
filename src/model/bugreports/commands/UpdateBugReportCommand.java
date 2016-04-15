@@ -9,11 +9,6 @@ public class UpdateBugReportCommand extends Command {
 
     private BugReportUpdateForm form;
 
-    /**
-     * Command to update a BugReport
-     * @param bugTrap BugTrap system.
-     * @param form BugReportUpdateForm
-     */
     public UpdateBugReportCommand(BugTrap bugTrap, BugReportUpdateForm form) {
         super(bugTrap);
         this.form = form;

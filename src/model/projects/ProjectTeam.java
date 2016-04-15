@@ -20,7 +20,6 @@ public class ProjectTeam {
 	public ProjectTeam() {
 		team = new ArrayList<DeveloperRoleRelation>();
 	}
-
 	/**
 	 * Copy constructor.
 	 * @param pteam The team to copy.
@@ -208,5 +207,15 @@ public class ProjectTeam {
 			list.add(rel.getUser());
 		}
 		return new ArrayList<IUser>(list);
+	}
+
+	/**
+	 * Terminates this team
+	 */
+	public void terminate() {
+		for (DeveloperRoleRelation rel : team) {
+			rel.terminate();
+		}
+		team.clear();
 	}
 }

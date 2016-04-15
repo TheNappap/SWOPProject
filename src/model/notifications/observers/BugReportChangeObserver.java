@@ -7,6 +7,11 @@ import model.notifications.signalisations.Signalisation;
 
 public class BugReportChangeObserver extends ObserverWithMailbox {
 
+	/**
+	 * 
+	 * @param mailbox
+	 * @param observable
+	 */
 	public BugReportChangeObserver(Mailbox mailbox, Observable observable) {
 		super(mailbox, observable);
 	}

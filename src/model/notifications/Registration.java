@@ -1,7 +1,7 @@
 package model.notifications;
 
 import model.bugreports.bugtag.BugTag;
-import model.notifications.observers.Observer;
+import model.notifications.observers.ObserverWithMailbox;
 import model.users.IUser;
 
 /**
@@ -9,9 +9,9 @@ import model.users.IUser;
  */
 public class Registration {
     private final RegistrationType registrationType;
-    private final Observable observable;
-    private final Observer observer;
-    private final Mailbox box;
+    private Observable observable;
+    private ObserverWithMailbox observer;
+    private Mailbox box;
 
     public Registration(RegistrationType type, Observable observable, Mailbox box, BugTag tag) {
         this.registrationType = type;
@@ -35,11 +35,21 @@ public class Registration {
         return observable;
     }
 
-    public Observer getObserver() {
+    public ObserverWithMailbox getObserver() {
         return observer;
     }
 
     public RegistrationType getRegistrationType() {
         return registrationType;
     }
+
+    /**
+     * Terminates this registration
+     */
+	public void terminate() {
+		box = null;
+		observable = null;
+		observer.terminate();
+		observer = null;
+	}
 }

@@ -15,13 +15,21 @@ public abstract class System implements ISystem, Observable, Observer {
 
 	protected String name;		//System name.
 	protected String description;	//System description.
-	protected final System parent;		//Parent System, if any.
+	protected System parent;		//Parent System, if any.
 	protected final List<Subsystem> subsystems;	//Subsystems.
 	
 	protected AchievedMilestone milestone;
 
 	protected List<Observer> observers = new ArrayList<Observer>();
 	
+	/**
+	 * Constructor.
+	 * @param name Name of the System.
+	 * @param description Description of the System.
+	 * @param parent Parent of this System.
+	 * @param subsystems Subsystems of this System.
+	 * @param milestone Milestone of the system.
+	 */
 	public System(String name, String description, System parent, List<Subsystem> subsystems, AchievedMilestone milestone) {
 		this.name 			= name;
 		this.description 	= description;
@@ -48,6 +56,10 @@ public abstract class System implements ISystem, Observable, Observer {
 		return name;
 	}
 
+	/**
+	 * Set the name of the System to the given name.
+	 * @param name The new name for the System.
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -56,7 +68,11 @@ public abstract class System implements ISystem, Observable, Observer {
 	public String getDescription() {
 		return description;
 	}
-
+	
+	/**
+	 * Set the description of the System to the given name.
+	 * @param description The new name for the System.
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -97,15 +113,18 @@ public abstract class System implements ISystem, Observable, Observer {
 		return milestone;
 	}
 
+	/**
+	 * Declare an Achieved Milestone for the System.
+	 * @param numbers The numbers for the Achieved Milestone.
+	 */
 	public void declareAchievedMilestone(List<Integer> numbers) {
 		AchievedMilestone highest = highestAchievedMilestone();
 		AchievedMilestone achieved = new AchievedMilestone(numbers);
 
-		if ((highest == null) || achieved.compareTo(highest) <= 0 && (this.milestone == null || achieved.compareTo(this.milestone) >= 0)) {
+		if ((highest == null) || achieved.compareTo(highest) <= 0 && (this.milestone == null || achieved.compareTo(this.milestone) >= 0)) 
 			milestone = achieved;
-		} else {
+		else
 			throw new IllegalArgumentException("The given milestone should be equal to or less than the higheset milestone of its (in)direct subsystems and the declared milestone must be larger than the current milestone.");
-		}
 	}
 
 	private AchievedMilestone highestAchievedMilestone() {
@@ -193,5 +212,15 @@ public abstract class System implements ISystem, Observable, Observer {
 
 		for (Observer observer : this.observers)
 			observer.signal(signalisation);
+	}
+	
+	/**
+	 * Terminates this system.
+	 * Subclasses should always call the super method
+	 */
+	public void terminate() {
+		parent = null;
+		subsystems.clear();
+		observers.clear();
 	}
 }

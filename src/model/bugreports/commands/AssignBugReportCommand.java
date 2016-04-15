@@ -8,11 +8,6 @@ import model.bugreports.forms.BugReportAssignForm;
 public class AssignBugReportCommand extends Command {
     private BugReportAssignForm form;
 
-    /**
-     * Command to assign Developers to BugReport.
-     * @param bugTrap BugTrap system.
-     * @param form BugReportAssignForm
-     */
     public AssignBugReportCommand(BugTrap bugTrap, BugReportAssignForm form) {
         super(bugTrap);
         this.form = form;
