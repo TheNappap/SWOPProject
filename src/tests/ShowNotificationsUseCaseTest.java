@@ -49,7 +49,6 @@ public class ShowNotificationsUseCaseTest {
 
 		//Log in as an Issuer, register for notification and log off.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
-		bugTrap.getBugReportManager().getBugReportList().get(0).attach(new BugReportChangeObserver(bugTrap.getNotificationManager().getMailboxForUser(bugTrap.getUserManager().getUser("ISSUER")), bugTrap.getBugReportManager().getBugReportList().get(0)));
 
 		bugTrap.getNotificationManager().registerForNotification(RegistrationType.BUGREPORT_CHANGE, (Project)bugTrap.getProjectManager().getProjects().get(0), null);
 		bugTrap.getUserManager().logOff();
