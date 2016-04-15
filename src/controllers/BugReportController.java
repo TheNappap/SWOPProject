@@ -5,15 +5,9 @@ import java.util.List;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
-import model.bugreports.commands.AssignBugReportCommand;
-import model.bugreports.commands.CreateBugReportCommand;
-import model.bugreports.commands.CreateCommentCommand;
-import model.bugreports.commands.UpdateBugReportCommand;
+import model.bugreports.commands.*;
 import model.bugreports.filters.FilterType;
-import model.bugreports.forms.BugReportAssignForm;
-import model.bugreports.forms.BugReportCreationForm;
-import model.bugreports.forms.BugReportUpdateForm;
-import model.bugreports.forms.CommentCreationForm;
+import model.bugreports.forms.*;
 import model.projects.IProject;
 
 /**
@@ -115,5 +109,31 @@ public class BugReportController extends Controller {
 	 */
 	public void assignToBugReport(BugReportAssignForm form) throws UnauthorizedAccessException {
 		new AssignBugReportCommand(getBugTrap(), form).execute();
+	}
+
+	public ProposeTestForm getProposeTestForm() throws UnauthorizedAccessException {
+		return getBugTrap().getFormFactory().makeProposeTestForm();
+	}
+
+	public ProposePatchForm getProposePatchForm() throws UnauthorizedAccessException {
+		return getBugTrap().getFormFactory().makeProposePatchForm();
+	}
+
+	/**
+	 * Propose a patch for a bug report.
+	 * @param form ProposeTestForm containing the details about the test.
+	 * @throws UnauthorizedAccessException
+     */
+	public void proposeTest(ProposeTestForm form) throws UnauthorizedAccessException {
+		new ProposeTestCommand(getBugTrap(), form).execute();
+	}
+
+	/**
+	 * Propose a test for the bug report.
+	 * @param form ProposePatchForm containing all the details about the patch.
+	 * @throws UnauthorizedAccessException
+     */
+	public void proposePatch(ProposePatchForm form) throws UnauthorizedAccessException {
+		new ProposePatchCommand(getBugTrap(), form).execute();
 	}
 }
