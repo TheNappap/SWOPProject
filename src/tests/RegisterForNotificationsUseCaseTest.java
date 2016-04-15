@@ -47,7 +47,7 @@ public class RegisterForNotificationsUseCaseTest {
 	}
 	
 	@Test
-	public void registerForNotificationProjectTest() {
+	public void registerForNotificationProjectTest() throws UnauthorizedAccessException {
 		//Log in.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		
@@ -129,16 +129,21 @@ public class RegisterForNotificationsUseCaseTest {
 		//Confirm
 		//Initially no notifications.
 		assertEquals(0, box.getNotifications().size());
-		bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.UNDERREVIEW);
+		try { bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.UNDERREVIEW);
+		} catch (UnauthorizedAccessException e) { fail(); }
 		//Not requested tag, still no notification.
 		assertEquals(0, box.getNotifications().size());
-		bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.NOTABUG);
+		
+		try {
+			bugTrap.getBugReportManager().updateBugReport(bugReport, BugTag.NOTABUG);
+		} catch (UnauthorizedAccessException e) { fail(); }
+		
 		//Requested tag, so notification.
 		assertEquals(1, box.getNotifications().size());
 	}
 
 	@Test
-	public void registerForNotificationBugReportTest() {
+	public void registerForNotificationBugReportTest() throws UnauthorizedAccessException {
 		//Log in.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		

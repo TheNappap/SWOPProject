@@ -56,7 +56,7 @@ public class ShowNotificationsUseCaseTest {
 	}
 
 	@Test
-	public void showNotificationsTest() {
+	public void showNotificationsTest() throws UnauthorizedAccessException {
 		//Log in as Issuer.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
 		

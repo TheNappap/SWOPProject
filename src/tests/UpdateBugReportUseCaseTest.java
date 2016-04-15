@@ -49,7 +49,7 @@ private BugTrap bugTrap;
 	}
 
 	@Test
-	public void updateBugReportTest() {
+	public void updateBugReportTest() throws UnauthorizedAccessException {
 		//Log in as Issuer.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
 		
@@ -143,7 +143,7 @@ private BugTrap bugTrap;
 	}
 	
 	@Test
-	public void nullFormTest() {
+	public void nullFormTest() throws UnauthorizedAccessException {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("DEV");
 		bugTrap.getUserManager().loginAs(dev);
