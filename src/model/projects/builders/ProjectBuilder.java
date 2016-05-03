@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.BugTrap;
 import model.projects.AchievedMilestone;
 import model.projects.Project;
 import model.projects.ProjectTeam;
@@ -11,6 +12,9 @@ import model.projects.Subsystem;
 import model.projects.Version;
 
 public class ProjectBuilder {
+
+	//Immutable
+	private BugTrap bugTrap;
 
 	//System variables.
 	//-Required.
@@ -33,8 +37,8 @@ public class ProjectBuilder {
 	 * Constructor for a ProjectBuilder. 
 	 * This class is able to construct Project objects.
 	 */
-	public ProjectBuilder() {
-		
+	public ProjectBuilder(BugTrap bugTrap) {
+		this.bugTrap = bugTrap;
 	}
 	
 	/**
@@ -123,7 +127,7 @@ public class ProjectBuilder {
 	 */
 	public Project getProject() {
 		validate();
-		return new Project(name, description, subsystems, version, creationDate, startDate, budgetEstimate, team, milestone);
+		return new Project(bugTrap, name, description, subsystems, version, creationDate, startDate, budgetEstimate, team, milestone);
 	}
 	
 	private void validate() {

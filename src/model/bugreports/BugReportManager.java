@@ -69,41 +69,11 @@ public class BugReportManager {
 	}
 
 	/**
-	 * returns all the bug reports for a given project
-	 * @param project
-	 * @return list of bug reports
-	 */
-	public List<IBugReport> getBugReportsForProject(IProject project) {
-		return getBugReportsForSystem(project);
-	}
-	
-	/**
-	 * Return all BugReports for given System.
-	 * @param system The System to get all BugReports for.
-	 * @return  The BugReports of given System.
-	 */
-	public List<IBugReport> getBugReportsForSystem(ISystem system) {
-		List<ISubsystem> subs = system.getAllDirectOrIndirectSubsystems();
-		List<IBugReport> reports = new ArrayList<IBugReport>();
-		if(system.getParent() != null)
-			subs.add((Subsystem) system);
-
-		for (IBugReport r : bugReportList)
-			for (ISubsystem s : subs)
-				if (r.getSubsystem() == s)
-					reports.add(r);
-
-		return reports;
-	}
-
-	/**
 	 * Delete the BugReports for given System and deletes the registrations for this bug report
 	 * @param system The System for which to delete the BugReports
-	 * @throws UnauthorizedAccessException 
 	 */
-	public void deleteBugReportsForSystem(ISystem system) throws UnauthorizedAccessException {
-		for (IBugReport report : getBugReportsForSystem(system)){
-			bugTrap.getNotificationManager().deleteRegistrationsForObservable(report);
+	public void deleteBugReportsForSystem(ISystem system) {
+		for (IBugReport report : system.getBugReports()){
 			((BugReport)report).terminate();
 			bugReportList.remove(report);
 		}
@@ -121,7 +91,7 @@ public class BugReportManager {
 	 * @param tag Tag of the BugReport
 	 */
 	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) {
-		BugReport report = new BugReportBuilder().setTitle(title)
+		BugReport report = new BugReportBuilder(bugTrap).setTitle(title)
 				.setDescription(description)
 				.setSubsystem(subsystem)
 				.setIssuer(issuer)
@@ -150,7 +120,7 @@ public class BugReportManager {
 		TargetMilestone target = new TargetMilestone(milestone);
 		if(target.compareTo(subsystem.getAchievedMilestone()) <= 0) throw new IllegalArgumentException("The target milestone should be strict higher than the achieved milestone of the subsystem");
 		
-		BugReport report = new BugReportBuilder().setTitle(title)
+		BugReport report = new BugReportBuilder(bugTrap).setTitle(title)
 				.setDescription(description)
 				.setSubsystem(subsystem)
 				.setIssuer(issuer)

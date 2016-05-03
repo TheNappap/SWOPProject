@@ -3,12 +3,16 @@ package model.projects.builders;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.BugTrap;
 import model.projects.AchievedMilestone;
 import model.projects.Project;
 import model.projects.Subsystem;
 import model.projects.System;
 
 public class SubsystemBuilder {
+
+	// Immutable
+	private final BugTrap bugTrap;
 
 	//System variables.
 	//-Required
@@ -27,8 +31,8 @@ public class SubsystemBuilder {
 	 * Constructor for a SubsystemBuilder. 
 	 * This class is able to construct Subsystem objects.
 	 */
-	public SubsystemBuilder() {
-		
+	public SubsystemBuilder(BugTrap bugTrap) {
+		this.bugTrap = bugTrap;
 	}
 
 	/**
@@ -87,7 +91,7 @@ public class SubsystemBuilder {
 	 */
 	public Subsystem getSubsystem() {
 		validate();
-		return new Subsystem(name, description, parent, subsystems, project, milestone);
+		return new Subsystem(bugTrap, name, description, parent, subsystems, project, milestone);
 	}
 	
 	private void validate() {

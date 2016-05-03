@@ -51,7 +51,7 @@ public class ProjectManager {
 		if (lead != null)
 			team.addMember(lead, Role.LEAD);
 
-		projectList.add(new ProjectBuilder()
+		projectList.add(new ProjectBuilder(bugTrap)
 				.setName(name)
 				.setCreationDate(creationDate)
 				.setStartDate(startDate)
@@ -85,7 +85,6 @@ public class ProjectManager {
 		fork.setVersion(version);
 		fork.setBudgetEstimate(budgetEstimate);
 		fork.setStartDate(startDate);
-		fork.setAchievedMilestone(new AchievedMilestone());
 		
 		projectList.add(fork);
 	}
@@ -124,12 +123,6 @@ public class ProjectManager {
 
 		for (int i = 0; i < projectList.size(); i++) {
 			if (projectList.get(i) == project) {
-				for (ISubsystem sys : project.getAllDirectOrIndirectSubsystems()){
-					bugTrap.getNotificationManager().deleteRegistrationsForObservable(sys);
-					bugTrap.getBugReportManager().deleteBugReportsForSystem(sys);
-					((Subsystem) sys).terminate();
-				}
-				bugTrap.getNotificationManager().deleteRegistrationsForObservable(project);
 				((Project) project).terminate();
 				projectList.remove(i);
 			}
@@ -217,7 +210,7 @@ public class ProjectManager {
 			if (s == iparent)
 				system = s;
 
-		(new SubsystemBuilder())
+		(new SubsystemBuilder(bugTrap))
 				.setDescription(description)
 				.setName(name)
 				.setProject(project)
@@ -251,7 +244,7 @@ public class ProjectManager {
 		if (numbers == null || numbers.isEmpty()) throw new IllegalArgumentException("Numbers can not be null or empty!");
 		if (system == null) throw new IllegalArgumentException("System can not be null!");
 		
-		List<IBugReport> bugreports = bugTrap.getBugReportManager().getBugReportsForSystem(system);
+		List<IBugReport> bugreports = system.getBugReports();
 		AchievedMilestone achieved = new AchievedMilestone(numbers);
 		for (IBugReport bugreport : bugreports) {
 			BugTag tag = bugreport.getBugTag();
