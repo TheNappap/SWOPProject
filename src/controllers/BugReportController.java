@@ -47,15 +47,6 @@ public class BugReportController extends Controller {
 	}
 
 	/**
-	 * Returns a list of all bug reports for a given project
-	 * @return bug report list
-	 * @throws UnauthorizedAccessException
-	 */
-	public List<IBugReport> getBugReportsForProject(IProject project) throws UnauthorizedAccessException {
-		return getBugTrap().getBugReportManager().getBugReportsForProject(project);
-	}
-	
-	/**
 	 * Returns a list of all filter types
 	 * @return filter type list
 	 * @throws UnauthorizedAccessException

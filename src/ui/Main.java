@@ -477,7 +477,7 @@ public class Main {
 			System.out.println("Enter a target milestone: (optional, press enter to skip)");
 			form.setTargetMilestone(selectTargetMilestone());
 
-			List<IBugReport> selectedDependencies = selectBugReports(bugReportController.getBugReportsForProject(chosenSubsystem.getProject()));
+			List<IBugReport> selectedDependencies = selectBugReports(chosenProject.getBugReports());
 			form.setDependsOn(selectedDependencies);
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());

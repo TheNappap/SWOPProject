@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
 import model.bugreports.comments.Comment;
@@ -23,6 +24,8 @@ import model.users.IUser;
 public class BugReport implements IBugReport, Observable { //A Comment can be commented on.
 
 	//Immutable
+	private final BugTrap bugTrap;
+
 	private final Date creationDate;	//Creation Date of the BugReport.
 	private IUser issuedBy;		//The Issuer who issued this BugReport.
 	private ISubsystem subsystem;	//Subsystem to which this BugReport is attached.
@@ -61,9 +64,10 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	 * @param tests Tests for the Bug
 	 * @param patches Patches for the Bug
 	 */
-	public BugReport(String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments, 
+	public BugReport(BugTrap bugTrap, String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments,
 						IUser issuedBy, Date creationDate, List<Observer> observers, BugTag bugTag, String stackTrace, String errorMessage, String reproduction,
 						TargetMilestone milestone, List<Test> tests, List<Patch> patches) {
+		this.bugTrap 		= bugTrap;
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
 		this.subsystem		= subsystem;
@@ -80,6 +84,8 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 		this.milestone		= milestone;
 		this.tests 			= tests;
 		this.patches		= patches;
+
+		((Subsystem)subsystem).addBugReport(this);
 	}
 	
 	/**
@@ -315,6 +321,9 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	 * Terminates this bug report
 	 */
 	public void terminate() {
+		((Subsystem)subsystem).removeBugReport(this);
+		bugTrap.getNotificationManager().deleteRegistrationsForObservable(this);
+
 		issuedBy = null;
 		subsystem = null;
 		assignees.clear();

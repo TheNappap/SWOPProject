@@ -87,7 +87,7 @@ public interface IProject extends ISystem {
 	
     /**
      * Assign a Tester to work on this Project.
-     * @param programmer The Tester to assign.
+     * @param tester The Tester to assign.
      */
 	public void addTester(IUser tester);
 	

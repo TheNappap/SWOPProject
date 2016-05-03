@@ -47,7 +47,7 @@ public class DeleteProjectUseCaseTest {
 		//Log in as Developer, add BugReport and log off.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
 		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, bugTrap.getUserManager().getUser("DEV"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		IBugReport bugreport = bugTrap.getBugReportManager().getBugReportsForSystem(subsystem).get(0);
+		IBugReport bugreport = subsystem.getBugReports().get(0);
 		bugTrap.getUserManager().logOff();
 		
 		//Log in as Administrator and register for notifications.
