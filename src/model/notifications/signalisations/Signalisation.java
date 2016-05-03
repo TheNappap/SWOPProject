@@ -1,7 +1,7 @@
 package model.notifications.signalisations;
 
 import model.bugreports.IBugReport;
-import model.notifications.RegistrationType;
+import model.notifications.NotificationType;
 
 /**
  * This class represents a signal that is signaled when something
@@ -9,19 +9,19 @@ import model.notifications.RegistrationType;
  */
 public abstract class Signalisation {
 	
-	public Signalisation(RegistrationType type, IBugReport bugReport){
+	public Signalisation(NotificationType type, IBugReport bugReport){
 		this.type = type;
 		this.bugReport = bugReport;
 	}
 	
-	private final RegistrationType type;
+	private final NotificationType type;
 	private final IBugReport bugReport;
 
 	public IBugReport getBugReport() {
 		return bugReport;
 	}
 
-	public RegistrationType getType() {
+	public NotificationType getType() {
 		return type;
 	}
 

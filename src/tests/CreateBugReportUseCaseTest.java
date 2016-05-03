@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.TargetMilestone;
 import model.bugreports.bugtag.BugTag;
@@ -20,17 +19,13 @@ import model.bugreports.forms.BugReportCreationForm;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Version;
-import model.projects.forms.SubsystemCreationForm;
 import model.users.IUser;
 
-public class CreateBugReportUseCaseTest {
-
-	private BugTrap bugTrap;
+public class CreateBugReportUseCaseTest extends UseCaseTest {
 
 	@Before
 	public void setUp() throws Exception {
-		//Make System.
-		bugTrap = new BugTrap();
+		super.setUp();
 		
 		//Make Users.
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
@@ -54,22 +49,20 @@ public class CreateBugReportUseCaseTest {
 	@Test
 	public void createBugReportTest() {
 		String[] users = new String[]{"DEV", "ISSUER"};
-		//Log in as Developer.
 		
 		for (int iter = 0; iter < users.length; iter++) {
-			IUser user = bugTrap.getUserManager().getUser(users[iter]);
-			bugTrap.getUserManager().loginAs(user);		
-					
+			userController.loginAs(users[iter]);
+			IUser user = userController.getLoggedInUser();		
 			
 			//1. The issuer indicates he wants to file a bug report.
 			BugReportCreationForm form = null;
 			try {
-				form = bugTrap.getFormFactory().makeBugReportCreationForm();
+				form = bugReportController.getBugReportCreationForm();
 			} catch (UnauthorizedAccessException e) { fail("not authorized"); }
 			
 			//2. The system shows a list of projects.
 			List<IProject> projects = null;
-			projects = bugTrap.getProjectManager().getProjects();
+			projects = projectController.getProjectList();
 
 			//3. The issuer selects a project.
 			IProject project = projects.get(0);
@@ -97,6 +90,7 @@ public class CreateBugReportUseCaseTest {
 			form.setErrorMessage("ERROR! You messed up!");
 			form.setTargetMilestone(new TargetMilestone(Arrays.asList(new Integer[] { 1, 2, 3 })));
 			
+			fail("todo");
 			List<IBugReport> bugReports = bugTrap.getBugReportManager().getBugReportsForProject(project);
 			
 			//12. The system shows a list of possible dependencies of this bug report.
@@ -107,10 +101,12 @@ public class CreateBugReportUseCaseTest {
 			form.setDependsOn(dependencies);
 			
 			//14. The system creates the bug report
-			bugTrap.getBugReportManager().addBugReport("Bug", "a Bug", new Date(1302), subsystem, user, dependencies, new ArrayList<IUser>(), BugTag.NEW);
+			try {
+				bugReportController.createBugReport(form);
+			} catch (UnauthorizedAccessException e) { fail("not authorized"); }
 
 			//Confirm.
-			IBugReport bugReport = bugTrap.getBugReportManager().getBugReportList().get(iter + 1);
+			IBugReport bugReport = bugReportController.getBugReportList().get(iter + 1);
 			
 			assertEquals("Bug",				bugReport.getTitle());
 			assertEquals("a Bug",			bugReport.getDescription());
@@ -125,46 +121,16 @@ public class CreateBugReportUseCaseTest {
 	public void notAuthorizedTest() {
 		//Can't create BugReport when not logged in.
 		try {
-			bugTrap.getFormFactory().makeSubsystemCreationForm();
+			bugReportController.getBugReportCreationForm();
 			fail("Can't create BugReport when not logged in.");
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Can't create BugReport as Administrator.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		userController.loginAs("ADMIN");
 		try {
-			bugTrap.getFormFactory().makeBugReportCreationForm();
+			bugReportController.getBugReportCreationForm();
 			fail("Can't create BugReport as Administrator");
 		} catch (UnauthorizedAccessException e) { }
 	}
-	
-	@Test
-	public void varsNotFilledTest() {
-		//login
-		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
-		bugTrap.getUserManager().loginAs(admin);
-		
-		try {
-			SubsystemCreationForm form = bugTrap.getFormFactory().makeSubsystemCreationForm();
-			bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent());
-			fail("should throw exception");
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-		}
-		catch (IllegalArgumentException e) {
-		}
-	}
-	
-	@Test
-	public void nullFormTest() {
-		//login
-		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
-		bugTrap.getUserManager().loginAs(admin);
-		
-		try {
-			bugTrap.getProjectManager().createSubsystem(null, null, null, null);
-			fail("should throw exception");
-		}
-		catch (IllegalArgumentException e) {
-		}
-	}
+
 }

@@ -1,14 +1,11 @@
 package controllers;
 
+import java.util.List;
+
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.notifications.INotification;
-import model.notifications.Registration;
-import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.ShowChronologicalNotificationForm;
-import model.notifications.forms.UnregisterNotificationForm;
-
-import java.util.List;
 
 /**
  * Controller for all Notification related things.
@@ -25,13 +22,13 @@ public class NotificationController extends Controller{
 		return getBugTrap().getFormFactory().makeShowChronologicalNotificationForm();
 	}
 	
-	public RegisterNotificationForm getRegisterNotificationForm() throws UnauthorizedAccessException{
-		return getBugTrap().getFormFactory().makeRegisterNotificationForm();
-	}
-	
-	public UnregisterNotificationForm getUnregisterNotificationForm() throws UnauthorizedAccessException{
-		return getBugTrap().getFormFactory().makeUnregisterNotificationForm();
-	}
+//	public RegisterNotificationForm getRegisterNotificationForm() throws UnauthorizedAccessException{
+//		return getBugTrap().getFormFactory().makeRegisterNotificationForm();
+//	}
+//	
+//	public UnregisterNotificationForm getUnregisterNotificationForm() throws UnauthorizedAccessException{
+//		return getBugTrap().getFormFactory().makeUnregisterNotificationForm();
+//	}
 
 	/**
 	 * Shows notifications with the information provided in the form.

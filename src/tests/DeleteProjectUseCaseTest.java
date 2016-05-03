@@ -22,14 +22,17 @@ import model.projects.ISubsystem;
 import model.projects.Version;
 import model.projects.forms.ProjectDeleteForm;
 
-public class DeleteProjectUseCaseTest {
-
-	private BugTrap bugTrap;
+/**
+ * TO DO 
+ * @author Niels
+ *
+ */
+public class DeleteProjectUseCaseTest extends UseCaseTest {
 	
 	@Before
 	public void setUp() throws Exception {
 		//Make System.
-		bugTrap = new BugTrap();
+		super.setUp();
 		
 		//Make Users.
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");

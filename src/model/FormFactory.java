@@ -7,9 +7,7 @@ import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
 import model.bugreports.forms.ProposePatchForm;
 import model.bugreports.forms.ProposeTestForm;
-import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.ShowChronologicalNotificationForm;
-import model.notifications.forms.UnregisterNotificationForm;
 import model.projects.forms.DeclareAchievedMilestoneForm;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
@@ -162,24 +160,24 @@ public class FormFactory {
 	 * @return register notification form
 	 * @throws UnauthorizedAccessException if no user is logged in
 	 */
-	public RegisterNotificationForm makeRegisterNotificationForm() throws UnauthorizedAccessException {
-		if (!getBugTrap().isLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
-		
-		return new RegisterNotificationForm();
-	}
-	
-	/**
-	 * Creates and returns a unregister notification form
-	 * @return unregister notification form
-	 * @throws UnauthorizedAccessException if no user is logged in
-	 */
-	public UnregisterNotificationForm makeUnregisterNotificationForm() throws UnauthorizedAccessException {
-		if (!getBugTrap().isLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
-
-		return new UnregisterNotificationForm();
-	}
+//	public RegisterNotificationForm makeRegisterNotificationForm() throws UnauthorizedAccessException {
+//		if (!getBugTrap().isLoggedIn())
+//			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
+//		
+//		return new RegisterNotificationForm();
+//	}
+//	
+//	/**
+//	 * Creates and returns a unregister notification form
+//	 * @return unregister notification form
+//	 * @throws UnauthorizedAccessException if no user is logged in
+//	 */
+//	public UnregisterNotificationForm makeUnregisterNotificationForm() throws UnauthorizedAccessException {
+//		if (!getBugTrap().isLoggedIn())
+//			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
+//
+//		return new UnregisterNotificationForm();
+//	}
 	
 	/**
 	 * Creates and returns a show chronological notification form

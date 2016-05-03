@@ -6,21 +6,17 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.BugTrap;
 import model.users.IUser;
 import model.users.exceptions.NoUserWithUserNameException;
 
 
-public class LoginUseCaseTest {
-	
-	private BugTrap bugTrap;
+public class LoginUseCaseTest extends UseCaseTest {
+
 
 	@Before
 	public void setUp() throws Exception {
-		//Create system.
-		bugTrap = new BugTrap();
+		super.setUp();
 		
-		//Add users
 		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
@@ -30,12 +26,13 @@ public class LoginUseCaseTest {
 	public void logInAdminTest() {
 		//1. The user indicates if he wants to log in as an administrator, issuer or
 		//developer.
-		List<IUser> list = bugTrap.getUserManager().getAdmins();
 		//2. The system shows an overview of the users of the selected category.
-		IUser user = list.get(0);
+		List<IUser> list = userController.getAdmins();
 		//3. The user selects one of the shown users.
-		String message = bugTrap.getUserManager().loginAs(user);
-		//4. The system greets the user
+		IUser user = list.get(0);
+		//4. The system greets the user.
+		String message = userController.loginAs(user);
+		
 		Assert.assertEquals("User: ADMIN successfully logged in.",message);
 	}
 	
@@ -43,12 +40,13 @@ public class LoginUseCaseTest {
 	public void logInIssuer() {
 		//1. The user indicates if he wants to log in as an administrator, issuer or
 		//developer.
-		List<IUser> list = bugTrap.getUserManager().getIssuers();
 		//2. The system shows an overview of the users of the selected category.
-		IUser user = list.get(0);
+		List<IUser> list = userController.getIssuers();
 		//3. The user selects one of the shown users.
-		String message = bugTrap.getUserManager().loginAs(user);
-		//4. The system greets the user
+		IUser user = list.get(0);
+		//4. The system greets the user.
+		String message = userController.loginAs(user);
+		
 		Assert.assertEquals("User: ISSUER successfully logged in.",message);
 	}
 	
@@ -56,12 +54,13 @@ public class LoginUseCaseTest {
 	public void logInDeveloper() {
 		//1. The user indicates if he wants to log in as an administrator, issuer or
 		//developer.
-		List<IUser> list = bugTrap.getUserManager().getDevelopers();
 		//2. The system shows an overview of the users of the selected category.
-		IUser user = list.get(0);
+		List<IUser> list = userController.getDevelopers();
 		//3. The user selects one of the shown users.
-		String message = bugTrap.getUserManager().loginAs(user);
-		//4. The system greets the user
+		IUser user = list.get(0);
+		//4. The system greets the user.
+		String message = userController.loginAs(user);
+		
 		Assert.assertEquals("User: DEV successfully logged in.",message);
 	}
 	
@@ -75,7 +74,7 @@ public class LoginUseCaseTest {
 		//Evil
 		IUser user = null;
 		
-		bugTrap.getUserManager().loginAs(user);
+		userController.loginAs(user);
 	}
 
 }

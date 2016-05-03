@@ -8,19 +8,15 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import model.projects.IProject;
 import model.projects.Version;
 
-public class ShowProjectUseCaseTest {
-	
-	private BugTrap bugTrap;
+public class ShowProjectUseCaseTest extends UseCaseTest {
+
 
 	@Before
 	public void setUp() throws Exception {
-		//Make system.
-		bugTrap = new BugTrap();
+		super.setUp();
 		
 		//Add Users.
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
@@ -34,17 +30,18 @@ public class ShowProjectUseCaseTest {
 	}
 
 	@Test
-	public void showProjectTest() throws UnauthorizedAccessException {
+	public void showProjectTest() {
 		String[] users = new String[]{"ISSUER", "DEV", "ADMIN"};
 		
 		//All users should be able to show Projects.
 		for (String user : users) {
-			//Log in as Administrator.
-			bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser(user));
+			//Log in as User.
+			userController.loginAs(user);
 				
 			//1. The user indicates he wants to take a look at some project.
 			//2. The system shows a list of all projects.
-			List<IProject> list = bugTrap.getProjectManager().getProjects();
+			List<IProject> list = projectController.getProjectList();
+			
 			//3. The user selects a project.
 			IProject project = list.get(0);
 			//4. The system shows a detailed overview of the selected project and all its subsystems.

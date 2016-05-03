@@ -47,8 +47,13 @@ public class BugReportManager {
 	 * @param types Filter Types to filter by.
 	 * @param arguments Filter arguments.
 	 * @return an ordered list of bug reports
+	 * @throws UnauthorizedAccessException 
 	 */
-	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) {
+	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
+		if (bugTrap.getUserManager().getLoggedInUser() == null || 
+				!bugTrap.getUserManager().getLoggedInUser().isIssuer())
+			throw new UnauthorizedAccessException("Must be Issuer");
+		
 		List<IBugReport> filteredList = getBugReportList();
 		
 		BugReportFilter filter = new BugReportFilter(filteredList);
