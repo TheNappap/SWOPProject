@@ -18,7 +18,7 @@ public class ProjectController extends Controller {
 		super(bugTrap);
 	}
 
-	public List<IProject> getProjectList() throws UnauthorizedAccessException{
+	public List<IProject> getProjectList() {
 		return getBugTrap().getProjectManager().getProjects();
 	}
 

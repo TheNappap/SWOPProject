@@ -61,7 +61,7 @@ public class AssignBugReportUseCaseTest {
 	public void assignBugReportAsLeadTest() throws UnauthorizedAccessException {
 		//Log in.
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("LEAD"));
-
+		
 		//1. The developer indicates he wants to assign a developer to a bug report.
 		BugReportAssignForm form = null;
 		try {
