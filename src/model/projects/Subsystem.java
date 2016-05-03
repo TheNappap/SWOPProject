@@ -119,7 +119,7 @@ public class Subsystem extends System implements ISubsystem {
 	 * The new merged subsystem gets a given name and description.
 	 * @param name
 	 * @param description
-	 * @param subsystem
+	 * @param iSubsystem
 	 */
 	public void mergeSubsystem(String name, String description, ISubsystem iSubsystem){
 		//if parent and child merge, the parent has the responsibility

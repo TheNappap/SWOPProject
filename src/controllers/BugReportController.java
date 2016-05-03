@@ -5,10 +5,19 @@ import java.util.List;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
-import model.bugreports.commands.*;
+import model.bugreports.commands.AssignBugReportCommand;
+import model.bugreports.commands.CreateBugReportCommand;
+import model.bugreports.commands.CreateCommentCommand;
+import model.bugreports.commands.ProposePatchCommand;
+import model.bugreports.commands.ProposeTestCommand;
+import model.bugreports.commands.UpdateBugReportCommand;
 import model.bugreports.filters.FilterType;
-import model.bugreports.forms.*;
-import model.projects.IProject;
+import model.bugreports.forms.BugReportAssignForm;
+import model.bugreports.forms.BugReportCreationForm;
+import model.bugreports.forms.BugReportUpdateForm;
+import model.bugreports.forms.CommentCreationForm;
+import model.bugreports.forms.ProposePatchForm;
+import model.bugreports.forms.ProposeTestForm;
 
 /**
  * Controller for all BugReport related things.
