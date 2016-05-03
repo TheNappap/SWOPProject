@@ -7,7 +7,6 @@ import java.util.List;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
 import model.bugreports.comments.Comment;
-import model.notifications.Observable;
 import model.notifications.observers.Observer;
 import model.notifications.signalisations.BugReportChangeSignalisation;
 import model.notifications.signalisations.CommentCreationSignalisation;
@@ -20,7 +19,7 @@ import model.users.IUser;
 /**
  * This class represents a BugReport. in BugTrap.
  */
-public class BugReport implements IBugReport, Observable { //A Comment can be commented on.
+public class BugReport implements IBugReport { 
 
 	//Immutable
 	private final Date creationDate;	//Creation Date of the BugReport.
