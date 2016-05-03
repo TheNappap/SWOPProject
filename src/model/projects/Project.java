@@ -81,73 +81,69 @@ public class Project extends System implements IProject {
 		return budgetEstimate;
 	}
 
-	/**
-	 * 
-	 * @return The Team that works on this Project.
-	 */
-	public ProjectTeam getTeam() {
-		return projectTeam;
-	}
-
 	@Override
 	public IUser getLeadDeveloper() {
-		return getTeam().getLeadDeveloper();
+		return projectTeam.getLeadDeveloper();
+	}
+
+	ProjectTeam getTeam() {
+		return projectTeam;
 	}
 
 	@Override
 	public void setLeadDeveloper(IUser user) {
 		if (!user.isDeveloper())
 			throw new IllegalArgumentException("Lead developer should be a developer.");
-		getTeam().setLeadDeveloper(user);
+		projectTeam.setLeadDeveloper(user);
 	}
 
 	@Override
 	public List<IUser> getProgrammers() {
-		return getTeam().getProgrammers();
+		return projectTeam.getProgrammers();
 	}
 
 	@Override
 	public List<IUser> getTesters() {
-		return getTeam().getTesters();
+		return projectTeam.getTesters();
 	}
 
 	@Override
 	public List<IUser> getAllDevelopers() {
-		return getTeam().getAllDevelopers();
+		return projectTeam.getAllDevelopers();
 	}
 
 	@Override
 	public void addProgrammer(IUser programmer) {
 		if (!programmer.isDeveloper())
 			throw new IllegalArgumentException("Programmer should be a developer!");
-		getTeam().addMember(programmer, Role.PROGRAMMER);
+		projectTeam.addMember(programmer, Role.PROGRAMMER);
 	}
 
 	@Override
 	public void addTester(IUser tester) {
 		if (!tester.isDeveloper())
 			throw new IllegalArgumentException("Tester should be a developer!");
-		getTeam().addMember(tester, Role.TESTER);
+		projectTeam.addMember(tester, Role.TESTER);
 	}
 	
 	@Override
 	public List<Role> getRolesNotAssignedTo(IUser dev){
-		return getTeam().getRolesNotAssignedTo(dev);
+		return projectTeam.getRolesNotAssignedTo(dev);
 	}
 	
 	@Override
 	public boolean isLead(IUser dev){
-		return getTeam().isLead(dev);
+		return projectTeam.isLead(dev);
 	}
 
 	@Override
 	public boolean isTester(IUser dev){
-		return getTeam().isTester(dev);
+		return projectTeam.isTester(dev);
 	}
 
 	@Override
 	public boolean isProgrammer(IUser dev){
-		return getTeam().isProgrammer(dev);
+		return projectTeam.isProgrammer(dev);
 	}
 
 	@Override

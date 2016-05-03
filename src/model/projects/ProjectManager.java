@@ -141,8 +141,9 @@ public class ProjectManager {
 			throw new IllegalArgumentException("Arguments should not be null.");
 
 		for (Project p : projectList) {
-			if (p == project)
+			if (p == project) {
 				p.getTeam().addMember(dev, role);
+			}
 		}
 	}
 
@@ -168,7 +169,7 @@ public class ProjectManager {
 
 		ArrayList<IProject> projs = new ArrayList<IProject>();
 		for (Project p : projectList) {
-			if (p.getTeam().getLeadDeveloper() == dev) 
+			if (p.getLeadDeveloper() == dev)
 				projs.add(p);
 		}
 		return projs;

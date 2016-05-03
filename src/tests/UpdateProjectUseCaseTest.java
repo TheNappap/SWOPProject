@@ -10,19 +10,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import model.projects.IProject;
 import model.projects.Version;
 import model.projects.forms.ProjectUpdateForm;
 
-public class UpdateProjectUseCaseTest {
-
-	private BugTrap bugTrap;
+public class UpdateProjectUseCaseTest extends UseCaseTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		//Make system.
-		bugTrap = new BugTrap();
+		super.setUp();
 		
 		//Add Users.
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
@@ -38,28 +34,33 @@ public class UpdateProjectUseCaseTest {
 	@Test
 	public void updateProjectTest() {
 		//login
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		userController.loginAs(userController.getAdmins().get(0));
 		
 		
 		//1. The administrator indicates he wants to update a project.
 		ProjectUpdateForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeProjectUpdateForm();
+			form = projectController.getProjectUpdateForm();
 		} catch (UnauthorizedAccessException e) { fail("not authorized"); }
 		
 		//2. The system shows a list of all projects.
-		List<IProject> list = bugTrap.getProjectManager().getProjects();
+		List<IProject> list = projectController.getProjectList();
+		
 		//3. The administrator selects a project.
 		IProject project = list.get(0);
+		
 		//4/5. The system shows a form to update the project details: name, description, starting date and budget estimate.
 		form.setProject(project);
 		form.setBudgetEstimate(10000);
 		form.setDescription("project");
 		form.setName("Project S");
 		form.setStartDate(new Date(3000));
+		
 		//6. The system updates the project.
-		bugTrap.getProjectManager().updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
-		project = bugTrap.getProjectManager().getProjects().get(0);
+		try {
+			projectController.updateProject(form);
+			project = projectController.getProjectList().get(0);
+		} catch (UnauthorizedAccessException e) { fail("not authorised."); }
 		
 		//Confirm modifications.
 		Assert.assertEquals("Project S", 	project.getName());
@@ -72,47 +73,36 @@ public class UpdateProjectUseCaseTest {
 	public void notAuthorizedTest() {
 		//Must be logged in to Update.
 		try {
-			bugTrap.getFormFactory().makeProjectUpdateForm();
+			projectController.getProjectUpdateForm();
 			fail("Can't update when no-one logged in.");
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Developer can't update.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		userController.loginAs(userController.getDevelopers().get(0));
 		try {
-			bugTrap.getFormFactory().makeProjectUpdateForm();
+			projectController.getProjectUpdateForm();
 			fail("Can't update as Developer.");
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Issuer can't update.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
+		userController.loginAs(userController.getIssuers().get(0));
 		try {
-			bugTrap.getFormFactory().makeProjectUpdateForm();
+			projectController.getProjectUpdateForm();
 		} catch (UnauthorizedAccessException e) { }
 	}
 	
 	@Test
 	public void varsNotFilledTest() {
 		//login
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		userController.loginAs(userController.getAdmins().get(0));
 		
 		try {
-			ProjectUpdateForm form = bugTrap.getFormFactory().makeProjectUpdateForm();
-			bugTrap.getProjectManager().updateProject(form.getProject(), form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
+			ProjectUpdateForm form = projectController.getProjectUpdateForm();
+			projectController.updateProject(form);
 			fail("Can't update Project with null values.");
 		} 
 		catch (UnauthorizedAccessException e) { fail("not authorized"); }
 		catch (IllegalArgumentException e) { }
-	}
-	
-	@Test
-	public void nullFormTest() {
-		//login
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		
-		try {
-			bugTrap.getProjectManager().updateProject(null, null, null, 0, null);
-			fail("Can't update with null values.");
-		}
-		catch (IllegalArgumentException e) { }
+		catch (NullPointerException e) { }
 	}
 }

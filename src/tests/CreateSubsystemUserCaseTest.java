@@ -11,20 +11,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Version;
 import model.projects.forms.SubsystemCreationForm;
 
-public class CreateSubsystemUserCaseTest {
-
-	private BugTrap bugTrap;
+public class CreateSubsystemUserCaseTest extends UseCaseTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		//Create System.
-		bugTrap = new BugTrap();
+		super.setUp();
 		
 		//Add Users.
 		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
@@ -41,13 +37,13 @@ public class CreateSubsystemUserCaseTest {
 	@Test
 	public void createSubsystemInProjectTest() {
 		//Log in as Administrator.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		userController.loginAs("ADMIN");
 
 		try {
 			//1. The administrator indicates he wants to create a new subsystem.
-			SubsystemCreationForm form = bugTrap.getFormFactory().makeSubsystemCreationForm();
+			SubsystemCreationForm form = projectController.getSubsystemCreationForm();
 			//2. The system shows a list of projects and subsystems.
-			List<IProject> list = bugTrap.getProjectManager().getProjects();
+			List<IProject> list = projectController.getProjectList();
 			//3. The administrator selects the project or subsystem that the new subsystem will be part of.
 			IProject project = list.get(0);
 			//4. The system shows the subsystem creation form.
@@ -56,10 +52,10 @@ public class CreateSubsystemUserCaseTest {
 			form.setDescription("Subsystem");
 			form.setName("sub X");
 			//6. The system creates the subsystem
-			bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent());
+			projectController.createSubsystem(form);
 			
 			//Confirm.
-			ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("sub X");	
+			ISubsystem subsystem = projectController.getProjectList().get(0).getSubsystems().get(1);	
 			assertTrue(subsystem.getName().equals("sub X"));
 			assertTrue(subsystem.getDescription().equals("Subsystem"));
 			assertEquals(project, subsystem.getParent());
@@ -69,13 +65,13 @@ public class CreateSubsystemUserCaseTest {
 	@Test
 	public void createSubsystemInSubsystemTest() {
 		//Log in as Administrator.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		userController.loginAs("ADMIN");
 				
 		try {
 			//1. The administrator indicates he wants to create a new subsystem.
-			SubsystemCreationForm form = bugTrap.getFormFactory().makeSubsystemCreationForm();
+			SubsystemCreationForm form = projectController.getSubsystemCreationForm();
 			//2. The system shows a list of projects and subsystems.
-			List<IProject> list = bugTrap.getProjectManager().getProjects();
+			List<IProject> list = projectController.getProjectList();
 			//3. The administrator selects the project or subsystem that the new subsystem will be part of.
 			ISubsystem system = list.get(0).getAllDirectOrIndirectSubsystems().get(0);
 			//4. The system shows the subsystem creation form.
@@ -84,8 +80,8 @@ public class CreateSubsystemUserCaseTest {
 			form.setDescription("Subsystem");
 			form.setName("sub X");
 			//6. The system creates the subsystem.
-			bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent());
-			ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("sub X");
+			projectController.createSubsystem(form);
+			ISubsystem subsystem = projectController.getProjectList().get(0).getSubsystems().get(0).getSubsystems().get(0);
 			
 			//Confirm.
 			assertTrue(subsystem.getName().equals("sub X"));
@@ -98,21 +94,21 @@ public class CreateSubsystemUserCaseTest {
 	public void notAuthorizedTest() {
 		//Can't be not logged in.
 		try {
-			bugTrap.getFormFactory().makeSubsystemCreationForm();
+			projectController.getSubsystemCreationForm();
 			fail("Can't be not logged in.");
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Can't be Issuer.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
+		userController.loginAs("ISSUER");
 		try {
-			bugTrap.getFormFactory().makeSubsystemCreationForm();
+			projectController.getSubsystemCreationForm();
 			fail("Can't be Issuer.");
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Can't be Developer.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		userController.loginAs("DEV");
 		try {
-			bugTrap.getFormFactory().makeSubsystemCreationForm();
+			projectController.getSubsystemCreationForm();
 			fail("Can't be Developer.");
 		} catch (UnauthorizedAccessException e) { }
 	}
@@ -120,26 +116,29 @@ public class CreateSubsystemUserCaseTest {
 	@Test
 	public void varsNotFilledTest() {
 		//login
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		userController.loginAs("ADMIN");
 		
 		try {
-			SubsystemCreationForm form = bugTrap.getFormFactory().makeSubsystemCreationForm();
-			bugTrap.getProjectManager().createSubsystem(form.getName(), form.getDescription(), form.getProject(), form.getParent());
+			SubsystemCreationForm form = projectController.getSubsystemCreationForm();
+			projectController.createSubsystem(form);
 			fail("Can't pass nulls.");
 		} 
 		catch (UnauthorizedAccessException e) { fail("not authorized"); }
 		catch (IllegalArgumentException e) { }
+		catch (NullPointerException e) { }
 	}
 	
 	@Test
 	public void nullFormTest() {
 		//Log in as Administrator.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		userController.loginAs("ADMIN");
 		
 		try {
-			bugTrap.getProjectManager().createSubsystem(null, null, null, null);
+			projectController.createSubsystem(projectController.getSubsystemCreationForm());
 			fail("Can't pass nulls.");
 		}
 		catch (IllegalArgumentException e) { }
+		catch (NullPointerException e) { }
+		catch (UnauthorizedAccessException e ) { fail("not authorized"); } 
 	}
 }
