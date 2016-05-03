@@ -3,6 +3,7 @@ package model.bugreports.commands;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.Command;
+import model.bugreports.BugReport;
 import model.bugreports.forms.BugReportAssignForm;
 
 public class AssignBugReportCommand extends Command {
@@ -16,6 +17,6 @@ public class AssignBugReportCommand extends Command {
     @Override
     public void execute() throws UnauthorizedAccessException {
         form.allVarsFilledIn();
-        getBugTrap().getBugReportManager().assignToBugReport(form.getBugReport(), form.getDeveloper());
+        ((BugReport)form.getBugReport()).assignDeveloper(form.getDeveloper());
     }
 }
