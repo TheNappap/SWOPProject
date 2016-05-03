@@ -16,7 +16,6 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
-import model.notifications.RegistrationType;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Version;

@@ -170,48 +170,9 @@ public class BugReportManager {
 	}
 
 	/**
-	 * Assigns a given developer to a BugReport.
-	 * @param bugReport BugReport to add Developer to.
-	 * @param dev Developer to assign.
-	 * @throws UnauthorizedAccessException If the current user is not allowed to do this action.
-	 */
-	public void assignToBugReport(IBugReport bugReport, IUser dev) throws UnauthorizedAccessException{
-		IProject project = bugReport.getSubsystem().getProject();
-		IUser user = bugTrap.getUserManager().getLoggedInUser();
-		if(!project.isLead(user) && !project.isTester(user)) throw new UnauthorizedAccessException("A lead or tester should be logged in to assign bug report");
-		
-		BugReport report = null;
-		for (BugReport b : bugReportList)
-			if (b == bugReport)
-				report = b;
-		
-		report.assignDeveloper(dev);
-	}
-	
-	/**
-	 * update a bug report with a tag
-	 * @param bugReport BugReport to update.
-	 * @param tag Tag to update to.
-	 * @throws UnauthorizedAccessException If the current user is not allowed to do this action.
-	 */
-	public void updateBugReport(IBugReport bugReport, BugTag tag) throws UnauthorizedAccessException {
-		if (bugReport == null || tag == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-		if (tag.hasToBeLeadToSet() && !(bugReport.getProject().getLeadDeveloper() == bugTrap.getUserManager().getLoggedInUser()))
-			throw new UnauthorizedAccessException();
-		
-		BugReport report = null;
-		for (BugReport b : bugReportList)
-			if (b == bugReport)
-				report = b;
-		
-		report.updateBugTag(tag);
-	}
-
-	/**
-	 * Adds a comment to a Commentable object.
-	 * @param commentable Commentable to comment on.
-	 * @param text Text of the Comment.
+	 * adds a comment to a commentable object
+	 * @param commentable
+	 * @param text
 	 */
 	public void addComment(Commentable commentable, String text) {
 		if (commentable == null || text == null)
