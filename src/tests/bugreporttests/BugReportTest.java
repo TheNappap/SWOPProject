@@ -52,9 +52,9 @@ public class BugReportTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		Project project = new Project("n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
-		subsystem = new Subsystem(null, null, project, null, project, null);
-		bugReport = new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, targetMilestone, tests, patches);
+		Project project = new Project(null, "n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
+		subsystem = new Subsystem(null, null, null, project, null, project, null);
+		bugReport = new BugReport(null, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, targetMilestone, tests, patches);
 	}
 
 	@Test
@@ -134,11 +134,11 @@ public class BugReportTest {
 
 	@Test
 	public void compareTest() {
-		BugReport other = new BugReport("CugReport", null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null);
+		BugReport other = new BugReport(null, "CugReport", null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null);
 		assertEquals(-1, bugReport.compareTo(other));
 		assertEquals(1, other.compareTo(bugReport));
 		
-		BugReport other2 = new BugReport("BugReport", null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null);
+		BugReport other2 = new BugReport(null, "BugReport", null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null);
 		assertEquals(0, bugReport.compareTo(other2));
 		assertEquals(0, other2.compareTo(bugReport));
 	}

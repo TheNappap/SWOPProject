@@ -1,7 +1,10 @@
 package model.projects;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import model.BugTrap;
+import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 
 /**
@@ -10,9 +13,12 @@ import model.bugreports.IBugReport;
 public class Subsystem extends System implements ISubsystem {
 
 	private Project project;
-	
+
+	private final List<BugReport> bugReports;
+
 	/**
 	 * Constructor.
+	 * @param bugTrap The BugTrap in which this project lives
 	 * @param name Name of the Subsystem.
 	 * @param description Description of the Subsystem.
 	 * @param parent Parent of the Subsystem.
@@ -20,11 +26,11 @@ public class Subsystem extends System implements ISubsystem {
 	 * @param project Project of the Subsystem.
 	 * @param achievedMilestone Achieved Milestone of the Subsystem.
 	 */
-	public Subsystem(String name, String description, System parent, List<Subsystem> subsystems, Project project, AchievedMilestone achievedMilestone) {
-		super(name, description, parent, subsystems, achievedMilestone);
+	public Subsystem(BugTrap bugTrap, String name, String description, System parent, List<Subsystem> subsystems, Project project, AchievedMilestone achievedMilestone) {
+		super(bugTrap, name, description, parent, subsystems, achievedMilestone);
 		
 		this.project = project;
-		
+		this.bugReports = new ArrayList<>();
 		parent.subsystems.add(this);
 	}
 
@@ -44,8 +50,19 @@ public class Subsystem extends System implements ISubsystem {
 		return true;
 	}
 
+	public void addBugReport(BugReport report) {
+		this.bugReports.add(report);
+	}
+
+	public void removeBugReport(BugReport report) {
+		this.bugReports.remove(report);
+	}
+
 	@Override
 	public void terminate() {
+		bugTrap.getBugReportManager().deleteBugReportsForSystem(this);
+		bugTrap.getNotificationManager().deleteRegistrationsForObservable(this);
+
 		super.terminate();
 		project = null;
 	}
@@ -63,8 +80,8 @@ public class Subsystem extends System implements ISubsystem {
 	 */
 	public void splitSubsystem(String nameFor1, String nameFor2, String descriptionFor1, String descriptionFor2,
 			List<IBugReport> bugReportsFor1, List<ISubsystem> subsystemsFor1){
-		Subsystem sub1 = new Subsystem(nameFor1, descriptionFor1, parent, null, project, getAchievedMilestone());
-		Subsystem sub2 = new Subsystem(nameFor2, descriptionFor2, parent, null, project, getAchievedMilestone());
+		Subsystem sub1 = new Subsystem(bugTrap, nameFor1, descriptionFor1, parent, null, project, getAchievedMilestone());
+		Subsystem sub2 = new Subsystem(bugTrap, nameFor2, descriptionFor2, parent, null, project, getAchievedMilestone());
 		
 		for (Subsystem subsystem : this.subsystems) {	
 			if(subsystemsFor1.contains(subsystem)){
@@ -78,11 +95,23 @@ public class Subsystem extends System implements ISubsystem {
 			}
 		}
 		
+		//TODO BUGREPORTS!
+		
 		parent.subsystems.add(sub1);
 		parent.subsystems.add(sub2);
 		
 		terminate();
 		parent.subsystems.remove(this);
+	}
+	
+
+	@Override
+	public List<IBugReport> getBugReports() {
+		List<IBugReport> reports = new ArrayList<>();
+		reports.addAll(this.bugReports);
+		for (ISubsystem s : subsystems)
+			reports.addAll(s.getBugReports());
+		return reports;
 	}
 	
 	/**
@@ -104,7 +133,7 @@ public class Subsystem extends System implements ISubsystem {
 			achievedMilestone = iSubsystem.getAchievedMilestone();
 		}
 		
-		Subsystem newSubsystem = new Subsystem(name, description, parent, null, project, achievedMilestone);
+		Subsystem newSubsystem = new Subsystem(bugTrap, name, description, parent, null, project, achievedMilestone);
 		
 		//move subsystems from given subsystem (=sibling or child)
 		Subsystem subsystem = ((Subsystem) iSubsystem);
@@ -119,6 +148,8 @@ public class Subsystem extends System implements ISubsystem {
 				subsystem.subsystems.remove(sub);
 			}
 		}
+		
+		//TODO BUGREPORTS!
 		
 		//delete given subsystem (=child or sibling)
 		System parent = subsystem.parent;

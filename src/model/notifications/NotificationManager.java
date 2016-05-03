@@ -100,12 +100,8 @@ public class NotificationManager {
     /**
      * Deletes all the registrations for a given observable
      * @param obs the given observable
-     * @throws UnauthorizedAccessException
      */
-    public void deleteRegistrationsForObservable(Observable obs) throws UnauthorizedAccessException {
-        if (!bugTrap.isLoggedIn())
-            throw new UnauthorizedAccessException("You must be logged in to retrieve a list of registrations.");
-        
+    public void deleteRegistrationsForObservable(Observable obs) {
         for (int i = 0; i < registrations.size(); i++) {
 			Registration reg = registrations.get(i);
 			if(reg.getObservable() == obs){

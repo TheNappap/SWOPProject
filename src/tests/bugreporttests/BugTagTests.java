@@ -21,7 +21,7 @@ public class BugTagTests {
 
     @Test
     public void newTest() {
-    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null);
+    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null);
         BugTagState tag = bugReport.getBugTagState();
         assertTrue(tag.isNew());
         assertFalse(tag.isClosed());
@@ -31,7 +31,7 @@ public class BugTagTests {
 
     @Test
     public void assignedTest() {
-    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, BugTag.ASSIGNED, null, null, null, null, null, null);
+    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, null, BugTag.ASSIGNED, null, null, null, null, null, null);
     	BugTagState tag = bugReport.getBugTagState();
         assertFalse(tag.isNew());
         assertFalse(tag.isClosed());
@@ -41,7 +41,7 @@ public class BugTagTests {
 
     @Test
     public void closedTest() {
-    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, BugTag.CLOSED, null, null, null, null, null, null);
+    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, null, BugTag.CLOSED, null, null, null, null, null, null);
     	BugTagState tag = bugReport.getBugTagState();
         assertTrue(tag.isClosed());
         assertFalse(tag.isNew());
@@ -51,7 +51,7 @@ public class BugTagTests {
 
     @Test
     public void duplicateTest() {
-    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, BugTag.DUPLICATE, null, null, null, null, null, null);
+    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, null, BugTag.DUPLICATE, null, null, null, null, null, null);
     	BugTagState tag = bugReport.getBugTagState();
         assertTrue(tag.isClosed());
         assertFalse(tag.isNew());
@@ -61,7 +61,7 @@ public class BugTagTests {
 
     @Test
     public void notABugTest() {
-    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, BugTag.NOTABUG, null, null, null, null, null, null);
+    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, null, BugTag.NOTABUG, null, null, null, null, null, null);
     	BugTagState tag = bugReport.getBugTagState();
         assertFalse(tag.isNew());
         assertFalse(tag.isInProgress());
@@ -71,7 +71,7 @@ public class BugTagTests {
 
     @Test
     public void resolvedTest() {
-    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, BugTag.RESOLVED, null, null, null, null, null, null);
+    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, null, BugTag.RESOLVED, null, null, null, null, null, null);
     	BugTagState tag = bugReport.getBugTagState();
         assertFalse(tag.isNew());
         assertFalse(tag.isInProgress());
@@ -81,7 +81,7 @@ public class BugTagTests {
 
     @Test
     public void underReviewTest() {
-    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, BugTag.UNDERREVIEW, null, null, null, null, null, null);
+    	bugReport = new BugReport(null, null, null, null, null, null, null, null, null, null, BugTag.UNDERREVIEW, null, null, null, null, null, null);
     	BugTagState tag = bugReport.getBugTagState();
         assertFalse(tag.isNew());
         assertTrue(tag.isInProgress());
