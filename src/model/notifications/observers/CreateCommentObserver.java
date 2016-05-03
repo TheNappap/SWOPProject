@@ -1,8 +1,8 @@
 package model.notifications.observers;
 
 import model.notifications.Mailbox;
+import model.notifications.NotificationType;
 import model.notifications.Observable;
-import model.notifications.RegistrationType;
 import model.notifications.signalisations.Signalisation;
 
 public class CreateCommentObserver extends ObserverWithMailbox {
@@ -14,7 +14,7 @@ public class CreateCommentObserver extends ObserverWithMailbox {
 
 	@Override
 	public void signal(Signalisation signalisation) {
-		if (signalisation.getType() == RegistrationType.CREATE_COMMENT) {
+		if (signalisation.getType() == NotificationType.CREATE_COMMENT) {
 			getMailbox().addNotification("New comment on '" + signalisation.getBugReport().getTitle());
 		}
 	}

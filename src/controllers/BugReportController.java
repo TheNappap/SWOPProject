@@ -42,7 +42,7 @@ public class BugReportController extends Controller {
 	 * @return bug report list
 	 * @throws UnauthorizedAccessException
 	 */
-	public List<IBugReport> getBugReportList() throws UnauthorizedAccessException{
+	public List<IBugReport> getBugReportList() {
 		return getBugTrap().getBugReportManager().getBugReportList();
 	}
 
@@ -51,7 +51,7 @@ public class BugReportController extends Controller {
 	 * @return filter type list
 	 * @throws UnauthorizedAccessException
 	 */
-	public FilterType[] getFilterTypes() throws UnauthorizedAccessException{
+	public FilterType[] getFilterTypes() {
 		return getBugTrap().getBugReportManager().getFilterTypes();
 	}
 

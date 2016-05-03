@@ -12,21 +12,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import model.projects.IProject;
 import model.projects.Version;
+import model.projects.forms.DeclareAchievedMilestoneForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectForkForm;
 import model.users.IUser;
 
-public class CreateProjectUseCaseTest {
-
-	private BugTrap bugTrap;
+public class CreateProjectUseCaseTest extends UseCaseTest {
 
 	@Before
 	public void setUp() throws Exception {
-		//Make System
-		bugTrap = new BugTrap();
+		super.setUp();
 		
 		//Add User
 		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
@@ -47,11 +44,8 @@ public class CreateProjectUseCaseTest {
 		//2.  The system shows a form to enter the project details: name, description, starting date and budget estimate.
 		ProjectCreationForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeProjectCreationForm();
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+			form = projectController.getProjectCreationForm();
+		} catch (UnauthorizedAccessException e) { fail("not authorized"); }
 		
 		//3. The administrator enters all the project details
 		form.setName("name");
@@ -60,7 +54,7 @@ public class CreateProjectUseCaseTest {
 		form.setBudgetEstimate(1234);
 		
 		//4. The system shows a list of possible lead developers
-		List<IUser> devs = bugTrap.getUserManager().getDevelopers();
+		List<IUser> devs = userController.getDevelopers();
 		
 		//5. The administrator selects a lead developer.
 		IUser dev = devs.get(0);
@@ -68,8 +62,10 @@ public class CreateProjectUseCaseTest {
 		
 		//6. The system creates the project and shows an overview.
 		Date creationDate = new Date();
-		bugTrap.getProjectManager().createProject(form.getName(), form.getDescription(), creationDate, form.getStartDate(), form.getBudgetEstimate(), form.getLeadDeveloper(), Version.firstVersion());
-		project = bugTrap.getProjectManager().getProjects().get(0);
+		try {
+			projectController.createProject(form);
+			project = projectController.getProjectList().get(0);
+		} catch (UnauthorizedAccessException e) { fail("not authorised"); }
 
 		//Confirm.
 		//-From input (form).
@@ -101,17 +97,24 @@ public class CreateProjectUseCaseTest {
 	@SuppressWarnings("deprecation")
 	@Test
 	public void createForkProjectTest() {
-		//Log in as an Administrator, they create forks.
-		IUser admin = bugTrap.getUserManager().getAdmins().get(0);
-		bugTrap.getUserManager().loginAs(admin);
-		
+		IUser admin = userController.getAdmins().get(0);
+		IUser dev = userController.getDevelopers().get(0);
+	
 		//Add some project to the system to fork.
-		bugTrap.getProjectManager().createProject("name", "description", new Date(2005, 1, 2), new Date(2005, 2, 12), 1234, null, new Version(1, 0, 0));
-		bugTrap.getProjectManager().declareAchievedMilestone(bugTrap.getProjectManager().getProjects().get(0), Arrays.asList(new Integer[] {2, 1, 2, 1, 2, 1}));
-
+		createNewProjectTest();
+		
+		DeclareAchievedMilestoneForm milestoneForm = null;
+		
+		userController.loginAs(dev);
+		try {
+			milestoneForm = projectController.getDeclareAchievedMilestoneForm();
+			milestoneForm.setNumbers(Arrays.asList(new Integer[] {2, 1, 2, 1, 2, 1}));
+			milestoneForm.setSystem(projectController.getProjectList().get(0));
+		} catch (UnauthorizedAccessException e1) { fail("not authorised.");}
+		userController.loginAs(admin);
+		
 		//1. The system shows a list of existing projects
-		List<IProject> projects = null;
-		projects = bugTrap.getProjectManager().getProjects();
+		List<IProject> projects = projectController.getProjectList();
 
 		//2. The administrator selects an existing project
 		IProject project = projects.get(0);
@@ -119,11 +122,8 @@ public class CreateProjectUseCaseTest {
 		//3. The system shows a form to enter the missing project details: new incremented version identifier, starting date and budget estimate.
 		ProjectForkForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeProjectForkForm();
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+			form = projectController.getProjectForkForm();
+		} catch (UnauthorizedAccessException e) { fail("not authorized"); }
 
 		//4. The administrator enters all the missing project details.
 		form.setProject(project);
@@ -132,18 +132,25 @@ public class CreateProjectUseCaseTest {
 		form.setVersion(new Version(2, 0, 1));
 
 		//5. The system shows a list of possible lead developers.
-		List<IUser> devs = bugTrap.getUserManager().getDevelopers();
+		List<IUser> devs = userController.getDevelopers();
 		
 		//6. The administrator selects a lead developer.
 		form.setLeadDeveloper(devs.get(0));
 		
 		//7. The system creates the project and shows an overview.
-		bugTrap.getProjectManager().createFork(form.getProject(), form.getBudgetEstimate(), form.getVersion(), form.getStartDate());
-		IProject fork = bugTrap.getProjectManager().getProjects().get(1);
+		try {
+			projectController.forkProject(form);
+		} catch (UnauthorizedAccessException e) { fail("not authorised"); }
+		
+		
+		IProject fork = projectController.getProjectList().get(1);
 
 		//Confirm.
 		assertEquals(fork, project);
 		assertFalse(fork == project);
+		assertEquals(new Date(2010,3,21), fork.getStartDate());
+		assertEquals(1234				, fork.getBudgetEstimate(),1e-6);
+		assertEquals(new Version(2, 0, 1), fork.getVersion());
 		assertEquals("M0", fork.getAchievedMilestone().toString());
 	}
 	
@@ -151,33 +158,33 @@ public class CreateProjectUseCaseTest {
 	public void notAuthorizedTest() {
 		//Can't make project/forks when not logged in.
 		try {
-			bugTrap.getFormFactory().makeProjectCreationForm();
+			projectController.getProjectCreationForm();
 			fail("Should be logged in!");
 		} catch (UnauthorizedAccessException e) { }
 		try {
-			bugTrap.getFormFactory().makeProjectForkForm();
+			projectController.getProjectForkForm();
 			fail("Should be logged in!");
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Developers shouldn't be able to make projects/forks. 
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		userController.loginAs(userController.getDevelopers().get(0));
 		try {
-			bugTrap.getFormFactory().makeProjectCreationForm();
+			projectController.getProjectCreationForm();
 			fail("Developer's can't create Projects!");
 		} catch (UnauthorizedAccessException e) { }
 		try {
-			bugTrap.getFormFactory().makeProjectForkForm();
+			projectController.getProjectForkForm();
 			fail("Developer's can't fork Projects!");
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Issuers shouldn't be able to make projects/forks. 
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
+		userController.loginAs(userController.getIssuers().get(0));
 		try {
-			bugTrap.getFormFactory().makeProjectCreationForm();
+			projectController.getProjectCreationForm();
 			fail("Issuers can't create Projects!");
 		} catch (UnauthorizedAccessException e) { }
 		try {
-			bugTrap.getFormFactory().makeProjectForkForm();
+			projectController.getProjectForkForm();
 			fail("Issuer's can't fork Projects!");
 		} catch (UnauthorizedAccessException e) { }
 	}
@@ -188,15 +195,18 @@ public class CreateProjectUseCaseTest {
 		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
 		
 		try {
-			bugTrap.getProjectManager().createProject(null, null, null, null, 0, null, null);
+			projectController.createProject(projectController.getProjectCreationForm());
 			fail("should throw exception");
 		}
-		catch (IllegalArgumentException e) { }
+		catch (NullPointerException e) { } 
+		catch (UnauthorizedAccessException e) { fail("not authorised"); }
+		
 		try {
-			bugTrap.getProjectManager().createFork(null, 0, null, null);
+			projectController.forkProject(projectController.getProjectForkForm());
 			fail("should throw exception");
 		}
-		catch (IllegalArgumentException e){
-		}
+		catch (NullPointerException e){ }
+		catch (IllegalArgumentException e) { }
+		catch (UnauthorizedAccessException e) { fail("not authorised"); }
 	}
 }

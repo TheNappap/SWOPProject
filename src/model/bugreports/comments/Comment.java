@@ -5,9 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import model.bugreports.BugReport;
-import model.notifications.observers.Observer;
-import model.notifications.signalisations.Signalisation;
-import model.projects.Subsystem;
 
 /**
  * Class that represents a Comment.
@@ -20,8 +17,6 @@ public class Comment implements Commentable { //A Comment can be commented on.
 	private final List<Comment> comments;			//Comments to this Comment.
 	private final String text;						//Text.
 	private final BugReport bugReport;
-	
-	private List<Observer> observers = new ArrayList<Observer>();
 	
 	/**  
 	 * Constructor.  
@@ -58,26 +53,6 @@ public class Comment implements Commentable { //A Comment can be commented on.
 	@Override
 	public List<Comment> getComments() {
 		return comments;
-	}
-
-	@Override
-	public void attach(Observer observer) {
-		if (!this.observers.contains(observer))
-			this.observers.add(observer);
-	}
-
-	@Override
-	public void detach(Observer observer) {
-		if (observers.contains(observer))
-			observers.remove(observer);
-	}
-
-	@Override
-	public void notifyObservers(Signalisation signalisation) {
-		for (Observer observer : this.observers)
-			observer.signal(signalisation);
-		
-		 ((Subsystem) bugReport.getSubsystem()).signal(signalisation);
 	}
 	
 	/**

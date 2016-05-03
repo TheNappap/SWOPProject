@@ -49,6 +49,10 @@ public class UserController extends Controller {
 		return getBugTrap().getUserManager().loginAs(loggingUser);
 	}
 	
+	public String loginAs(String userName) {
+		return getBugTrap().getUserManager().loginAs(getBugTrap().getUserManager().getUser(userName));
+	}
+	
 	/**
 	 * Returns if a given user is logged in
 	 * @param user given user

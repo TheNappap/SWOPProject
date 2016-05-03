@@ -7,7 +7,7 @@ import model.notifications.observers.CreateBugReportObserver;
 import model.notifications.observers.CreateCommentObserver;
 import model.notifications.observers.ObserverWithMailbox;
 
-public enum RegistrationType {
+public enum NotificationType {
 	BUGREPORT_CHANGE {	//A Change in a BugReport.
 		@Override
 		public ObserverWithMailbox createObserver(Mailbox box, Observable observable, BugTag tag) {

@@ -27,6 +27,7 @@ public class BugReportManager {
 	private final BugTrap bugTrap;
 	/**
 	 * Constructor.
+	 * @param bugTrap the BugTrap System
 	 */
 	public BugReportManager(BugTrap bugTrap) {
 		this.bugReportList = new ArrayList<BugReport>();
@@ -43,11 +44,16 @@ public class BugReportManager {
 
 	/**
 	 * returns an ordered list of bug reports
-	 * @param types filter types
-	 * @param arguments
+	 * @param types Filter Types to filter by.
+	 * @param arguments Filter arguments.
 	 * @return an ordered list of bug reports
+	 * @throws UnauthorizedAccessException 
 	 */
-	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) {
+	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) throws UnauthorizedAccessException {
+		if (bugTrap.getUserManager().getLoggedInUser() == null || 
+				!bugTrap.getUserManager().getLoggedInUser().isIssuer())
+			throw new UnauthorizedAccessException("Must be Issuer");
+		
 		List<IBugReport> filteredList = getBugReportList();
 		
 		BugReportFilter filter = new BugReportFilter(filteredList);
@@ -66,6 +72,35 @@ public class BugReportManager {
 		ArrayList<IBugReport> clonedList = new ArrayList<IBugReport>();
 		clonedList.addAll(bugReportList);
 		return clonedList;
+	}
+
+	/**
+<<<<<<< HEAD
+	 * returns all the bug reports for a given project
+	 * @param project Project to return BugReports for.
+	 * @return list of bug reports
+	 */
+	public List<IBugReport> getBugReportsForProject(IProject project) {
+		return getBugReportsForSystem(project);
+	}
+	
+	/**
+	 * Return all BugReports for given System.
+	 * @param system The System to get all BugReports for.
+	 * @return  The BugReports of given System.
+	 */
+	public List<IBugReport> getBugReportsForSystem(ISystem system) {
+		List<ISubsystem> subs = system.getAllDirectOrIndirectSubsystems();
+		List<IBugReport> reports = new ArrayList<IBugReport>();
+		if(system.getParent() != null)
+			subs.add((Subsystem) system);
+
+		for (IBugReport r : bugReportList)
+			for (ISubsystem s : subs)
+				if (r.getSubsystem() == s)
+					reports.add(r);
+
+		return reports;
 	}
 
 	/**
@@ -147,9 +182,9 @@ public class BugReportManager {
 	}
 	
 	/**
-	 * proposes a test to a given bug report
+	 * Proposes a test to a given BugReport.
 	 * @param report given bug report
-	 * @param test
+	 * @param test Test to propose
 	 * @throws UnauthorizedAccessException if the logged in user is not a tester for this bugreport
 	 */
 	public void proposeTest(IBugReport report, String test) throws UnauthorizedAccessException {
@@ -164,10 +199,10 @@ public class BugReportManager {
 	}
 	
 	/**
-	 * proposes a patch to a given bug report
-	 * @param report given bug report
-	 * @param patch
-	 * @throws UnauthorizedAccessException if the logged in user is not a programmer for this bugreport
+	 * Proposes a patch to a given BugReport.
+	 * @param report Given bug report
+	 * @param patch The Patch to propose.
+	 * @throws UnauthorizedAccessException if the logged in user is not a programmer for this BugReport.
 	 */
 	public void proposePatch(IBugReport report, String patch) throws UnauthorizedAccessException {
 		if (report == null || patch == null)

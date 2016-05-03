@@ -2,8 +2,8 @@ package model.notifications.observers;
 
 import model.bugreports.bugtag.BugTag;
 import model.notifications.Mailbox;
+import model.notifications.NotificationType;
 import model.notifications.Observable;
-import model.notifications.RegistrationType;
 import model.notifications.signalisations.Signalisation;
 
 public class BugReportSpecificTagObserver extends BugReportChangeObserver {
@@ -18,7 +18,7 @@ public class BugReportSpecificTagObserver extends BugReportChangeObserver {
 
 	@Override
 	public void signal(Signalisation signalisation) {
-		if (signalisation.getType() == RegistrationType.BUGREPORT_CHANGE && signalisation.getBugReport().getBugTag() == this.bugTag) {
+		if (signalisation.getType() == NotificationType.BUGREPORT_CHANGE && signalisation.getBugReport().getBugTag() == this.bugTag) {
 			getMailbox().addNotification("The bugreport '" + signalisation.getBugReport().getTitle() + "' has received the tag " + signalisation.getBugReport().getBugTag());
 		}
 	}
