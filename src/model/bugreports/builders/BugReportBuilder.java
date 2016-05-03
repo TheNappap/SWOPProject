@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.BugTrap;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 import model.bugreports.Patch;
@@ -21,6 +22,9 @@ import model.users.IUser;
  * Use getter to validate variables, build BugReport and return BugReport.
  */
 public class BugReportBuilder {
+
+	//Immutable
+	private final BugTrap bugTrap;
 
 	//Required parameters
 	private String title; 				//Title of the BugReport. 
@@ -45,7 +49,9 @@ public class BugReportBuilder {
 	/**  
 	 * Empty constructor.  
 	 */
-	public BugReportBuilder() { }
+	public BugReportBuilder(BugTrap bugTrap) {
+		this.bugTrap = bugTrap;
+	}
 
 	/**  
 	 * Set the title for the BugReport.  
@@ -186,7 +192,7 @@ public class BugReportBuilder {
 	 */
 	public BugReport getBugReport() {
 		validate();
-		return new BugReport(title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, milestone, tests, patches);
+		return new BugReport(bugTrap, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, milestone, tests, patches);
 	}
 
 	//Assure all variables are not null.

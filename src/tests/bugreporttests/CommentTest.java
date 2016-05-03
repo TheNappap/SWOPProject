@@ -15,7 +15,7 @@ public class CommentTest {
 
 	Comment comment;
 	String text = "This is a comment.";
-	BugReport bugReport = new BugReport(null, null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null);
+	BugReport bugReport = new BugReport(null, null, null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null);
 	@Before
 	public void setUp() throws Exception {
 		comment = new Comment(bugReport, text);

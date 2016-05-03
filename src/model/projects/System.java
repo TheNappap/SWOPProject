@@ -3,6 +3,7 @@ package model.projects;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.BugTrap;
 import model.notifications.Observable;
 import model.notifications.observers.Observer;
 import model.notifications.signalisations.Signalisation;
@@ -13,11 +14,13 @@ import model.notifications.signalisations.Signalisation;
  */
 public abstract class System implements ISystem, Observable, Observer {
 
+	protected BugTrap bugTrap; // BugTrap
+
 	protected String name;		//System name.
 	protected String description;	//System description.
 	protected System parent;		//Parent System, if any.
 	protected final List<Subsystem> subsystems;	//Subsystems.
-	
+
 	protected AchievedMilestone milestone;
 
 	protected List<Observer> observers = new ArrayList<Observer>();
@@ -30,7 +33,8 @@ public abstract class System implements ISystem, Observable, Observer {
 	 * @param subsystems Subsystems of this System.
 	 * @param milestone Milestone of the system.
 	 */
-	public System(String name, String description, System parent, List<Subsystem> subsystems, AchievedMilestone milestone) {
+	public System(BugTrap bugTrap, String name, String description, System parent, List<Subsystem> subsystems, AchievedMilestone milestone) {
+		this.bugTrap 		= bugTrap;
 		this.name 			= name;
 		this.description 	= description;
 		this.parent 		= parent;

@@ -90,8 +90,8 @@ public class CreateBugReportUseCaseTest extends UseCaseTest {
 			form.setErrorMessage("ERROR! You messed up!");
 			form.setTargetMilestone(new TargetMilestone(Arrays.asList(new Integer[] { 1, 2, 3 })));
 			
-			fail("todo");
-			List<IBugReport> bugReports = bugTrap.getBugReportManager().getBugReportsForProject(project);
+
+			List<IBugReport> bugReports = project.getBugReports();
 			
 			//12. The system shows a list of possible dependencies of this bug report.
 			//These are the bug reports of the same project

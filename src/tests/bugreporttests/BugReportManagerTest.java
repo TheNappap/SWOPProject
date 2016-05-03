@@ -49,12 +49,12 @@ public class BugReportManagerTest {
 	
 	@Test
 	public void addBugReportTest() {
-		Project project = new Project("n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
+		Project project = new Project(null, "n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
 
 		String title = "BugReport";
 		String description = "Terrible bug";
 		Date creationDate = new Date();
-		Subsystem subsystem = new Subsystem(null, null, project, null, project, null);
+		Subsystem subsystem = new Subsystem(null, null, null, project, null, project, null);
 		Issuer issuer = new Issuer(null, null, null, null);
 		List<IBugReport> dependencies = new ArrayList<IBugReport>();
 		List<IUser> assignees = new ArrayList<IUser>();
@@ -78,10 +78,10 @@ public class BugReportManagerTest {
 	
 	@Test
 	public void getOrderedListTest() {
-		Project project = new Project("n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
-		bugTrap.getBugReportManager().addBugReport("Urgent!!!", "This is a BugReport", new Date(), new Subsystem(null, null, project, null, project, null), new Issuer(null, null, null, "Michael"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		bugTrap.getBugReportManager().addBugReport("Some BugReport", "Low Priority", new Date(), new Subsystem(null, null, project, null, project, null), new Issuer(null, null, null,"George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		bugTrap.getBugReportManager().addBugReport("CRITICAL", "BEEP BOOP BEEP", new Date(), new Subsystem(null, null, project, null, project, null), new Issuer(null, null, null, "George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		Project project = new Project(null, "n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
+		bugTrap.getBugReportManager().addBugReport("Urgent!!!", "This is a BugReport", new Date(), new Subsystem(null, null, null, project, null, project, null), new Issuer(null, null, null, "Michael"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		bugTrap.getBugReportManager().addBugReport("Some BugReport", "Low Priority", new Date(), new Subsystem(null, null, null, project, null, project, null), new Issuer(null, null, null,"George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		bugTrap.getBugReportManager().addBugReport("CRITICAL", "BEEP BOOP BEEP", new Date(), new Subsystem(null, null, null, project, null, project, null), new Issuer(null, null, null, "George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 
 		List<IBugReport> ordered = null;
 		ordered = bugTrap.getBugReportManager().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING, FilterType.FILED_BY_USER}, new String[]{"BugReport", "Michael"});
@@ -102,7 +102,7 @@ public class BugReportManagerTest {
 		IUser developer = new Developer(null, null, null, "Jacques");
 		IUser notDev = new Administrator(null, null, null, "John von Neumann");
 		Project p = (Project)bugTrap.getProjectManager().getProjects().get(0);
-		bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 
 		IBugReport added = null;
 		added = bugTrap.getBugReportManager().getBugReportList().get(0);
@@ -126,7 +126,7 @@ public class BugReportManagerTest {
 	@Test
 	public void updateBugTagTest() throws UnauthorizedAccessException {
 		Project p = (Project)bugTrap.getProjectManager().getProjects().get(0);
-		bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 
 		IBugReport added = null;
 		added = bugTrap.getBugReportManager().getBugReportList().get(0);
@@ -136,11 +136,5 @@ public class BugReportManagerTest {
 		bugTrap.getBugReportManager().updateBugReport(added, BugTag.ASSIGNED);
 
 		assertEquals(added.getBugTag(), BugTag.ASSIGNED);
-	}
-	
-	@Test
-	public void getBugReportsForProject() {
-		IProject project = bugTrap.getProjectManager().getProjects().get(0);
-		bugTrap.getBugReportManager().getBugReportsForProject(project);
 	}
 }

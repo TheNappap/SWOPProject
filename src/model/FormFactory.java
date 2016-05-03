@@ -210,7 +210,7 @@ public class FormFactory {
 	 */
 	public ProposePatchForm makeProposePatchForm() throws UnauthorizedAccessException {
 		if (!getBugTrap().isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
+			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
 		return new ProposePatchForm();
 	}
@@ -222,7 +222,7 @@ public class FormFactory {
 	 */
 	public DeclareAchievedMilestoneForm makeDeclareAchievedMilestoneForm() throws UnauthorizedAccessException {
 		if (!getBugTrap().isDeveloperLoggedIn())
-			throw new UnauthorizedAccessException("You need to be logged in as an developer to perform this action.");
+			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
 		return new DeclareAchievedMilestoneForm();
 	}

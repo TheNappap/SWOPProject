@@ -1,8 +1,11 @@
 package model.projects;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.BugTrap;
+import model.bugreports.IBugReport;
 import model.users.IUser;
 
 /**
@@ -20,6 +23,7 @@ public class Project extends System implements IProject {
 	
 	/**
 	 * Constructor for a project
+	 * @param bugTrap The BugTrap in which this project lives
 	 * @param name The name for the project
 	 * @param description The description for the project
 	 * @param version The version of the project
@@ -28,8 +32,8 @@ public class Project extends System implements IProject {
 	 * @param budgetEstimate The budget estimate for the project
      * @param projectTeam The team assigned to the project
      */
-	public Project(String name, String description, List<Subsystem> subsystems, Version version, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam projectTeam, AchievedMilestone milestone) {
-		super(name, description, null, subsystems, milestone);
+	public Project(BugTrap bugTrap, String name, String description, List<Subsystem> subsystems, Version version, Date creationDate, Date startDate, double budgetEstimate, ProjectTeam projectTeam, AchievedMilestone milestone) {
+		super(bugTrap, name, description, null, subsystems, milestone);
 		
 		this.version		= version;
 		this.creationDate	= creationDate;
@@ -44,13 +48,14 @@ public class Project extends System implements IProject {
 
 	//Copy constructor.
 	protected Project(Project other) {
-		super(other.name, other.description, null, other.subsystems, other.milestone);
+		super(other.bugTrap, other.name, other.description, null, other.subsystems, other.milestone);
 		
 		this.version		= other.version;
 		this.creationDate 	= new Date();
 		this.startDate	  	= new Date(other.getStartDate().getTime());
 		this.projectTeam 	= new ProjectTeam(other.projectTeam);
 		this.budgetEstimate = other.getBudgetEstimate();
+		this.milestone 		= new AchievedMilestone();
 	}
 
 	/**
@@ -174,14 +179,6 @@ public class Project extends System implements IProject {
 		this.startDate = startDate;
 	}
 
-	/**
-	 * Set Achieved Milestone of the Project.
-	 * @param milestone The new Achieved Milestone of the System.
-	 */
-	public void setAchievedMilestone(AchievedMilestone milestone) {
-		this.milestone = milestone;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (!super.equals(o))
@@ -202,8 +199,21 @@ public class Project extends System implements IProject {
 	
 	@Override
 	public void terminate() {
+		for (ISubsystem sys : this.getAllDirectOrIndirectSubsystems()){
+			((Subsystem) sys).terminate();
+		}
+
+		bugTrap.getNotificationManager().deleteRegistrationsForObservable(this);
 		super.terminate();
 		projectTeam.terminate();
 		projectTeam = null;
+	}
+
+	@Override
+	public List<IBugReport> getBugReports() {
+		List<IBugReport> reports = new ArrayList<>();
+		for (ISubsystem s : subsystems)
+			reports.addAll(s.getBugReports());
+		return reports;
 	}
 }
