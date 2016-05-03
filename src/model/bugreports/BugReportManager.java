@@ -27,6 +27,7 @@ public class BugReportManager {
 	private final BugTrap bugTrap;
 	/**
 	 * Constructor.
+	 * @param bugTrap the BugTrap System
 	 */
 	public BugReportManager(BugTrap bugTrap) {
 		this.bugReportList = new ArrayList<BugReport>();
@@ -43,8 +44,8 @@ public class BugReportManager {
 
 	/**
 	 * returns an ordered list of bug reports
-	 * @param types filter types
-	 * @param arguments
+	 * @param types Filter Types to filter by.
+	 * @param arguments Filter arguments.
 	 * @return an ordered list of bug reports
 	 */
 	public List<IBugReport> getOrderedList(FilterType[] types, String[] arguments) {
@@ -70,7 +71,7 @@ public class BugReportManager {
 
 	/**
 	 * returns all the bug reports for a given project
-	 * @param project
+	 * @param project Project to return BugReports for.
 	 * @return list of bug reports
 	 */
 	public List<IBugReport> getBugReportsForProject(IProject project) {
@@ -99,7 +100,7 @@ public class BugReportManager {
 	/**
 	 * Delete the BugReports for given System and deletes the registrations for this bug report
 	 * @param system The System for which to delete the BugReports
-	 * @throws UnauthorizedAccessException 
+	 * @throws UnauthorizedAccessException If the User is not authorized for this action.
 	 */
 	public void deleteBugReportsForSystem(ISystem system) throws UnauthorizedAccessException {
 		for (IBugReport report : getBugReportsForSystem(system)){
@@ -165,10 +166,10 @@ public class BugReportManager {
 	}
 
 	/**
-	 * assigns a given developer to a bugreport
-	 * @param bugReport
-	 * @param dev given developer
-	 * @throws UnauthorizedAccessException 
+	 * Assigns a given developer to a BugReport.
+	 * @param bugReport BugReport to add Developer to.
+	 * @param dev Developer to assign.
+	 * @throws UnauthorizedAccessException If the current user is not allowed to do this action.
 	 */
 	public void assignToBugReport(IBugReport bugReport, IUser dev) throws UnauthorizedAccessException{
 		IProject project = bugReport.getSubsystem().getProject();
@@ -185,9 +186,9 @@ public class BugReportManager {
 	
 	/**
 	 * update a bug report with a tag
-	 * @param bugReport
-	 * @param tag
-	 * @throws UnauthorizedAccessException 
+	 * @param bugReport BugReport to update.
+	 * @param tag Tag to update to.
+	 * @throws UnauthorizedAccessException If the current user is not allowed to do this action.
 	 */
 	public void updateBugReport(IBugReport bugReport, BugTag tag) throws UnauthorizedAccessException {
 		if (bugReport == null || tag == null)
@@ -204,9 +205,9 @@ public class BugReportManager {
 	}
 
 	/**
-	 * adds a comment to a commentable object
-	 * @param commentable
-	 * @param text
+	 * Adds a comment to a Commentable object.
+	 * @param commentable Commentable to comment on.
+	 * @param text Text of the Comment.
 	 */
 	public void addComment(Commentable commentable, String text) {
 		if (commentable == null || text == null)
@@ -216,9 +217,9 @@ public class BugReportManager {
 	}
 	
 	/**
-	 * proposes a test to a given bug report
+	 * Proposes a test to a given BugReport.
 	 * @param report given bug report
-	 * @param test
+	 * @param test Test to propose
 	 * @throws UnauthorizedAccessException if the logged in user is not a tester for this bugreport
 	 */
 	public void proposeTest(IBugReport report, String test) throws UnauthorizedAccessException {
@@ -233,10 +234,10 @@ public class BugReportManager {
 	}
 	
 	/**
-	 * proposes a patch to a given bug report
-	 * @param report given bug report
-	 * @param patch
-	 * @throws UnauthorizedAccessException if the logged in user is not a programmer for this bugreport
+	 * Proposes a patch to a given BugReport.
+	 * @param report Given bug report
+	 * @param patch The Patch to propose.
+	 * @throws UnauthorizedAccessException if the logged in user is not a programmer for this BugReport.
 	 */
 	public void proposePatch(IBugReport report, String patch) throws UnauthorizedAccessException {
 		if (report == null || patch == null)
