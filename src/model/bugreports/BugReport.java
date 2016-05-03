@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
@@ -106,7 +107,12 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	 * @post The Developer is part of the assignees list.
 	 * 		| getAssignees().contains(developer);
 	 */
-	public void assignDeveloper(IUser developer) {
+	public void assignDeveloper(IUser developer) throws UnauthorizedAccessException {
+		IProject project = subsystem.getProject();
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if (!project.isLead(user) && !project.isTester(user))
+			throw new UnauthorizedAccessException("A lead or tester should be logged in to assign bug report");
+
 		if (!developer.isDeveloper()) throw new IllegalArgumentException();
 		
 		assignees.add(developer);
@@ -118,12 +124,15 @@ public class BugReport implements IBugReport, Observable { //A Comment can be co
 	 * @post The given BugTag will be the new BugTag.
 	 * 		| getBugTag() == bugTag
 	 */
-	public void updateBugTag(BugTag bugTag) {
+	public void updateBugTag(BugTag bugTag) throws UnauthorizedAccessException {
+		if (bugTag.hasToBeLeadToSet() && !(getProject().getLeadDeveloper() == bugTrap.getUserManager().getLoggedInUser()))
+			throw new UnauthorizedAccessException();
+
 		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState(this));
 		
 		notifyObservers(new BugReportChangeSignalisation(this));
 	}
-	
+
 	@Override
 	public int compareTo(IBugReport otherBugReport) {
 		return getTitle().compareTo(otherBugReport.getTitle());

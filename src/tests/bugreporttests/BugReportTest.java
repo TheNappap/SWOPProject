@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import controllers.exceptions.UnauthorizedAccessException;
+import model.BugTrap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -87,11 +89,15 @@ public class BugReportTest {
 		IUser issuer 	= new Issuer(null, null, null, null);
 		IUser developer = new Developer(null, null, null, null);
 		
-		try { bugReport.assignDeveloper(admin); fail(); } catch (IllegalArgumentException e) {}
-		try { bugReport.assignDeveloper(issuer); fail(); } catch (IllegalArgumentException e) {}
+		try { bugReport.assignDeveloper(admin); fail(); } catch (IllegalArgumentException e) {} catch (UnauthorizedAccessException e) { }
+		try { bugReport.assignDeveloper(issuer); fail(); } catch (IllegalArgumentException e) {} catch (UnauthorizedAccessException e) { }
 		
 		assertEquals(0, bugReport.getAssignees().size());
-		bugReport.assignDeveloper(developer);
+		try {
+			bugReport.assignDeveloper(developer);
+		} catch (UnauthorizedAccessException e) {
+			fail();
+		}
 		assertEquals(1, bugReport.getAssignees().size());
 		assertEquals(bugReport.getAssignees().get(0), developer);
 	}
@@ -107,29 +113,49 @@ public class BugReportTest {
 		BugTag underReviewTag 	= BugTag.UNDERREVIEW;
 		
 		//From New to New is allowed.
-		bugReport.updateBugTag(newTag);
+		try {
+			bugReport.updateBugTag(newTag);
+		} catch (UnauthorizedAccessException e) {
+			fail();
+		}
 		//From New to InProgress is allowed.
-		bugReport.updateBugTag(underReviewTag);
+		try {
+			bugReport.updateBugTag(underReviewTag);
+		} catch (UnauthorizedAccessException e) {
+			fail();
+		}
 		//Walking around in InProgress is allowed.
-		bugReport.updateBugTag(assignedTag);
-		bugReport.updateBugTag(underReviewTag);
-		
+		try {
+			bugReport.updateBugTag(assignedTag);
+		} catch (UnauthorizedAccessException e) {
+			fail();
+		}
+		try {
+			bugReport.updateBugTag(underReviewTag);
+		} catch (UnauthorizedAccessException e) {
+			fail();
+		}
+
 		//Going back to New is not allowed.
-		try { bugReport.updateBugTag(newTag); fail(); } catch (IllegalStateException e) { }
+		try { bugReport.updateBugTag(newTag); fail(); } catch (IllegalStateException e) { } catch (UnauthorizedAccessException e) { }
 		
 		//From InProgress to Closed is allowed.
-		bugReport.updateBugTag(duplicateTag);
+		try {
+			bugReport.updateBugTag(duplicateTag);
+		} catch (UnauthorizedAccessException e) {
+			fail();
+		}
 		//Walking around in Closed is not allowed.
 		
 		System.out.println(bugReport.getBugTag());
-		try { bugReport.updateBugTag(resolvedTag); fail(); } catch (IllegalStateException e) { }
-		try { bugReport.updateBugTag(closedTag); fail(); } catch (IllegalStateException e) { }
-		try { bugReport.updateBugTag(notABugTag); fail(); } catch (IllegalStateException e) { }
+		try { bugReport.updateBugTag(resolvedTag); fail(); } catch (IllegalStateException e) { } catch (UnauthorizedAccessException e) { }
+		try { bugReport.updateBugTag(closedTag); fail(); } catch (IllegalStateException e) { } catch (UnauthorizedAccessException e) { }
+		try { bugReport.updateBugTag(notABugTag); fail(); } catch (IllegalStateException e) { } catch (UnauthorizedAccessException e) { }
 		
 		//Going back to previous states is not allowed.
-		try { bugReport.updateBugTag(newTag); fail(); } catch (IllegalStateException e) { }
-		try { bugReport.updateBugTag(underReviewTag); fail(); } catch (IllegalStateException e) { }
-		try { bugReport.updateBugTag(assignedTag); fail(); } catch (IllegalStateException e) { }
+		try { bugReport.updateBugTag(newTag); fail(); } catch (IllegalStateException e) { } catch (UnauthorizedAccessException e) { }
+		try { bugReport.updateBugTag(underReviewTag); fail(); } catch (IllegalStateException e) { } catch (UnauthorizedAccessException e) { }
+		try { bugReport.updateBugTag(assignedTag); fail(); } catch (IllegalStateException e) { } catch (UnauthorizedAccessException e) { }
 	}
 
 	@Test

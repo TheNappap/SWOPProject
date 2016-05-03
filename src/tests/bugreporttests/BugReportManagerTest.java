@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.bugreports.BugReport;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -95,46 +96,5 @@ public class BugReportManagerTest {
 		//Is it the correct one?
 		assertTrue(filtered.getTitle().equals("Urgent!!!"));
 		assertTrue(filtered.getDescription().equals("This is a BugReport"));
-	}
-
-	@Test
-	public void assignToBugReportTest() {
-		IUser developer = new Developer(null, null, null, "Jacques");
-		IUser notDev = new Administrator(null, null, null, "John von Neumann");
-		Project p = (Project)bugTrap.getProjectManager().getProjects().get(0);
-		bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-
-		IBugReport added = null;
-		added = bugTrap.getBugReportManager().getBugReportList().get(0);
-
-		try { bugTrap.getBugReportManager().assignToBugReport(added, notDev); fail(); } 
-		catch (IllegalArgumentException e) { } catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-
-		assertEquals(0, added.getAssignees().size());
-		try {
-			bugTrap.getBugReportManager().assignToBugReport(added, developer);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		assertEquals(1, added.getAssignees().size());
-	}
-	
-	@Test
-	public void updateBugTagTest() throws UnauthorizedAccessException {
-		Project p = (Project)bugTrap.getProjectManager().getProjects().get(0);
-		bugTrap.getBugReportManager().addBugReport("I'm a BugReport", "Yes I Am", new Date(), new Subsystem(null, null, null, p, null, p, null), new Issuer(null, null, null, null), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-
-		IBugReport added = null;
-		added = bugTrap.getBugReportManager().getBugReportList().get(0);
-
-		assertEquals(added.getBugTag(), BugTag.NEW);
-		
-		bugTrap.getBugReportManager().updateBugReport(added, BugTag.ASSIGNED);
-
-		assertEquals(added.getBugTag(), BugTag.ASSIGNED);
 	}
 }

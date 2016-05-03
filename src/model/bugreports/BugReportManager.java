@@ -135,45 +135,6 @@ public class BugReportManager {
 	}
 
 	/**
-	 * assigns a given developer to a bugreport
-	 * @param bugReport
-	 * @param dev given developer
-	 * @throws UnauthorizedAccessException 
-	 */
-	public void assignToBugReport(IBugReport bugReport, IUser dev) throws UnauthorizedAccessException{
-		IProject project = bugReport.getSubsystem().getProject();
-		IUser user = bugTrap.getUserManager().getLoggedInUser();
-		if(!project.isLead(user) && !project.isTester(user)) throw new UnauthorizedAccessException("A lead or tester should be logged in to assign bug report");
-		
-		BugReport report = null;
-		for (BugReport b : bugReportList)
-			if (b == bugReport)
-				report = b;
-		
-		report.assignDeveloper(dev);
-	}
-	
-	/**
-	 * update a bug report with a tag
-	 * @param bugReport
-	 * @param tag
-	 * @throws UnauthorizedAccessException 
-	 */
-	public void updateBugReport(IBugReport bugReport, BugTag tag) throws UnauthorizedAccessException {
-		if (bugReport == null || tag == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-		if (tag.hasToBeLeadToSet() && !(bugReport.getProject().getLeadDeveloper() == bugTrap.getUserManager().getLoggedInUser()))
-			throw new UnauthorizedAccessException();
-		
-		BugReport report = null;
-		for (BugReport b : bugReportList)
-			if (b == bugReport)
-				report = b;
-		
-		report.updateBugTag(tag);
-	}
-
-	/**
 	 * adds a comment to a commentable object
 	 * @param commentable
 	 * @param text
