@@ -159,4 +159,17 @@ public class Subsystem extends System implements ISubsystem {
 		terminate();
 		this.parent.subsystems.remove(this);
 	}
+
+	@Override
+	public double getBugImpact() {
+		List<IBugReport> bugreports = bugTrap.getBugReportManager().getBugReportsForSystem(this);
+		double bugImpact = 0;
+		
+		for (IBugReport iBugReport : bugreports) {
+			double impactProduct = ((BugReport) iBugReport).getImpactProduct();
+			bugImpact += impactProduct;
+		}
+		
+		return bugImpact;
+	}
 }

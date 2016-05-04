@@ -7,6 +7,8 @@ import model.BugTrap;
 import model.notifications.Observable;
 import model.notifications.observers.Observer;
 import model.notifications.signalisations.Signalisation;
+import model.projects.health.HealthCalculator;
+import model.projects.health.HealthIndicator;
 
 /**
  * This class represents a system in BugTrap.
@@ -20,10 +22,10 @@ public abstract class System implements ISystem, Observable, Observer {
 	protected String description;	//System description.
 	protected System parent;		//Parent System, if any.
 	protected final List<Subsystem> subsystems;	//Subsystems.
-
 	protected AchievedMilestone milestone;
 
 	protected List<Observer> observers = new ArrayList<Observer>();
+	private HealthCalculator healthCalculator;//TODO initialize health calculator
 	
 	/**
 	 * Constructor.
@@ -102,7 +104,7 @@ public abstract class System implements ISystem, Observable, Observer {
 		return subs;
 	}
 
-	public List<Subsystem> getAllSubsystems() {
+	public List<Subsystem> getAllSubsystems() {//TODO list met subsystems en niet isubsystem? waarom deze methode? is alldirectandindirect en getsubsystems niet genoeg?
 		ArrayList<Subsystem> subs = new ArrayList<Subsystem>();
 		for (Subsystem s : subsystems) {
 			subs.add(s);
@@ -115,6 +117,14 @@ public abstract class System implements ISystem, Observable, Observer {
 	@Override
 	public AchievedMilestone getAchievedMilestone() {
 		return milestone;
+	}
+
+	/**
+	 * 
+	 * @return the health calculator of the system
+	 */
+	private HealthCalculator getHealthCalculator() {
+		return healthCalculator;
 	}
 
 	/**
@@ -216,6 +226,20 @@ public abstract class System implements ISystem, Observable, Observer {
 
 		for (Observer observer : this.observers)
 			observer.signal(signalisation);
+	}
+	
+	/**
+	 * Returns the bug impact of this system.
+	 * @return a double representing the bug impact
+	 */
+	public abstract double getBugImpact();
+	
+	/**
+	 * Returns a health indicator for this system.
+	 * @return an indicator that indicates the health of the system
+	 */
+	public HealthIndicator getHealth(){
+		return getHealthCalculator().calculateHealth(this);
 	}
 	
 	/**

@@ -212,4 +212,9 @@ public class Project extends System implements IProject {
 			reports.addAll(s.getBugReports());
 		return reports;
 	}
+
+	@Override
+	public double getBugImpact() {
+		return 0;
+	}
 }

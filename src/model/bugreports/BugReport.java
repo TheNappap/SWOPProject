@@ -44,6 +44,7 @@ public class BugReport implements IBugReport {
 	
 	//Mutable
 	private BugTagState bugTag;			//BugTag that is attached to this BugReport.
+	private int impactFactor; //TODO double or int? Should be >0 and <=10!!
 
 	/**
 	 * BugReport Constructor.
@@ -241,6 +242,14 @@ public class BugReport implements IBugReport {
 	}
 
 	/**
+	 * Returns the impact factor of the bug report
+	 * @return the impact factor of the bug report
+	 */
+	public int getImpactFactor() {
+		return impactFactor;
+	}
+
+	/**
 	 * adds a test to the bug report
 	 * @param test given test
 	 */
@@ -343,5 +352,14 @@ public class BugReport implements IBugReport {
 			comment.terminate();
 		}
 		comments.clear();
+	}
+
+	/**
+	 * Returns the impact product of the bug report.
+	 * The impact product is the product of the impact factor and the multiplier.
+	 * @return the impact product of the bug report.
+	 */
+	public double getImpactProduct() {
+		return bugTag.getMultiplier()*getImpactFactor();
 	}
 }

@@ -17,4 +17,9 @@ public class Assigned extends InProgress {
     public BugTag getTag() {
         return BugTag.ASSIGNED;
     }
+
+	@Override
+	public double getMultiplier() {
+		return 2;
+	}
 }

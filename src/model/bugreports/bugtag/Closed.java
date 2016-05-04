@@ -22,4 +22,9 @@ public class Closed extends BugTagState {
 	public BugTag getTag() {
 		return BugTag.CLOSED;
 	}
+
+	@Override
+	public double getMultiplier() {
+		return 0;
+	}
 }

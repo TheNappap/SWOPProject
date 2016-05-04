@@ -31,4 +31,9 @@ public class UnderReview extends InProgress {
     public BugTag getTag() {
         return BugTag.UNDERREVIEW;
     }
+
+	@Override
+	public double getMultiplier() {
+		return 1;
+	}
 }

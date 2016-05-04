@@ -31,6 +31,12 @@ public abstract class BugTagState {
 	public BugTagState confirmBugTag(BugTagState bugTag) {
 		throw new IllegalStateException();
 	}
+	
+	/**
+	 * Returns the multiplier of the bug tag state
+	 * @return the multiplier of the bug tag state
+	 */
+	public abstract double getMultiplier();
 
 	/**
 	 * Get Enum representation of the Tag.

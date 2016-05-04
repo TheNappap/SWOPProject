@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.bugreports.IBugReport;
 import model.notifications.Observable;
+import model.projects.health.HealthIndicator;
 
 /**
  * Interface for the System class.
@@ -51,5 +52,11 @@ public interface ISystem extends Observable{
      * @return List of all bug reports related to this system or its subsystems.
      */
     public List<IBugReport> getBugReports();
+    
+    /**
+     * 
+     * @return the health of the system
+     */
+    public HealthIndicator getHealth();
 }
 

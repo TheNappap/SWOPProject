@@ -36,4 +36,9 @@ public class New extends BugTagState {
 	public BugTag getTag() {
 		return BugTag.NEW;
 	}
+
+	@Override
+	public double getMultiplier() {
+		return 3;
+	}
 }

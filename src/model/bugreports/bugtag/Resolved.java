@@ -17,4 +17,9 @@ public class Resolved extends Closed {
     public BugTag getTag() {
         return BugTag.RESOLVED;
     }
+	
+	@Override
+	public double getMultiplier() {
+		return 0.1;
+	}
 }
