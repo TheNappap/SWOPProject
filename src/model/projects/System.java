@@ -8,6 +8,9 @@ import model.notifications.Observable;
 import model.notifications.observers.Observer;
 import model.notifications.signalisations.Signalisation;
 import model.projects.health.HealthCalculator;
+import model.projects.health.HealthCalculator1;
+import model.projects.health.HealthCalculator2;
+import model.projects.health.HealthCalculator3;
 import model.projects.health.HealthIndicator;
 
 /**
@@ -25,7 +28,6 @@ public abstract class System implements ISystem, Observable, Observer {
 	protected AchievedMilestone milestone;
 
 	protected List<Observer> observers = new ArrayList<Observer>();
-	private HealthCalculator healthCalculator;//TODO initialize health calculator
 	
 	/**
 	 * Constructor.
@@ -108,14 +110,6 @@ public abstract class System implements ISystem, Observable, Observer {
 	@Override
 	public AchievedMilestone getAchievedMilestone() {
 		return milestone;
-	}
-
-	/**
-	 * 
-	 * @return the health calculator of the system
-	 */
-	private HealthCalculator getHealthCalculator() {
-		return healthCalculator;
 	}
 
 	/**
@@ -227,10 +221,23 @@ public abstract class System implements ISystem, Observable, Observer {
 	
 	/**
 	 * Returns a health indicator for this system.
+	 * @param calculator
 	 * @return an indicator that indicates the health of the system
 	 */
-	public HealthIndicator getHealth(){
-		return getHealthCalculator().calculateHealth(this);
+	public HealthIndicator getHealthIndicator(HealthCalculator calculator){
+		return calculator.calculateHealth(this);
+	}
+	
+	@Override
+	public List<HealthIndicator> getHealthIndicators(){
+		List<HealthIndicator> indicators = new ArrayList<HealthIndicator>();
+		HealthCalculator[]  algorithms = { new HealthCalculator1(), new HealthCalculator2(), new HealthCalculator3()};
+		
+		for (HealthCalculator healthCalculator : algorithms) {
+			indicators.add(getHealthIndicator(healthCalculator));
+		}
+		
+		return indicators;
 	}
 	
 	/**

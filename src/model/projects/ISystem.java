@@ -55,8 +55,8 @@ public interface ISystem extends Observable{
     
     /**
      * 
-     * @return the health of the system
+     * @return the health indicators of the system with different algorithms
      */
-    public HealthIndicator getHealth();
+    public List<HealthIndicator> getHealthIndicators();
 }
 
