@@ -14,7 +14,7 @@ public class CreateSubsystemCommand extends Command {
      * @param form SubsystemCreationForm.
      */
     public CreateSubsystemCommand(BugTrap bugTrap, SubsystemCreationForm form) {
-        super(bugTrap);
+        super(bugTrap, form);
         this.form = form;
     }
 

@@ -5,7 +5,9 @@ import java.util.List;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.notifications.INotification;
+import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.ShowChronologicalNotificationForm;
+import model.notifications.forms.UnregisterNotificationForm;
 
 /**
  * Controller for all Notification related things.

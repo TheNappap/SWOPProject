@@ -14,7 +14,7 @@ public class UpdateProjectCommand extends Command {
      * @param form ProjectUpdateForm.
      */
     public UpdateProjectCommand(BugTrap bugTrap, ProjectUpdateForm form) {
-        super(bugTrap);
+        super(bugTrap, form);
         this.form = form;
     }
 

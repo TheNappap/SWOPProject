@@ -14,7 +14,7 @@ public class DeleteProjectCommand extends Command {
      * @param form ProjectDeleteForm.
      */
     public DeleteProjectCommand(BugTrap bugTrap, ProjectDeleteForm form) {
-        super(bugTrap);
+        super(bugTrap, form);
         this.form = form;
     }
 

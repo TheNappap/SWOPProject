@@ -15,7 +15,7 @@ public class ForkProjectCommand extends Command {
      * @param form ProjectForkForm.
      */
     public ForkProjectCommand(BugTrap bugTrap, ProjectForkForm form) {
-        super(bugTrap);
+        super(bugTrap, form);
         this.form = form;
     }
 

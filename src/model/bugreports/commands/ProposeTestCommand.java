@@ -10,7 +10,7 @@ public class ProposeTestCommand extends Command {
     private ProposeTestForm form;
 
     public ProposeTestCommand(BugTrap bugTrap, ProposeTestForm form) {
-        super(bugTrap);
+        super(bugTrap, form);
         this.form = form;
     }
 

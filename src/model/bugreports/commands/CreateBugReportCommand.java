@@ -15,7 +15,7 @@ public class CreateBugReportCommand extends Command {
     private BugReportCreationForm form;
 
     public CreateBugReportCommand(BugTrap bugTrap, BugReportCreationForm form) {
-        super(bugTrap);
+        super(bugTrap, form);
         
         this.form = form;
     }
