@@ -10,7 +10,7 @@ public class DeclareAchievedMilestoneCommand extends Command {
     private DeclareAchievedMilestoneForm form;
 
     public DeclareAchievedMilestoneCommand(BugTrap bugTrap, DeclareAchievedMilestoneForm form) {
-        super(bugTrap);
+        super(bugTrap, form);
         this.form = form;
     }
 

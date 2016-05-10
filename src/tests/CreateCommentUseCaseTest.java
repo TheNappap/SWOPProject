@@ -22,51 +22,23 @@ import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Version;
 
-public class CreateCommentUseCaseTest {
-
-	private BugTrap bugTrap;
-
-	@Before
-	public void setUp() throws Exception {
-		//Create System.
-		bugTrap = new BugTrap();
-		
-		//Add Users.
-		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		bugTrap.getUserManager().createIssuer("", "", "" , "ISSUER");
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		
-		//Add Project.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
-		IProject project = bugTrap.getProjectManager().getProjects().get(0);
-		//Add Subsystem.
-		bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
-		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
-		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
-		//Add BugReport.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
-		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, bugTrap.getUserManager().getLoggedInUser(), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		IBugReport bugreport = bugTrap.getBugReportManager().getBugReportList().get(0);
-		//Add Comment.
-		bugTrap.getBugReportManager().addComment(bugreport, "comment1");
-		bugTrap.getUserManager().logOff();
-	}
+public class CreateCommentUseCaseTest extends BugTrapTest{
 
 	@Test
 	public void createCommentOnBugReportTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));		
+		bugTrap.getUserManager().loginAs(issuer);
 				
 		//1. The issuer indicates he wants to create a comment
 		CommentCreationForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeCommentCreationForm();
+			form = bugReportController.getCommentCreationForm();
 		} catch (UnauthorizedAccessException e1) { fail("not authorized"); }
 		
 		//2. Include use case Select Bug Report.
-		List<IBugReport> list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { bugTrap.getBugReportManager().getFilterTypes()[0] }, new String[] { "B1" });
-		
+		List<IBugReport> list = null;
+		list = bugReportController.getBugReportList();
+
 		//3. The system shows a list of all comments of the selected bug report.
 		list.get(0).getComments();
 		
@@ -75,20 +47,24 @@ public class CreateCommentUseCaseTest {
 		
 		//5. The system asks for the text of the comment.
 		//6. The issuer writes his comment.
-		form.setText("comment2");
+		form.setText("No! Clippy will become annoying :o");
 		
 		//7. The system adds the comment to the selected use case.
-		bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
+		try {
+			bugReportController.createComment(form);
+		} catch (UnauthorizedAccessException e) {
+			fail(e.getMessage());
+		}
 
 		//Confirm.
 		assertEquals(2, list.get(0).getComments().size());
-		assertTrue(list.get(0).getComments().get(1).getText().equals("comment2"));
+		assertTrue(list.get(0).getComments().get(1).getText().equals("No! Clippy will become annoying :o"));
 	}
 	
 	@Test
 	public void createCommentOnCommentTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));		
+		bugTrap.getUserManager().loginAs(prog);
 				
 		//1. The issuer indicates he wants to create a comment.
 		CommentCreationForm form = null;
@@ -97,7 +73,7 @@ public class CreateCommentUseCaseTest {
 		} catch (UnauthorizedAccessException e1) { fail("not authorized"); }
 		
 		//2. Include use case Select Bug Report.
-		List<IBugReport> list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { bugTrap.getBugReportManager().getFilterTypes()[0] }, new String[] { "B1" });
+		List<IBugReport> list = bugReportController.getBugReportList();
 		
 		//3. The system shows a list of all comments of the selected bug report.
 		List<Comment> comments = list.get(0).getComments();
@@ -107,14 +83,18 @@ public class CreateCommentUseCaseTest {
 		
 		//5. The system asks for the text of the comment.
 		//6. The issuer writes his comment.
-		form.setText("comment2");
+		form.setText("Aren't you exaggerating?");
 		
 		//7. The system adds the comment to the selected use case.
-		bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
+		try {
+			bugReportController.createComment(form);
+		} catch (UnauthorizedAccessException e) {
+			fail(e.getMessage());
+		}
 
 		//Confirm.
 		assertEquals(1, comments.get(0).getComments().size());
-		assertTrue(comments.get(0).getComments().get(0).getText().equals("comment2"));
+		assertTrue(comments.get(0).getComments().get(0).getText().equals("Aren't you exaggerating?"));
 	}
 	
 	@Test
@@ -128,11 +108,11 @@ public class CreateCommentUseCaseTest {
 	@Test
 	public void varsNotFilledTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		bugTrap.getUserManager().loginAs(issuer);
 		
 		try {
 			CommentCreationForm form = bugTrap.getFormFactory().makeCommentCreationForm();
-			bugTrap.getBugReportManager().addComment(form.getCommentable(), form.getText());
+			bugReportController.createComment(form);
 			fail("should throw exception");
 		} 
 		catch (UnauthorizedAccessException e) { fail("not authorized"); }
@@ -142,12 +122,15 @@ public class CreateCommentUseCaseTest {
 	@Test
 	public void nullFormTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		bugTrap.getUserManager().loginAs(issuer);
 		
 		try {
-			bugTrap.getBugReportManager().addComment(null, null);
+			bugReportController.createComment(null);
 			fail("should throw exception");
 		}
 		catch (IllegalArgumentException e) { }
+		catch (UnauthorizedAccessException e) {
+			fail("not authorized");
+		}
 	}
 }

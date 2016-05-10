@@ -10,7 +10,7 @@ public class ProposePatchCommand extends Command {
     private ProposePatchForm form;
 
     public ProposePatchCommand(BugTrap bugTrap, ProposePatchForm form) {
-        super(bugTrap);
+        super(bugTrap, form);
         this.form = form;
     }
 

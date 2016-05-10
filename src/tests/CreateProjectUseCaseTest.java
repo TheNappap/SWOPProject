@@ -19,23 +19,13 @@ import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectForkForm;
 import model.users.IUser;
 
-public class CreateProjectUseCaseTest extends UseCaseTest {
-
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
-		//Add User
-		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-	}
+public class CreateProjectUseCaseTest extends BugTrapTest {
 
 	@SuppressWarnings("deprecation")
 	@Test
 	public void createNewProjectTest() {
 		//Log in as a administrator, they create Projects.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		bugTrap.getUserManager().loginAs(admin);
 		
 		//Holds the project we're creating.
 		IProject project = null; 
@@ -100,17 +90,6 @@ public class CreateProjectUseCaseTest extends UseCaseTest {
 		IUser admin = userController.getAdmins().get(0);
 		IUser dev = userController.getDevelopers().get(0);
 	
-		//Add some project to the system to fork.
-		createNewProjectTest();
-		
-		DeclareAchievedMilestoneForm milestoneForm = null;
-		
-		userController.loginAs(dev);
-		try {
-			milestoneForm = projectController.getDeclareAchievedMilestoneForm();
-			milestoneForm.setNumbers(Arrays.asList(new Integer[] {2, 1, 2, 1, 2, 1}));
-			milestoneForm.setSystem(projectController.getProjectList().get(0));
-		} catch (UnauthorizedAccessException e1) { fail("not authorised.");}
 		userController.loginAs(admin);
 		
 		//1. The system shows a list of existing projects
@@ -143,7 +122,7 @@ public class CreateProjectUseCaseTest extends UseCaseTest {
 		} catch (UnauthorizedAccessException e) { fail("not authorised"); }
 		
 		
-		IProject fork = projectController.getProjectList().get(1);
+		IProject fork = projectController.getProjectList().get(projectController.getProjectList().size()-1);
 
 		//Confirm.
 		assertEquals(fork, project);
@@ -167,18 +146,18 @@ public class CreateProjectUseCaseTest extends UseCaseTest {
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Developers shouldn't be able to make projects/forks. 
-		userController.loginAs(userController.getDevelopers().get(0));
+		userController.loginAs(prog);
 		try {
 			projectController.getProjectCreationForm();
-			fail("Developer's can't create Projects!");
+			fail("Developers can't create Projects!");
 		} catch (UnauthorizedAccessException e) { }
 		try {
 			projectController.getProjectForkForm();
-			fail("Developer's can't fork Projects!");
+			fail("Developers can't fork Projects!");
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Issuers shouldn't be able to make projects/forks. 
-		userController.loginAs(userController.getIssuers().get(0));
+		userController.loginAs(issuer);
 		try {
 			projectController.getProjectCreationForm();
 			fail("Issuers can't create Projects!");
@@ -192,7 +171,7 @@ public class CreateProjectUseCaseTest extends UseCaseTest {
 	@Test
 	public void invalidInputTest() {
 		//login
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
 			projectController.createProject(projectController.getProjectCreationForm());

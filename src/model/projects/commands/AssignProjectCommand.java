@@ -15,7 +15,7 @@ public class AssignProjectCommand extends Command {
      * @param form ProjectAssignForm.
      */
     public AssignProjectCommand(BugTrap bugTrap,ProjectAssignForm form) {
-        super(bugTrap);
+        super(bugTrap, form);
         this.form = form;
     }
 

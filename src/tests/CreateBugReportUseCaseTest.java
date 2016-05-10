@@ -21,34 +21,11 @@ import model.projects.ISubsystem;
 import model.projects.Version;
 import model.users.IUser;
 
-public class CreateBugReportUseCaseTest extends UseCaseTest {
-
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
-		//Make Users.
-		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
-		
-		//Log in as Administrator and create project/subsystem.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
-		IProject project = bugTrap.getProjectManager().getProjects().get(0);
-		bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
-		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
-		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
-		
-		//Log in as Developer, add BugReport and log off.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
-		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, bugTrap.getUserManager().getUser("DEV"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		bugTrap.getUserManager().logOff();
-	}
+public class CreateBugReportUseCaseTest extends BugTrapTest {
 
 	@Test
 	public void createBugReportTest() {
-		String[] users = new String[]{"DEV", "ISSUER"};
+		IUser[] users = new IUser[] {tester, issuer, prog, lead};
 		
 		for (int iter = 0; iter < users.length; iter++) {
 			userController.loginAs(users[iter]);
@@ -132,5 +109,4 @@ public class CreateBugReportUseCaseTest extends UseCaseTest {
 			fail("Can't create BugReport as Administrator");
 		} catch (UnauthorizedAccessException e) { }
 	}
-
 }

@@ -11,7 +11,7 @@ public class UpdateBugReportCommand extends Command {
     private BugReportUpdateForm form;
 
     public UpdateBugReportCommand(BugTrap bugTrap, BugReportUpdateForm form) {
-        super(bugTrap);
+        super(bugTrap, form);
         this.form = form;
     }
 
