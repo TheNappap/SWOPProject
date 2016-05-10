@@ -1,5 +1,9 @@
 package tests;
 
+import controllers.BugReportController;
+import controllers.NotificationController;
+import controllers.ProjectController;
+import controllers.UserController;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
@@ -8,6 +12,7 @@ import model.projects.ISubsystem;
 import model.projects.Version;
 import model.users.Developer;
 import model.users.IUser;
+import model.users.Issuer;
 import org.junit.Before;
 
 import java.util.ArrayList;
@@ -20,11 +25,16 @@ import java.util.Date;
  */
 public class BugTrapTest {
     protected BugTrap bugTrap;
+    protected BugReportController bugReportController;
+    protected NotificationController notificationController;
+    protected ProjectController projectController;
+    protected UserController userController;
 
     protected IUser admin;
     protected Developer lead;
     protected Developer prog;
     protected Developer tester;
+    protected Issuer issuer;
 
     protected IProject office;
     protected ISubsystem word;
@@ -42,12 +52,17 @@ public class BugTrapTest {
     public void setUp() {
         //Make System.
         bugTrap = new BugTrap();
+        bugReportController = new BugReportController(bugTrap);
+        notificationController = new NotificationController(bugTrap);
+        projectController = new ProjectController(bugTrap);
+        userController = new UserController(bugTrap);
 
         //Add Users.
-        admin = bugTrap.getUserManager().createAdmin("Bill", "", "Gates", "THE BOSS");
-        lead = bugTrap.getUserManager().createDeveloper("Barack", "", "Obama", "President");
-        prog = bugTrap.getUserManager().createDeveloper("Edsger", "W.", "Dijkstra", "Inventor");
-        tester = bugTrap.getUserManager().createDeveloper("Edsger", "W.", "Dijkstra", "Controller");
+        admin = bugTrap.getUserManager().createAdmin("Bill", "", "Gates", "ADMIN");
+        lead = bugTrap.getUserManager().createDeveloper("Barack", "", "Obama", "LEAD");
+        prog = bugTrap.getUserManager().createDeveloper("Edsger", "W.", "Dijkstra", "PROGRAMMER");
+        tester = bugTrap.getUserManager().createDeveloper("Edsger", "W.", "Dijkstra", "TESTER");
+        issuer = bugTrap.getUserManager().createIssuer("Geen", "", "Idee", "ISSUER");
         bugTrap.getUserManager().loginAs(admin);
 
         //Add Project, assign some people.
@@ -72,6 +87,7 @@ public class BugTrapTest {
         //Add BugReports.
         bugTrap.getBugReportManager().addBugReport("Clippy bug!", "Clippy only pops up once an hour. Should be more.", new Date(1303), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
         clippyBug = clippy.getBugReports().get(0);
+        bugTrap.getBugReportManager().addComment(clippyBug, "Agreed! I propose once every 5 minutes!");
         bugTrap.getBugReportManager().addBugReport("Word crashes when Clippy pops up", "...", new Date(1305), word, lead, Arrays.asList(new IBugReport[] { clippyBug }), Arrays.asList(new IUser[] { prog }), BugTag.UNDERREVIEW);
         wordBug = word.getBugReports().get(0);
 

@@ -10,7 +10,7 @@ public class CreateCommentCommand extends Command {
     private CommentCreationForm form;
 
     public CreateCommentCommand(BugTrap bugTrap, CommentCreationForm form) {
-        super(bugTrap);
+        super(bugTrap, form);
         this.form = form;
     }
 

@@ -2,6 +2,8 @@ package model;
 
 import controllers.exceptions.UnauthorizedAccessException;
 
+import java.util.IllegalFormatException;
+
 public abstract class Command {
 	
     private BugTrap bugTrap; //BugTrap system
@@ -10,8 +12,10 @@ public abstract class Command {
      * Command to do this with the System.
      * @param bugTrap BugTrap system.
      */
-    public Command(BugTrap bugTrap) {
+    public Command(BugTrap bugTrap, Form form) {
         this.bugTrap = bugTrap;
+        if (form == null)
+            throw new IllegalArgumentException("Form cannot be null");
     }
 
     /**

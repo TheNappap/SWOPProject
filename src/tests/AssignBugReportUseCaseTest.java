@@ -4,63 +4,23 @@ package tests;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import model.bugreports.IBugReport;
-import model.bugreports.bugtag.BugTag;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportAssignForm;
 import model.projects.IProject;
-import model.projects.ISubsystem;
-import model.projects.Version;
-import model.users.Developer;
 import model.users.IUser;
 
-public class AssignBugReportUseCaseTest {
-
-	private BugTrap bugTrap;
-
-	@Before
-	public void setUp() throws Exception {
-		//Make System.
-		bugTrap = new BugTrap();
-		
-		//Add Users.
-		IUser admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		Developer lead = bugTrap.getUserManager().createDeveloper("", "", "", "LEAD");
-		Developer prog = bugTrap.getUserManager().createDeveloper("", "", "", "PROG");
-		Developer tester = bugTrap.getUserManager().createDeveloper("", "", "", "TESTER");
-		bugTrap.getUserManager().loginAs(admin);
-		
-		//Add Project, assign some people.
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
-		IProject project = bugTrap.getProjectManager().getProjects().get(0);
-		project.setLeadDeveloper(lead);
-		project.addProgrammer(prog);
-		project.addTester(tester);
-		//Add Subsystem.
-		bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
-		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
-		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
-		bugTrap.getUserManager().loginAs(lead);
-		//Add BugReport.
-		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		
-		//Log off.
-		bugTrap.getUserManager().logOff();	
-	}
+public class AssignBugReportUseCaseTest extends BugTrapTest {
 
 	@Test
 	public void assignBugReportAsLeadTest() throws UnauthorizedAccessException {
 		//Log in.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("LEAD"));
+		bugTrap.getUserManager().loginAs(lead);
 		
 		//1. The developer indicates he wants to assign a developer to a bug report.
 		BugReportAssignForm form = null;
@@ -80,7 +40,7 @@ public class AssignBugReportUseCaseTest {
 		form.setDeveloper(devs.get(0));
 		
 		//5. The systems assigns the selected developers to the selected bug report.
-		bugTrap.getBugReportManager().assignToBugReport(form.getBugReport(), form.getDeveloper());
+		bugReportController.assignToBugReport(form);
 
 		assertTrue(list.get(0).getAssignees().get(0) == form.getDeveloper());
 	}
@@ -88,7 +48,7 @@ public class AssignBugReportUseCaseTest {
 	@Test
 	public void assignBugReportAsTesterTest() throws UnauthorizedAccessException {
 		//Log in.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("TESTER"));
+		bugTrap.getUserManager().loginAs(tester);
 
 		//1. The developer indicates he wants to assign a developer to a bug report.
 		BugReportAssignForm form = null;
@@ -107,7 +67,7 @@ public class AssignBugReportUseCaseTest {
 		form.setDeveloper(devs.get(0));
 		
 		//5. The systems assigns the selected developers to the selected bug report.
-		bugTrap.getBugReportManager().assignToBugReport(form.getBugReport(), form.getDeveloper());
+		bugReportController.assignToBugReport(form);
 
 		assertTrue(list.get(0).getAssignees().get(0) == form.getDeveloper());
 	}
@@ -115,8 +75,7 @@ public class AssignBugReportUseCaseTest {
 	@Test (expected = UnauthorizedAccessException.class)
 	public void loggedInDevIsNotLeadOrTester() throws UnauthorizedAccessException {
 		//login
-		IUser dev = bugTrap.getUserManager().getUser("PROG");
-		bugTrap.getUserManager().loginAs(dev);
+		bugTrap.getUserManager().loginAs(prog);
 		
 		//step 1
 		BugReportAssignForm form = null;
@@ -149,8 +108,8 @@ public class AssignBugReportUseCaseTest {
 		}
 		else
 			fail("should not be lead or tester");
-		
-		bugTrap.getBugReportManager().assignToBugReport(form.getBugReport(), form.getDeveloper());
+
+		bugReportController.assignToBugReport(form);
 
 		assertTrue(list.get(0).getAssignees().get(0) == form.getDeveloper());
 			
@@ -172,7 +131,7 @@ public class AssignBugReportUseCaseTest {
 		bugTrap.getUserManager().loginAs(dev);
 		
 		BugReportAssignForm form = bugTrap.getFormFactory().makeBugReportAssignForm();
-		bugTrap.getBugReportManager().assignToBugReport(form.getBugReport(), form.getDeveloper());
+		bugReportController.assignToBugReport(form);
 	}
 	
 	@Test (expected = NullPointerException.class)
@@ -180,6 +139,6 @@ public class AssignBugReportUseCaseTest {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("LEAD");
 		bugTrap.getUserManager().loginAs(dev);
-		bugTrap.getBugReportManager().assignToBugReport(null, null);
+		bugReportController.assignToBugReport(null);
 	}
 }
