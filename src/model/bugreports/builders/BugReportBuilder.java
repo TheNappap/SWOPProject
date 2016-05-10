@@ -32,6 +32,7 @@ public class BugReportBuilder {
 	private ISubsystem subsystem; 		//Subsystem the BugReport belongs to.
 	private IUser issuedBy; 			//Issuer who issued the BugReport.
 	private List<IBugReport> dependsOn; //Other BugReports the BugReports depends on.
+	private int impactFactor; //The impact factor of the bug report
 	
 	//Optional Parameters
 	private Date creationDate 	= new Date();	//The day this BugReport was created.
@@ -136,6 +137,16 @@ public class BugReportBuilder {
 	}
 	
 	/**
+	 * Set the impact factor for the BugReport.
+	 * @param impactFactor The impact factor
+	 * @return this.
+	 */
+	public BugReportBuilder setImpactFactor(int impactFactor) {
+		this.impactFactor = impactFactor;
+		return this;
+	}
+	
+	/**
 	 * Set the comments on the BugReport.
 	 * @param comments The InitialComments on the BugReport.
 	 * @return this.
@@ -192,7 +203,7 @@ public class BugReportBuilder {
 	 */
 	public BugReport getBugReport() {
 		validate();
-		return new BugReport(bugTrap, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, milestone, tests, patches);
+		return new BugReport(bugTrap, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, milestone, tests, patches, impactFactor);
 	}
 
 	//Assure all variables are not null.
@@ -209,6 +220,7 @@ public class BugReportBuilder {
 		if (observers == null)		throw new NullPointerException("Observers is null");
 		if (tests == null)		throw new NullPointerException("tests is null");
 		if (patches == null)		throw new NullPointerException("patches is null");
+		if (impactFactor == 0)		throw new IllegalArgumentException("the impact factor is 0");
 	}
 
 }

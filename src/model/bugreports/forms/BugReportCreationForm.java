@@ -15,7 +15,8 @@ public class BugReportCreationForm implements Form {
 	private String title;	//A Title for the BugReport.
 	private String description;	//A description for the BugReport.
 	private ISubsystem subsystem;	//The Subsystem the BugReport is about.
-	private List<IBugReport> dependsOn;	//List of BugReports the BugReport depends on.7
+	private List<IBugReport> dependsOn;	//List of BugReports the BugReport depends on.
+	private int impactFactor; //Impact factor of the bug report
 
 	// Optional
 	private String errorMessage;
@@ -34,6 +35,7 @@ public class BugReportCreationForm implements Form {
 		this.stackTrace 	= null;
 		this.reproduction	= null;
 		this.targetMilestone = null;
+		this.impactFactor = 1;
 	}
 
 	@Override
@@ -43,6 +45,7 @@ public class BugReportCreationForm implements Form {
 		if (getDescription() == null) throw new NullPointerException("Description is null");
 		if (getSubsystem() == null) throw new NullPointerException("Subsystem is null");
 		if (getDependsOn() == null) throw new NullPointerException("DependsOn is null");
+		if(!impactFactorIsValid(getImpactFactor())) throw new IllegalArgumentException("The impact factor should >0 and <=10");
 	}
 
 	//Getters and Setters
@@ -129,4 +132,25 @@ public class BugReportCreationForm implements Form {
 	public void setTargetMilestone(TargetMilestone targetMilestone) {
 		this.targetMilestone = targetMilestone;
 	}
+
+	public int getImpactFactor() {
+		return impactFactor;
+	}
+
+	public void setImpactFactor(int impactFactor) {
+		if(!impactFactorIsValid(impactFactor)) throw new IllegalArgumentException("The impact factor should >0 and <=10");
+		
+		this.impactFactor = impactFactor;
+	}
+
+	private boolean impactFactorIsValid(int impactFactor) {
+		if(impactFactor <= 0){
+			return false;
+		}
+		if(impactFactor > 10){
+			return false;
+		}
+		return true;
+	}
+	
 }
