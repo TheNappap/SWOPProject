@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.BugTrap;
+import model.bugreports.IBugReport;
 import model.notifications.Observable;
 import model.notifications.observers.Observer;
 import model.notifications.signalisations.Signalisation;
@@ -106,6 +107,21 @@ public abstract class System implements ISystem, Observable, Observer {
 		}
 		return subs;
 	}
+	
+	@Override
+	public List<IBugReport> getAllBugReports() {
+		List<IBugReport> reports = new ArrayList<>();
+		reports.addAll(getBugReports());
+		for (ISubsystem s : subsystems)
+			reports.addAll(s.getAllBugReports());
+		return reports;
+	}
+	
+	/**
+	 * 
+	 * @return A list of the direct bug reports
+	 */
+	public abstract List<IBugReport> getBugReports();
 
 	@Override
 	public AchievedMilestone getAchievedMilestone() {

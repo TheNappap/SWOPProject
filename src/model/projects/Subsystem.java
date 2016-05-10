@@ -79,29 +79,18 @@ public class Subsystem extends System implements ISubsystem {
 	public List<IBugReport> getBugReports() {
 		List<IBugReport> reports = new ArrayList<>();
 		reports.addAll(this.bugReports);
-		for (ISubsystem s : subsystems)
-			reports.addAll(s.getBugReports());
 		return reports;
 	}
 
-	/**
-	 * Splits a subsystem into two new subsystems with given names and descriptions.
-	 * The first new subsystem receives the given bug reports and subsystems.
-	 * The second new subsystem receives the remaining bug reports and subsystems.
-	 * @param nameFor1 The name for the first new subsystem
-	 * @param nameFor2 The name for the second new subsystem
-	 * @param descriptionFor1 The description for the first new subsystem
-	 * @param descriptionFor2 The description for the second new subsystem
-	 * @param bugReportsFor1 The bug reports for the first new subsystem
-	 * @param subsystemsFor1 The subsystems for the first new subsystem
-	 */
-	public void splitSubsystem(String nameFor1, String nameFor2, String descriptionFor1, String descriptionFor2,
+	@Override
+	public void split(String nameFor1, String nameFor2, String descriptionFor1, String descriptionFor2,
 			List<IBugReport> bugReportsFor1, List<ISubsystem> subsystemsFor1){
 		Subsystem sub1 = new Subsystem(bugTrap, nameFor1, descriptionFor1, parent, null, project, getAchievedMilestone());
 		Subsystem sub2 = new Subsystem(bugTrap, nameFor2, descriptionFor2, parent, null, project, getAchievedMilestone());
 		
 		//split subsystems
-		for (Subsystem subsystem : this.subsystems) {	
+		for (int i = 0; i < this.subsystems.size(); i++) {
+			Subsystem subsystem = this.subsystems.get(i);
 			if(subsystemsFor1.contains(subsystem)){
 				//subsystem for first new subsystem
 				sub1.subsystems.add(subsystem); 
@@ -110,10 +99,12 @@ public class Subsystem extends System implements ISubsystem {
 				sub2.subsystems.add(subsystem); 
 			}
 			this.subsystems.remove(subsystem);
+			i--;
 		}
 		
 		//split bug reports
-		for (BugReport bugReport : this.bugReports) {	
+		for (int i = 0; i < this.bugReports.size(); i++) {
+			BugReport bugReport = this.bugReports.get(i);
 			if(bugReportsFor1.contains(bugReport)){
 				//bug report for first new subsystem
 				sub1.bugReports.add(bugReport);
@@ -121,29 +112,24 @@ public class Subsystem extends System implements ISubsystem {
 				//bug report for second new subsystem
 				sub2.bugReports.add(bugReport);
 			}
-			this.bugReports.remove(bugReport);	
+			this.bugReports.remove(bugReport);
+			i--;
 		}
 		
 		//add new subsystems
 		parent.subsystems.add(sub1);
 		parent.subsystems.add(sub2);
 		
-		this.terminate();
+		//this.terminate();
 		parent.subsystems.remove(this);
 	}
 	
 
-	/**
-	 * Merges this subsystem with a given subsystem that is a child, parent or sibling of this subsystem.
-	 * The new merged subsystem gets a given name and description.
-	 * @param name
-	 * @param description
-	 * @param iSubsystem
-	 */
-	public void mergeSubsystem(String name, String description, ISubsystem iSubsystem){
+	@Override
+	public void merge(String name, String description, ISubsystem iSubsystem){
 		//if parent and child merge, the parent has the responsibility
 		if(this.getParent().equals(iSubsystem)){
-			((Subsystem) iSubsystem).mergeSubsystem(name, description, this);
+			((Subsystem) iSubsystem).merge(name, description, this);
 			return;
 		}
 		

@@ -51,7 +51,7 @@ public interface ISystem extends Observable{
      *
      * @return List of all bug reports related to this system or its subsystems.
      */
-    public List<IBugReport> getBugReports();
+    public List<IBugReport> getAllBugReports();
     
     /**
      * 

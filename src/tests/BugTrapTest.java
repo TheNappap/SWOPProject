@@ -87,10 +87,10 @@ public class BugTrapTest {
         //Add BugReports.
         bugTrap.getUserManager().loginAs(lead);
         bugTrap.getBugReportManager().addBugReport("Clippy bug!", "Clippy only pops up once an hour. Should be more.", new Date(1303), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, 5);
-        clippyBug = clippy.getBugReports().get(0);
+        clippyBug = clippy.getAllBugReports().get(0);
         bugTrap.getBugReportManager().addComment(clippyBug, "Agreed! I propose once every 5 minutes!");
         bugTrap.getBugReportManager().addBugReport("Word crashes when Clippy pops up", "...", new Date(1305), word, lead, Arrays.asList(new IBugReport[] { clippyBug }), Arrays.asList(new IUser[] { prog }), BugTag.UNDERREVIEW, 7);
-        wordBug = word.getBugReports().get(0);
+        wordBug = word.getAllBugReports().get(0);
 
         //Log off.
         bugTrap.getUserManager().logOff();

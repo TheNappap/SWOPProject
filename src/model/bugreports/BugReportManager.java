@@ -108,7 +108,7 @@ public class BugReportManager {
 	 * @param system The System for which to delete the BugReports
 	 */
 	public void deleteBugReportsForSystem(ISystem system) {
-		for (IBugReport report : system.getBugReports()){
+		for (IBugReport report : system.getAllBugReports()){
 			((BugReport)report).terminate();
 			bugReportList.remove(report);
 		}
