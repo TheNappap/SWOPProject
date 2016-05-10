@@ -199,7 +199,7 @@ public class Project extends System implements IProject {
 			((Subsystem) sys).terminate();
 		}
 
-		bugTrap.getNotificationManager().deleteRegistrationsForObservable(this);
+		bugTrap.getNotificationManager().removeObservable(this);
 		super.terminate();
 		projectTeam.terminate();
 		projectTeam = null;

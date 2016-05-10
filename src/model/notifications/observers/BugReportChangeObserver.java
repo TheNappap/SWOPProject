@@ -18,8 +18,13 @@ public class BugReportChangeObserver extends ObserverWithMailbox {
 
 	@Override
 	public void signal(Signalisation signalisation) {
-		if (signalisation.getType() == NotificationType.BUGREPORT_CHANGE) {
+		if (signalisation.getType() == getNotificationType()) {
 			getMailbox().addNotification("The bugreport '" + signalisation.getBugReport().getTitle() + "' has received the tag " + signalisation.getBugReport().getBugTag());
 		}
+	}
+
+	@Override
+	public NotificationType getNotificationType() {
+		return NotificationType.BUGREPORT_CHANGE;
 	}
 }

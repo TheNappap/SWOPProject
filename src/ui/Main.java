@@ -11,7 +11,6 @@ import controllers.ProjectController;
 import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
-import model.FormFactory;
 import model.bugreports.IBugReport;
 import model.bugreports.TargetMilestone;
 import model.bugreports.bugtag.BugTag;
@@ -19,10 +18,7 @@ import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.FilterType;
 import model.bugreports.forms.*;
-import model.notifications.INotification;
-import model.notifications.Observable;
-import model.notifications.Registration;
-import model.notifications.RegistrationType;
+import model.notifications.*;
 import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.ShowChronologicalNotificationForm;
 import model.notifications.forms.UnregisterNotificationForm;
@@ -306,11 +302,7 @@ public class Main {
 		}
 		
 		IProject project = null;
-		try {
-			project = selectProject(projectController.getProjectList());
-		} catch (UnauthorizedAccessException e1) {
-			System.out.println(e1.getMessage());
-		}
+		project = selectProject(projectController.getProjectList());
 		form.setProject(project);
 		
 		System.out.println("Enter the name of the project:");
@@ -378,12 +370,7 @@ public class Main {
 		}
 		
 		IProject project = null;
-		try {
-			project = selectProject(projectController.getProjectList());
-		} catch (UnauthorizedAccessException e) {
-			System.out.println(e.getMessage());
-			return;
-		}
+		project = selectProject(projectController.getProjectList());
 		form.setProject(project);
 		
 		try {
@@ -396,21 +383,18 @@ public class Main {
 	
 	public static void showProject() {
 		IProject project = null;
-		try {
-			project = selectProject(projectController.getProjectList());
-			System.out.println(" -- " + project.getName() + " -- ");
-			System.out.println(" Description: " + project.getDescription());
-			System.out.println(" Budget estimate: " + project.getBudgetEstimate());
-			System.out.println(" Creation date: " + project.getCreationDate().toString());
-			System.out.println(" Start date: " + project.getStartDate().toString());
-			System.out.println(" Version: " + project.getVersion());
-			
-			for (ISubsystem system : project.getAllDirectOrIndirectSubsystems()) {
-				System.out.println(" -- " + system.getName() + " -- ");
-				System.out.println(" Description: " + system.getDescription());
-			}
-		} catch (UnauthorizedAccessException e) {
-			System.out.println(e.getMessage());
+
+		project = selectProject(projectController.getProjectList());
+		System.out.println(" -- " + project.getName() + " -- ");
+		System.out.println(" Description: " + project.getDescription());
+		System.out.println(" Budget estimate: " + project.getBudgetEstimate());
+		System.out.println(" Creation date: " + project.getCreationDate().toString());
+		System.out.println(" Start date: " + project.getStartDate().toString());
+		System.out.println(" Version: " + project.getVersion());
+
+		for (ISubsystem system : project.getAllDirectOrIndirectSubsystems()) {
+			System.out.println(" -- " + system.getName() + " -- ");
+			System.out.println(" Description: " + system.getDescription());
 		}
 	}
 	
@@ -630,33 +614,28 @@ public class Main {
 				selection = 0;
 		}
 
-		try {
-			Observable observable = null;
-			switch (selection) {
-				case 1:
-					observable = selectProject(projectController.getProjectList());
-					break;
-				case 2:
-					List<IProject> ps = projectController.getProjectList();
-					IProject p = selectProject(ps);
-					observable = selectSubsystem(p.getAllDirectOrIndirectSubsystems());
-					break;
-				case 3:
-					observable = selectBugReport();
-					break;
-			}
-			form.setObservable(observable);
-		} catch (UnauthorizedAccessException e) {
-			System.out.println(e.getMessage());
-			return;
+		Observable observable = null;
+		switch (selection) {
+			case 1:
+				observable = selectProject(projectController.getProjectList());
+				break;
+			case 2:
+				List<IProject> ps = projectController.getProjectList();
+				IProject p = selectProject(ps);
+				observable = selectSubsystem(p.getAllDirectOrIndirectSubsystems());
+				break;
+			case 3:
+				observable = selectBugReport();
+				break;
 		}
+		form.setObservable(observable);
 
-		form.setRegistrationType(selectRegistrationType());
-		if (form.getRegistrationType() == RegistrationType.BUGREPORT_SPECIFIC_TAG)
+		form.setNotificationType(selectNotificationType());
+		if (form.getRegistrationType() == NotificationType.BUGREPORT_SPECIFIC_TAG)
 			form.setTag(selectBugTag());
 
 		try {
-			notificationController.registerForNotification(form);
+			notificationController.registerNotification(form);
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
 			return;
@@ -674,7 +653,7 @@ public class Main {
 			return;
 		}
 
-		List<Registration> registrations = null;
+		List<IRegistration> registrations = null;
 		try {
 			registrations = notificationController.getRegistrations();
 		} catch (UnauthorizedAccessException e) {
@@ -685,7 +664,7 @@ public class Main {
 		form.setRegistration(selectRegistration(registrations));
 
 		try {
-			notificationController.unregisterForNotification(form);
+			notificationController.unregisterNotification(form);
 		} catch (UnauthorizedAccessException e) {
 			System.out.println(e.getMessage());
 			return;
@@ -754,27 +733,22 @@ public class Main {
 		}
 
 		ISystem sys = null;
-		try {
-			IProject project = selectProject(projectController.getProjectList());
+		IProject project = selectProject(projectController.getProjectList());
 
-			boolean valid = false;
-			while (!valid) {
-				System.out.println("Do you want to declare a milestone for the entire project? (y/n)");
-				String raw = input.nextLine();
-				if (raw.equals("y")) {
-					sys = project;
-					valid = true;
-				} else if (raw.equals("n")) {
-					sys = selectSubsystem(project.getAllDirectOrIndirectSubsystems());
-					valid = true;
+		boolean valid = false;
+		while (!valid) {
+			System.out.println("Do you want to declare a milestone for the entire project? (y/n)");
+			String raw = input.nextLine();
+			if (raw.equals("y")) {
+				sys = project;
+				valid = true;
+			} else if (raw.equals("n")) {
+				sys = selectSubsystem(project.getAllDirectOrIndirectSubsystems());
+				valid = true;
 
-					System.out.println("Current milestone: ");
-					System.out.println(" " + sys.getAchievedMilestone());
-				}
+				System.out.println("Current milestone: ");
+				System.out.println(" " + sys.getAchievedMilestone());
 			}
-		} catch (UnauthorizedAccessException e) {
-			System.out.println(e.getMessage());
-			return;
 		}
 		form.setSystem(sys);
 
@@ -1034,30 +1008,30 @@ public class Main {
 		return numbers;
 	}
 
-	private static RegistrationType selectRegistrationType() {
+	private static NotificationType selectNotificationType() {
 		while (true) {
 			System.out.println("Select a registration type by entering its numner");
 
 			int number = 1;
-			for (RegistrationType type : RegistrationType.values()) {
+			for (NotificationType type : NotificationType.values()) {
 				System.out.println(number + ". " + type.toString());
 				number++;
 			}
 
 			int selected = input.nextInt();
 			input.nextLine();
-			if (selected <= RegistrationType.values().length)
-				return RegistrationType.values()[selected-1];
+			if (selected <= NotificationType.values().length)
+				return NotificationType.values()[selected-1];
 		}
 	}
 
-	private static Registration selectRegistration(List<Registration> registrations) {
+	private static IRegistration selectRegistration(List<IRegistration> registrations) {
 		while (true) {
 			try {
 				System.out.println("Select a registration by entering its number: ");
 				int number = 1;
-				for (Registration registration : registrations) {
-					System.out.println(number + ". " + registration.getRegistrationType() + " " + registration.getObservable());
+				for (IRegistration registration : registrations) {
+					System.out.println(number + ". " + registration.getNotificationType() + " " + registration.getObserves());
 					number++;
 				}
 

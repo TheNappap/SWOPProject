@@ -105,18 +105,13 @@ public class CreateCommentUseCaseTest extends BugTrapTest{
 		} catch (UnauthorizedAccessException e) { }
 	}
 	
-	@Test
-	public void varsNotFilledTest() {
+	@Test (expected = NullPointerException.class)
+	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//Log in.
 		bugTrap.getUserManager().loginAs(issuer);
-		
-		try {
-			CommentCreationForm form = bugTrap.getFormFactory().makeCommentCreationForm();
-			bugReportController.createComment(form);
-			fail("should throw exception");
-		} 
-		catch (UnauthorizedAccessException e) { fail("not authorized"); }
-		catch (IllegalArgumentException e) { }
+
+		CommentCreationForm form = bugTrap.getFormFactory().makeCommentCreationForm();
+		bugReportController.createComment(form);
 	}
 	
 	@Test

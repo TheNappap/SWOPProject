@@ -69,7 +69,7 @@ public class Subsystem extends System implements ISubsystem {
 	@Override
 	public void terminate() {
 		bugTrap.getBugReportManager().deleteBugReportsForSystem(this);
-		bugTrap.getNotificationManager().deleteRegistrationsForObservable(this);
+		bugTrap.getNotificationManager().removeObservable(this);
 
 		super.terminate();
 		project = null;

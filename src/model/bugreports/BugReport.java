@@ -339,7 +339,7 @@ public class BugReport implements IBugReport {
 	 */
 	public void terminate() {
 		((Subsystem)subsystem).removeBugReport(this);
-		bugTrap.getNotificationManager().deleteRegistrationsForObservable(this);
+		bugTrap.getNotificationManager().removeObservable(this);
 
 		issuedBy = null;
 		subsystem = null;

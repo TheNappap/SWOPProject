@@ -85,7 +85,12 @@ public class BugReportManagerTest {
 		bugTrap.getBugReportManager().addBugReport("CRITICAL", "BEEP BOOP BEEP", new Date(), new Subsystem(null, null, null, project, null, project, null), new Issuer(null, null, null, "George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
 
 		List<IBugReport> ordered = null;
-		ordered = bugTrap.getBugReportManager().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING, FilterType.FILED_BY_USER}, new String[]{"BugReport", "Michael"});
+		try {
+			ordered = bugTrap.getBugReportManager().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING, FilterType.FILED_BY_USER}, new String[]{"BugReport", "Michael"});
+		} catch (UnauthorizedAccessException e) {
+			fail("Unauthorized.");
+			e.printStackTrace();
+		}
 
 		//Correct list returned.
 		//Filters themselves are tested in BugReportFilterTest.

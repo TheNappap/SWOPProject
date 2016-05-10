@@ -13,8 +13,13 @@ public class CreateBugReportObserver extends ObserverWithMailbox {
 
 	@Override
 	public void signal(Signalisation signalisation) {
-		if (signalisation.getType() == NotificationType.CREATE_BUGREPORT) {
+		if (signalisation.getType() == getNotificationType()) {
 			getMailbox().addNotification("New bug report: '" + signalisation.getBugReport().getTitle() + "'");
 		}
+	}
+
+	@Override
+	public NotificationType getNotificationType() {
+		return NotificationType.CREATE_BUGREPORT;
 	}
 }

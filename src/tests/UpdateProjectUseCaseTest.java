@@ -14,29 +14,13 @@ import model.projects.IProject;
 import model.projects.Version;
 import model.projects.forms.ProjectUpdateForm;
 
-public class UpdateProjectUseCaseTest extends UseCaseTest {
-	
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
-		//Add Users.
-		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		
-		//Log in as an Administrator, make a Project and log off.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
-		bugTrap.getUserManager().logOff();
-	}
+public class UpdateProjectUseCaseTest extends BugTrapTest {
 
 	@Test
 	public void updateProjectTest() {
 		//login
-		userController.loginAs(userController.getAdmins().get(0));
-		
-		
+		userController.loginAs(admin);
+
 		//1. The administrator indicates he wants to update a project.
 		ProjectUpdateForm form = null;
 		try {
@@ -78,23 +62,24 @@ public class UpdateProjectUseCaseTest extends UseCaseTest {
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Developer can't update.
-		userController.loginAs(userController.getDevelopers().get(0));
+		userController.loginAs(lead);
 		try {
 			projectController.getProjectUpdateForm();
 			fail("Can't update as Developer.");
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Issuer can't update.
-		userController.loginAs(userController.getIssuers().get(0));
+		userController.loginAs(issuer);
 		try {
 			projectController.getProjectUpdateForm();
+			fail("Can't update as issuer");
 		} catch (UnauthorizedAccessException e) { }
 	}
 	
 	@Test
 	public void varsNotFilledTest() {
 		//login
-		userController.loginAs(userController.getAdmins().get(0));
+		userController.loginAs(admin);
 		
 		try {
 			ProjectUpdateForm form = projectController.getProjectUpdateForm();

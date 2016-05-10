@@ -83,7 +83,7 @@ public class CreateBugReportUseCaseTest extends BugTrapTest {
 			} catch (UnauthorizedAccessException e) { fail("not authorized"); }
 
 			//Confirm.
-			IBugReport bugReport = bugReportController.getBugReportList().get(iter + 1);
+			IBugReport bugReport = bugReportController.getBugReportList().get(bugReportController.getBugReportList().size() - 1);
 			
 			assertEquals("Bug",				bugReport.getTitle());
 			assertEquals("a Bug",			bugReport.getDescription());
