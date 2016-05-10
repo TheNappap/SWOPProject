@@ -94,21 +94,12 @@ public abstract class System implements ISystem, Observable, Observer {
 		return copy;
 	}
 	
+	@Override
 	public List<ISubsystem> getAllDirectOrIndirectSubsystems() {
 		ArrayList<ISubsystem> subs = new ArrayList<ISubsystem>();
 		for (ISubsystem s : subsystems) {
 			subs.add(s);
 			for (ISubsystem ss : s.getAllDirectOrIndirectSubsystems())
-				subs.add(ss);
-		}
-		return subs;
-	}
-
-	public List<Subsystem> getAllSubsystems() {//TODO list met subsystems en niet isubsystem? waarom deze methode? is alldirectandindirect en getsubsystems niet genoeg?
-		ArrayList<Subsystem> subs = new ArrayList<Subsystem>();
-		for (Subsystem s : subsystems) {
-			subs.add(s);
-			for (Subsystem ss : s.getAllSubsystems())
 				subs.add(ss);
 		}
 		return subs;

@@ -207,9 +207,9 @@ public class ProjectManager {
 		System system = null;
 		if (iparent == project)
 			system = project;
-		for (System s : project.getAllSubsystems())
+		for (ISystem s : project.getAllDirectOrIndirectSubsystems())
 			if (s == iparent)
-				system = s;
+				system = (System) s;
 
 		(new SubsystemBuilder(bugTrap))
 				.setDescription(description)

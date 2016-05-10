@@ -68,8 +68,9 @@ public class BugTrapTest {
         excel = bugTrap.getProjectManager().getSubsystemWithName("Excel");
         bugTrap.getProjectManager().createSubsystem("PowerPoint", "Powerfully pointless", office, office);
         powerpoint = bugTrap.getProjectManager().getSubsystemWithName("PowerPoint");
-        bugTrap.getUserManager().loginAs(lead);
+        
         //Add BugReports.
+        bugTrap.getUserManager().loginAs(lead);
         bugTrap.getBugReportManager().addBugReport("Clippy bug!", "Clippy only pops up once an hour. Should be more.", new Date(1303), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
         clippyBug = clippy.getBugReports().get(0);
         bugTrap.getBugReportManager().addBugReport("Word crashes when Clippy pops up", "...", new Date(1305), word, lead, Arrays.asList(new IBugReport[] { clippyBug }), Arrays.asList(new IUser[] { prog }), BugTag.UNDERREVIEW);

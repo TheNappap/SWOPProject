@@ -38,6 +38,14 @@ public class Subsystem extends System implements ISubsystem {
 	public IProject getProject() {
 		return project;
 	}
+	
+	/**
+	 * Sets parent
+	 * @param parent
+	 */
+	private void setParent(System parent) {
+		this.parent = parent;
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -67,6 +75,15 @@ public class Subsystem extends System implements ISubsystem {
 		project = null;
 	}
 	
+	@Override
+	public List<IBugReport> getBugReports() {
+		List<IBugReport> reports = new ArrayList<>();
+		reports.addAll(this.bugReports);
+		for (ISubsystem s : subsystems)
+			reports.addAll(s.getBugReports());
+		return reports;
+	}
+
 	/**
 	 * Splits a subsystem into two new subsystems with given names and descriptions.
 	 * The first new subsystem receives the given bug reports and subsystems.
@@ -83,37 +100,39 @@ public class Subsystem extends System implements ISubsystem {
 		Subsystem sub1 = new Subsystem(bugTrap, nameFor1, descriptionFor1, parent, null, project, getAchievedMilestone());
 		Subsystem sub2 = new Subsystem(bugTrap, nameFor2, descriptionFor2, parent, null, project, getAchievedMilestone());
 		
+		//split subsystems
 		for (Subsystem subsystem : this.subsystems) {	
 			if(subsystemsFor1.contains(subsystem)){
 				//subsystem for first new subsystem
 				sub1.subsystems.add(subsystem); 
-				this.subsystems.remove(subsystem);
 			}else{
 				//subsystem for second new subsystem
 				sub2.subsystems.add(subsystem); 
-				this.subsystems.remove(subsystem);	
 			}
+			this.subsystems.remove(subsystem);
 		}
 		
-		//TODO BUGREPORTS!
+		//split bug reports
+		for (BugReport bugReport : this.bugReports) {	
+			if(bugReportsFor1.contains(bugReport)){
+				//bug report for first new subsystem
+				sub1.bugReports.add(bugReport);
+			}else{
+				//bug report for second new subsystem
+				sub2.bugReports.add(bugReport);
+			}
+			this.bugReports.remove(bugReport);	
+		}
 		
+		//add new subsystems
 		parent.subsystems.add(sub1);
 		parent.subsystems.add(sub2);
 		
-		terminate();
+		this.terminate();
 		parent.subsystems.remove(this);
 	}
 	
 
-	@Override
-	public List<IBugReport> getBugReports() {
-		List<IBugReport> reports = new ArrayList<>();
-		reports.addAll(this.bugReports);
-		for (ISubsystem s : subsystems)
-			reports.addAll(s.getBugReports());
-		return reports;
-	}
-	
 	/**
 	 * Merges this subsystem with a given subsystem that is a child, parent or sibling of this subsystem.
 	 * The new merged subsystem gets a given name and description.
@@ -128,6 +147,7 @@ public class Subsystem extends System implements ISubsystem {
 			return;
 		}
 		
+		//new milestone is smallest achieved milestone
 		AchievedMilestone achievedMilestone = this.getAchievedMilestone();
 		if(iSubsystem.getAchievedMilestone().compareTo(achievedMilestone) < 0){
 			achievedMilestone = iSubsystem.getAchievedMilestone();
@@ -135,29 +155,47 @@ public class Subsystem extends System implements ISubsystem {
 		
 		Subsystem newSubsystem = new Subsystem(bugTrap, name, description, parent, null, project, achievedMilestone);
 		
-		//move subsystems from given subsystem (=sibling or child)
 		Subsystem subsystem = ((Subsystem) iSubsystem);
-		for (Subsystem sub : subsystem.subsystems) {
-			newSubsystem.subsystems.add(sub);
-			subsystem.subsystems.remove(sub);
-		}
-		//move subsystems from this subsystem (=sibling or parent)
-		for (Subsystem sub : this.subsystems) {
-			if(!sub.equals(subsystem)){
-				newSubsystem.subsystems.add(sub);
-				subsystem.subsystems.remove(sub);
-			}
-		}
-		
-		//TODO BUGREPORTS!
+		//Move all subsystems to the new merged subsystem
+		this.moveSubsystemsAndBugReportsTo(newSubsystem, subsystem);
+		subsystem.moveSubsystemsAndBugReportsTo(newSubsystem, this);
 		
 		//delete given subsystem (=child or sibling)
 		System parent = subsystem.parent;
 		subsystem.terminate();
 		parent.subsystems.remove(subsystem);
 		//delete this subsystem (=parent or sibling)
-		terminate();
+		this.terminate();
 		this.parent.subsystems.remove(this);
+	}
+
+	/**
+	 * Moves all subsystems and bug reports to a given new subsystem as part of merging two subsystems.
+	 * If the other subsystem in the merge is a child of this system, it isn't moved.
+	 * @param newSubsystem The new subsystem resulting in a merge
+	 * @param otherSubsystem The other subsystem merging with this subsystem
+	 */
+	private void moveSubsystemsAndBugReportsTo(Subsystem newSubsystem, Subsystem otherSubsystem) {
+		for (Subsystem sub : this.subsystems) {
+			if(!sub.equals(otherSubsystem)){
+				sub.moveToNewParent(newSubsystem);
+			}
+		}
+		for (BugReport bugReport : this.bugReports) {
+			newSubsystem.bugReports.add(bugReport);
+			this.bugReports.remove(bugReport);
+		}
+	}
+
+	/**
+	 * Moves this subsystem to a new parent.
+	 * The subsystem lists are updated.
+	 * @param parent
+	 */
+	private void moveToNewParent(Subsystem parent) {
+		parent.subsystems.add(this);
+		this.parent.subsystems.remove(this);
+		setParent(parent);
 	}
 
 	@Override
