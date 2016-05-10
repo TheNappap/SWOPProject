@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.users.IUser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,39 +19,14 @@ import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Version;
 
-public class SelectBugReportUseCaseTest extends UseCaseTest {
-
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
-		//Make Users.
-		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
-	
-		//Add a Project
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
-		IProject project = bugTrap.getProjectManager().getProjects().get(0);
-		//Add a Subsystem.
-		bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
-		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
-		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
-		//Add a BugReport.
-		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, bugTrap.getUserManager().getUser("ISSUER"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-	
-		//Log off.
-		bugTrap.getUserManager().logOff();
-	}
+public class SelectBugReportUseCaseTest extends BugTrapTest {
 
 	@Test
 	public void selectBugReportTest() {
-		String[] users = new String[]{"ISSUER", "DEV"};
+		IUser[] users = new IUser[]{issuer, lead, prog, tester};
 		
 		//Log in.
-		for (String user : users) {
+		for (IUser user : users) {
 			userController.loginAs(user);
 	
 			//1. The system shows a list of possible searching modes:
@@ -58,7 +34,7 @@ public class SelectBugReportUseCaseTest extends UseCaseTest {
 			
 			//2. The issuer selects a searching mode and provides the required search parameters.
 			FilterType type = types[0];
-			String searchingString = "B1";
+			String searchingString = "Clippy";
 			
 			//3. The system shows an ordered list of bug reports that matched the search query.
 			List<IBugReport> list = null;
@@ -70,7 +46,7 @@ public class SelectBugReportUseCaseTest extends UseCaseTest {
 			IBugReport bugReport = list.get(0);
 			
 			//Confirm.
-			assertEquals("B1", bugReport.getTitle());	
+			assertEquals("Clippy bug!", bugReport.getTitle());
 		}
 	}
 	
@@ -81,7 +57,7 @@ public class SelectBugReportUseCaseTest extends UseCaseTest {
 			fail("Must be logged in.");
 		} catch (UnauthorizedAccessException e) { }
 		
-		userController.loginAs("ADMIN");
+		userController.loginAs(admin);
 		try {
 			bugReportController.getOrderedList(null, null);
 			fail("Can't be an admin.");

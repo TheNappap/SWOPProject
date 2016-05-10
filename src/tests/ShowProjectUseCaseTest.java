@@ -5,36 +5,21 @@ import static org.junit.Assert.assertEquals;
 import java.util.Date;
 import java.util.List;
 
+import model.users.IUser;
 import org.junit.Before;
 import org.junit.Test;
 
 import model.projects.IProject;
 import model.projects.Version;
 
-public class ShowProjectUseCaseTest extends UseCaseTest {
-
-
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
-		//Add Users.
-		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		
-		//Log in as Administrator, create Project, log off.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
-		bugTrap.getUserManager().logOff();
-	}
+public class ShowProjectUseCaseTest extends BugTrapTest {
 
 	@Test
 	public void showProjectTest() {
-		String[] users = new String[]{"ISSUER", "DEV", "ADMIN"};
+		IUser[] users = new IUser[] {issuer, prog, lead, admin};
 		
 		//All users should be able to show Projects.
-		for (String user : users) {
+		for (IUser user : users) {
 			//Log in as User.
 			userController.loginAs(user);
 				
@@ -47,12 +32,12 @@ public class ShowProjectUseCaseTest extends UseCaseTest {
 			//4. The system shows a detailed overview of the selected project and all its subsystems.
 			
 			//Confirm.
-			assertEquals("name",				project.getName());
-			assertEquals("description",			project.getDescription());
+			assertEquals("Office",				project.getName());
+			assertEquals("This project is huge. Lots of subsystems",			project.getDescription());
 			assertEquals(new Date(1302),		project.getStartDate());
 			assertEquals(1234, 					project.getBudgetEstimate(), 0.01);
 			assertEquals(new Version(1, 0, 0),	project.getVersion());
-			assertEquals(0, 					project.getSubsystems().size());
+			assertEquals(3, 					project.getSubsystems().size());
 		}
 	}
 }

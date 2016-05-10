@@ -63,15 +63,14 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 		}
 
 		//Confirm.
-		Assert.assertEquals(project.getProgrammers().get(0), developer);
+		Assert.assertEquals(project.getProgrammers().get(1), developer);
 	}
 
 	@Test
 	public void assignLeadToProjectTest(){
 		//Log in.
 		bugTrap.getUserManager().loginAs(lead);
-				
-		
+
 		//1. The developer indicates he wants to assign another developer.
 		ProjectAssignForm form = null;
 		try {
@@ -136,7 +135,7 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 		List<Role> roles = project.getRolesNotAssignedTo(developer);
 		
 		//7. The lead developer selects a role.
-		Role role = roles.get(1);//Tester
+		Role role = roles.get(0); //Tester
 		assertTrue(role == Role.TESTER);
 		form.setRole(role);
 
@@ -148,7 +147,7 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 		}
 
 		//Confirm.
-		Assert.assertEquals(project.getTesters().get(0), developer);
+		Assert.assertTrue(project.getTesters().contains(developer));
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
@@ -173,7 +172,7 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 		} catch (UnauthorizedAccessException e) { }
 	}
 	
-	@Test (expected = IllegalArgumentException.class)
+	@Test (expected = NullPointerException.class)
 	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//login
 		bugTrap.getUserManager().loginAs(lead);

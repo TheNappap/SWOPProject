@@ -1,14 +1,15 @@
 package model.notifications.forms;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import model.Form;
 import model.bugreports.bugtag.BugTag;
+import model.notifications.NotificationType;
 import model.notifications.Observable;
-import model.notifications.RegistrationType;
 
 public class RegisterNotificationForm implements Form {
 
 	private Observable observable;
-	private RegistrationType registrationType;
+	private NotificationType notificationType;
 	private BugTag tag;
 	
 	public Observable getObservable() {
@@ -16,19 +17,19 @@ public class RegisterNotificationForm implements Form {
 	}
 	
 	public void setObservable(Observable observable) {
-		if (observable == null) throw new NullPointerException("Observable may not be null.");
+		if (observable == null) throw new IllegalArgumentException("Observable may not be null.");
 
 		this.observable = observable;
 	}
 	
-	public RegistrationType getRegistrationType() {
-		return registrationType;
+	public NotificationType getRegistrationType() {
+		return notificationType;
 	}
 	
-	public void setRegistrationType(RegistrationType registrationType) {
-		if (registrationType == null) throw new NullPointerException("RegistrationType may not be null.");
+	public void setNotificationType(NotificationType notificationType) {
+		if (notificationType == null) throw new IllegalArgumentException("RegistrationType may not be null.");
 
-		this.registrationType = registrationType;
+		this.notificationType = notificationType;
 	}
 
 	public BugTag getTag() {
@@ -36,7 +37,7 @@ public class RegisterNotificationForm implements Form {
 	}
 
 	public void setTag(BugTag tag) {
-		if (registrationType == RegistrationType.BUGREPORT_SPECIFIC_TAG && tag == null) throw new NullPointerException("BugTag may not be null.");
+		if (notificationType == NotificationType.BUGREPORT_SPECIFIC_TAG && tag == null) throw new NullPointerException("BugTag may not be null.");
 
 		this.tag = tag;
 	}
@@ -44,7 +45,7 @@ public class RegisterNotificationForm implements Form {
 	@Override
 	public void allVarsFilledIn() {
 		if (observable == null) throw new NullPointerException("Observable may not be null.");
-		if (registrationType == null) throw new NullPointerException("RegistrationType may not be null.");
-		if (registrationType == RegistrationType.BUGREPORT_SPECIFIC_TAG && tag == null) throw new NullPointerException("BugTag may not be null.");
+		if (notificationType == null) throw new NullPointerException("RegistrationType may not be null.");
+		if (notificationType == NotificationType.BUGREPORT_SPECIFIC_TAG && tag == null) throw new NullPointerException("BugTag may not be null.");
 	}
 }

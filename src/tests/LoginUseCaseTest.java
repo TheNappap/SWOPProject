@@ -10,17 +10,7 @@ import model.users.IUser;
 import model.users.exceptions.NoUserWithUserNameException;
 
 
-public class LoginUseCaseTest extends UseCaseTest {
-
-
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
-		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-	}
+public class LoginUseCaseTest extends BugTrapTest {
 
 	@Test
 	public void logInAdminTest() {
@@ -33,7 +23,7 @@ public class LoginUseCaseTest extends UseCaseTest {
 		//4. The system greets the user.
 		String message = userController.loginAs(user);
 		
-		Assert.assertEquals("User: ADMIN successfully logged in.",message);
+		Assert.assertEquals("User: ADMIN successfully logged in.", message);
 	}
 	
 	@Test
@@ -43,11 +33,11 @@ public class LoginUseCaseTest extends UseCaseTest {
 		//2. The system shows an overview of the users of the selected category.
 		List<IUser> list = userController.getIssuers();
 		//3. The user selects one of the shown users.
-		IUser user = list.get(0);
+		IUser user = issuer;
 		//4. The system greets the user.
 		String message = userController.loginAs(user);
 		
-		Assert.assertEquals("User: ISSUER successfully logged in.",message);
+		Assert.assertEquals("User: ISSUER successfully logged in.", message);
 	}
 	
 	@Test
@@ -61,7 +51,7 @@ public class LoginUseCaseTest extends UseCaseTest {
 		//4. The system greets the user.
 		String message = userController.loginAs(user);
 		
-		Assert.assertEquals("User: DEV successfully logged in.",message);
+		Assert.assertEquals("User: LEAD successfully logged in.", message);
 	}
 	
 	@Test (expected = NoUserWithUserNameException.class)

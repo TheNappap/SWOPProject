@@ -17,6 +17,6 @@ public class ProposePatchCommand extends Command {
 
     @Override
     public void execute() throws UnauthorizedAccessException {
-        getBugTrap().getBugReportManager().proposeTest(form.getBugReport(), form.getPatch());
+        getBugTrap().getBugReportManager().proposePatch(form.getBugReport(), form.getPatch());
     }
 }

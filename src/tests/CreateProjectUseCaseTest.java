@@ -54,7 +54,7 @@ public class CreateProjectUseCaseTest extends BugTrapTest {
 		Date creationDate = new Date();
 		try {
 			projectController.createProject(form);
-			project = projectController.getProjectList().get(0);
+			project = projectController.getProjectList().get(projectController.getProjectList().size() - 1);
 		} catch (UnauthorizedAccessException e) { fail("not authorised"); }
 
 		//Confirm.

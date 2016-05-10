@@ -5,6 +5,9 @@ import java.util.List;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.notifications.INotification;
+import model.notifications.IRegistration;
+import model.notifications.commands.RegisterForNotificationCommand;
+import model.notifications.commands.UnregisterForNotificationCommand;
 import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.ShowChronologicalNotificationForm;
 import model.notifications.forms.UnregisterNotificationForm;
@@ -24,13 +27,25 @@ public class NotificationController extends Controller{
 		return getBugTrap().getFormFactory().makeShowChronologicalNotificationForm();
 	}
 	
-//	public RegisterNotificationForm getRegisterNotificationForm() throws UnauthorizedAccessException{
-//		return getBugTrap().getFormFactory().makeRegisterNotificationForm();
-//	}
-//	
-//	public UnregisterNotificationForm getUnregisterNotificationForm() throws UnauthorizedAccessException{
-//		return getBugTrap().getFormFactory().makeUnregisterNotificationForm();
-//	}
+	public RegisterNotificationForm getRegisterNotificationForm() throws UnauthorizedAccessException{
+		return getBugTrap().getFormFactory().makeRegisterForNotificationForm();
+	}
+
+	public UnregisterNotificationForm getUnregisterNotificationForm() throws UnauthorizedAccessException{
+		return getBugTrap().getFormFactory().makeUnregisterFromNotificationForm();
+	}
+
+	public void registerNotification(RegisterNotificationForm form) throws UnauthorizedAccessException {
+		new RegisterForNotificationCommand(getBugTrap(), form).execute();
+	}
+
+	public void unregisterNotification(UnregisterNotificationForm form) throws UnauthorizedAccessException {
+		new UnregisterForNotificationCommand(getBugTrap(), form).execute();
+	}
+
+	public List<IRegistration> getRegistrations() throws UnauthorizedAccessException {
+		return getBugTrap().getNotificationManager().getRegistrationsLoggedInUser();
+	}
 
 	/**
 	 * Shows notifications with the information provided in the form.
@@ -39,32 +54,5 @@ public class NotificationController extends Controller{
 	 */
 	public List<INotification> showNotifications(ShowChronologicalNotificationForm form) throws UnauthorizedAccessException{
 		return getBugTrap().getNotificationManager().getNotifications(form.getNbOfNotifications());
-	}
-	
-	/**
-	 * Register for notifications with the information provided in the form.
-	 * @param form RegisterNotificationForm containing all the details about the request for registration.
-	 * @throws UnauthorizedAccessException 
-	 */
-	public void registerForNotification(RegisterNotificationForm form) throws UnauthorizedAccessException {
-		getBugTrap().getNotificationManager().registerForNotification(form.getRegistrationType(), form.getObservable(), form.getTag());
-	}
-
-	/**
-	 * Unregister for notifications with the information provided in the form.
-	 * @param form UnregisterNotificationForm containing all the details about the request for unregistration.
-	 * @throws UnauthorizedAccessException 
-	 */
-	public void unregisterForNotification(UnregisterNotificationForm form) throws UnauthorizedAccessException {
-		getBugTrap().getNotificationManager().unregisterForNotification(form.getRegistration());
-	}
-
-	/**
-	 * Get a list of all active registrations for the currently logged in user.
-	 * @return A list of current registrations for the user.
-	 * @throws UnauthorizedAccessException
-     */
-	public List<Registration> getRegistrations() throws UnauthorizedAccessException {
-		return getBugTrap().getNotificationManager().getRegistrationsLoggedInUser();
 	}
 }

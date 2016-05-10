@@ -21,32 +21,12 @@ import model.projects.Version;
 import model.projects.forms.DeclareAchievedMilestoneForm;
 import model.users.IUser;
 
-public class DeclaredAchievedMilestoneUseCaseTest {
-
-	private BugTrap bugTrap;
-	
-	@Before
-	public void setUp() throws Exception {
-		//Make System.
-		bugTrap = new BugTrap();
-		
-		//Make Users.
-		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
-		
-		//Log in as Administrator, create Project/Subsystem, register for Notification and log off.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
-		bugTrap.getProjectManager().createSubsystem("name", "description", bugTrap.getProjectManager().getProjects().get(0), bugTrap.getProjectManager().getProjects().get(0));
-
-		bugTrap.getUserManager().logOff();
-	}
+public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 
 	@Test
 	public void DeclareAchievedMilestoneToSubsystemTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		bugTrap.getUserManager().loginAs(lead);
 		
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
 		DeclareAchievedMilestoneForm form = null;
@@ -55,8 +35,7 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
 		
 		//Step 2. The system shows a list of projects.
-		List<IProject> projects = bugTrap.getProjectManager().getProjects();
-		
+		List<IProject> projects = projectController.getProjectList();
 		//Step 3. The developer selects a project.
 		IProject project = projects.get(0);
 		
@@ -64,7 +43,7 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		List<ISubsystem> subsystems = project.getAllDirectOrIndirectSubsystems();
 		
 		//Step 5. The developer selects a subsystem.
-		ISubsystem subsystem = subsystems.get(0);
+		ISubsystem subsystem = project.getSubsystems().get(2);
 		form.setSystem(subsystem);
 		
 		//Step 6. The system shows the currently achieved milestones and asks for a new one.
@@ -79,27 +58,28 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		
 		//Step 8. system updates the achieved milestone of the selected component. 
 		//If necessary, the system first recursively updates the achieved milestone of all the subsystems that the component contains.
-		bugTrap.getProjectManager().declareAchievedMilestone(form.getSystem(), form.getNumbers());
-		
+		try {
+			projectController.declareAchievedMilestone(form);
+		} catch (UnauthorizedAccessException e) {
+			fail(e.getMessage());
+		}
+
 		//Confirm
-		//Initially no notifications.
 		assertEquals("M1.2.3",subsystem.getAchievedMilestone().toString());
-				
 	}
 	
 	@Test
 	public void DeclareAchievedMilestoneToProjectTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		bugTrap.getUserManager().loginAs(lead);
 		
 		//set subsystem to new milestone to prevent error
-		List<IProject> ps = bugTrap.getProjectManager().getProjects();
+		List<IProject> ps = projectController.getProjectList();
 		IProject p = ps.get(0);
 		List<ISubsystem> ss = p.getAllDirectOrIndirectSubsystems();
 		ISubsystem sub = ss.get(0);
 		bugTrap.getProjectManager().declareAchievedMilestone(sub, Arrays.asList(new Integer[] {1,2,3}));
-		
-		
+
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
 		DeclareAchievedMilestoneForm form = null;
 		try {
@@ -107,7 +87,7 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
 		
 		//Step 2. The system shows a list of projects.
-		List<IProject> projects = bugTrap.getProjectManager().getProjects();
+		List<IProject> projects = projectController.getProjectList();
 		
 		//Step 3. The developer selects a project.
 		IProject project = projects.get(0);
@@ -130,18 +110,20 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		
 		//Step 8. system updates the achieved milestone of the selected component. 
 		//If necessary, the system first recursively updates the achieved milestone of all the subsystems that the component contains.
-		bugTrap.getProjectManager().declareAchievedMilestone(form.getSystem(), form.getNumbers());
+		try {
+			projectController.declareAchievedMilestone(form);
+		} catch (UnauthorizedAccessException e) {
+			fail(e.getMessage());
+		}
 		
 		//Confirm
-		//Initially no notifications.
 		assertEquals("M1.2.3",project.getAchievedMilestone().toString());
-					
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void MilestoneTooHighTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		bugTrap.getUserManager().loginAs(lead);
 		
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
 		DeclareAchievedMilestoneForm form = null;
@@ -150,7 +132,7 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
 		
 		//Step 2. The system shows a list of projects.
-		List<IProject> projects = bugTrap.getProjectManager().getProjects();
+		List<IProject> projects = projectController.getProjectList();
 		
 		//Step 3. The developer selects a project.
 		IProject project = projects.get(0);
@@ -174,23 +156,25 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		
 		//Step 8. system updates the achieved milestone of the selected component. 
 		//If necessary, the system first recursively updates the achieved milestone of all the subsystems that the component contains.
-		bugTrap.getProjectManager().declareAchievedMilestone(form.getSystem(), form.getNumbers());
-
+		try {
+			projectController.declareAchievedMilestone(form);
+		} catch (UnauthorizedAccessException e) {
+			fail(e.getMessage());
+		}
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void EarlyBugReportNotClosedTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
-		IUser dev = bugTrap.getUserManager().getUser("DEV");
-		
+		bugTrap.getUserManager().loginAs(lead);
+
 		//create bugreport with lower target milestone and set subsystem to new milestone to prevent error
 		List<IProject> ps = bugTrap.getProjectManager().getProjects();
 		IProject p = ps.get(0);
 		List<ISubsystem> ss = p.getAllDirectOrIndirectSubsystems();
 		ISubsystem sub = ss.get(0);
 		bugTrap.getProjectManager().declareAchievedMilestone(sub, Arrays.asList(new Integer[] {0,1}));
-		bugTrap.getBugReportManager().addBugReportWithTargetMilestone("title", "description", new Date(3), sub, dev, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, Arrays.asList(new Integer[] {0,2}));
+		bugTrap.getBugReportManager().addBugReportWithTargetMilestone("title", "description", new Date(3), sub, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, Arrays.asList(new Integer[] {0,2}));
 		
 		
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
@@ -224,8 +208,11 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		
 		//Step 8. system updates the achieved milestone of the selected component. 
 		//If necessary, the system first recursively updates the achieved milestone of all the subsystems that the component contains.
-		bugTrap.getProjectManager().declareAchievedMilestone(form.getSystem(), form.getNumbers());
-
+		try {
+			projectController.declareAchievedMilestone(form);
+		} catch (UnauthorizedAccessException e) {
+			fail(e.getMessage());
+		}
 	}
 	
 	@Test
@@ -237,17 +224,12 @@ public class DeclaredAchievedMilestoneUseCaseTest {
 		} catch (UnauthorizedAccessException e) { }
 	}
 	
-	@Test
-	public void varsNotFilledTest() {
+	@Test (expected = NullPointerException.class)
+	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//Log in as dev.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
-		
-		try {
-			bugTrap.getFormFactory().makeDeclareAchievedMilestoneForm().allVarsFilledIn();
-			fail("should throw exception");
-		} 
-		catch (UnauthorizedAccessException e) 	{ fail("not authorized"); }
-		catch (NullPointerException e) 			{ }
+		bugTrap.getUserManager().loginAs(lead);
+
+		bugTrap.getFormFactory().makeDeclareAchievedMilestoneForm().allVarsFilledIn();
 	}	
 
 }

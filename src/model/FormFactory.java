@@ -7,7 +7,9 @@ import model.bugreports.forms.BugReportUpdateForm;
 import model.bugreports.forms.CommentCreationForm;
 import model.bugreports.forms.ProposePatchForm;
 import model.bugreports.forms.ProposeTestForm;
+import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.ShowChronologicalNotificationForm;
+import model.notifications.forms.UnregisterNotificationForm;
 import model.projects.forms.DeclareAchievedMilestoneForm;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
@@ -225,5 +227,19 @@ public class FormFactory {
 			throw new UnauthorizedAccessException("You need to be logged in as an issuer to perform this action.");
 		
 		return new DeclareAchievedMilestoneForm();
+	}
+
+	public RegisterNotificationForm makeRegisterForNotificationForm() throws UnauthorizedAccessException {
+		if (!getBugTrap().isLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
+
+		return new RegisterNotificationForm();
+	}
+
+	public UnregisterNotificationForm makeUnregisterFromNotificationForm() throws UnauthorizedAccessException {
+		if (!getBugTrap().isLoggedIn())
+			throw new UnauthorizedAccessException("You need to be logged in to perform this action.");
+
+		return new UnregisterNotificationForm();
 	}
 }
