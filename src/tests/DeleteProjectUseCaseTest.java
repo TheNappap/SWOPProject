@@ -27,7 +27,7 @@ public class DeleteProjectUseCaseTest extends BugTrapTest {
 	public void setUp() {
 		//Setup BugTrap
 		super.setUp();
-		
+
 		//Log in as Administrator and register for notifications.
 		bugTrap.getUserManager().loginAs(admin);
 		// Register for notifications to make sure registrations are cleared as well.

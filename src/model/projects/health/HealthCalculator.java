@@ -77,7 +77,7 @@ public abstract class HealthCalculator {
 		
 		List<HealthIndicator> healthIndicatorsOfSubsystems = new ArrayList<HealthIndicator>();
 		for (ISubsystem sub : subsystems) {
-			HealthIndicator healthIndicator = sub.getHealth();
+			HealthIndicator healthIndicator = ((System) sub).getHealthIndicator(this);
 			healthIndicatorsOfSubsystems.add(healthIndicator);
 		}
 		

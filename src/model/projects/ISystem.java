@@ -51,12 +51,12 @@ public interface ISystem extends Observable{
      *
      * @return List of all bug reports related to this system or its subsystems.
      */
-    public List<IBugReport> getBugReports();
+    public List<IBugReport> getAllBugReports();
     
     /**
      * 
-     * @return the health of the system
+     * @return the health indicators of the system with different algorithms
      */
-    public HealthIndicator getHealth();
+    public List<HealthIndicator> getHealthIndicators();
 }
 

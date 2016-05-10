@@ -108,7 +108,7 @@ public class BugReportManager {
 	 * @param system The System for which to delete the BugReports
 	 */
 	public void deleteBugReportsForSystem(ISystem system) {
-		for (IBugReport report : system.getBugReports()){
+		for (IBugReport report : system.getAllBugReports()){
 			((BugReport)report).terminate();
 			bugReportList.remove(report);
 		}
@@ -125,7 +125,7 @@ public class BugReportManager {
 	 * @param assignees Assignees of the BugReport
 	 * @param tag Tag of the BugReport
 	 */
-	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag) {
+	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag, int impactFactor) {
 		BugReport report = new BugReportBuilder(bugTrap).setTitle(title)
 				.setDescription(description)
 				.setSubsystem(subsystem)
@@ -134,6 +134,7 @@ public class BugReportManager {
 				.setCreationDate(creationDate)
 				.setAssignees(assignees)
 				.setBugTag(tag)
+				.setImpactFactor(impactFactor)
 				.getBugReport();
 		bugReportList.add(report);
 		((Subsystem)subsystem).signal(new BugReportCreationSignalisation(report));

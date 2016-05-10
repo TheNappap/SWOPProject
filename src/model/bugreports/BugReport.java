@@ -44,8 +44,8 @@ public class BugReport implements IBugReport {
 	
 	//Mutable
 	private BugTagState bugTag;			//BugTag that is attached to this BugReport.
-	private int impactFactor; //TODO double or int? Should be >0 and <=10!!
-
+	private double impactFactor; 		//Impact Factor of the bug report
+	
 	/**
 	 * BugReport Constructor.
 	 * @param title Title of the BugReport
@@ -67,7 +67,7 @@ public class BugReport implements IBugReport {
 	 */
 	public BugReport(BugTrap bugTrap, String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments,
 						IUser issuedBy, Date creationDate, List<Observer> observers, BugTag bugTag, String stackTrace, String errorMessage, String reproduction,
-						TargetMilestone milestone, List<Test> tests, List<Patch> patches) {
+						TargetMilestone milestone, List<Test> tests, List<Patch> patches, int impactFactor) {
 		this.bugTrap 		= bugTrap;
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
@@ -85,6 +85,7 @@ public class BugReport implements IBugReport {
 		this.milestone		= milestone;
 		this.tests 			= tests;
 		this.patches		= patches;
+		this.impactFactor 	= impactFactor;
 
 		((Subsystem)subsystem).addBugReport(this);
 	}
@@ -245,7 +246,7 @@ public class BugReport implements IBugReport {
 	 * Returns the impact factor of the bug report
 	 * @return the impact factor of the bug report
 	 */
-	public int getImpactFactor() {
+	public double getImpactFactor() {
 		return impactFactor;
 	}
 

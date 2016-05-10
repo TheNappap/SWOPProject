@@ -23,6 +23,6 @@ public class CreateBugReportCommand extends Command {
     @Override
     public void execute() throws UnauthorizedAccessException {
         form.allVarsFilledIn();
-        getBugTrap().getBugReportManager().addBugReport(form.getTitle(), form.getDescription(), new Date(), form.getSubsystem(), form.getIssuer(), form.getDependsOn(), new ArrayList<IUser>(), BugTag.NEW);
+        getBugTrap().getBugReportManager().addBugReport(form.getTitle(), form.getDescription(), new Date(), form.getSubsystem(), form.getIssuer(), form.getDependsOn(), new ArrayList<IUser>(), BugTag.NEW, form.getImpactFactor());
     }
 }

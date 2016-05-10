@@ -245,7 +245,7 @@ public class ProjectManager {
 		if (numbers == null || numbers.isEmpty()) throw new IllegalArgumentException("Numbers can not be null or empty!");
 		if (system == null) throw new IllegalArgumentException("System can not be null!");
 		
-		List<IBugReport> bugreports = system.getBugReports();
+		List<IBugReport> bugreports = system.getAllBugReports();
 		AchievedMilestone achieved = new AchievedMilestone(numbers);
 		for (IBugReport bugreport : bugreports) {
 			BugTag tag = bugreport.getBugTag();

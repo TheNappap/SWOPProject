@@ -206,11 +206,16 @@ public class Project extends System implements IProject {
 	}
 
 	@Override
-	public List<IBugReport> getBugReports() {
+	public List<IBugReport> getAllBugReports() {
 		List<IBugReport> reports = new ArrayList<>();
 		for (ISubsystem s : subsystems)
-			reports.addAll(s.getBugReports());
+			reports.addAll(s.getAllBugReports());
 		return reports;
+	}
+
+	@Override
+	public List<IBugReport> getBugReports() {
+		return new ArrayList<>();
 	}
 
 	@Override
