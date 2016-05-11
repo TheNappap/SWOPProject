@@ -3,10 +3,7 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -76,9 +73,11 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 		//set subsystem to new milestone to prevent error
 		List<IProject> ps = projectController.getProjectList();
 		IProject p = ps.get(0);
-		List<ISubsystem> ss = p.getAllDirectOrIndirectSubsystems();
-		ISubsystem sub = ss.get(0);
-		bugTrap.getProjectManager().declareAchievedMilestone(sub, Arrays.asList(new Integer[] {1,2,3}));
+		Stack<ISubsystem> subs = new Stack<>();
+		for (ISubsystem sub : p.getAllDirectOrIndirectSubsystems())
+			subs.push(sub);
+		while (!subs.isEmpty())
+			bugTrap.getProjectManager().declareAchievedMilestone(subs.pop(), Arrays.asList(new Integer[] {1,2,3}));
 
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
 		DeclareAchievedMilestoneForm form = null;
