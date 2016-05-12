@@ -99,6 +99,8 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 		//Shouldn't work because someone else is Lead already.
 		try {
 			projectController.assignToProject(form);
+			fail("Should not be allowed.");
+		} catch (UnsupportedOperationException e) {
 		} catch (UnauthorizedAccessException e) {
 			fail(e.getMessage());
 		}

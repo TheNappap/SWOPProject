@@ -80,7 +80,8 @@ public class ProjectController extends Controller {
 	/**
 	 * Assign a developer to the project with the information provided in the form.
 	 * @param form ProjectAssignForm containing the details about the assignment.
-	 * @throws UnauthorizedAccessException 
+	 * @throws UnauthorizedAccessException
+	 * @throws UnsupportedOperationException If trying to assign a lead to a projec that already has a lead.
 	 */
 	public void assignToProject(ProjectAssignForm form) throws UnauthorizedAccessException {
 		new AssignProjectCommand(getBugTrap(), form).execute();

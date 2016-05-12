@@ -23,7 +23,7 @@ public class ProposePatchUseCaseTest extends BugTrapTest {
 
 	@Test
 	public void proposePatchUseCaseTest() {
-		//Log in as tester.
+		//Log in as programmer.
 		bugTrap.getUserManager().loginAs(prog);
 		
 		//1.
@@ -63,8 +63,8 @@ public class ProposePatchUseCaseTest extends BugTrapTest {
 	
 	@Test (expected =  UnauthorizedAccessException.class)
 	public void devNotTesterFailTest() throws UnauthorizedAccessException {
-		//Log in as not tester.
-		bugTrap.getUserManager().loginAs(prog);
+		//Log in as not programmer.
+		bugTrap.getUserManager().loginAs(tester);
 		
 		//1.
 		ProposePatchForm form = null;
