@@ -44,9 +44,11 @@ public class BugTrapTest {
     protected ISubsystem wordArt;
     protected ISubsystem comicSans;
     protected ISubsystem clippy;
+    protected ISubsystem excelTable;
 
     protected IBugReport clippyBug;
     protected IBugReport wordBug;
+    protected IBugReport excelBug;
 
     @Before
     public void setUp() {
@@ -81,6 +83,8 @@ public class BugTrapTest {
         clippy = bugTrap.getProjectManager().getSubsystemWithName("Clippy");
         bugTrap.getProjectManager().createSubsystem("Excel", "Excellent software", office, office);
         excel = bugTrap.getProjectManager().getSubsystemWithName("Excel");
+        bugTrap.getProjectManager().createSubsystem("ExcelTable", "Excellent Table", office, excel);
+        excelTable = bugTrap.getProjectManager().getSubsystemWithName("ExcelTable");
         bugTrap.getProjectManager().createSubsystem("PowerPoint", "Powerfully pointless", office, office);
         powerpoint = bugTrap.getProjectManager().getSubsystemWithName("PowerPoint");
         
@@ -91,6 +95,8 @@ public class BugTrapTest {
         bugTrap.getBugReportManager().addComment(clippyBug, "Agreed! I propose once every 5 minutes!");
         bugTrap.getBugReportManager().addBugReport("Word crashes when Clippy pops up", "...", new Date(1305), word, lead, Arrays.asList(new IBugReport[] { clippyBug }), Arrays.asList(new IUser[] { prog }), BugTag.UNDERREVIEW, 7);
         wordBug = word.getAllBugReports().get(0);
+        bugTrap.getBugReportManager().addBugReport("Excel does weird stuff", "...", new Date(1305), excel, lead, new ArrayList<>(), Arrays.asList(new IUser[] { prog }), BugTag.RESOLVED, 3);
+        excelBug = excel.getAllBugReports().get(0);
 
         //Log off.
         bugTrap.getUserManager().logOff();

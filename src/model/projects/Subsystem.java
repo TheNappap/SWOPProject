@@ -120,7 +120,7 @@ public class Subsystem extends System implements ISubsystem {
 		parent.subsystems.add(sub1);
 		parent.subsystems.add(sub2);
 		
-		//this.terminate();
+		this.terminate();
 		parent.subsystems.remove(this);
 	}
 	
@@ -162,12 +162,16 @@ public class Subsystem extends System implements ISubsystem {
 	 * @param otherSubsystem The other subsystem merging with this subsystem
 	 */
 	private void moveSubsystemsAndBugReportsTo(Subsystem newSubsystem, Subsystem otherSubsystem) {
-		for (Subsystem sub : this.subsystems) {
+		List<Subsystem> subs = new ArrayList<>();
+		subs.addAll(this.subsystems);
+		for (Subsystem sub : subs) {
 			if(!sub.equals(otherSubsystem)){
 				sub.moveToNewParent(newSubsystem);
 			}
 		}
-		for (BugReport bugReport : this.bugReports) {
+		List<BugReport> reports = new ArrayList<>();
+		reports.addAll(this.bugReports);
+		for (BugReport bugReport : reports) {
 			newSubsystem.bugReports.add(bugReport);
 			this.bugReports.remove(bugReport);
 		}
