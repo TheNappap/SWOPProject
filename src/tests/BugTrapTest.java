@@ -49,11 +49,8 @@ public class BugTrapTest {
 
     protected IBugReport clippyBug;
     protected IBugReport wordBug;
-<<<<<<< HEAD
     protected IBugReport wordArtBug;
-=======
     protected IBugReport excelBug;
->>>>>>> 43630c4dc793fad078023d42815551837422740f
 
     @Before
     public void setUp() {
@@ -104,14 +101,11 @@ public class BugTrapTest {
         dependencies.add(clippyBug);
         bugTrap.getBugReportManager().addBugReport("Word crashes", "As soon as Clippy pops up...", new Date(1305), word, lead, dependencies, assignees, BugTag.UNDERREVIEW, null, 7);
         wordBug = word.getAllBugReports().get(0);
-<<<<<<< HEAD
         dependencies = new ArrayList<>();
         bugTrap.getBugReportManager().addBugReport("WordArt is not working", "When using Comic Sans, the Word Art does not work.", new Date(1310), wordArt, issuer, dependencies, assignees, BugTag.ASSIGNED, null, 3);
         wordArtBug = wordArt.getAllBugReports().get(0);
-=======
-        bugTrap.getBugReportManager().addBugReport("Excel does weird stuff", "...", new Date(1305), excel, lead, new ArrayList<>(), Arrays.asList(new IUser[] { prog }), BugTag.RESOLVED, 3);
+        bugTrap.getBugReportManager().addBugReport("Excel does weird stuff", "...", new Date(1305), excel, lead, new ArrayList<>(), assignees, BugTag.RESOLVED, null, 3);
         excelBug = excel.getAllBugReports().get(0);
->>>>>>> 43630c4dc793fad078023d42815551837422740f
 
         //Log off.
         bugTrap.getUserManager().logOff();

@@ -65,7 +65,7 @@ public class CreateSubsystemUserCaseTest extends BugTrapTest {
 			form.setName("sub X");
 			//6. The system creates the subsystem.
 			projectController.createSubsystem(form);
-			ISubsystem subsystem = projectController.getProjectList().get(0).getSubsystems().get(1).getSubsystems().get(0);
+			ISubsystem subsystem = system.getSubsystems().get(system.getSubsystems().size() - 1);
 			
 			//Confirm.
 			assertTrue(subsystem.getName().equals("sub X"));
