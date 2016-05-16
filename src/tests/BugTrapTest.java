@@ -46,6 +46,7 @@ public class BugTrapTest {
 
     protected IBugReport clippyBug;
     protected IBugReport wordBug;
+    protected IBugReport wordArtBug;
 
     @Before
     public void setUp() {
@@ -85,15 +86,18 @@ public class BugTrapTest {
         
         //Add BugReports.
         bugTrap.getUserManager().loginAs(lead);
-        bugTrap.getBugReportManager().addBugReport("Clippy bug!", "Clippy only pops up once an hour. Should be more.", new Date(1303), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, 5);
+        bugTrap.getBugReportManager().addBugReport("Clippy bug!", "Clippy only pops up once an hour. Should be more.", new Date(1303), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, null, 5);
         clippyBug = clippy.getAllBugReports().get(0);
         bugTrap.getBugReportManager().addComment(clippyBug, "Agreed! I propose once every 5 minutes!");
         ArrayList<IUser> assignees = new ArrayList<>();
         assignees.add(prog);
         ArrayList<IBugReport> dependencies = new ArrayList<>();
         dependencies.add(clippyBug);
-        bugTrap.getBugReportManager().addBugReport("Word crashes when Clippy pops up", "...", new Date(1305), word, lead, dependencies, assignees, BugTag.UNDERREVIEW, 7);
+        bugTrap.getBugReportManager().addBugReport("Word crashes", "As soon as Clippy pops up...", new Date(1305), word, lead, dependencies, assignees, BugTag.UNDERREVIEW, null, 7);
         wordBug = word.getAllBugReports().get(0);
+        dependencies = new ArrayList<>();
+        bugTrap.getBugReportManager().addBugReport("WordArt is not working", "When using Comic Sans, the Word Art does not work.", new Date(1310), wordArt, issuer, dependencies, assignees, BugTag.ASSIGNED, null, 3);
+        wordArtBug = wordArt.getAllBugReports().get(0);
 
         //Log off.
         bugTrap.getUserManager().logOff();

@@ -3,6 +3,7 @@ package tests.projecttests;
 import java.util.ArrayList;
 import java.util.Date;
 
+import model.users.Developer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,13 +12,11 @@ import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Subsystem;
 import model.projects.Version;
+import tests.BugTrapTest;
 
-public class ProjectTests {
+import static org.junit.Assert.*;
 
-    @Before
-    public void setUp() throws Exception {
-
-    }
+public class ProjectTests extends BugTrapTest {
 
     @SuppressWarnings("deprecation")
     @Test
@@ -33,4 +32,22 @@ public class ProjectTests {
         Assert.assertEquals(p.getStartDate(), new Date(2013, 1, 1));
         Assert.assertEquals(p.getBudgetEstimate(), 12345, 0.0000001);
     }
+
+    @Test
+    public void testAddProgrammer() {
+        Developer dev = bugTrap.getUserManager().createDeveloper("D", "E", "V", "developer");
+        office.addProgrammer(dev);
+        assertTrue(office.getProgrammers().contains(dev));
+        assertFalse(office.getTesters().contains(dev));
+        assertNotEquals(office.getLeadDeveloper(), dev);
+    }
+
+     @Test
+    public void testAddTester() {
+         Developer dev = bugTrap.getUserManager().createDeveloper("D", "E", "V", "developer");
+         office.addTester(dev);
+         assertFalse(office.getProgrammers().contains(dev));
+         assertTrue(office.getTesters().contains(dev));
+         assertNotEquals(office.getLeadDeveloper(), dev);
+     }
 }

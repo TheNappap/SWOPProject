@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.util.*;
 
+import model.bugreports.TargetMilestone;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -173,7 +174,7 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 		List<ISubsystem> ss = p.getAllDirectOrIndirectSubsystems();
 		ISubsystem sub = ss.get(0);
 		bugTrap.getProjectManager().declareAchievedMilestone(sub, Arrays.asList(new Integer[] {0,1}));
-		bugTrap.getBugReportManager().addBugReportWithTargetMilestone("title", "description", new Date(3), sub, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, Arrays.asList(new Integer[] {0,2}));
+		bugTrap.getBugReportManager().addBugReport("title", "description", new Date(3), sub, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, new TargetMilestone(Arrays.asList(new Integer[] {0,2})), 3);
 		
 		
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.

@@ -1,9 +1,5 @@
 package tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +14,8 @@ import model.projects.forms.DeclareAchievedMilestoneForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectForkForm;
 import model.users.IUser;
+
+import static org.junit.Assert.*;
 
 public class CreateProjectUseCaseTest extends BugTrapTest {
 
@@ -54,7 +52,6 @@ public class CreateProjectUseCaseTest extends BugTrapTest {
 		Date creationDate = new Date();
 		try {
 			projectController.createProject(form);
-			creationDate = new Date();
 			project = projectController.getProjectList().get(projectController.getProjectList().size() - 1);
 		} catch (UnauthorizedAccessException e) { fail("not authorised"); }
 
@@ -81,7 +78,7 @@ public class CreateProjectUseCaseTest extends BugTrapTest {
 		//-Has no parent system.
 		assertEquals(null,						project.getParent());
 		//-Has correct CreationDate.
-		assertEquals(creationDate,				project.getCreationDate());
+		assertTrue(Math.abs(project.getCreationDate().getTime() - new Date().getTime()) < 250);
 		//-Has one Achieved Milestone: M0
 		assertEquals("M0",						project.getAchievedMilestone().toString());
 	}
