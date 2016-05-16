@@ -1,6 +1,5 @@
 package model.notifications.forms;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import model.Form;
 import model.bugreports.bugtag.BugTag;
 import model.notifications.NotificationType;

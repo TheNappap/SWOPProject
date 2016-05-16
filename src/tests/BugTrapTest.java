@@ -1,5 +1,11 @@
 package tests;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
+import org.junit.Before;
+
 import controllers.BugReportController;
 import controllers.NotificationController;
 import controllers.ProjectController;
@@ -13,10 +19,6 @@ import model.projects.Version;
 import model.users.Developer;
 import model.users.IUser;
 import model.users.Issuer;
-import org.junit.Before;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Superclass for all tests for the BugTrap system.
@@ -43,10 +45,15 @@ public class BugTrapTest {
     protected ISubsystem wordArt;
     protected ISubsystem comicSans;
     protected ISubsystem clippy;
+    protected ISubsystem excelTable;
 
     protected IBugReport clippyBug;
     protected IBugReport wordBug;
+<<<<<<< HEAD
     protected IBugReport wordArtBug;
+=======
+    protected IBugReport excelBug;
+>>>>>>> 43630c4dc793fad078023d42815551837422740f
 
     @Before
     public void setUp() {
@@ -81,6 +88,8 @@ public class BugTrapTest {
         clippy = bugTrap.getProjectManager().getSubsystemWithName("Clippy");
         bugTrap.getProjectManager().createSubsystem("Excel", "Excellent software", office, office);
         excel = bugTrap.getProjectManager().getSubsystemWithName("Excel");
+        bugTrap.getProjectManager().createSubsystem("ExcelTable", "Excellent Table", office, excel);
+        excelTable = bugTrap.getProjectManager().getSubsystemWithName("ExcelTable");
         bugTrap.getProjectManager().createSubsystem("PowerPoint", "Powerfully pointless", office, office);
         powerpoint = bugTrap.getProjectManager().getSubsystemWithName("PowerPoint");
         
@@ -95,9 +104,14 @@ public class BugTrapTest {
         dependencies.add(clippyBug);
         bugTrap.getBugReportManager().addBugReport("Word crashes", "As soon as Clippy pops up...", new Date(1305), word, lead, dependencies, assignees, BugTag.UNDERREVIEW, null, 7);
         wordBug = word.getAllBugReports().get(0);
+<<<<<<< HEAD
         dependencies = new ArrayList<>();
         bugTrap.getBugReportManager().addBugReport("WordArt is not working", "When using Comic Sans, the Word Art does not work.", new Date(1310), wordArt, issuer, dependencies, assignees, BugTag.ASSIGNED, null, 3);
         wordArtBug = wordArt.getAllBugReports().get(0);
+=======
+        bugTrap.getBugReportManager().addBugReport("Excel does weird stuff", "...", new Date(1305), excel, lead, new ArrayList<>(), Arrays.asList(new IUser[] { prog }), BugTag.RESOLVED, 3);
+        excelBug = excel.getAllBugReports().get(0);
+>>>>>>> 43630c4dc793fad078023d42815551837422740f
 
         //Log off.
         bugTrap.getUserManager().logOff();
