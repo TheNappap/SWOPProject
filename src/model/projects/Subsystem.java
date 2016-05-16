@@ -120,8 +120,8 @@ public class Subsystem extends System implements ISubsystem {
 		parent.subsystems.add(sub1);
 		parent.subsystems.add(sub2);
 		
-		this.terminate();
 		parent.subsystems.remove(this);
+		this.terminate();
 	}
 	
 
@@ -148,11 +148,11 @@ public class Subsystem extends System implements ISubsystem {
 		
 		//delete given subsystem (=child or sibling)
 		System parent = subsystem.parent;
-		subsystem.terminate();
 		parent.subsystems.remove(subsystem);
+		subsystem.terminate();
 		//delete this subsystem (=parent or sibling)
-		this.terminate();
 		this.parent.subsystems.remove(this);
+		this.terminate();
 	}
 
 	/**

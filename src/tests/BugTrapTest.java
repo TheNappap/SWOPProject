@@ -1,5 +1,11 @@
 package tests;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
+import org.junit.Before;
+
 import controllers.BugReportController;
 import controllers.NotificationController;
 import controllers.ProjectController;
@@ -13,10 +19,6 @@ import model.projects.Version;
 import model.users.Developer;
 import model.users.IUser;
 import model.users.Issuer;
-import org.junit.Before;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Superclass for all tests for the BugTrap system.
