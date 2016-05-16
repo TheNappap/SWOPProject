@@ -1,5 +1,6 @@
 package model.bugreports;
 
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,35 +76,6 @@ public class BugReportManager {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * returns all the bug reports for a given project
-	 * @param project Project to return BugReports for.
-	 * @return list of bug reports
-	 */
-	public List<IBugReport> getBugReportsForProject(IProject project) {
-		return getBugReportsForSystem(project);
-	}
-	
-	/**
-	 * Return all BugReports for given System.
-	 * @param system The System to get all BugReports for.
-	 * @return  The BugReports of given System.
-	 */
-	public List<IBugReport> getBugReportsForSystem(ISystem system) {
-		List<ISubsystem> subs = system.getAllDirectOrIndirectSubsystems();
-		List<IBugReport> reports = new ArrayList<IBugReport>();
-		if(system.getParent() != null)
-			subs.add((Subsystem) system);
-
-		for (IBugReport r : bugReportList)
-			for (ISubsystem s : subs)
-				if (r.getSubsystem() == s)
-					reports.add(r);
-
-		return reports;
-	}
-
-	/**
 	 * Delete the BugReports for given System and deletes the registrations for this bug report
 	 * @param system The System for which to delete the BugReports
 	 */
@@ -125,7 +97,11 @@ public class BugReportManager {
 	 * @param assignees Assignees of the BugReport
 	 * @param tag Tag of the BugReport
 	 */
-	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag, int impactFactor) {
+	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag, TargetMilestone milestone, int impactFactor) {
+		if (milestone != null) {
+			if(milestone.compareTo(subsystem.getAchievedMilestone()) <= 0) throw new IllegalArgumentException("The target milestone should be strict higher than the achieved milestone of the subsystem");
+		}
+
 		BugReport report = new BugReportBuilder(bugTrap).setTitle(title)
 				.setDescription(description)
 				.setSubsystem(subsystem)
@@ -135,35 +111,6 @@ public class BugReportManager {
 				.setAssignees(assignees)
 				.setBugTag(tag)
 				.setImpactFactor(impactFactor)
-				.getBugReport();
-		bugReportList.add(report);
-		((Subsystem)subsystem).signal(new BugReportCreationSignalisation(report));
-	}
-	
-	/**
-	 * Add a BugReport with a Target Milestone
-	 * @param title Title of the BugReport
-	 * @param description Description of the BugReport
-	 * @param creationDate Creation Date of the BugReport
-	 * @param subsystem Subsystem of the BugReport
-	 * @param issuer Issuer of the BugReport
-	 * @param dependencies Dependencies of the BugReport
-	 * @param assignees Assignees of the BugReport
-	 * @param tag Tag of the BugReport
-	 * @param milestone Target Milestone of the BugReport
-	 */
-	public void addBugReportWithTargetMilestone(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag, List<Integer> milestone) {
-		TargetMilestone target = new TargetMilestone(milestone);
-		if(target.compareTo(subsystem.getAchievedMilestone()) <= 0) throw new IllegalArgumentException("The target milestone should be strict higher than the achieved milestone of the subsystem");
-		
-		BugReport report = new BugReportBuilder(bugTrap).setTitle(title)
-				.setDescription(description)
-				.setSubsystem(subsystem)
-				.setIssuer(issuer)
-				.setDependsOn(dependencies)
-				.setCreationDate(creationDate)
-				.setAssignees(assignees)
-				.setBugTag(tag)
 				.setMilestone(milestone)
 				.getBugReport();
 		bugReportList.add(report);

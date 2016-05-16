@@ -42,7 +42,7 @@ public class HealthIndicatorTests extends BugTrapTest{
 		indicators = subsystem.getHealthIndicators();
 		
 		assertEquals("Word Art", subsystem.getName());
-		assertEquals(0, ((System) subsystem).getBugImpact(), 0.1);
+		assertEquals(6, ((System) subsystem).getBugImpact(), 0.1);
 		assertEquals(HealthIndicator.HEALTHY,indicators.get(0));
 		assertEquals(HealthIndicator.HEALTHY,indicators.get(1));
 		assertEquals(HealthIndicator.HEALTHY,indicators.get(2));
@@ -70,9 +70,9 @@ public class HealthIndicatorTests extends BugTrapTest{
 	public void HealthIndicatorTest2() {
 		//Add BugReports.
 	    bugTrap.getUserManager().loginAs(lead);
-	    bugTrap.getBugReportManager().addBugReport("Bug1", "...", new Date(1303), word, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, 100);
-	    bugTrap.getBugReportManager().addBugReport("Bug2", "...", new Date(1305), word, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, 100);
-	    bugTrap.getBugReportManager().addBugReport("Bug3", "...", new Date(1305), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, 100);
+	    bugTrap.getBugReportManager().addBugReport("Bug1", "...", new Date(1303), word, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, null, 100);
+	    bugTrap.getBugReportManager().addBugReport("Bug2", "...", new Date(1305), word, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, null, 100);
+	    bugTrap.getBugReportManager().addBugReport("Bug3", "...", new Date(1305), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, null, 100);
 
 	    //Log off.
 	    bugTrap.getUserManager().logOff();

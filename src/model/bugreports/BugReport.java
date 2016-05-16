@@ -136,7 +136,13 @@ public class BugReport implements IBugReport {
 
 	@Override
 	public int compareTo(IBugReport otherBugReport) {
-		return getTitle().compareTo(otherBugReport.getTitle());
+		int c = getTitle().compareTo(otherBugReport.getTitle());
+		if (c < 0)
+			return -1;
+		else if (c > 0)
+			return 1;
+		else
+			return 0;
 	}
 
 	@Override

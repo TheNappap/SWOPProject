@@ -13,6 +13,7 @@ import org.junit.Test;
 import model.projects.ProjectTeam;
 import model.projects.Role;
 import model.users.Developer;
+import tests.BugTrapTest;
 
 public class ProjectTeamTests {
 
@@ -22,7 +23,7 @@ public class ProjectTeamTests {
     Developer tester;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         team1 = new ProjectTeam();
         lead = new Developer("", "", "", "lead");
         prog = new Developer("", "", "", "prog");

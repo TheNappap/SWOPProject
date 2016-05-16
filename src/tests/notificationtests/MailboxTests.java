@@ -10,14 +10,16 @@ import org.junit.Test;
 import model.notifications.INotification;
 import model.notifications.Mailbox;
 import model.users.Administrator;
+import tests.BugTrapTest;
 
-public class MailboxTests {
+public class MailboxTests extends BugTrapTest {
 	
 	private Mailbox mailbox;
 	
 	@Before
-	public void setUp() throws Exception {
-		mailbox = new Mailbox(new Administrator("","","","ADMIN"));
+	public void setUp() {
+		super.setUp();
+		mailbox = new Mailbox(admin);
 		
 		mailbox.addNotification("not1");
 		mailbox.addNotification("not2");
@@ -25,14 +27,12 @@ public class MailboxTests {
 	
 	@Test
 	public void addNotificationTest(){
-		int nbnot = mailbox.getNotifications().size();
-		assertEquals(2,nbnot);
+		assertEquals(2, mailbox.getNotifications().size());
 		
 		mailbox.addNotification("not3");
-		
-		nbnot = mailbox.getNotifications().size();
-		assertEquals(3,nbnot);
-		assertEquals("not3",mailbox.getNotifications().get(0).getText());
+
+		assertEquals(3, mailbox.getNotifications().size());
+		assertEquals("not3", mailbox.getNotifications().get(0).getText());
 	}
 	
 	@Test
@@ -43,9 +43,8 @@ public class MailboxTests {
 		mailbox.addNotification("not3");
 		
 		List<INotification> list = mailbox.getNotifications(2);
-		assertEquals(2,list.size());
+		assertEquals(2, list.size());
 		assertEquals("not3",list.get(0).getText());
 		assertEquals("not2",list.get(1).getText());
 	}
-
 }

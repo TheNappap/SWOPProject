@@ -173,7 +173,7 @@ class BugTrapInitializer {
 		}
 
 
-		bugTrap.getBugReportManager().addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), assigned, tag, 6);
+		bugTrap.getBugReportManager().addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), assigned, tag, null, 6);
 	}
 	
 	// -- XML Helpers --

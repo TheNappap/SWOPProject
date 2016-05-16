@@ -1,53 +1,57 @@
 package tests.notificationtests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.util.Date;
-import java.util.List;
-
+import model.notifications.INotification;
 import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import model.notifications.Mailbox;
-import model.projects.Project;
-import model.projects.Version;
-import model.users.IUser;
+import tests.BugTrapTest;
 
-public class NotificationManagerTests {
-	
-	private BugTrap bugTrap;
-	private IUser admin;
-	private IUser dev;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class NotificationManagerTests extends BugTrapTest {
 
 	@Before
-	public void setUp() throws Exception {
-		bugTrap = new BugTrap();
-		admin = bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		dev = bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		bugTrap.getUserManager().loginAs(admin);
-		bugTrap.getProjectManager().createProject("project", "descr", new Date(3), new Date(5), 55, dev, Version.firstVersion());
+	public void setUp() {
+		super.setUp();
+
+		// Drop some notifications in the admin's mailbox
+		Mailbox box = bugTrap.getNotificationManager().getMailboxForUser(admin);
+		box.addNotification("Notification 1");
+		box.addNotification("Notification 2");
+		box.addNotification("Notification 3");
 	}
-	
+
 	@Test
 	public void getMailboxForUserTest(){
 		//no mailbox made
-		Mailbox mb = bugTrap.getNotificationManager().getMailboxForUser(admin);
-		
-		assertEquals(admin, mb.getUser());
-
-		mb = bugTrap.getNotificationManager().getMailboxForUser(admin);
-		
-		assertEquals(admin, mb.getUser());
+		Mailbox mb = bugTrap.getNotificationManager().getMailboxForUser(lead);
+		assertEquals(lead, mb.getUser());
+		//get created mailbox
+		mb = bugTrap.getNotificationManager().getMailboxForUser(lead);
+		assertEquals(lead, mb.getUser());
 	}
-	
 
 	@Test (expected = UnauthorizedAccessException.class)
 	public void getRegistrationsLoggedInUserUnauthorizedTest() throws UnauthorizedAccessException{
 		bugTrap.getUserManager().logOff();
-
 		bugTrap.getNotificationManager().getRegistrationsLoggedInUser();
 	}
+
+	 @Test
+	public void getNotifications() throws UnauthorizedAccessException {
+		 bugTrap.getUserManager().loginAs(admin);
+		 List<INotification> notificationList = bugTrap.getNotificationManager().getNotifications(2);
+
+		 assertEquals("Notification 3", notificationList.get(0).getText());
+		 assertEquals("Notification 2", notificationList.get(1).getText());
+		 assertFalse(notificationList.get(0).isRead());
+		 notificationList.get(0).markAsRead();
+
+		 notificationList = bugTrap.getNotificationManager().getNotifications(1);
+		 assertTrue(notificationList.get(0).isRead());
+	 }
 }

@@ -49,7 +49,11 @@ public class BugTrapTest {
 
     protected IBugReport clippyBug;
     protected IBugReport wordBug;
+<<<<<<< HEAD
+    protected IBugReport wordArtBug;
+=======
     protected IBugReport excelBug;
+>>>>>>> 43630c4dc793fad078023d42815551837422740f
 
     @Before
     public void setUp() {
@@ -91,17 +95,23 @@ public class BugTrapTest {
         
         //Add BugReports.
         bugTrap.getUserManager().loginAs(lead);
-        bugTrap.getBugReportManager().addBugReport("Clippy bug!", "Clippy only pops up once an hour. Should be more.", new Date(1303), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, 5);
+        bugTrap.getBugReportManager().addBugReport("Clippy bug!", "Clippy only pops up once an hour. Should be more.", new Date(1303), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, null, 5);
         clippyBug = clippy.getAllBugReports().get(0);
         bugTrap.getBugReportManager().addComment(clippyBug, "Agreed! I propose once every 5 minutes!");
         ArrayList<IUser> assignees = new ArrayList<>();
         assignees.add(prog);
         ArrayList<IBugReport> dependencies = new ArrayList<>();
         dependencies.add(clippyBug);
-        bugTrap.getBugReportManager().addBugReport("Word crashes when Clippy pops up", "...", new Date(1305), word, lead, dependencies, assignees, BugTag.UNDERREVIEW, 7);
+        bugTrap.getBugReportManager().addBugReport("Word crashes", "As soon as Clippy pops up...", new Date(1305), word, lead, dependencies, assignees, BugTag.UNDERREVIEW, null, 7);
         wordBug = word.getAllBugReports().get(0);
+<<<<<<< HEAD
+        dependencies = new ArrayList<>();
+        bugTrap.getBugReportManager().addBugReport("WordArt is not working", "When using Comic Sans, the Word Art does not work.", new Date(1310), wordArt, issuer, dependencies, assignees, BugTag.ASSIGNED, null, 3);
+        wordArtBug = wordArt.getAllBugReports().get(0);
+=======
         bugTrap.getBugReportManager().addBugReport("Excel does weird stuff", "...", new Date(1305), excel, lead, new ArrayList<>(), Arrays.asList(new IUser[] { prog }), BugTag.RESOLVED, 3);
         excelBug = excel.getAllBugReports().get(0);
+>>>>>>> 43630c4dc793fad078023d42815551837422740f
 
         //Log off.
         bugTrap.getUserManager().logOff();

@@ -8,19 +8,22 @@ import org.junit.Before;
 import org.junit.Test;
 
 import model.notifications.Notification;
+import tests.BugTrapTest;
 
-public class NotificationTests {
+public class NotificationTests extends BugTrapTest {
 	
 	private Notification not;
 	
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
+		super.setUp();
 		not = new Notification("not");
 	}
 	
 	@Test
 	public void constructorTest(){
-		assertEquals("not",not.getText());
+		not = new Notification("not");
+		assertEquals("not", not.getText());
 		assertFalse(not.isRead());
 	}
 	

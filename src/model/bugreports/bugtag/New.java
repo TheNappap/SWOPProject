@@ -16,9 +16,6 @@ public class New extends BugTagState {
 
 	@Override
 	public BugTagState confirmBugTag(BugTagState bugTag) {
-		if (bugTag.isClosed())
-			throw new IllegalArgumentException();
-			
 		for (IBugReport dependency : bugReport.getDependsOn())
 			if (	dependency.getBugTag() != BugTag.CLOSED ||
 					dependency.getBugTag() != BugTag.RESOLVED)
