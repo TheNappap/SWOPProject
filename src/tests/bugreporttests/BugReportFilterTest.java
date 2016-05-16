@@ -56,7 +56,7 @@ public class BugReportFilterTest extends BugTrapTest {
 		String param = lead.getUserName();
 		List<IBugReport> result = bugReportFilter.filter(FilterType.FILED_BY_USER, param);
 		
-		assertEquals(2, result.size());
+		assertEquals(3, result.size());
 		
 		for (IBugReport bugReport : result) 
 			assertTrue(bugReport.getIssuedBy().getUserName().equals(param));
@@ -71,7 +71,7 @@ public class BugReportFilterTest extends BugTrapTest {
 		String param = prog.getUserName();
 		List<IBugReport> result = bugReportFilter.filter(FilterType.ASSIGNED_TO_USER, param);
 		
-		assertEquals(2, result.size());
+		assertEquals(3, result.size());
 		
 		boolean contains = false;
 		
