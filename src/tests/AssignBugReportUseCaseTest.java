@@ -29,7 +29,7 @@ public class AssignBugReportUseCaseTest extends BugTrapTest {
 		} catch (UnauthorizedAccessException e) { fail("not authorized");	}
 		
 		//2. Include use case Select Bug Report.
-		List<IBugReport> list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { bugTrap.getBugReportManager().getFilterTypes()[0] }, new String[] { "B1" });
+		List<IBugReport> list = bugReportController.getBugReportList();
 		form.setBugReport(list.get(0));
 		
 		//3. The system shows a list of developers that are involved in the project.
@@ -57,7 +57,7 @@ public class AssignBugReportUseCaseTest extends BugTrapTest {
 		} catch (UnauthorizedAccessException e) { fail("not authorized"); }
 		
 		//2. Include use case Select Bug Report
-		List<IBugReport> list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { bugTrap.getBugReportManager().getFilterTypes()[0] }, new String[] { "B1" });
+		List<IBugReport> list = bugReportController.getBugReportList();
 		form.setBugReport(list.get(0));
 		
 		//3. The system shows a list of developers that are involved in the project.
@@ -93,7 +93,7 @@ public class AssignBugReportUseCaseTest extends BugTrapTest {
 		FilterType type = types[0];
 		String searchingString = "B1";
 		List<IBugReport> list = null;
-		list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { type }, new String[] { searchingString });
+		list = bugReportController.getBugReportList();
 		bugReport = list.get(0);
 
 		form.setBugReport(bugReport);
@@ -134,7 +134,7 @@ public class AssignBugReportUseCaseTest extends BugTrapTest {
 		bugReportController.assignToBugReport(form);
 	}
 	
-	@Test (expected = NullPointerException.class)
+	@Test (expected = IllegalArgumentException.class)
 	public void nullFormTest() throws UnauthorizedAccessException {
 		//login
 		IUser dev = bugTrap.getUserManager().getUser("LEAD");

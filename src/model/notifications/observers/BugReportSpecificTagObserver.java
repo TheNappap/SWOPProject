@@ -22,4 +22,9 @@ public class BugReportSpecificTagObserver extends BugReportChangeObserver {
 			getMailbox().addNotification("The bugreport '" + signalisation.getBugReport().getTitle() + "' has received the tag " + signalisation.getBugReport().getBugTag());
 		}
 	}
+
+	@Override
+	public NotificationType getNotificationType() {
+		return NotificationType.BUGREPORT_SPECIFIC_TAG;
+	}
 }

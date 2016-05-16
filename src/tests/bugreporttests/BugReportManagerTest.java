@@ -60,7 +60,7 @@ public class BugReportManagerTest {
 		List<IBugReport> dependencies = new ArrayList<IBugReport>();
 		List<IUser> assignees = new ArrayList<IUser>();
 		BugTag tag = BugTag.NEW;
-		bugTrap.getBugReportManager().addBugReport(title, description, creationDate, subsystem, issuer, dependencies, assignees, tag);
+		bugTrap.getBugReportManager().addBugReport(title, description, creationDate, subsystem, issuer, dependencies, assignees, tag, 4);
 
 		assertEquals(1, bugTrap.getBugReportManager().getBugReportList().size());
 
@@ -80,12 +80,17 @@ public class BugReportManagerTest {
 	@Test
 	public void getOrderedListTest() {
 		Project project = new Project(null, "n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
-		bugTrap.getBugReportManager().addBugReport("Urgent!!!", "This is a BugReport", new Date(), new Subsystem(null, null, null, project, null, project, null), new Issuer(null, null, null, "Michael"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		bugTrap.getBugReportManager().addBugReport("Some BugReport", "Low Priority", new Date(), new Subsystem(null, null, null, project, null, project, null), new Issuer(null, null, null,"George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		bugTrap.getBugReportManager().addBugReport("CRITICAL", "BEEP BOOP BEEP", new Date(), new Subsystem(null, null, null, project, null, project, null), new Issuer(null, null, null, "George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
+		bugTrap.getBugReportManager().addBugReport("Urgent!!!", "This is a BugReport", new Date(), new Subsystem(null, null, null, project, null, project, null), new Issuer(null, null, null, "Michael"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW, 6);
+		bugTrap.getBugReportManager().addBugReport("Some BugReport", "Low Priority", new Date(), new Subsystem(null, null, null, project, null, project, null), new Issuer(null, null, null,"George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW, 8);
+		bugTrap.getBugReportManager().addBugReport("CRITICAL", "BEEP BOOP BEEP", new Date(), new Subsystem(null, null, null, project, null, project, null), new Issuer(null, null, null, "George"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW, 3);
 
 		List<IBugReport> ordered = null;
-		ordered = bugTrap.getBugReportManager().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING, FilterType.FILED_BY_USER}, new String[]{"BugReport", "Michael"});
+		try {
+			ordered = bugTrap.getBugReportManager().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING, FilterType.FILED_BY_USER}, new String[]{"BugReport", "Michael"});
+		} catch (UnauthorizedAccessException e) {
+			fail("Unauthorized.");
+			e.printStackTrace();
+		}
 
 		//Correct list returned.
 		//Filters themselves are tested in BugReportFilterTest.

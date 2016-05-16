@@ -254,7 +254,7 @@ public class ProjectManager {
 			}
 			
 			Milestone target = ((BugReport) bugreport).getTargetMilestone();
-			if(target == null || achieved.compareTo(target) >= 0){
+			if(target != null && achieved.compareTo(target) >= 0){
 				throw new IllegalArgumentException("The new declared achieved milestone should be less than a target milestone of a bugreport in progress");
 			}
 		}

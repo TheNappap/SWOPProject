@@ -16,28 +16,12 @@ import model.projects.ISubsystem;
 import model.projects.Version;
 import model.projects.forms.SubsystemCreationForm;
 
-public class CreateSubsystemUserCaseTest extends UseCaseTest {
-	
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
-		//Add Users.
-		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		bugTrap.getUserManager().createIssuer("", "", "" , "ISSUER");
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		
-		//Log in as Administrator, create Project, subsystem and log off.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
-		bugTrap.getProjectManager().createSubsystem("name", "description", bugTrap.getProjectManager().getProjects().get(0), bugTrap.getProjectManager().getProjects().get(0));
-		bugTrap.getUserManager().logOff();
-	}
+public class CreateSubsystemUserCaseTest extends BugTrapTest {
 
 	@Test
 	public void createSubsystemInProjectTest() {
 		//Log in as Administrator.
-		userController.loginAs("ADMIN");
+		userController.loginAs(admin);
 
 		try {
 			//1. The administrator indicates he wants to create a new subsystem.
@@ -55,7 +39,7 @@ public class CreateSubsystemUserCaseTest extends UseCaseTest {
 			projectController.createSubsystem(form);
 			
 			//Confirm.
-			ISubsystem subsystem = projectController.getProjectList().get(0).getSubsystems().get(1);	
+			ISubsystem subsystem = projectController.getProjectList().get(0).getSubsystems().get(projectController.getProjectList().get(0).getSubsystems().size() - 1);
 			assertTrue(subsystem.getName().equals("sub X"));
 			assertTrue(subsystem.getDescription().equals("Subsystem"));
 			assertEquals(project, subsystem.getParent());
@@ -65,7 +49,7 @@ public class CreateSubsystemUserCaseTest extends UseCaseTest {
 	@Test
 	public void createSubsystemInSubsystemTest() {
 		//Log in as Administrator.
-		userController.loginAs("ADMIN");
+		userController.loginAs(admin);
 				
 		try {
 			//1. The administrator indicates he wants to create a new subsystem.
@@ -73,7 +57,7 @@ public class CreateSubsystemUserCaseTest extends UseCaseTest {
 			//2. The system shows a list of projects and subsystems.
 			List<IProject> list = projectController.getProjectList();
 			//3. The administrator selects the project or subsystem that the new subsystem will be part of.
-			ISubsystem system = list.get(0).getAllDirectOrIndirectSubsystems().get(0);
+			ISubsystem system = list.get(0).getSubsystems().get(1);
 			//4. The system shows the subsystem creation form.
 			form.setParent(system);
 			//5. The administrator enters the subsystem details: name and description.
@@ -81,7 +65,7 @@ public class CreateSubsystemUserCaseTest extends UseCaseTest {
 			form.setName("sub X");
 			//6. The system creates the subsystem.
 			projectController.createSubsystem(form);
-			ISubsystem subsystem = projectController.getProjectList().get(0).getSubsystems().get(0).getSubsystems().get(0);
+			ISubsystem subsystem = projectController.getProjectList().get(0).getSubsystems().get(1).getSubsystems().get(0);
 			
 			//Confirm.
 			assertTrue(subsystem.getName().equals("sub X"));
@@ -99,14 +83,14 @@ public class CreateSubsystemUserCaseTest extends UseCaseTest {
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Can't be Issuer.
-		userController.loginAs("ISSUER");
+		userController.loginAs(issuer);
 		try {
 			projectController.getSubsystemCreationForm();
 			fail("Can't be Issuer.");
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Can't be Developer.
-		userController.loginAs("DEV");
+		userController.loginAs(prog);
 		try {
 			projectController.getSubsystemCreationForm();
 			fail("Can't be Developer.");
@@ -116,7 +100,7 @@ public class CreateSubsystemUserCaseTest extends UseCaseTest {
 	@Test
 	public void varsNotFilledTest() {
 		//login
-		userController.loginAs("ADMIN");
+		userController.loginAs(admin);
 		
 		try {
 			SubsystemCreationForm form = projectController.getSubsystemCreationForm();
@@ -131,7 +115,7 @@ public class CreateSubsystemUserCaseTest extends UseCaseTest {
 	@Test
 	public void nullFormTest() {
 		//Log in as Administrator.
-		userController.loginAs("ADMIN");
+		userController.loginAs(admin);
 		
 		try {
 			projectController.createSubsystem(projectController.getSubsystemCreationForm());

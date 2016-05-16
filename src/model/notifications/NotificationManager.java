@@ -6,6 +6,8 @@ import java.util.List;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
+import model.notifications.observers.Observer;
+import model.notifications.observers.ObserverWithMailbox;
 import model.users.IUser;
 
 /**
@@ -16,6 +18,7 @@ public class NotificationManager {
 	private final BugTrap bugTrap;
 
     private final List<Mailbox> mailboxes;
+    private final List<ObserverWithMailbox> observers;
 
     /**
 	 * Constructor.
@@ -23,6 +26,7 @@ public class NotificationManager {
     public NotificationManager(BugTrap bugTrap) {
         this.bugTrap = bugTrap;
         this.mailboxes = new ArrayList<Mailbox>();
+        this.observers = new ArrayList<ObserverWithMailbox>();
     }
 
     /**
@@ -42,73 +46,6 @@ public class NotificationManager {
 
         return box;
     }
-    
-//    /**
-//     * Registers for notifications with a given type, observable and a specific tag.
-//     * The tag is only used if the type is BUGREPORT_SPECIFIC_TAG
-//     * @param registrationType the type
-//     * @param observable the object that is observed
-//     * @param tag the specific tag
-//     * @throws UnauthorizedAccessException
-//     */
-//    public void registerForNotification(RegistrationType registrationType, Observable observable, BugTag tag) throws UnauthorizedAccessException {
-//        if (!bugTrap.isLoggedIn())
-//            throw new UnauthorizedAccessException("You must be logged in to register for notifications.");
-//
-//        IUser user = bugTrap.getUserManager().getLoggedInUser();
-//        Mailbox box = getMailboxForUser(user);
-//        Registration registration =  (new RegistrationBuilder()).setObservable(observable)
-//                                                                .setType(registrationType).setTag(tag)
-//                                                                .setMailbox(box)
-//                                                                .getRegistration();
-//        this.registrations.add(registration);
-//    }
-    
-//    /**
-//     * Unregisters for notifications with a given registration
-//     * @param registration the given registration
-//     * @throws UnauthorizedAccessException
-//     */
-//    public void unregisterForNotification(Registration registration) throws UnauthorizedAccessException {
-//        if (!bugTrap.isLoggedIn())
-//            throw new UnauthorizedAccessException("You must be logged in to unregister for notifications.");
-//
-//        registration.getObservable().detach(registration.getObserver());
-//        this.registrations.remove(registration);
-//    }
-//
-//    /**
-//     * Returns the registrations of the logged in user
-//     * @return a list of registrations for the logged ins user
-//     * @throws UnauthorizedAccessException
-//     */
-//    public List<Registration> getRegistrationsLoggedInUser() throws UnauthorizedAccessException {
-//        if (!bugTrap.isLoggedIn())
-//            throw new UnauthorizedAccessException("You must be logged in to retrieve a list of registrations for notifications.");
-//
-//        ArrayList<Registration> regs = new ArrayList<>();
-//    	for (Registration r : this.registrations)
-//            if (r.getUser() == bugTrap.getUserManager().getLoggedInUser())
-//                regs.add(r);
-//
-//        return regs;
-//    }
-    
-
-    /**
-     * Deletes all the registrations for a given observable
-     * @param obs the given observable
-     */
-    public void deleteRegistrationsForObservable(Observable obs) {
-        for (int i = 0; i < registrations.size(); i++) {
-			Registration reg = registrations.get(i);
-			if(reg.getObservable() == obs){
-        		reg.terminate();
-        		registrations.remove(reg);
-        	}
-		}
-        		
-    }
 
     /**
      * Returns specific number of last received notifications for the logged in user
@@ -125,4 +62,36 @@ public class NotificationManager {
 		
 		return box.getNotifications(nbOfNotifications);
 	}
+
+    public List<IRegistration> getRegistrationsLoggedInUser() throws UnauthorizedAccessException {
+        IUser user = bugTrap.getUserManager().getLoggedInUser();
+        if (user == null)
+            throw new UnauthorizedAccessException("You need to be logged in to get a list of registrations for notifications.");
+
+        List<IRegistration> regs = new ArrayList<>();
+        for (ObserverWithMailbox o : observers) {
+            if (o.getUser() == user) {
+                regs.add(o);
+            }
+        }
+        return regs;
+    }
+
+    public void addObserver(ObserverWithMailbox observerWithMailbox) {
+        observers.add(observerWithMailbox);
+    }
+
+    public void removeObserver(ObserverWithMailbox observerWithMailbox) {
+        observers.remove(observerWithMailbox);
+    }
+
+    public void removeObservable(Observable observable) {
+        for (int i = 0; i < observers.size(); i++) {
+            ObserverWithMailbox o = observers.get(i);
+            if (o.getObserves() == observable) {
+                observers.remove(o);
+                i--;
+            }
+        }
+    }
 }

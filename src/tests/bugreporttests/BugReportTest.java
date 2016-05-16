@@ -44,19 +44,20 @@ public class BugReportTest {
 	private IUser issuedBy = new Issuer(null, null, null, null);
 	private Date creationDate = new Date();
 	private BugTag bugTag = BugTag.NEW;
-	private String stackTrace;
-	private String errorMessage;
-	private String reproduction;
+	private String stackTrace = "stack";
+	private String errorMessage = "error";
+	private String reproduction = "reproduction";
 	private TargetMilestone targetMilestone = new TargetMilestone();
 	private List<model.bugreports.Test> tests = new ArrayList<model.bugreports.Test>();
 	private List<Patch> patches = new ArrayList<Patch>();
+	private int impactFactor = 3;
 	
 	
 	@Before
 	public void setUp() throws Exception {
 		Project project = new Project(null, "n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
 		subsystem = new Subsystem(null, null, null, project, null, project, null);
-		bugReport = new BugReport(null, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, targetMilestone, tests, patches);
+		bugReport = new BugReport(null, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, targetMilestone, tests, patches, impactFactor);
 	}
 
 	@Test
@@ -160,11 +161,11 @@ public class BugReportTest {
 
 	@Test
 	public void compareTest() {
-		BugReport other = new BugReport(null, "CugReport", null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null);
+		BugReport other = new BugReport(null, "CugReport", null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null, 4);
 		assertEquals(-1, bugReport.compareTo(other));
 		assertEquals(1, other.compareTo(bugReport));
 		
-		BugReport other2 = new BugReport(null, "BugReport", null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null);
+		BugReport other2 = new BugReport(null, "BugReport", null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null, 3);
 		assertEquals(0, bugReport.compareTo(other2));
 		assertEquals(0, other2.compareTo(bugReport));
 	}

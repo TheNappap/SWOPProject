@@ -14,8 +14,13 @@ public class CreateCommentObserver extends ObserverWithMailbox {
 
 	@Override
 	public void signal(Signalisation signalisation) {
-		if (signalisation.getType() == NotificationType.CREATE_COMMENT) {
+		if (signalisation.getType() == getNotificationType()) {
 			getMailbox().addNotification("New comment on '" + signalisation.getBugReport().getTitle());
 		}
+	}
+
+	@Override
+	public NotificationType getNotificationType() {
+		return NotificationType.CREATE_COMMENT;
 	}
 }

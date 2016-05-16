@@ -5,20 +5,15 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import model.notifications.NotificationType;
+import model.notifications.forms.RegisterNotificationForm;
 import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
-import model.bugreports.IBugReport;
-import model.bugreports.bugtag.BugTag;
 import model.projects.IProject;
-import model.projects.ISubsystem;
-import model.projects.Version;
 import model.projects.forms.ProjectDeleteForm;
 
 /**
@@ -26,56 +21,53 @@ import model.projects.forms.ProjectDeleteForm;
  * @author Niels
  *
  */
-public class DeleteProjectUseCaseTest extends UseCaseTest {
+public class DeleteProjectUseCaseTest extends BugTrapTest {
 	
 	@Before
-	public void setUp() throws Exception {
-		//Make System.
+	public void setUp() {
+		//Setup BugTrap
 		super.setUp();
-		
-		//Make Users.
-		bugTrap.getUserManager().createDeveloper("", "", "", "DEV");
-		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
-		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
-		
-		//Log in as Administrator and create project/subsystem.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		bugTrap.getProjectManager().createProject("name", "description", new Date(1302), new Date(1302), 1234, null, new Version(1, 0, 0));
-		IProject project = bugTrap.getProjectManager().getProjects().get(0);
-		bugTrap.getProjectManager().createSubsystem("name", "description", project, project);
-		ISubsystem subsystem = bugTrap.getProjectManager().getSubsystemWithName("name");
-		bugTrap.getProjectManager().createSubsystem("name2", "description2", project, project);
-		
-		//Log in as Developer, add BugReport and log off.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
-		bugTrap.getBugReportManager().addBugReport("B1", "B1 is a bug", new Date(5), subsystem, bugTrap.getUserManager().getUser("DEV"), new ArrayList<>(), new ArrayList<>(), BugTag.NEW);
-		IBugReport bugreport = subsystem.getAllBugReports().get(0);
-		bugTrap.getUserManager().logOff();
-		
+
 		//Log in as Administrator and register for notifications.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
-		bugTrap.getNotificationManager().registerForNotification(RegistrationType.CREATE_BUGREPORT, project, null);
-		bugTrap.getNotificationManager().registerForNotification(RegistrationType.BUGREPORT_CHANGE, subsystem, null);
-		bugTrap.getNotificationManager().registerForNotification(RegistrationType.CREATE_COMMENT, bugreport, null);
-		
-		assertEquals(3, bugTrap.getNotificationManager().getRegistrationsLoggedInUser().size());
-		bugTrap.getUserManager().logOff();
+		bugTrap.getUserManager().loginAs(admin);
+		// Register for notifications to make sure registrations are cleared as well.
+		try {
+			RegisterNotificationForm form = bugTrap.getFormFactory().makeRegisterForNotificationForm();
+			form.setObservable(office); // Register for the entire project
+			form.setNotificationType(NotificationType.CREATE_BUGREPORT);
+			notificationController.registerNotification(form);
+
+			form = bugTrap.getFormFactory().makeRegisterForNotificationForm();
+			form.setObservable(word); // Register for the subsystem
+			form.setNotificationType(NotificationType.BUGREPORT_CHANGE);
+			notificationController.registerNotification(form);
+
+			form = bugTrap.getFormFactory().makeRegisterForNotificationForm();
+			form.setObservable(clippyBug); // Register for the bugreport
+			form.setNotificationType(NotificationType.CREATE_COMMENT);
+			notificationController.registerNotification(form);
+			assertEquals(3, bugTrap.getNotificationManager().getRegistrationsLoggedInUser().size());
+			bugTrap.getUserManager().logOff();
+		} catch (UnauthorizedAccessException e) {
+			fail("Unauthorized.");
+			e.printStackTrace();
+		}
 	}
 
 	@Test
 	public void DeleteProjectTest() {
 		//Log in as Administrator.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		bugTrap.getUserManager().loginAs(admin);
 		
 		try { 
 			//Make sure there's a project.
-			assertFalse(bugTrap.getProjectManager().getProjects().isEmpty());
+			assertFalse(projectController.getProjectList().isEmpty());
 					
 			//1. The administrator indicates he wants to delete a project.
 			ProjectDeleteForm form = bugTrap.getFormFactory().makeProjectDeleteForm();
 			
 			//2. The system shows a list of all projects.
-			List<IProject> list = bugTrap.getProjectManager().getProjects();
+			List<IProject> list = projectController.getProjectList();
 			
 			//3. The administrator selects a project.
 			form.setProject(list.get(0));
@@ -83,7 +75,7 @@ public class DeleteProjectUseCaseTest extends UseCaseTest {
 			//4. The system deletes a project and recursively all subsystems that are
 			//part of the project. All bug reports fore those subsystem are also
 			//removed from BugTrap.
-			bugTrap.getProjectManager().deleteProject(form.getProject());
+			projectController.deleteProject(form);
 			
 			//confirm
 			assertTrue(bugTrap.getProjectManager().getProjects().isEmpty());
@@ -101,14 +93,14 @@ public class DeleteProjectUseCaseTest extends UseCaseTest {
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Developer can't delete Projects.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("DEV"));
+		bugTrap.getUserManager().loginAs(prog);
 		try {
 			bugTrap.getFormFactory().makeProjectDeleteForm();
 			fail("Developer can't delete projects.");
 		} catch (UnauthorizedAccessException e) { }
 		
 		//Issuer can't delete Projects.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ISSUER"));
+		bugTrap.getUserManager().loginAs(issuer);
 		try {
 			bugTrap.getFormFactory().makeProjectDeleteForm();
 			fail("Issuer can't delete projects.");
@@ -118,7 +110,7 @@ public class DeleteProjectUseCaseTest extends UseCaseTest {
 	@Test
 	public void varsNotFilledTest() {
 		//Log in as Administrator.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
 			bugTrap.getProjectManager().deleteProject(bugTrap.getFormFactory().makeProjectDeleteForm().getProject());
@@ -131,7 +123,7 @@ public class DeleteProjectUseCaseTest extends UseCaseTest {
 	@Test
 	public void nullFormTest() {
 		//Log in as Administrator.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		bugTrap.getUserManager().loginAs(admin);
 		
 		try {
 			bugTrap.getProjectManager().deleteProject(null);
