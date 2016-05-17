@@ -1,12 +1,12 @@
 package model.bugreports.forms;
 
 import model.Form;
-import model.bugreports.comments.Commentable;
+import model.bugreports.comments.ICommentable;
 
 public class CommentCreationForm implements Form {
 
 	//Information needed to create a Comment.
-	private Commentable commentable; //Object on which Comment is made.
+	private ICommentable commentable; //Object on which Comment is made.
 	private String text;	//Comment text.
 	
 	public CommentCreationForm() {
@@ -33,11 +33,11 @@ public class CommentCreationForm implements Form {
 		this.text = text;
 	}
 
-	public Commentable getCommentable() {
+	public ICommentable getCommentable() {
 		return commentable;
 	}
 
-	public void setCommentable(Commentable commentable) {
+	public void setCommentable(ICommentable commentable) {
 		if (commentable == null) throw new NullPointerException("Commentable is null");
 		
 		this.commentable = commentable;

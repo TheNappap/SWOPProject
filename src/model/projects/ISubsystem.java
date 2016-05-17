@@ -23,7 +23,13 @@ public interface ISubsystem extends ISystem {
 	 * @param iSubsystem
 	 */
     public void merge(String name, String description, ISubsystem iSubsystem);
-    
+
+	/**
+	 * Returns a list of all subsystems this subsystem can merge with.
+	 * @return
+     */
+	public List<ISubsystem> mergeableWith();
+
     /**
 	 * Splits a subsystem into two new subsystems with given names and descriptions.
 	 * The first new subsystem receives the given bug reports and subsystems.

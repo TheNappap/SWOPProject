@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.BugTrap;
+import model.Milestone;
+import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
+import model.bugreports.bugtag.BugTag;
+import model.notifications.NotificationType;
 import model.notifications.Observable;
 import model.notifications.observers.Observer;
 import model.notifications.signalisations.Signalisation;
+import model.projects.builders.SubsystemBuilder;
 import model.projects.health.HealthCalculator;
 import model.projects.health.HealthCalculator1;
 import model.projects.health.HealthCalculator2;
@@ -47,19 +52,11 @@ public abstract class System implements ISystem, Observable, Observer {
 		this.subsystems 	= subsystems == null ? new ArrayList<>() : subsystems;
 		this.milestone 		= milestone == null ? new AchievedMilestone() : milestone;
 	}
-
-	@Override
-	public void attach(Observer observer) {
-		if (!this.observers.contains(observer))
-			this.observers.add(observer);
-	}
-
-	@Override
-	public void detach(Observer observer) {
-		if (this.observers.contains(observer))
-			this.observers.remove(observer);
-	}
 	
+	/**********************************************
+	 * GETTERS AND SETTERS
+	 **********************************************/
+
 	@Override
 	public String getName() {
 		return name;
@@ -127,19 +124,41 @@ public abstract class System implements ISystem, Observable, Observer {
 	public AchievedMilestone getAchievedMilestone() {
 		return milestone;
 	}
+	
+	/**********************************************
+	 * ACHIEVED MILESTONES
+	 **********************************************/
 
 	/**
 	 * Declare an Achieved Milestone for the System.
 	 * @param numbers The numbers for the Achieved Milestone.
 	 */
 	public void declareAchievedMilestone(List<Integer> numbers) {
-		AchievedMilestone highest = highestAchievedMilestone();
+		if (numbers == null || numbers.isEmpty()) throw new IllegalArgumentException("Numbers can not be null or empty!");
+		
+		//Check if new achieved milestone is less than target milestones of bugreports in progress
+		List<IBugReport> bugreports = getAllBugReports();
 		AchievedMilestone achieved = new AchievedMilestone(numbers);
-
+		for (IBugReport bugreport : bugreports) {
+			BugTag tag = bugreport.getBugTag();
+			if(tag == BugTag.CLOSED || tag == BugTag.NOTABUG || tag == BugTag.DUPLICATE){
+				continue;
+			}
+			
+			Milestone target = ((BugReport) bugreport).getTargetMilestone();
+			if(target != null && achieved.compareTo(target) >= 0){
+				throw new IllegalArgumentException("The new declared achieved milestone should be less than a target milestone of a bugreport in progress");
+			}
+		}
+		
+		//Check if the new milestone is larger than the current AND it is equal or less than the highest milestone of the bugreports
+		AchievedMilestone highest = highestAchievedMilestone();
 		if ((highest == null) || achieved.compareTo(highest) <= 0 && (this.milestone == null || achieved.compareTo(this.milestone) >= 0)) 
 			milestone = achieved;
 		else
-			throw new IllegalArgumentException("The given milestone should be equal to or less than the higheset milestone of its (in)direct subsystems and the declared milestone must be larger than the current milestone.");
+			throw new IllegalArgumentException("The given milestone should be equal to or less than the highest milestone of its (in)direct subsystems and the declared milestone must be larger than the current milestone.");
+
+		notifyObservers(new Signalisation(NotificationType.ACHIEVED_MILESTONE, this));
 	}
 
 	private AchievedMilestone highestAchievedMilestone() {
@@ -150,11 +169,10 @@ public abstract class System implements ISystem, Observable, Observer {
 		}
 		return highest;
 	}
-
-	@Override
-	public void signal(Signalisation signalisation) {
-		notifyObservers(signalisation);
-	}
+	
+	/**********************************************
+	 * EQUALS
+	 **********************************************/
 
 	@Override
 	public boolean equals(Object o) {
@@ -220,6 +238,22 @@ public abstract class System implements ISystem, Observable, Observer {
 		return true;
 	}
 	
+	/**********************************************
+	 * OBSERVERS
+	 **********************************************/
+	
+	@Override
+	public void attach(Observer observer) {
+		if (!this.observers.contains(observer))
+			this.observers.add(observer);
+	}
+
+	@Override
+	public void detach(Observer observer) {
+		if (this.observers.contains(observer))
+			this.observers.remove(observer);
+	}
+
 	@Override
 	public void notifyObservers(Signalisation signalisation) {
 		if (this.parent != null)
@@ -229,6 +263,15 @@ public abstract class System implements ISystem, Observable, Observer {
 			observer.signal(signalisation);
 	}
 	
+	@Override
+	public void signal(Signalisation signalisation) {
+		notifyObservers(signalisation);
+	}
+	
+	/**********************************************
+	 * HEALTH AND BUGIMPACT
+	 **********************************************/
+
 	/**
 	 * Returns the bug impact of this system.
 	 * @return a double representing the bug impact
@@ -255,6 +298,50 @@ public abstract class System implements ISystem, Observable, Observer {
 		
 		return indicators;
 	}
+	
+	/**********************************************
+	 * OTHER
+	 **********************************************/
+	
+	/**
+	 * Get all siblings of the given system. The given system should be a subsystem of this system.
+	 */
+	public List<ISubsystem> getSiblings(ISubsystem sub) {
+		if (!subsystems.contains(sub)) throw new IllegalArgumentException("The given subsystem should be a subsystem of this system.");
+
+		List<ISubsystem> siblings = new ArrayList<>();
+		for (ISubsystem s : subsystems)
+			if (s != sub)
+				siblings.add(s);
+		return siblings;
+	}
+
+	/**
+	 * Creates a subsystem in the system with a given name and description
+	 * @param name			The name of the subsystem
+	 * @param description	The description of the subsystem
+	 */
+	public void createSubsystem(String name, String description) {
+		if (name == null || description == null)
+			throw  new IllegalArgumentException("Arguments should not be null.");
+		
+		(new SubsystemBuilder(bugTrap))
+			.setDescription(description)
+			.setName(name)
+			.setParent(this)
+			.getSubsystem();
+	}
+	
+	/**
+	 * Returns the verison of the system
+	 * @return The Version of this system.
+	 */
+	@Override
+	public abstract Version getVersion();
+
+	/**********************************************
+	 * OTHER
+	 **********************************************/
 	
 	/**
 	 * Terminates this system.

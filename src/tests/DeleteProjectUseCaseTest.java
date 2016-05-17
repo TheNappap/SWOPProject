@@ -7,12 +7,12 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import model.notifications.NotificationType;
-import model.notifications.forms.RegisterNotificationForm;
 import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
+import model.notifications.NotificationType;
+import model.notifications.forms.RegisterNotificationForm;
 import model.projects.IProject;
 import model.projects.forms.ProjectDeleteForm;
 

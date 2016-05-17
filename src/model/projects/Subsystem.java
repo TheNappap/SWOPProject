@@ -6,6 +6,8 @@ import java.util.List;
 import model.BugTrap;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
+import model.notifications.NotificationType;
+import model.notifications.signalisations.Signalisation;
 
 /**
  * This class represents a subsystem in a system.
@@ -23,56 +25,27 @@ public class Subsystem extends System implements ISubsystem {
 	 * @param description Description of the Subsystem.
 	 * @param parent Parent of the Subsystem.
 	 * @param subsystems Subsystems of the Subsystems.
-	 * @param project Project of the Subsystem.
 	 * @param achievedMilestone Achieved Milestone of the Subsystem.
 	 */
-	public Subsystem(BugTrap bugTrap, String name, String description, System parent, List<Subsystem> subsystems, Project project, AchievedMilestone achievedMilestone) {
+	public Subsystem(BugTrap bugTrap, String name, String description, System parent, List<Subsystem> subsystems, AchievedMilestone achievedMilestone) {
 		super(bugTrap, name, description, parent, subsystems, achievedMilestone);
 		
-		this.project = project;
+		System system = parent;
+		while(system.getParent() != null){
+			system = (System) system.getParent();
+		}
+		this.project = (Project) system;
 		this.bugReports = new ArrayList<>();
 		parent.subsystems.add(this);
 	}
+	
+	/**********************************************
+	 * GETTERS AND SETTERS
+	 **********************************************/
 
 	@Override
 	public IProject getProject() {
 		return project;
-	}
-	
-	/**
-	 * Sets parent
-	 * @param parent
-	 */
-	private void setParent(System parent) {
-		this.parent = parent;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (!super.equals(o))
-			return false;
-
-		// System.equals compares parents until the root.
-		// If same root, then same project.
-		// No need to compare here.
-		return true;
-	}
-
-	public void addBugReport(BugReport report) {
-		this.bugReports.add(report);
-	}
-
-	public void removeBugReport(BugReport report) {
-		this.bugReports.remove(report);
-	}
-
-	@Override
-	public void terminate() {
-		bugTrap.getBugReportManager().deleteBugReportsForSystem(this);
-		bugTrap.getNotificationManager().removeObservable(this);
-
-		super.terminate();
-		project = null;
 	}
 	
 	@Override
@@ -83,10 +56,61 @@ public class Subsystem extends System implements ISubsystem {
 	}
 
 	@Override
+	public double getBugImpact() {
+		double bugImpact = 0;
+		
+		for (IBugReport iBugReport : bugReports) {
+			double impactProduct = ((BugReport) iBugReport).getImpactProduct();
+			bugImpact += impactProduct;
+		}
+		
+		return bugImpact;
+	}
+
+	@Override
+	public Version getVersion() {
+		return ((System) getParent()).getVersion();
+	}
+
+	/**
+	 * Sets parent
+	 * @param parent
+	 */
+	private void setParent(System parent) {
+		this.parent = parent;
+	}
+	
+	/**********************************************
+	 * BUGREPORTS
+	 **********************************************/
+
+	/**
+	 * adds a bug report to the subsystem
+	 * @param report
+	 */
+	public void addBugReport(BugReport report) {
+		this.bugReports.add(report);
+		signal(new Signalisation(NotificationType.CREATE_BUGREPORT, report));
+		report.setSubsystem(this);
+	}
+
+	/**
+	 * removes a bug report from the subsystem
+	 * @param report
+	 */
+	public void removeBugReport(BugReport report) {
+		this.bugReports.remove(report);
+	}
+	
+	/**********************************************
+	 * SPLIT AND MERGE
+	 **********************************************/
+
+	@Override
 	public void split(String nameFor1, String nameFor2, String descriptionFor1, String descriptionFor2,
 			List<IBugReport> bugReportsFor1, List<ISubsystem> subsystemsFor1){
-		Subsystem sub1 = new Subsystem(bugTrap, nameFor1, descriptionFor1, parent, null, project, getAchievedMilestone());
-		Subsystem sub2 = new Subsystem(bugTrap, nameFor2, descriptionFor2, parent, null, project, getAchievedMilestone());
+		Subsystem sub1 = new Subsystem(bugTrap, nameFor1, descriptionFor1, parent, null, getAchievedMilestone());
+		Subsystem sub2 = new Subsystem(bugTrap, nameFor2, descriptionFor2, parent, null, getAchievedMilestone());
 		
 		//split subsystems
 		for (int i = 0; i < this.subsystems.size(); i++) {
@@ -107,12 +131,12 @@ public class Subsystem extends System implements ISubsystem {
 			BugReport bugReport = this.bugReports.get(i);
 			if(bugReportsFor1.contains(bugReport)){
 				//bug report for first new subsystem
-				sub1.bugReports.add(bugReport);
+				sub1.addBugReport(bugReport);
 			}else{
 				//bug report for second new subsystem
-				sub2.bugReports.add(bugReport);
+				sub2.addBugReport(bugReport);
 			}
-			this.bugReports.remove(bugReport);
+			this.removeBugReport(bugReport);
 			i--;
 		}
 		
@@ -120,10 +144,19 @@ public class Subsystem extends System implements ISubsystem {
 		parent.subsystems.add(sub1);
 		parent.subsystems.add(sub2);
 		
-		//this.terminate();
 		parent.subsystems.remove(this);
+		this.terminate();
 	}
 	
+	@Override
+	public List<ISubsystem> mergeableWith() {
+		List<ISubsystem> merge = new ArrayList<>();
+		merge.addAll(parent.getSiblings(this));
+		merge.addAll(subsystems);
+		if (parent.getParent() != null) // Our parent is not a project
+			merge.add((ISubsystem)parent);
+		return merge;
+	}
 
 	@Override
 	public void merge(String name, String description, ISubsystem iSubsystem){
@@ -139,7 +172,7 @@ public class Subsystem extends System implements ISubsystem {
 			achievedMilestone = iSubsystem.getAchievedMilestone();
 		}
 		
-		Subsystem newSubsystem = new Subsystem(bugTrap, name, description, parent, null, project, achievedMilestone);
+		Subsystem newSubsystem = new Subsystem(bugTrap, name, description, parent, null, achievedMilestone);
 		
 		Subsystem subsystem = ((Subsystem) iSubsystem);
 		//Move all subsystems to the new merged subsystem
@@ -148,11 +181,11 @@ public class Subsystem extends System implements ISubsystem {
 		
 		//delete given subsystem (=child or sibling)
 		System parent = subsystem.parent;
-		subsystem.terminate();
 		parent.subsystems.remove(subsystem);
+		subsystem.terminate();
 		//delete this subsystem (=parent or sibling)
-		this.terminate();
 		this.parent.subsystems.remove(this);
+		this.terminate();
 	}
 
 	/**
@@ -162,14 +195,18 @@ public class Subsystem extends System implements ISubsystem {
 	 * @param otherSubsystem The other subsystem merging with this subsystem
 	 */
 	private void moveSubsystemsAndBugReportsTo(Subsystem newSubsystem, Subsystem otherSubsystem) {
-		for (Subsystem sub : this.subsystems) {
+		List<Subsystem> subs = new ArrayList<>();
+		subs.addAll(this.subsystems);
+		for (Subsystem sub : subs) {
 			if(!sub.equals(otherSubsystem)){
 				sub.moveToNewParent(newSubsystem);
 			}
 		}
-		for (BugReport bugReport : this.bugReports) {
-			newSubsystem.bugReports.add(bugReport);
-			this.bugReports.remove(bugReport);
+		List<BugReport> reports = new ArrayList<>();
+		reports.addAll(this.bugReports);
+		for (BugReport bugReport : reports) {
+			newSubsystem.addBugReport(bugReport);
+			this.removeBugReport(bugReport);
 		}
 	}
 
@@ -183,16 +220,28 @@ public class Subsystem extends System implements ISubsystem {
 		this.parent.subsystems.remove(this);
 		setParent(parent);
 	}
+	
+	/**********************************************
+	 * OTHER
+	 **********************************************/
 
 	@Override
-	public double getBugImpact() {
-		double bugImpact = 0;
-		
-		for (IBugReport iBugReport : bugReports) {
-			double impactProduct = ((BugReport) iBugReport).getImpactProduct();
-			bugImpact += impactProduct;
-		}
-		
-		return bugImpact;
+	public boolean equals(Object o) {
+		if (!super.equals(o))
+			return false;
+	
+		// System.equals compares parents until the root.
+		// If same root, then same project.
+		// No need to compare here.
+		return true;
+	}
+
+	@Override
+	public void terminate() {
+		bugTrap.getBugReportManager().deleteBugReportsForSystem(this);
+		bugTrap.getNotificationManager().removeObservable(this);
+	
+		super.terminate();
+		project = null;
 	}
 }

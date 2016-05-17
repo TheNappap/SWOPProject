@@ -3,6 +3,7 @@ package model.projects.commands;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.Command;
+import model.projects.System;
 import model.projects.forms.DeclareAchievedMilestoneForm;
 
 public class DeclareAchievedMilestoneCommand extends Command {
@@ -16,6 +17,6 @@ public class DeclareAchievedMilestoneCommand extends Command {
 
     @Override
     public void execute() throws UnauthorizedAccessException {
-        getBugTrap().getProjectManager().declareAchievedMilestone(form.getSystem(), form.getNumbers());
+        ((System) form.getSystem()).declareAchievedMilestone(form.getNumbers());
     }
 }

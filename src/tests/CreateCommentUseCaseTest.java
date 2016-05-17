@@ -4,23 +4,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import model.bugreports.IBugReport;
-import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
-import model.bugreports.filters.FilterType;
 import model.bugreports.forms.CommentCreationForm;
-import model.projects.IProject;
-import model.projects.ISubsystem;
-import model.projects.Version;
 
 public class CreateCommentUseCaseTest extends BugTrapTest{
 

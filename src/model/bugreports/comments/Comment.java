@@ -31,6 +31,9 @@ public class Comment implements Commentable { //A Comment can be commented on.
 	
 	@Override
 	public void addComment(String commentText) {
+		if (commentText == null)
+			throw new IllegalArgumentException("Comment should not be null.");
+		
 		comments.add(new Comment(bugReport, commentText));
 	}
 

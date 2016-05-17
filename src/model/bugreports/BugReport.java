@@ -9,9 +9,9 @@ import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
 import model.bugreports.comments.Comment;
+import model.bugreports.comments.Commentable;
+import model.notifications.NotificationType;
 import model.notifications.observers.Observer;
-import model.notifications.signalisations.BugReportChangeSignalisation;
-import model.notifications.signalisations.CommentCreationSignalisation;
 import model.notifications.signalisations.Signalisation;
 import model.projects.IProject;
 import model.projects.ISubsystem;
@@ -21,7 +21,7 @@ import model.users.IUser;
 /**
  * This class represents a BugReport. in BugTrap.
  */
-public class BugReport implements IBugReport { 
+public class BugReport implements IBugReport, Commentable { 
 
 	//Immutable
 	private final BugTrap bugTrap;
@@ -90,55 +90,10 @@ public class BugReport implements IBugReport {
 		((Subsystem)subsystem).addBugReport(this);
 	}
 	
-	/**
-	 * Create and add a Comment to this BugReport.
-	 * @param commentText The text of the comment.
-	 */
-	public void addComment(String commentText) {
-		comments.add(new Comment(this, commentText));
-
-		notifyObservers(new CommentCreationSignalisation(this));
-	}
+	/**********************************************
+	 * GETTERS
+	 **********************************************/
 	
-	/**
-	 * Adds the given Developer to the assignees list.
-	 * @param developer The developer to add.
-	 * @pre The developer is a developer.
-	 * 		| developer.isDeveloper() == true;
-	 * @post The Developer is part of the assignees list.
-	 * 		| getAssignees().contains(developer);
-	 */
-	public void assignDeveloper(IUser developer) throws UnauthorizedAccessException {
-		IProject project = subsystem.getProject();
-		IUser user = bugTrap.getUserManager().getLoggedInUser();
-		if (!project.isLead(user) && !project.isTester(user))
-			throw new UnauthorizedAccessException("A lead or tester should be logged in to assign bug report");
-
-		if (!developer.isDeveloper()) throw new IllegalArgumentException();
-		
-		assignees.add(developer);
-	}
-
-	/**
-	 * Changes the current BugTag to the given BugTag.
-	 * @param bugTag The new BugTag
-	 * @post The given BugTag will be the new BugTag.
-	 * 		| getBugTag() == bugTag
-	 */
-	public void updateBugTag(BugTag bugTag) throws UnauthorizedAccessException {
-		if (bugTag.hasToBeLeadToSet() && !(getProject().getLeadDeveloper() == bugTrap.getUserManager().getLoggedInUser()))
-			throw new UnauthorizedAccessException();
-
-		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState(this));
-		
-		notifyObservers(new BugReportChangeSignalisation(this));
-	}
-
-	@Override
-	public int compareTo(IBugReport otherBugReport) {
-		return getTitle().compareTo(otherBugReport.getTitle());
-	}
-
 	@Override
 	public String getDescription() {
 		return description;
@@ -163,7 +118,7 @@ public class BugReport implements IBugReport {
 	public BugTag getBugTag() {
 		return bugTag.getTag();
 	}
-	
+
 	/**
 	 * Class of the BugTag.
 	 * @return Class of BugTag
@@ -251,21 +206,48 @@ public class BugReport implements IBugReport {
 	}
 
 	/**
+	 * Returns the impact product of the bug report.
+	 * The impact product is the product of the impact factor and the multiplier.
+	 * @return the impact product of the bug report.
+	 */
+	public double getImpactProduct() {
+		return bugTag.getMultiplier()*getImpactFactor();
+	}
+
+	@Override
+	public IProject getProject() {
+		return subsystem.getProject();
+	}
+
+	
+	
+	/**********************************************
+	 * TESTS
+	 **********************************************/
+
+	/**
+	 * Proposes a test to the BugReport.
+	 * @param test Test to propose
+	 * @throws UnauthorizedAccessException if the logged in user is not a tester for this bugreport
+	 */
+	public void proposeTest(String test) throws UnauthorizedAccessException {
+		if (test == null)
+			throw new IllegalArgumentException("Test should not be null.");
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if(!this.getSubsystem().getProject().isTester(user))
+			throw new UnauthorizedAccessException("The logged in user needs to be a tester to propose a test");
+		
+		addTest(test);
+	}
+
+	/**
 	 * adds a test to the bug report
 	 * @param test given test
 	 */
-	public void addTest(String test) {
+	private void addTest(String test) {
 		tests.add(new Test(test));
 	}
-	
-	/**
-	 * adds a patch to the bug report
-	 * @param patch given patch
-	 */
-	public void addPatch(String patch) {
-		patches.add(new Patch(patch));
-	}
-	
+
 	/**
 	 * accepts a given test if its for this bug report
 	 * @param test given test
@@ -276,7 +258,7 @@ public class BugReport implements IBugReport {
 		
 		test.accept();
 	}
-	
+
 	/**
 	 * rejects a given test if its for this bug report
 	 * @param test given test
@@ -286,6 +268,33 @@ public class BugReport implements IBugReport {
 			throw new IllegalArgumentException("given test is not a test for this bugreport");
 		
 		tests.remove(test);
+	}
+	
+	/**********************************************
+	 * PATCHES
+	 **********************************************/
+
+	/**
+	 * Proposes a patch to the BugReport.
+	 * @param patch The Patch to propose.
+	 * @throws UnauthorizedAccessException if the logged in user is not a programmer for this BugReport.
+	 */
+	public void proposePatch(String patch) throws UnauthorizedAccessException {
+		if (patch == null)
+			throw new IllegalArgumentException("Patch should not be null.");
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if(!this.getSubsystem().getProject().isProgrammer(user))
+			throw new UnauthorizedAccessException("The logged in user needs to be a programmer to propose a patch");
+		
+		addPatch(patch);
+	}
+
+	/**
+	 * adds a patch to the bug report
+	 * @param patch given patch
+	 */
+	private void addPatch(String patch) {
+		patches.add(new Patch(patch));
 	}
 	
 	/**
@@ -309,6 +318,10 @@ public class BugReport implements IBugReport {
 		
 		patches.remove(patch);
 	}
+	
+	/**********************************************
+	 * OBSERVERS
+	 **********************************************/
 
 	@Override
 	public void attach(Observer observer) {
@@ -330,9 +343,63 @@ public class BugReport implements IBugReport {
 		 ((Subsystem)getSubsystem()).signal(s);
 	}
 	
+	/**********************************************
+	 * OTHER
+	 **********************************************/
+	
+	/**
+	 * Sets the subsystem of this bug report.
+	 * The subsystem of the bug report must contain this bug report.
+	 * @param subsystem
+	 */
+	public void setSubsystem(Subsystem subsystem) {
+		subsystem.getBugReports().contains(this);
+		
+		this.subsystem = subsystem;
+	}
+
 	@Override
-	public IProject getProject() {
-		return subsystem.getProject();
+	public void addComment(String commentText) {
+		if (commentText == null)
+			throw new IllegalArgumentException("Comment should not be null.");
+		
+		comments.add(new Comment(this, commentText));
+	
+		notifyObservers(new Signalisation(NotificationType.CREATE_COMMENT, this));
+	}
+
+	/**
+	 * Adds the given Developer to the assignees list.
+	 * @param developer The developer to add.
+	 * @pre The developer is a developer.
+	 * 		| developer.isDeveloper() == true;
+	 * @post The Developer is part of the assignees list.
+	 * 		| getAssignees().contains(developer);
+	 */
+	public void assignDeveloper(IUser developer) throws UnauthorizedAccessException {
+		IProject project = subsystem.getProject();
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if (!project.isLead(user) && !project.isTester(user))
+			throw new UnauthorizedAccessException("A lead or tester should be logged in to assign bug report");
+	
+		if (!developer.isDeveloper()) throw new IllegalArgumentException();
+		
+		assignees.add(developer);
+	}
+
+	/**
+	 * Changes the current BugTag to the given BugTag.
+	 * @param bugTag The new BugTag
+	 * @post The given BugTag will be the new BugTag.
+	 * 		| getBugTag() == bugTag
+	 */
+	public void updateBugTag(BugTag bugTag) throws UnauthorizedAccessException {
+		if (bugTag.hasToBeLeadToSet() && !(getProject().getLeadDeveloper() == bugTrap.getUserManager().getLoggedInUser()))
+			throw new UnauthorizedAccessException();
+	
+		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState(this));
+		
+		notifyObservers(new Signalisation(NotificationType.BUGREPORT_CHANGE, this));
 	}
 
 	/**
@@ -341,7 +408,7 @@ public class BugReport implements IBugReport {
 	public void terminate() {
 		((Subsystem)subsystem).removeBugReport(this);
 		bugTrap.getNotificationManager().removeObservable(this);
-
+	
 		issuedBy = null;
 		subsystem = null;
 		assignees.clear();
@@ -355,12 +422,14 @@ public class BugReport implements IBugReport {
 		comments.clear();
 	}
 
-	/**
-	 * Returns the impact product of the bug report.
-	 * The impact product is the product of the impact factor and the multiplier.
-	 * @return the impact product of the bug report.
-	 */
-	public double getImpactProduct() {
-		return bugTag.getMultiplier()*getImpactFactor();
+	@Override
+	public int compareTo(IBugReport otherBugReport) {
+		int c = getTitle().compareTo(otherBugReport.getTitle());
+		if (c < 0)
+			return -1;
+		else if (c > 0)
+			return 1;
+		else
+			return 0;
 	}
 }

@@ -3,6 +3,7 @@ package model.projects.commands;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.Command;
+import model.projects.Project;
 import model.projects.forms.ProjectAssignForm;
 
 public class AssignProjectCommand extends Command {
@@ -23,6 +24,6 @@ public class AssignProjectCommand extends Command {
     public void execute() throws UnauthorizedAccessException {
         form.allVarsFilledIn();
 
-        getBugTrap().getProjectManager().assignToProject(form.getProject(), form.getDeveloper(), form.getRole());
+        ((Project) form.getProject()).assignToProject(form.getDeveloper(), form.getRole());
     }
 }

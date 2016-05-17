@@ -14,7 +14,7 @@ public class VersionTests {
 	Version version4;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		version1 = new Version(1, 0, 0);
 		version2 = new Version(1, 0, 1);
 		version3 = new Version(1, 1, 0);
@@ -59,5 +59,4 @@ public class VersionTests {
 	public void equalsFailTest() {
 		Assert.assertFalse(version1.equals(null));
 	}
-
 }

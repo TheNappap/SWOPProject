@@ -1,42 +1,20 @@
 package tests.usertests;
 
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import model.users.Developer;
 import model.users.IUser;
-import model.users.UserManager;
 import model.users.exceptions.NoUserWithUserNameException;
 import model.users.exceptions.NotUniqueUserNameException;
+import tests.BugTrapTest;
 
-public class UserManagerTests {
-	
-	private UserManager userManager;
-	private IUser admin;
-	private IUser issuer;
-	private IUser dev;
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		userManager = new UserManager();
-		
-		userManager.createAdmin("Richard", "Rosie", "Reese", "RRR");
-		userManager.createIssuer("Lindsey", "Lida", "Linkovic", "LLL");
-		userManager.createDeveloper("Carl", "Casey", "Carver", "CCC");
-		
-		admin = userManager.getAdmins().get(0);
-		issuer = userManager.getIssuers().get(0);
-		dev = userManager.getDevelopers().get(0);
-	}
+public class UserManagerTests extends BugTrapTest {
 
 	@Test
 	public void adminCreateTest() {
+		bugTrap.getUserManager().createAdmin("Richard", "Rosie", "Reese", "RRR");
+		IUser admin = bugTrap.getUserManager().getAdmins().get(bugTrap.getUserManager().getAdmins().size() - 1);
 		Assert.assertTrue(admin.isAdmin());
 		Assert.assertEquals(admin.getFirstName(), "Richard");
 		Assert.assertEquals(admin.getMiddleName(), "Rosie");
@@ -46,6 +24,8 @@ public class UserManagerTests {
 	
 	@Test
 	public void issuerCreateTest() {
+		bugTrap.getUserManager().createIssuer("Lindsey", "Lida", "Linkovic", "LLL");
+		IUser issuer = bugTrap.getUserManager().getIssuers().get(bugTrap.getUserManager().getIssuers().size() - 1);
 		Assert.assertTrue(issuer.isIssuer());
 		Assert.assertEquals(issuer.getFirstName(), "Lindsey");
 		Assert.assertEquals(issuer.getMiddleName(), "Lida");
@@ -55,6 +35,8 @@ public class UserManagerTests {
 	
 	@Test
 	public void devCreateTest() {
+		bugTrap.getUserManager().createDeveloper("Carl", "Casey", "Carver", "CCC");
+		IUser dev = bugTrap.getUserManager().getDevelopers().get(bugTrap.getUserManager().getDevelopers().size() - 1);
 		Assert.assertTrue(dev.isDeveloper());
 		Assert.assertEquals(dev.getFirstName(), "Carl");
 		Assert.assertEquals(dev.getMiddleName(), "Casey");
@@ -64,96 +46,96 @@ public class UserManagerTests {
 	
 	@Test (expected = NotUniqueUserNameException.class)
 	public void createAdminFailUserNameExistsTest() {
-		userManager.createAdmin("", "", "", "RRR");
+		bugTrap.getUserManager().createAdmin("", "", "", "ADMIN");
 	}
 	
 	@Test (expected = NotUniqueUserNameException.class)
 	public void createIssuerFailUserNameExistsTest() {
-		userManager.createIssuer("", "", "", "RRR");
+		bugTrap.getUserManager().createIssuer("", "", "", "ISSUER");
 	}
 	
 	@Test (expected = NotUniqueUserNameException.class)
 	public void createDeveloperFailUserNameExistsTest() {
-		userManager.createDeveloper("", "", "", "RRR");
+		bugTrap.getUserManager().createDeveloper("", "", "", "TESTER");
 	}
 	
 	@Test
 	public void loginSuccesTest() {
-		Assert.assertFalse(userManager.isLoggedIn(admin));
-		String message = userManager.loginAs(admin);
-		Assert.assertEquals("User: RRR successfully logged in.", message);
-		Assert.assertTrue(userManager.isLoggedIn(admin));
-		message = userManager.loginAs(admin);
-		Assert.assertEquals("User: RRR is already logged in.", message);
-		Assert.assertTrue(userManager.isLoggedIn(admin));
-		Assert.assertFalse(userManager.isLoggedIn(dev));
+		Assert.assertFalse(bugTrap.getUserManager().isLoggedIn(admin));
+		String message = bugTrap.getUserManager().loginAs(admin);
+		Assert.assertEquals("User: ADMIN successfully logged in.", message);
+		Assert.assertTrue(bugTrap.getUserManager().isLoggedIn(admin));
+		message = bugTrap.getUserManager().loginAs(admin);
+		Assert.assertEquals("User: ADMIN is already logged in.", message);
+		Assert.assertTrue(bugTrap.getUserManager().isLoggedIn(admin));
+		Assert.assertFalse(bugTrap.getUserManager().isLoggedIn(lead));
 	}
 	
 	@Test (expected = NoUserWithUserNameException.class)
 	public void loginFailTest() {
 		Developer d = new Developer("", "", "", "");
-		userManager.loginAs(d);
+		bugTrap.getUserManager().loginAs(d);
 	}
 	
 	@Test
 	public void userNameExistsTest() {
-		boolean succes = userManager.userNameExists("RRR");
-		boolean fail = userManager.userNameExists("NotExistingUser");
+		boolean succes = bugTrap.getUserManager().userNameExists("ADMIN");
+		boolean fail = bugTrap.getUserManager().userNameExists("NotExistingUser");
 		Assert.assertTrue(succes);
 		Assert.assertFalse(fail);
 	}
 	
 	@Test
 	public void userExistsTest() {
-		boolean succes = userManager.userExists(admin);
-		boolean fail = userManager.userExists(new Developer("", "", "",""));
+		boolean succes = bugTrap.getUserManager().userExists(admin);
+		boolean fail = bugTrap.getUserManager().userExists(new Developer("", "", "",""));
 		Assert.assertTrue(succes);
 		Assert.assertFalse(fail);
 	}
 	
 	@Test
 	public void getAdminsTest() {
-		int nb = userManager.getAdmins().size();
+		int nb = bugTrap.getUserManager().getAdmins().size();
 		Assert.assertEquals(1, nb);
-		
-		userManager.createAdmin("", "", "", "");
-		nb = userManager.getAdmins().size();
+
+		bugTrap.getUserManager().createAdmin("", "", "", "");
+		nb = bugTrap.getUserManager().getAdmins().size();
 		Assert.assertEquals(2, nb);
 	}
 	
 	@Test
 	public void getIssuersTest() {
-		int nb = userManager.getIssuers().size();
-		Assert.assertEquals(2, nb); //issuer and dev
-		
-		userManager.createIssuer("", "", "", "");
-		nb = userManager.getIssuers().size();
-		Assert.assertEquals(3, nb);
+		int nb = bugTrap.getUserManager().getIssuers().size();
+		Assert.assertEquals(4, nb); //lead, programmer, tester and issuer
+
+		bugTrap.getUserManager().createIssuer("", "", "", "");
+		nb = bugTrap.getUserManager().getIssuers().size();
+		Assert.assertEquals(5, nb);
 	}
 	
 	@Test
 	public void getDeveloperTest() {
-		int nb = userManager.getDevelopers().size();
-		Assert.assertEquals(1, nb);
-		
-		userManager.createDeveloper("", "", "", "");
-		nb = userManager.getDevelopers().size();
-		Assert.assertEquals(2, nb);
+		int nb = bugTrap.getUserManager().getDevelopers().size();
+		Assert.assertEquals(3, nb);
+
+		bugTrap.getUserManager().createDeveloper("", "", "", "");
+		nb = bugTrap.getUserManager().getDevelopers().size();
+		Assert.assertEquals(4, nb);
 	}
 	
 	@Test
 	public void getUserSuccesTest() {
-		IUser user = userManager.getUser("RRR");
+		IUser user = bugTrap.getUserManager().getUser("ADMIN");
 		Assert.assertEquals(admin, user);
-		user = userManager.getUser("LLL");
+		user = bugTrap.getUserManager().getUser("ISSUER");
 		Assert.assertEquals(issuer, user);
-		user = userManager.getUser("CCC");
-		Assert.assertEquals(dev, user);
+		user = bugTrap.getUserManager().getUser("PROGRAMMER");
+		Assert.assertEquals(prog, user);
 	}
 	
 	@Test (expected = NoUserWithUserNameException.class)
 	public void getUserFailTest() {
-		userManager.getUser("NotAUser");
+		bugTrap.getUserManager().getUser("NotAUser");
 	}
 
 }

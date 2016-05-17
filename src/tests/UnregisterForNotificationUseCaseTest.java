@@ -5,12 +5,12 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import model.notifications.IRegistration;
-import model.notifications.NotificationType;
 import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
+import model.notifications.IRegistration;
+import model.notifications.NotificationType;
 import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.UnregisterNotificationForm;
 

@@ -1,5 +1,11 @@
 package tests;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
+import org.junit.Before;
+
 import controllers.BugReportController;
 import controllers.NotificationController;
 import controllers.ProjectController;
@@ -7,16 +13,15 @@ import controllers.UserController;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
+import model.bugreports.comments.Commentable;
 import model.projects.IProject;
 import model.projects.ISubsystem;
+import model.projects.Project;
+import model.projects.Subsystem;
 import model.projects.Version;
 import model.users.Developer;
 import model.users.IUser;
 import model.users.Issuer;
-import org.junit.Before;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Superclass for all tests for the BugTrap system.
@@ -43,9 +48,12 @@ public class BugTrapTest {
     protected ISubsystem wordArt;
     protected ISubsystem comicSans;
     protected ISubsystem clippy;
+    protected ISubsystem excelTable;
 
     protected IBugReport clippyBug;
     protected IBugReport wordBug;
+    protected IBugReport wordArtBug;
+    protected IBugReport excelBug;
 
     @Before
     public void setUp() {
@@ -67,33 +75,47 @@ public class BugTrapTest {
         //Add Project, assign some people.
         bugTrap.getProjectManager().createProject("Office", "This project is huge. Lots of subsystems", new Date(1302), new Date(1302), 1234, lead, new Version(1, 0, 0));
         office = bugTrap.getProjectManager().getProjects().get(0);
-        office.addProgrammer(prog);
-        office.addTester(tester);
+        ((Project) office).addProgrammer(prog);
+        ((Project) office).addTester(tester);
         //Add Subsystem.
-        bugTrap.getProjectManager().createSubsystem("Word", "Word processor", office, office);
+        ((Project) office).createSubsystem("Word", "Word processor");
         word = bugTrap.getProjectManager().getSubsystemWithName("Word");
-        bugTrap.getProjectManager().createSubsystem("Word Art", "Beautiful creations in text documents!", office, word);
+        ((Subsystem) word).declareAchievedMilestone(Arrays.asList(1, 1));
+        ((Subsystem) word).createSubsystem("Word Art", "Beautiful creations in text documents!");
         wordArt = bugTrap.getProjectManager().getSubsystemWithName("Word Art");
-        bugTrap.getProjectManager().createSubsystem("Comic Sans", "We need an amazing font everybody loves!", office, word);
+        ((Subsystem) wordArt).declareAchievedMilestone(Arrays.asList(1, 2));
+        ((Subsystem) word).createSubsystem("Comic Sans", "We need an amazing font everybody loves!");
         comicSans = bugTrap.getProjectManager().getSubsystemWithName("Comic Sans");
-        bugTrap.getProjectManager().createSubsystem("Clippy", "Annoying paperclip to make people use our software for longer periods of time", office, word);
+        ((Subsystem) comicSans).declareAchievedMilestone(Arrays.asList(1, 1, 1));
+        ((Subsystem) word).createSubsystem("Clippy", "Annoying paperclip to make people use our software for longer periods of time");
         clippy = bugTrap.getProjectManager().getSubsystemWithName("Clippy");
-        bugTrap.getProjectManager().createSubsystem("Excel", "Excellent software", office, office);
+        ((Subsystem) clippy).declareAchievedMilestone(Arrays.asList(1, 2, 1));
+        ((Project) office).createSubsystem("Excel", "Excellent software");
         excel = bugTrap.getProjectManager().getSubsystemWithName("Excel");
-        bugTrap.getProjectManager().createSubsystem("PowerPoint", "Powerfully pointless", office, office);
+        ((Subsystem) excel).declareAchievedMilestone(Arrays.asList(1, 0, 10));
+        ((Subsystem) excel).createSubsystem("ExcelTable", "Excellent Table");
+        excelTable = bugTrap.getProjectManager().getSubsystemWithName("ExcelTable");
+        ((Project) office).createSubsystem("PowerPoint", "Powerfully pointless");
+        ((Subsystem) excelTable).declareAchievedMilestone(Arrays.asList(1, 1));
         powerpoint = bugTrap.getProjectManager().getSubsystemWithName("PowerPoint");
+        ((Subsystem) powerpoint).declareAchievedMilestone(Arrays.asList(1, 1));
         
         //Add BugReports.
         bugTrap.getUserManager().loginAs(lead);
-        bugTrap.getBugReportManager().addBugReport("Clippy bug!", "Clippy only pops up once an hour. Should be more.", new Date(1303), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, 5);
+        bugTrap.getBugReportManager().addBugReport("Clippy bug!", "Clippy only pops up once an hour. Should be more.", new Date(1303), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, null, 5);
         clippyBug = clippy.getAllBugReports().get(0);
-        bugTrap.getBugReportManager().addComment(clippyBug, "Agreed! I propose once every 5 minutes!");
+        ((Commentable) clippyBug).addComment("Agreed! I propose once every 5 minutes!");
         ArrayList<IUser> assignees = new ArrayList<>();
         assignees.add(prog);
         ArrayList<IBugReport> dependencies = new ArrayList<>();
         dependencies.add(clippyBug);
-        bugTrap.getBugReportManager().addBugReport("Word crashes when Clippy pops up", "...", new Date(1305), word, lead, dependencies, assignees, BugTag.UNDERREVIEW, 7);
+        bugTrap.getBugReportManager().addBugReport("Word crashes", "As soon as Clippy pops up...", new Date(1305), word, lead, dependencies, assignees, BugTag.UNDERREVIEW, null, 7);
         wordBug = word.getAllBugReports().get(0);
+        dependencies = new ArrayList<>();
+        bugTrap.getBugReportManager().addBugReport("WordArt is not working", "When using Comic Sans, the Word Art does not work.", new Date(1310), wordArt, issuer, dependencies, assignees, BugTag.ASSIGNED, null, 3);
+        wordArtBug = wordArt.getAllBugReports().get(0);
+        bugTrap.getBugReportManager().addBugReport("Excel does weird stuff", "...", new Date(1305), excel, lead, new ArrayList<>(), assignees, BugTag.RESOLVED, null, 3);
+        excelBug = excel.getAllBugReports().get(0);
 
         //Log off.
         bugTrap.getUserManager().logOff();

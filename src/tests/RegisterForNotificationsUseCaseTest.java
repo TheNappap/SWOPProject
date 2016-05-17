@@ -3,14 +3,14 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import model.bugreports.BugReport;
-import model.notifications.NotificationType;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
+import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 import model.notifications.Mailbox;
+import model.notifications.NotificationType;
 import model.notifications.forms.RegisterNotificationForm;
 import model.projects.IProject;
 import model.projects.ISubsystem;

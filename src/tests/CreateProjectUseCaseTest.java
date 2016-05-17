@@ -2,19 +2,17 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.projects.IProject;
 import model.projects.Version;
-import model.projects.forms.DeclareAchievedMilestoneForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectForkForm;
 import model.users.IUser;
@@ -51,10 +49,8 @@ public class CreateProjectUseCaseTest extends BugTrapTest {
 		form.setLeadDeveloper(dev);
 		
 		//6. The system creates the project and shows an overview.
-		Date creationDate = new Date();
 		try {
 			projectController.createProject(form);
-			creationDate = new Date();
 			project = projectController.getProjectList().get(projectController.getProjectList().size() - 1);
 		} catch (UnauthorizedAccessException e) { fail("not authorised"); }
 
@@ -81,7 +77,7 @@ public class CreateProjectUseCaseTest extends BugTrapTest {
 		//-Has no parent system.
 		assertEquals(null,						project.getParent());
 		//-Has correct CreationDate.
-		assertEquals(creationDate,				project.getCreationDate());
+		assertTrue(Math.abs(project.getCreationDate().getTime() - new Date().getTime()) < 250);
 		//-Has one Achieved Milestone: M0
 		assertEquals("M0",						project.getAchievedMilestone().toString());
 	}
@@ -90,7 +86,6 @@ public class CreateProjectUseCaseTest extends BugTrapTest {
 	@Test
 	public void createForkProjectTest() {
 		IUser admin = userController.getAdmins().get(0);
-		IUser dev = userController.getDevelopers().get(0);
 	
 		userController.loginAs(admin);
 		

@@ -5,20 +5,16 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.IBugReport;
 import model.bugreports.TargetMilestone;
-import model.bugreports.bugtag.BugTag;
 import model.bugreports.forms.BugReportCreationForm;
 import model.projects.IProject;
 import model.projects.ISubsystem;
-import model.projects.Version;
 import model.users.IUser;
 
 public class CreateBugReportUseCaseTest extends BugTrapTest {

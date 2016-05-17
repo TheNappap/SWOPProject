@@ -17,8 +17,16 @@ import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.FilterType;
-import model.bugreports.forms.*;
-import model.notifications.*;
+import model.bugreports.forms.BugReportAssignForm;
+import model.bugreports.forms.BugReportCreationForm;
+import model.bugreports.forms.BugReportUpdateForm;
+import model.bugreports.forms.CommentCreationForm;
+import model.bugreports.forms.ProposePatchForm;
+import model.bugreports.forms.ProposeTestForm;
+import model.notifications.INotification;
+import model.notifications.IRegistration;
+import model.notifications.NotificationType;
+import model.notifications.Observable;
 import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.ShowChronologicalNotificationForm;
 import model.notifications.forms.UnregisterNotificationForm;
@@ -27,11 +35,15 @@ import model.projects.ISubsystem;
 import model.projects.ISystem;
 import model.projects.Role;
 import model.projects.Version;
-import model.projects.forms.*;
+import model.projects.forms.DeclareAchievedMilestoneForm;
+import model.projects.forms.ProjectAssignForm;
+import model.projects.forms.ProjectCreationForm;
+import model.projects.forms.ProjectDeleteForm;
+import model.projects.forms.ProjectForkForm;
+import model.projects.forms.ProjectUpdateForm;
+import model.projects.forms.SubsystemCreationForm;
 import model.users.IUser;
 import model.users.Issuer;
-
-import static org.junit.Assert.fail;
 
 public class Main {
 
@@ -119,6 +131,10 @@ public class Main {
 			proposePatch();
 		} else if (cmd.equals("declareachievedmilestone")) {
 			declareAchievedMilestone();
+		} else if (cmd.equals("split")) {
+			split();
+		} else if (cmd.equals("merge")) {
+			merge();
 		}
 		else
 			System.out.println("Command not recognized.");
@@ -391,10 +407,18 @@ public class Main {
 		System.out.println(" Creation date: " + project.getCreationDate().toString());
 		System.out.println(" Start date: " + project.getStartDate().toString());
 		System.out.println(" Version: " + project.getVersion());
+		System.out.println(" Health");
+		System.out.println(" - Health indicator 1: " + project.getHealthIndicators().get(0));
+		System.out.println(" - Health indicator 2: " + project.getHealthIndicators().get(1));
+		System.out.println(" - Health indicator 3: " + project.getHealthIndicators().get(2));
 
 		for (ISubsystem system : project.getAllDirectOrIndirectSubsystems()) {
 			System.out.println(" -- " + system.getName() + " -- ");
-			System.out.println(" Description: " + system.getDescription());
+			System.out.println(" --- Description: " + system.getDescription());
+			System.out.println(" --- Health");
+			System.out.println(" ---- Health indicator 1: " + system.getHealthIndicators().get(0));
+			System.out.println(" ---- Health indicator 2: " + system.getHealthIndicators().get(1));
+			System.out.println(" ---- Health indicator 3: " + system.getHealthIndicators().get(2));
 		}
 	}
 	
@@ -766,6 +790,14 @@ public class Main {
 		}
 
 		System.out.println("Milestone was declared.");
+	}
+
+	public static void split() {
+		// TODO: Implement this
+	}
+
+	public static void merge() {
+		// TODO: Implement this as well!
 	}
 
 	// -- Printing --

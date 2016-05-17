@@ -5,8 +5,6 @@ import java.util.List;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
-import model.bugreports.bugtag.BugTag;
-import model.notifications.observers.Observer;
 import model.notifications.observers.ObserverWithMailbox;
 import model.users.IUser;
 

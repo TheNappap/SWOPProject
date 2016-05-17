@@ -9,11 +9,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import org.junit.Before;
 import org.junit.Test;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 import model.bugreports.Patch;
@@ -22,15 +21,11 @@ import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
 import model.notifications.observers.Observer;
 import model.projects.ISubsystem;
-import model.projects.Project;
-import model.projects.Subsystem;
-import model.projects.Version;
-import model.users.Administrator;
-import model.users.Developer;
 import model.users.IUser;
 import model.users.Issuer;
+import tests.BugTrapTest;
 
-public class BugReportTest {
+public class BugReportTest extends BugTrapTest {
 
 	private BugReport bugReport;
 	
@@ -54,10 +49,10 @@ public class BugReportTest {
 	
 	
 	@Before
-	public void setUp() throws Exception {
-		Project project = new Project(null, "n", "d", null, Version.firstVersion(), null, null, 12345, null, null);
-		subsystem = new Subsystem(null, null, null, project, null, project, null);
-		bugReport = new BugReport(null, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, targetMilestone, tests, patches, impactFactor);
+	public void setUp() {
+		super.setUp();
+		subsystem = excel;
+		bugReport = new BugReport(bugTrap, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, targetMilestone, tests, patches, impactFactor);
 	}
 
 	@Test
@@ -86,21 +81,18 @@ public class BugReportTest {
 	
 	@Test
 	public void assignDeveloperTest() {
-		IUser admin 	= new Administrator(null, null, null, null);
-		IUser issuer 	= new Issuer(null, null, null, null);
-		IUser developer = new Developer(null, null, null, null);
-		
-		try { bugReport.assignDeveloper(admin); fail(); } catch (IllegalArgumentException e) {} catch (UnauthorizedAccessException e) { }
-		try { bugReport.assignDeveloper(issuer); fail(); } catch (IllegalArgumentException e) {} catch (UnauthorizedAccessException e) { }
+		bugTrap.getUserManager().loginAs(lead);
+		try { bugReport.assignDeveloper(admin); fail(); } catch (IllegalArgumentException e) {} catch (UnauthorizedAccessException e) { fail(); }
+		try { bugReport.assignDeveloper(issuer); fail(); } catch (IllegalArgumentException e) {} catch (UnauthorizedAccessException e) { fail(); }
 		
 		assertEquals(0, bugReport.getAssignees().size());
 		try {
-			bugReport.assignDeveloper(developer);
+			bugReport.assignDeveloper(prog);
 		} catch (UnauthorizedAccessException e) {
 			fail();
 		}
 		assertEquals(1, bugReport.getAssignees().size());
-		assertEquals(bugReport.getAssignees().get(0), developer);
+		assertEquals(bugReport.getAssignees().get(0), prog);
 	}
 	
 	@Test
@@ -112,7 +104,9 @@ public class BugReportTest {
 		BugTag notABugTag 		= BugTag.NOTABUG;
 		BugTag resolvedTag 		= BugTag.RESOLVED;
 		BugTag underReviewTag 	= BugTag.UNDERREVIEW;
-		
+
+		bugTrap.getUserManager().loginAs(lead);
+
 		//From New to New is allowed.
 		try {
 			bugReport.updateBugTag(newTag);
@@ -147,8 +141,6 @@ public class BugReportTest {
 			fail();
 		}
 		//Walking around in Closed is not allowed.
-		
-		System.out.println(bugReport.getBugTag());
 		try { bugReport.updateBugTag(resolvedTag); fail(); } catch (IllegalStateException e) { } catch (UnauthorizedAccessException e) { }
 		try { bugReport.updateBugTag(closedTag); fail(); } catch (IllegalStateException e) { } catch (UnauthorizedAccessException e) { }
 		try { bugReport.updateBugTag(notABugTag); fail(); } catch (IllegalStateException e) { } catch (UnauthorizedAccessException e) { }
@@ -161,12 +153,60 @@ public class BugReportTest {
 
 	@Test
 	public void compareTest() {
-		BugReport other = new BugReport(null, "CugReport", null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null, 4);
-		assertEquals(-1, bugReport.compareTo(other));
-		assertEquals(1, other.compareTo(bugReport));
-		
-		BugReport other2 = new BugReport(null, "BugReport", null, null, null, null, null, null, null, null, BugTag.NEW, null, null, null, null, null, null, 3);
-		assertEquals(0, bugReport.compareTo(other2));
-		assertEquals(0, other2.compareTo(bugReport));
+		assertEquals(-1, clippyBug.compareTo(wordBug));
+		assertEquals(1, wordArtBug.compareTo(clippyBug));
+
+		assertEquals(0, bugReport.compareTo(bugReport));
+		assertEquals(0, bugReport.compareTo(bugReport));
+
+		assertEquals(-1, bugReport.compareTo(clippyBug));
+		assertEquals(1, clippyBug.compareTo(bugReport));
+	}
+	
+	@Test
+	public void addComment() {
+		((BugReport) wordArtBug).addComment("Who uses WortArt or Comic Sans anyway?");
+		assertEquals(1, wordArtBug.getComments().size());
+		assertEquals("Who uses WortArt or Comic Sans anyway?", wordArtBug.getComments().get(0).getText());
+	}
+
+	@Test
+	public void proposeTest() {
+		bugTrap.getUserManager().loginAs(tester);
+		try {
+			((BugReport) wordArtBug).proposeTest("<code here>");
+		} catch (UnauthorizedAccessException e) {
+			fail("Not authorized.");
+			e.printStackTrace();
+		}
+
+		assertEquals(1, wordArtBug.getTests().size());
+		assertEquals("<code here>", wordArtBug.getTests().get(0).getTest());
+	}
+
+	@Test (expected = UnauthorizedAccessException.class)
+	public void propseTestNotAllowed() throws UnauthorizedAccessException {
+		bugTrap.getUserManager().loginAs(lead);
+		((BugReport) wordArtBug).proposeTest("test");
+	}
+
+	@Test
+	public void proposePatch() {
+		bugTrap.getUserManager().loginAs(prog);
+		try {
+			((BugReport) wordArtBug).proposePatch("<code here>");
+		} catch (UnauthorizedAccessException e) {
+			fail("Not authorized.");
+			e.printStackTrace();
+		}
+
+		assertEquals(1, wordArtBug.getPatches().size());
+		assertEquals("<code here>", wordArtBug.getPatches().get(0).getPatch());
+	}
+
+	@Test (expected = UnauthorizedAccessException.class)
+	public void proposePatchNotAllowed() throws UnauthorizedAccessException {
+		bugTrap.getUserManager().loginAs(lead);
+		((BugReport) wordArtBug).proposePatch("patch");
 	}
 }

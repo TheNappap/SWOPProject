@@ -45,6 +45,14 @@ public class BugReportController extends Controller {
 	public BugReportUpdateForm getBugReportUpdateForm() throws UnauthorizedAccessException{
 		return getBugTrap().getFormFactory().makeBugReportUpdateForm();
 	}
+	
+	public ProposeTestForm getProposeTestForm() throws UnauthorizedAccessException {
+		return getBugTrap().getFormFactory().makeProposeTestForm();
+	}
+
+	public ProposePatchForm getProposePatchForm() throws UnauthorizedAccessException {
+		return getBugTrap().getFormFactory().makeProposePatchForm();
+	}
 
 	/**
 	 * Returns a list of all bug reports
@@ -109,14 +117,6 @@ public class BugReportController extends Controller {
 	 */
 	public void assignToBugReport(BugReportAssignForm form) throws UnauthorizedAccessException {
 		new AssignBugReportCommand(getBugTrap(), form).execute();
-	}
-
-	public ProposeTestForm getProposeTestForm() throws UnauthorizedAccessException {
-		return getBugTrap().getFormFactory().makeProposeTestForm();
-	}
-
-	public ProposePatchForm getProposePatchForm() throws UnauthorizedAccessException {
-		return getBugTrap().getFormFactory().makeProposePatchForm();
 	}
 
 	/**

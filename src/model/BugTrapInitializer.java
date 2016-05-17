@@ -140,7 +140,7 @@ class BugTrapInitializer {
 		String name = node.getAttribute("name");
 		String descr = node.getAttribute("description");
 		
-		bugTrap.getProjectManager().createSubsystem(name, descr, project, parent);
+		parent.createSubsystem(name, descr);
 		Subsystem sub = (Subsystem) bugTrap.getProjectManager().getSubsystemWithName(name);
 		
 		ArrayList<Node> subsystems = getDirectElementsWithTagName((Element)getFirstDirectElementWithTagName(node, "subsystems"), "subsystem");
@@ -173,7 +173,7 @@ class BugTrapInitializer {
 		}
 
 
-		bugTrap.getBugReportManager().addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), assigned, tag, 6);
+		bugTrap.getBugReportManager().addBugReport(title, descr, creation, sub, issuer, new ArrayList<>(), assigned, tag, null, 6);
 	}
 	
 	// -- XML Helpers --

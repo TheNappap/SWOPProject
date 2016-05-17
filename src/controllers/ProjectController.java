@@ -5,8 +5,24 @@ import java.util.List;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.projects.IProject;
-import model.projects.commands.*;
-import model.projects.forms.*;
+import model.projects.commands.AssignProjectCommand;
+import model.projects.commands.CreateProjectCommand;
+import model.projects.commands.CreateSubsystemCommand;
+import model.projects.commands.DeclareAchievedMilestoneCommand;
+import model.projects.commands.DeleteProjectCommand;
+import model.projects.commands.ForkProjectCommand;
+import model.projects.commands.MergeSubsystemCommand;
+import model.projects.commands.SplitSubsystemCommand;
+import model.projects.commands.UpdateProjectCommand;
+import model.projects.forms.DeclareAchievedMilestoneForm;
+import model.projects.forms.MergeSubsystemForm;
+import model.projects.forms.ProjectAssignForm;
+import model.projects.forms.ProjectCreationForm;
+import model.projects.forms.ProjectDeleteForm;
+import model.projects.forms.ProjectForkForm;
+import model.projects.forms.ProjectUpdateForm;
+import model.projects.forms.SplitSubsystemForm;
+import model.projects.forms.SubsystemCreationForm;
 
 /**
  * Controller for all Project related things.
@@ -48,6 +64,18 @@ public class ProjectController extends Controller {
 
 	public SubsystemCreationForm getSubsystemCreationForm() throws UnauthorizedAccessException{
 		return getBugTrap().getFormFactory().makeSubsystemCreationForm();
+	}
+	
+	public DeclareAchievedMilestoneForm getDeclareAchievedMilestoneForm() throws UnauthorizedAccessException {
+		return getBugTrap().getFormFactory().makeDeclareAchievedMilestoneForm();
+	}
+	
+	public SplitSubsystemForm getSplitSubsystemForm() throws UnauthorizedAccessException {
+		return getBugTrap().getFormFactory().makeSplitSubsystemForm();
+	}
+	
+	public MergeSubsystemForm getMergeSubsystemForm() throws UnauthorizedAccessException {
+		return getBugTrap().getFormFactory().makeMergeSubsystemForm();
 	}
 
 	/**
@@ -105,15 +133,30 @@ public class ProjectController extends Controller {
 		new CreateSubsystemCommand(getBugTrap(), form).execute();
 	}
 
-	public DeclareAchievedMilestoneForm getDeclareAchievedMilestoneForm() throws UnauthorizedAccessException {
-		return getBugTrap().getFormFactory().makeDeclareAchievedMilestoneForm();
-	}
-
 	/**
 	 * Declare an achieved milestone.
 	 * @param form DeclareAchievedMilestoneForm containing all the details about the declaration.
+	 * @throws UnauthorizedAccessException 
      */
 	public void declareAchievedMilestone(DeclareAchievedMilestoneForm form) throws UnauthorizedAccessException {
 		new DeclareAchievedMilestoneCommand(getBugTrap(), form).execute();
+	}
+	
+	/**
+	 * Split a subsystem
+	 * @param form SplitSubsystemForm containing all the details about the split.
+	 * @throws UnauthorizedAccessException 
+     */
+	public void splitSubsystem(SplitSubsystemForm form) throws UnauthorizedAccessException {
+		new SplitSubsystemCommand(getBugTrap(), form).execute();
+	}
+	
+	/**
+	 * Merge a subsystem
+	 * @param form MergeSubsystemForm containing all the details about the split.
+	 * @throws UnauthorizedAccessException 
+     */
+	public void mergeSubsystem(MergeSubsystemForm form) throws UnauthorizedAccessException {
+		new MergeSubsystemCommand(getBugTrap(), form).execute();
 	}
 }

@@ -4,7 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import model.bugreports.bugtag.BugTag;
-import model.bugreports.comments.Commentable;
+import model.bugreports.comments.Comment;
+import model.bugreports.comments.ICommentable;
 import model.notifications.Observable;
 import model.projects.IProject;
 import model.projects.ISubsystem;
@@ -13,7 +14,7 @@ import model.users.IUser;
 /**
  * Interface for the BugReport class.
  */
-public interface IBugReport extends Comparable<IBugReport>, Commentable, Observable {
+public interface IBugReport extends Comparable<IBugReport>, ICommentable, Observable {
 
 	/**
 	 * 
@@ -102,4 +103,10 @@ public interface IBugReport extends Comparable<IBugReport>, Commentable, Observa
      * @return Project of the BugReport.
      */
     IProject getProject();
+    
+    /**
+     * 
+     * @return Comments of the BugReport
+     */
+    List<Comment> getComments();
 }

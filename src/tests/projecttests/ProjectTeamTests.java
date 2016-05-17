@@ -22,7 +22,7 @@ public class ProjectTeamTests {
     Developer tester;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         team1 = new ProjectTeam();
         lead = new Developer("", "", "", "lead");
         prog = new Developer("", "", "", "prog");

@@ -20,7 +20,7 @@ public class RegisterForNotificationCommand extends Command {
     @Override
     public void execute() throws UnauthorizedAccessException {
         Mailbox box = getBugTrap().getNotificationManager().getMailboxForUser(getBugTrap().getUserManager().getLoggedInUser());
-        ObserverWithMailbox observer = form.getRegistrationType().createObserver(box, form.getObservable(), form.getTag());
+        ObserverWithMailbox observer = form.getRegistrationType().createObserver(box, form.getObservable(), form.getTag(), form.getMilestone());
         form.getObservable().attach(observer);
         getBugTrap().getNotificationManager().addObserver(observer);
     }
