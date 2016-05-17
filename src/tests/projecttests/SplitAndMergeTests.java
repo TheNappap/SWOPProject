@@ -35,12 +35,15 @@ public class SplitAndMergeTests extends BugTrapTest{
 		assertEquals(1, subsystem.getBugReports().size());
 		assertEquals(2, subsystem.getSubsystems().size());
 		
+		assertEquals("Text", subsystem.getBugReports().get(0).getSubsystem().getName());
+		
 		//second part of split subsystem
 		subsystem =  (Subsystem) subsystems.get(3);
 		assertEquals("Annoying Tools", subsystem.getName());
 		assertEquals("Tools can annoying", subsystem.getDescription());
 		assertEquals(0, subsystem.getBugReports().size());
 		assertEquals(1, subsystem.getSubsystems().size());
+		
 	}
 	
 	@Test
@@ -63,6 +66,8 @@ public class SplitAndMergeTests extends BugTrapTest{
 		assertEquals("A combination of word and excel", subsystem.getDescription());
 		assertEquals(2, subsystem.getBugReports().size());
 		assertEquals(4, subsystem.getSubsystems().size());
+		
+		assertEquals("OfficeParty", subsystem.getBugReports().get(0).getSubsystem().getName());
 	}
 	
 	@Test
@@ -72,7 +77,7 @@ public class SplitAndMergeTests extends BugTrapTest{
 		assertEquals(3, word.getSubsystems().size());
 		assertEquals(1, ((Subsystem) excel).getBugReports().size());
 		assertEquals(0, clippy.getSubsystems().size());
-		word.merge("Word", "Word with embedded clippy", clippy);
+		word.merge("Word+", "Word with embedded clippy", clippy);
 		
 		List<ISubsystem> subsystems = office.getSubsystems();
 		
@@ -83,10 +88,12 @@ public class SplitAndMergeTests extends BugTrapTest{
 		
 		//merged subsystem
 		subsystem =  (Subsystem) subsystems.get(2);
-		assertEquals("Word", subsystem.getName());
+		assertEquals("Word+", subsystem.getName());
 		assertEquals("Word with embedded clippy", subsystem.getDescription());
 		assertEquals(2, subsystem.getBugReports().size());
-		assertEquals(2, subsystem.getSubsystems().size());		
+		assertEquals(2, subsystem.getSubsystems().size());
+		
+		assertEquals("Word+", subsystem.getBugReports().get(0).getSubsystem().getName());
 	}
 
 }

@@ -1,7 +1,6 @@
 package model.projects.forms;
 
 import model.Form;
-import model.projects.IProject;
 import model.projects.ISystem;
 
 /**
@@ -12,7 +11,6 @@ public class SubsystemCreationForm implements Form {
 	private String name;
 	private String description;
 	private ISystem parent;
-	private IProject project;
 		
 	public SubsystemCreationForm() {
 		
@@ -44,19 +42,8 @@ public class SubsystemCreationForm implements Form {
 
 	public void setParent(ISystem parent) {
 		if (parent == null) throw new NullPointerException("Given parent is null.");
-		
-		// The project is the root
-		ISystem p = parent;
-		while (p.getParent() != null)
-			p = p.getParent();
-		
-		this.project = (IProject)p;
-		
-		this.parent = parent;
-	}
 
-	public IProject getProject() {
-		return project;
+		this.parent = parent;
 	}
 
 	@Override
@@ -64,7 +51,6 @@ public class SubsystemCreationForm implements Form {
 		if (getName() == null) throw new NullPointerException("Name is null");
 		if (getDescription() == null) throw new NullPointerException("Description is null");
 		if (getParent() == null) throw new NullPointerException("Parent is null");
-		if (getProject() == null) throw new NullPointerException("Project is null");
 	}
 
 }

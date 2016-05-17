@@ -5,7 +5,6 @@ import java.util.List;
 
 import model.BugTrap;
 import model.projects.AchievedMilestone;
-import model.projects.Project;
 import model.projects.Subsystem;
 import model.projects.System;
 
@@ -22,10 +21,6 @@ public class SubsystemBuilder {
 	//-Optional
 	private List<Subsystem> subsystems = new ArrayList<Subsystem>();
 	private AchievedMilestone milestone = new AchievedMilestone();
-	
-	//Subsystem variables.
-	//-Required.
-	private Project project;
 	
 	/**
 	 * Constructor for a SubsystemBuilder. 
@@ -74,16 +69,6 @@ public class SubsystemBuilder {
 		this.milestone = milestone;
 		return this;
 	}
-
-	/**
-	 * Method to set the project of the Subsystem object being built.
-	 * @param project The project to set for the subsystem.
-	 * @return this, with set project.
-	 */
-	public SubsystemBuilder setProject(Project project) {
-		this.project = project;
-		return this;
-	}
 	
 	/**
 	 * Method to create the Subsystem object with the set properties.
@@ -91,7 +76,7 @@ public class SubsystemBuilder {
 	 */
 	public Subsystem getSubsystem() {
 		validate();
-		return new Subsystem(bugTrap, name, description, parent, subsystems, project, milestone);
+		return new Subsystem(bugTrap, name, description, parent, subsystems, milestone);
 	}
 	
 	private void validate() {
@@ -100,6 +85,5 @@ public class SubsystemBuilder {
 		if (parent == null) 		throw new NullPointerException("Parent is null");
 		if (subsystems == null) 	throw new NullPointerException("Subsystems is null");
 		if (milestone == null)		throw new NullPointerException("Milestone is null");
-		if (project == null) 		throw new NullPointerException("Project is null");
 	}
 }

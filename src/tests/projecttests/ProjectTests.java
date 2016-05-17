@@ -12,9 +12,12 @@ import org.junit.Test;
 
 import model.projects.Project;
 import model.projects.ProjectTeam;
+import model.projects.Role;
 import model.projects.Subsystem;
 import model.projects.Version;
 import model.users.Developer;
+import model.users.IUser;
+import model.users.UserManager;
 import tests.BugTrapTest;
 
 public class ProjectTests extends BugTrapTest {
@@ -50,5 +53,44 @@ public class ProjectTests extends BugTrapTest {
          assertFalse(office.getProgrammers().contains(dev));
          assertTrue(office.getTesters().contains(dev));
          assertNotEquals(office.getLeadDeveloper(), dev);
+     }
+     
+     @SuppressWarnings("deprecation")
+     @Test
+     public void testUpdateProject() {
+         ((Project)office).update("nn", "dd", 3883, new Date(2015, 11, 1));
+
+         Assert.assertEquals(office.getName(), "nn");
+         Assert.assertEquals(office.getDescription(), "dd");
+         Assert.assertEquals(office.getStartDate(), new Date(2015, 11, 1));
+         Assert.assertEquals(office.getBudgetEstimate(), 3883, 0.0001);
+     }
+     
+     @SuppressWarnings("deprecation")
+     @Test
+     public void testAssignToProject() {
+         bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
+         Project project = ((Project)office);
+         //to assign, need to be logged in as dev
+ 		 bugTrap.getUserManager().loginAs(lead);
+
+
+         UserManager um = new UserManager();
+         um.createDeveloper("", "", "", "D0");
+         IUser d0 = um.getDevelopers().get(0);
+         um.createDeveloper("", "", "", "D1");
+         IUser d1 = um.getDevelopers().get(1);
+         um.createDeveloper("", "", "", "D2");
+         IUser d2 = um.getDevelopers().get(2);
+
+         project.assignToProject(d0, Role.PROGRAMMER);
+ 		 Assert.assertTrue(office.getProgrammers().contains(d0));
+         Assert.assertFalse(office.getProgrammers().contains(d1));
+         Assert.assertFalse(office.getProgrammers().contains(d2));
+
+         project.assignToProject(d1, Role.TESTER);
+ 		 Assert.assertFalse(office.getTesters().contains(d0));
+         Assert.assertTrue(office.getTesters().contains(d1));
+         Assert.assertFalse(office.getTesters().contains(d2));
      }
 }

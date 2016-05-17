@@ -86,7 +86,7 @@ public class Project extends System implements IProject {
 		return projectTeam.getLeadDeveloper();
 	}
 
-	ProjectTeam getTeam() {
+	private ProjectTeam getTeam() {
 		return projectTeam;
 	}
 
@@ -221,5 +221,34 @@ public class Project extends System implements IProject {
 	@Override
 	public double getBugImpact() {
 		return 0;
+	}
+	
+	/**
+	 * Updates project with given name, description, budget estimate and start date
+	 * @param name				the name of the project
+	 * @param description		the description of the project
+	 * @param budgetEstimate	the budget estimate of the project
+	 * @param startDate			the start date of the project
+	 */
+	public void update(String name, String description, double budgetEstimate, Date startDate) {
+		if (name == null || description == null || startDate == null)
+			throw new IllegalArgumentException("Arguments should not be null.");
+
+		setBudgetEstimate(budgetEstimate);
+		setDescription(description);
+		setName(name);
+		setStartDate(startDate);
+	}
+	
+	/**
+	 * Assigns a developer to the project with a given role
+	 * @param dev		The developer to be assigned
+	 * @param role		The role to be assigned
+	 */
+	public void assignToProject(IUser dev, Role role) {
+		if (dev == null || role == null)
+			throw new IllegalArgumentException("Arguments should not be null.");
+
+		getTeam().addMember(dev, role);
 	}
 }

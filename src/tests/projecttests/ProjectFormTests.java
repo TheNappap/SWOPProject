@@ -280,7 +280,6 @@ public class ProjectFormTests extends BugTrapTest {
 		Assert.assertEquals("Sub", subSystemCreationForm.getName());
 		Assert.assertEquals("A test subsystem", subSystemCreationForm.getDescription());
 		Assert.assertEquals(office, subSystemCreationForm.getParent());
-		Assert.assertEquals(office, subSystemCreationForm.getProject());
 	}
 	
 	@Test (expected = NullPointerException.class)

@@ -12,7 +12,7 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Project;
-import model.projects.Role;
+import model.projects.Subsystem;
 import model.projects.Version;
 import model.users.IUser;
 import model.users.UserManager;
@@ -66,17 +66,6 @@ public class ProjectManagerTests extends BugTrapTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testUpdateProject() {
-        bugTrap.getProjectManager().updateProject(office, "nn", "dd", 3883, new Date(2015, 11, 1));
-
-        Assert.assertEquals(office.getName(), "nn");
-        Assert.assertEquals(office.getDescription(), "dd");
-        Assert.assertEquals(office.getStartDate(), new Date(2015, 11, 1));
-        Assert.assertEquals(office.getBudgetEstimate(), 3883, 0.0001);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Test
     public void testDeleteProject() throws UnauthorizedAccessException {
         int projects = bugTrap.getProjectManager().getProjects().size();
 
@@ -89,38 +78,6 @@ public class ProjectManagerTests extends BugTrapTest {
         Assert.assertFalse(bugTrap.getProjectManager().getProjects().contains(project));
     }
 
-    @SuppressWarnings("deprecation")
-    @Test
-    public void testAssignToProject() {
-        bugTrap.getProjectManager().createProject("n", "d", new Date(2015, 8, 18), new Date(2015, 9, 1), 123, null, new Version(1, 0, 0));
-        IProject project = bugTrap.getProjectManager().getProjects().get(bugTrap.getProjectManager().getProjects().size() - 1);
-        //to assign, need to be logged in as dev
-		bugTrap.getUserManager().loginAs(lead);
-
-
-        UserManager um = new UserManager();
-        um.createDeveloper("", "", "", "D0");
-        IUser d0 = um.getDevelopers().get(0);
-        um.createDeveloper("", "", "", "D1");
-        IUser d1 = um.getDevelopers().get(1);
-        um.createDeveloper("", "", "", "D2");
-        IUser d2 = um.getDevelopers().get(2);
-
-        bugTrap.getProjectManager().assignToProject(office, d0, Role.PROGRAMMER);
-		Assert.assertTrue(office.getProgrammers().contains(d0));
-        Assert.assertFalse(office.getProgrammers().contains(d1));
-        Assert.assertFalse(office.getProgrammers().contains(d2));
-
-        bugTrap.getProjectManager().assignToProject(office, d1, Role.TESTER);
-		Assert.assertFalse(office.getTesters().contains(d0));
-        Assert.assertTrue(office.getTesters().contains(d1));
-        Assert.assertFalse(office.getTesters().contains(d2));
-
-        bugTrap.getProjectManager().assignToProject(project, d2, Role.LEAD);
-		Assert.assertNotEquals(project.getLeadDeveloper(), d0);
-        Assert.assertNotEquals(project.getLeadDeveloper(), d1);
-        Assert.assertEquals(project.getLeadDeveloper(), d2);
-    }
 
     @SuppressWarnings("deprecation")
     @Test
@@ -165,7 +122,7 @@ public class ProjectManagerTests extends BugTrapTest {
     @Test
     public void testCreateSubsystem() {
         ISubsystem sub = null;
-        bugTrap.getProjectManager().createSubsystem("name", "description", office, office);
+        ((Project) office).createSubsystem("name", "description");
         sub = bugTrap.getProjectManager().getSubsystemWithName("name");
 
         Assert.assertEquals(sub.getName(), "name");
@@ -176,7 +133,7 @@ public class ProjectManagerTests extends BugTrapTest {
         Assert.assertTrue(office.getSubsystems().contains(sub));
 
         ISubsystem subsub = null;
-		bugTrap.getProjectManager().createSubsystem("name2", "descr2", office, sub);
+        ((Subsystem) sub).createSubsystem("name2", "descr2");
 		subsub = bugTrap.getProjectManager().getSubsystemWithName("name2");
 
         Assert.assertEquals(subsub.getName(), "name2");
@@ -193,7 +150,7 @@ public class ProjectManagerTests extends BugTrapTest {
 
     @Test
     public void testGetSubsystemWithName() {
-        bugTrap.getProjectManager().createSubsystem("name", "description", office, office);
+    	((Project) office).createSubsystem("name", "description");
         ISubsystem sub = office.getSubsystems().get(office.getSubsystems().size() - 1);
         assertEquals(bugTrap.getProjectManager().getSubsystemWithName("name").getName(), "name");
         assertEquals(bugTrap.getProjectManager().getSubsystemWithName("name"), sub);
