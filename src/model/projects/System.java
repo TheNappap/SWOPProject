@@ -314,4 +314,10 @@ public abstract class System implements ISystem, Observable, Observer {
 			.setParent(this)
 			.getSubsystem();
 	}
+	
+	/**
+	 * Returns the verison of the system
+	 * @return The Version of this system.
+	 */
+	public abstract Version getVersion();
 }

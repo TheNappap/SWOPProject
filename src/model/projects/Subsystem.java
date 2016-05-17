@@ -212,4 +212,9 @@ public class Subsystem extends System implements ISubsystem {
 		
 		return bugImpact;
 	}
+
+	@Override
+	public Version getVersion() {
+		return ((System) getParent()).getVersion();
+	}
 }

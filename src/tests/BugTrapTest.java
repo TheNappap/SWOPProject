@@ -75,8 +75,8 @@ public class BugTrapTest {
         //Add Project, assign some people.
         bugTrap.getProjectManager().createProject("Office", "This project is huge. Lots of subsystems", new Date(1302), new Date(1302), 1234, lead, new Version(1, 0, 0));
         office = bugTrap.getProjectManager().getProjects().get(0);
-        office.addProgrammer(prog);
-        office.addTester(tester);
+        ((Project) office).addProgrammer(prog);
+        ((Project) office).addTester(tester);
         //Add Subsystem.
         ((Project) office).createSubsystem("Word", "Word processor");
         word = bugTrap.getProjectManager().getSubsystemWithName("Word");
