@@ -8,7 +8,9 @@ import java.util.List;
 import org.junit.Test;
 
 import model.projects.IProject;
+import model.projects.ISubsystem;
 import model.projects.Version;
+import model.projects.health.HealthIndicator;
 import model.users.IUser;
 
 public class ShowProjectUseCaseTest extends BugTrapTest {
@@ -29,6 +31,8 @@ public class ShowProjectUseCaseTest extends BugTrapTest {
 			//3. The user selects a project.
 			IProject project = list.get(0);
 			//4. The system shows a detailed overview of the selected project and all its subsystems.
+			List<ISubsystem> subsystems = project.getAllDirectOrIndirectSubsystems();
+			List<HealthIndicator> indicators = project.getHealthIndicators();
 			
 			//Confirm.
 			assertEquals("Office",				project.getName());
@@ -37,6 +41,66 @@ public class ShowProjectUseCaseTest extends BugTrapTest {
 			assertEquals(1234, 					project.getBudgetEstimate(), 0.01);
 			assertEquals(new Version(1, 0, 0),	project.getVersion());
 			assertEquals(3, 					project.getSubsystems().size());
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(0));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(1));
+			assertEquals(HealthIndicator.SATISFACTORY, 					indicators.get(2));
+			
+			
+			ISubsystem subsystem = subsystems.get(0);
+			indicators = subsystem.getHealthIndicators();
+			assertEquals("Word",				subsystem.getName());
+			assertEquals(3, 					subsystem.getSubsystems().size());
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(0));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(1));
+			assertEquals(HealthIndicator.SATISFACTORY, 					indicators.get(2));
+			
+			subsystem = subsystems.get(1);
+			indicators = subsystem.getHealthIndicators();
+			assertEquals("Word Art",				subsystem.getName());
+			assertEquals(0, 					subsystem.getSubsystems().size());
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(0));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(1));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(2));
+			
+			subsystem = subsystems.get(2);
+			indicators = subsystem.getHealthIndicators();
+			assertEquals("Comic Sans",				subsystem.getName());
+			assertEquals(0, 					subsystem.getSubsystems().size());
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(0));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(1));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(2));
+			
+			subsystem = subsystems.get(3);
+			indicators = subsystem.getHealthIndicators();
+			assertEquals("Clippy",				subsystem.getName());
+			assertEquals(0, 					subsystem.getSubsystems().size());
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(0));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(1));
+			assertEquals(HealthIndicator.SATISFACTORY, 					indicators.get(2));
+			
+			subsystem = subsystems.get(4);
+			indicators = subsystem.getHealthIndicators();
+			assertEquals("Excel",				subsystem.getName());
+			assertEquals(1, 					subsystem.getSubsystems().size());
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(0));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(1));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(2));
+			
+			subsystem = subsystems.get(5);
+			indicators = subsystem.getHealthIndicators();
+			assertEquals("ExcelTable",				subsystem.getName());
+			assertEquals(0, 					subsystem.getSubsystems().size());
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(0));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(1));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(2));
+			
+			subsystem = subsystems.get(6);
+			indicators = subsystem.getHealthIndicators();
+			assertEquals("PowerPoint",				subsystem.getName());
+			assertEquals(0, 					subsystem.getSubsystems().size());
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(0));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(1));
+			assertEquals(HealthIndicator.HEALTHY, 					indicators.get(2));
 		}
 	}
 }
