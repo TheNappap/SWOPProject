@@ -18,13 +18,13 @@ public class InspectBugReportUseCaseTest extends BugTrapTest {
 	@Test
 	public void inspectBugReportTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(issuer);
+		userController.loginAs(issuer);
 
 		//1. The issuer indicates he wants to inspect some bug report.
 		//2. Include use case Select Bug Report.
 		List<IBugReport> list = null;
 		try {
-			list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { bugTrap.getBugReportManager().getFilterTypes()[0] }, new String[] { "Clippy" });
+			list = bugReportController.getOrderedList(new FilterType[] { FilterType.CONTAINS_STRING }, new String[] { "Clippy" });
 		} catch (UnauthorizedAccessException e) {
 			fail(e.getMessage());
 		}

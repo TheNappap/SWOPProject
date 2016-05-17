@@ -18,12 +18,12 @@ public class ProposePatchUseCaseTest extends BugTrapTest {
 	@Test
 	public void proposePatchUseCaseTest() {
 		//Log in as programmer.
-		bugTrap.getUserManager().loginAs(prog);
+		userController.loginAs(prog);
 		
 		//1.
 		ProposePatchForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeProposePatchForm();
+			form = bugReportController.getProposePatchForm();
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
@@ -58,17 +58,17 @@ public class ProposePatchUseCaseTest extends BugTrapTest {
 	@Test (expected =  UnauthorizedAccessException.class)
 	public void devNotTesterFailTest() throws UnauthorizedAccessException {
 		//Log in as not programmer.
-		bugTrap.getUserManager().loginAs(tester);
+		userController.loginAs(tester);
 		
 		//1.
 		ProposePatchForm form = null;
-		form = bugTrap.getFormFactory().makeProposePatchForm();
+		form = bugReportController.getProposePatchForm();
 
 		//step 2 SELECT BUGREPORT USE CASE
 		IBugReport bugReport = null;
 		String searchingString = "Clippy";
 		List<IBugReport> list = null;
-		list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { FilterType.CONTAINS_STRING }, new String[] { searchingString });
+		list = bugReportController.getOrderedList(new FilterType[] { FilterType.CONTAINS_STRING }, new String[] { searchingString });
 		bugReport = list.get(0);	
 		//3
 		form.setBugReport(bugReport);
@@ -78,26 +78,17 @@ public class ProposePatchUseCaseTest extends BugTrapTest {
 		bugReportController.proposePatch(form);
 	}
 	
-	@Test
-	public void authorisationTest() {
+	@Test (expected = UnauthorizedAccessException.class)
+	public void authorisationTest() throws UnauthorizedAccessException {
 		//Can't propose test when not logged in.
-		try {
-			bugTrap.getFormFactory().makeProposePatchForm();
-			fail("Can't propose test when not logged in.");
-		} catch (UnauthorizedAccessException e) { }
+		bugReportController.getProposePatchForm();
 	}
 	
-	@Test
-	public void varsNotFilledTest() {
+	@Test (expected = NullPointerException.class)
+	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//Log in as Administrator.
-		bugTrap.getUserManager().loginAs(tester);
+		userController.loginAs(tester);
 		
-		try {
-			bugTrap.getFormFactory().makeProposePatchForm().allVarsFilledIn();
-			fail("should throw exception");
-		} 
-		catch (UnauthorizedAccessException e) 	{ fail("not authorized"); }
-		catch (NullPointerException e) 			{ }
+		bugReportController.getProposePatchForm().allVarsFilledIn();
 	}
-
 }

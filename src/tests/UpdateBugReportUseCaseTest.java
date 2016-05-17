@@ -19,7 +19,7 @@ public class UpdateBugReportUseCaseTest extends BugTrapTest {
 	@Test
 	public void updateBugReportTest() throws UnauthorizedAccessException {
 		//Log in as Issuer.
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 		
 		//1.
 		BugReportUpdateForm form = null;
@@ -33,7 +33,7 @@ public class UpdateBugReportUseCaseTest extends BugTrapTest {
 		IBugReport bugReport = null;
 		String searchingString = "Clippy";
 		List<IBugReport> list = null;
-		list = bugTrap.getBugReportManager().getOrderedList(new FilterType[] { FilterType.CONTAINS_STRING }, new String[] { searchingString });
+		list = bugReportController.getOrderedList(new FilterType[] { FilterType.CONTAINS_STRING }, new String[] { searchingString });
 		bugReport = list.get(0);
 
 		//step 3
@@ -55,29 +55,29 @@ public class UpdateBugReportUseCaseTest extends BugTrapTest {
 	public void noPermissionToAssignTest() throws UnauthorizedAccessException {
 		//login
 		IUser dev = issuer;
-		bugTrap.getUserManager().loginAs(dev);
+		userController.loginAs(dev);
 
 		bugReportController.getBugReportUpdateForm();
 	}
 
 	@Test (expected = UnauthorizedAccessException.class)
 	public void notAuthorizedTest() throws UnauthorizedAccessException {
-		bugTrap.getFormFactory().makeBugReportUpdateForm();
+		bugReportController.getBugReportUpdateForm();
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//login
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 
-		BugReportUpdateForm form = bugTrap.getFormFactory().makeBugReportUpdateForm();
+		BugReportUpdateForm form = bugReportController.getBugReportUpdateForm();
 		bugReportController.updateBugReport(form);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void nullFormTest() throws UnauthorizedAccessException {
 		//login
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 
 		bugReportController.updateBugReport(null);
 	}

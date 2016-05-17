@@ -130,6 +130,9 @@ public class ProjectManager {
 			if (p.getLeadDeveloper() == dev)
 				projs.add(p);
 		}
+
+		if (projs.size() == 0) throw new IllegalArgumentException("The given developer is not leading any projects.");
+
 		return projs;
 	}
 

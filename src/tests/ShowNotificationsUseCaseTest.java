@@ -27,9 +27,9 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 		super.setUp();
 
 		//Log in as an Issuer, register for notification and log off.
-		bugTrap.getUserManager().loginAs(issuer);
+		userController.loginAs(issuer);
 		try {
-			RegisterNotificationForm form = bugTrap.getFormFactory().makeRegisterForNotificationForm();
+			RegisterNotificationForm form = notificationController.getRegisterNotificationForm();
 			form.setObservable(office);
 			form.setNotificationType(NotificationType.BUGREPORT_CHANGE);
 			notificationController.registerNotification(form);
@@ -38,9 +38,10 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 		}
 
 		//Initially, no notifications.
+		// Using BugTrap to shortcut, as it's just the set up.
 		assertEquals(0, bugTrap.getNotificationManager().getMailboxForUser(issuer).getNotifications().size());
 
-		BugReport report = (BugReport) bugTrap.getBugReportManager().getBugReportList().get(0);
+		BugReport report = (BugReport) bugReportController.getBugReportList().get(0);
 
 		//Update project with 2 new values.
 		try {
@@ -55,28 +56,28 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 
 		//Update Bug Report with new tag..
 		//Log in as Lead to update bug report.
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 		try {
 			report.updateBugTag(BugTag.RESOLVED);
 		} catch (UnauthorizedAccessException e) {
 			fail(e.getMessage());
 		}
 		//Log back in as issuer.
-		bugTrap.getUserManager().loginAs(issuer);
+		userController.loginAs(issuer);
 		//After this, 2+1=3 notifications.
 		assertEquals(3, bugTrap.getNotificationManager().getMailboxForUser(issuer).getNotifications().size());
 
-		bugTrap.getUserManager().logOff();
+		userController.logOff();
 	}
 
 	@Test
 	public void showNotificationsTest() throws UnauthorizedAccessException {
-		bugTrap.getUserManager().loginAs(issuer);
+		userController.loginAs(issuer);
 
 		//1. The issuer indicates he wants to view his notifications
 		ShowChronologicalNotificationForm form = null;
 		try {
-			form = new FormFactory(bugTrap).makeShowChronologicalNotificationForm();
+			form = notificationController.getShowChronologicalNotificationForm();
 		} catch (UnauthorizedAccessException e) { fail("Must be logged in."); } 
 		
 		//2. The system asks how many notifications the issuer wants to see.
@@ -86,7 +87,7 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 		//4. The system shows the requested number of received notifications in chronological order with the most recent notification first.
 		List<INotification> reqNotifications = null;
 		try {
-			reqNotifications = bugTrap.getNotificationManager().getNotifications(form.getNbOfNotifications());
+			reqNotifications = notificationController.showNotifications(form);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
@@ -105,12 +106,12 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 
 	@Test
 	public void showTooMuchNotificationsTest() throws UnauthorizedAccessException {
-		bugTrap.getUserManager().loginAs(issuer);
+		userController.loginAs(issuer);
 
 		//1. The issuer indicates he wants to view his notifications
 		ShowChronologicalNotificationForm form = null;
 		try {
-			form = new FormFactory(bugTrap).makeShowChronologicalNotificationForm();
+			form = notificationController.getShowChronologicalNotificationForm();
 		} catch (UnauthorizedAccessException e) { fail("Must be logged in."); }
 
 		//2. The system asks how many notifications the issuer wants to see.
@@ -120,7 +121,7 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 		//4. The system shows the requested number of received notifications in chronological order with the most recent notification first.
 		List<INotification> reqNotifications = null;
 		try {
-			reqNotifications = bugTrap.getNotificationManager().getNotifications(form.getNbOfNotifications());
+			reqNotifications = notificationController.showNotifications(form);
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
