@@ -11,7 +11,8 @@ import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
-import model.notifications.signalisations.BugReportCreationSignalisation;
+import model.notifications.NotificationType;
+import model.notifications.signalisations.Signalisation;
 import model.projects.ISubsystem;
 import model.projects.ISystem;
 import model.projects.Subsystem;
@@ -112,7 +113,7 @@ public class BugReportManager {
 				.setMilestone(milestone)
 				.getBugReport();
 		bugReportList.add(report);
-		((Subsystem)subsystem).signal(new BugReportCreationSignalisation(report));
+		((Subsystem)subsystem).signal(new Signalisation(NotificationType.CREATE_BUGREPORT, report));
 	}
 
 	/**

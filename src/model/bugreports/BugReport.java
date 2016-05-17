@@ -9,9 +9,8 @@ import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
 import model.bugreports.comments.Comment;
+import model.notifications.NotificationType;
 import model.notifications.observers.Observer;
-import model.notifications.signalisations.BugReportChangeSignalisation;
-import model.notifications.signalisations.CommentCreationSignalisation;
 import model.notifications.signalisations.Signalisation;
 import model.projects.IProject;
 import model.projects.ISubsystem;
@@ -97,7 +96,7 @@ public class BugReport implements IBugReport {
 	public void addComment(String commentText) {
 		comments.add(new Comment(this, commentText));
 
-		notifyObservers(new CommentCreationSignalisation(this));
+		notifyObservers(new Signalisation(NotificationType.CREATE_COMMENT, this));
 	}
 	
 	/**
@@ -131,7 +130,7 @@ public class BugReport implements IBugReport {
 
 		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState(this));
 		
-		notifyObservers(new BugReportChangeSignalisation(this));
+		notifyObservers(new Signalisation(NotificationType.BUGREPORT_CHANGE, this));
 	}
 
 	@Override

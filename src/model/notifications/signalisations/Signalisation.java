@@ -7,7 +7,7 @@ import model.notifications.NotificationType;
  * This class represents a signal that is signaled when something
  * happens in an observable and it notifies it observers.
  */
-public abstract class Signalisation {
+public class Signalisation {
 	
 	public Signalisation(NotificationType type, IBugReport bugReport){
 		this.type = type;
