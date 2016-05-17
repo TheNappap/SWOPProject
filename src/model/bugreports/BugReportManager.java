@@ -8,14 +8,10 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.builders.BugReportBuilder;
-import model.bugreports.comments.Commentable;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
-import model.notifications.NotificationType;
-import model.notifications.signalisations.Signalisation;
 import model.projects.ISubsystem;
 import model.projects.ISystem;
-import model.projects.Subsystem;
 import model.users.IUser;
 
 /**
@@ -98,7 +94,8 @@ public class BugReportManager {
 	 */
 	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag, TargetMilestone milestone, int impactFactor) {
 		if (milestone != null) {
-			if(milestone.compareTo(subsystem.getAchievedMilestone()) <= 0) throw new IllegalArgumentException("The target milestone should be strict higher than the achieved milestone of the subsystem");
+			if (milestone.compareTo(subsystem.getAchievedMilestone()) <= 0)
+				throw new IllegalArgumentException("The target milestone should be strict higher than the achieved milestone of the subsystem");
 		}
 
 		BugReport report = new BugReportBuilder(bugTrap).setTitle(title)
@@ -113,51 +110,5 @@ public class BugReportManager {
 				.setMilestone(milestone)
 				.getBugReport();
 		bugReportList.add(report);
-	}
-
-	/**
-	 * adds a comment to a commentable object
-	 * @param commentable
-	 * @param text
-	 */
-	public void addComment(Commentable commentable, String text) {
-		if (commentable == null || text == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-		
-		commentable.addComment(text);
-	}
-	
-	/**
-	 * Proposes a test to a given BugReport.
-	 * @param report given bug report
-	 * @param test Test to propose
-	 * @throws UnauthorizedAccessException if the logged in user is not a tester for this bugreport
-	 */
-	public void proposeTest(IBugReport report, String test) throws UnauthorizedAccessException {
-		if (report == null || test == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-		IUser user = bugTrap.getUserManager().getLoggedInUser();
-		BugReport bugReport = (BugReport) report;
-		if(!bugReport.getSubsystem().getProject().isTester(user))
-			throw new UnauthorizedAccessException("The logged in user needs to be a tester to propose a test");
-		
-		bugReport.addTest(test);
-	}
-	
-	/**
-	 * Proposes a patch to a given BugReport.
-	 * @param report Given bug report
-	 * @param patch The Patch to propose.
-	 * @throws UnauthorizedAccessException if the logged in user is not a programmer for this BugReport.
-	 */
-	public void proposePatch(IBugReport report, String patch) throws UnauthorizedAccessException {
-		if (report == null || patch == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-		IUser user = bugTrap.getUserManager().getLoggedInUser();
-		BugReport bugReport = (BugReport) report;
-		if(!bugReport.getSubsystem().getProject().isProgrammer(user))
-			throw new UnauthorizedAccessException("The logged in user needs to be a programmer to propose a patch");
-		
-		bugReport.addPatch(patch);
 	}
 }

@@ -13,6 +13,7 @@ import controllers.UserController;
 import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
+import model.bugreports.comments.Commentable;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Project;
@@ -103,7 +104,7 @@ public class BugTrapTest {
         bugTrap.getUserManager().loginAs(lead);
         bugTrap.getBugReportManager().addBugReport("Clippy bug!", "Clippy only pops up once an hour. Should be more.", new Date(1303), clippy, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, null, 5);
         clippyBug = clippy.getAllBugReports().get(0);
-        bugTrap.getBugReportManager().addComment(clippyBug, "Agreed! I propose once every 5 minutes!");
+        ((Commentable) clippyBug).addComment("Agreed! I propose once every 5 minutes!");
         ArrayList<IUser> assignees = new ArrayList<>();
         assignees.add(prog);
         ArrayList<IBugReport> dependencies = new ArrayList<>();

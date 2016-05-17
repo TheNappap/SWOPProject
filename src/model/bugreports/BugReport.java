@@ -9,6 +9,7 @@ import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
 import model.bugreports.comments.Comment;
+import model.bugreports.comments.Commentable;
 import model.notifications.NotificationType;
 import model.notifications.observers.Observer;
 import model.notifications.signalisations.Signalisation;
@@ -20,7 +21,7 @@ import model.users.IUser;
 /**
  * This class represents a BugReport. in BugTrap.
  */
-public class BugReport implements IBugReport { 
+public class BugReport implements IBugReport, Commentable { 
 
 	//Immutable
 	private final BugTrap bugTrap;
@@ -89,11 +90,11 @@ public class BugReport implements IBugReport {
 		((Subsystem)subsystem).addBugReport(this);
 	}
 	
-	/**
-	 * Create and add a Comment to this BugReport.
-	 * @param commentText The text of the comment.
-	 */
+	@Override
 	public void addComment(String commentText) {
+		if (commentText == null)
+			throw new IllegalArgumentException("Comment should not be null.");
+		
 		comments.add(new Comment(this, commentText));
 
 		notifyObservers(new Signalisation(NotificationType.CREATE_COMMENT, this));
@@ -256,10 +257,49 @@ public class BugReport implements IBugReport {
 	}
 
 	/**
+	 * Returns the impact product of the bug report.
+	 * The impact product is the product of the impact factor and the multiplier.
+	 * @return the impact product of the bug report.
+	 */
+	public double getImpactProduct() {
+		return bugTag.getMultiplier()*getImpactFactor();
+	}
+	
+	/**
+	 * Proposes a test to the BugReport.
+	 * @param test Test to propose
+	 * @throws UnauthorizedAccessException if the logged in user is not a tester for this bugreport
+	 */
+	public void proposeTest(String test) throws UnauthorizedAccessException {
+		if (test == null)
+			throw new IllegalArgumentException("Test should not be null.");
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if(!this.getSubsystem().getProject().isTester(user))
+			throw new UnauthorizedAccessException("The logged in user needs to be a tester to propose a test");
+		
+		addTest(test);
+	}
+
+	/**
+	 * Proposes a patch to the BugReport.
+	 * @param patch The Patch to propose.
+	 * @throws UnauthorizedAccessException if the logged in user is not a programmer for this BugReport.
+	 */
+	public void proposePatch(String patch) throws UnauthorizedAccessException {
+		if (patch == null)
+			throw new IllegalArgumentException("Patch should not be null.");
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if(!this.getSubsystem().getProject().isProgrammer(user))
+			throw new UnauthorizedAccessException("The logged in user needs to be a programmer to propose a patch");
+		
+		addPatch(patch);
+	}
+
+	/**
 	 * adds a test to the bug report
 	 * @param test given test
 	 */
-	public void addTest(String test) {
+	private void addTest(String test) {
 		tests.add(new Test(test));
 	}
 	
@@ -267,7 +307,7 @@ public class BugReport implements IBugReport {
 	 * adds a patch to the bug report
 	 * @param patch given patch
 	 */
-	public void addPatch(String patch) {
+	private void addPatch(String patch) {
 		patches.add(new Patch(patch));
 	}
 	
@@ -361,11 +401,13 @@ public class BugReport implements IBugReport {
 	}
 
 	/**
-	 * Returns the impact product of the bug report.
-	 * The impact product is the product of the impact factor and the multiplier.
-	 * @return the impact product of the bug report.
+	 * Sets the subsystem of this bug report.
+	 * The subsystem of the bug report must contain this bug report.
+	 * @param subsystem
 	 */
-	public double getImpactProduct() {
-		return bugTag.getMultiplier()*getImpactFactor();
+	public void setSubsystem(Subsystem subsystem) {
+		subsystem.getBugReports().contains(this);
+		
+		this.subsystem = subsystem;
 	}
 }
