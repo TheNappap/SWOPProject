@@ -265,4 +265,16 @@ public abstract class System implements ISystem, Observable, Observer {
 		subsystems.clear();
 		observers.clear();
 	}
+
+	/**
+	 * Get all siblings of this system, including the system itself.
+	 */
+	public List<ISubsystem> getSiblings() {
+		List<ISubsystem> siblings = new ArrayList<>();
+		if (parent != null) {
+			for (ISubsystem s : parent.subsystems)
+				siblings.add(s);
+		}
+		return siblings;
+	}
 }
