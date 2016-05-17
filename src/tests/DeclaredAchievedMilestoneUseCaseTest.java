@@ -25,12 +25,12 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 	@Test
 	public void DeclareAchievedMilestoneToSubsystemTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 		
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
 		DeclareAchievedMilestoneForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeDeclareAchievedMilestoneForm();
+			form = projectController.getDeclareAchievedMilestoneForm();
 		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
 		
 		//Step 2. The system shows a list of projects.
@@ -70,7 +70,7 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 	@Test
 	public void DeclareAchievedMilestoneToProjectTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 		
 		//set subsystem to new milestone to prevent error
 		List<IProject> ps = projectController.getProjectList();
@@ -84,7 +84,7 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
 		DeclareAchievedMilestoneForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeDeclareAchievedMilestoneForm();
+			form = projectController.getDeclareAchievedMilestoneForm();
 		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
 		
 		//Step 2. The system shows a list of projects.
@@ -124,12 +124,12 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 	@Test (expected = IllegalArgumentException.class)
 	public void MilestoneTooHighTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 		
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
 		DeclareAchievedMilestoneForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeDeclareAchievedMilestoneForm();
+			form = projectController.getDeclareAchievedMilestoneForm();
 		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
 		
 		//Step 2. The system shows a list of projects.
@@ -167,25 +167,26 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 	@Test (expected = IllegalArgumentException.class)
 	public void EarlyBugReportNotClosedTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 
 		//create bugreport with lower target milestone and set subsystem to new milestone to prevent error
-		List<IProject> ps = bugTrap.getProjectManager().getProjects();
+		List<IProject> ps = projectController.getProjectList();
 		IProject p = ps.get(0);
 		List<ISubsystem> ss = p.getAllDirectOrIndirectSubsystems();
 		ISubsystem sub = ss.get(0);
 		((System) sub).declareAchievedMilestone(Arrays.asList(new Integer[] {0,1}));
+		// shortcut this via BugTrap as it's just the setup
 		bugTrap.getBugReportManager().addBugReport("title", "description", new Date(3), sub, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, new TargetMilestone(Arrays.asList(new Integer[] {0,2})), 3);
 		
 		
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
 		DeclareAchievedMilestoneForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeDeclareAchievedMilestoneForm();
+			form = projectController.getDeclareAchievedMilestoneForm();
 		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
 		
 		//Step 2. The system shows a list of projects.
-		List<IProject> projects = bugTrap.getProjectManager().getProjects();
+		List<IProject> projects = projectController.getProjectList();
 		
 		//Step 3. The developer selects a project.
 		IProject project = projects.get(0);
@@ -216,21 +217,17 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 		}
 	}
 	
-	@Test
-	public void authorisationTest() {
+	@Test (expected = UnauthorizedAccessException.class)
+	public void authorisationTest() throws UnauthorizedAccessException {
 		//Can't declare milestone when not logged in.
-		try {
-			bugTrap.getFormFactory().makeDeclareAchievedMilestoneForm();
-			fail("Can't declare milestone when not logged in.");
-		} catch (UnauthorizedAccessException e) { }
+		projectController.getDeclareAchievedMilestoneForm();
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//Log in as dev.
-		bugTrap.getUserManager().loginAs(lead);
-
-		bugTrap.getFormFactory().makeDeclareAchievedMilestoneForm().allVarsFilledIn();
+		userController.loginAs(lead);
+		projectController.getDeclareAchievedMilestoneForm().allVarsFilledIn();
 	}	
 
 }
