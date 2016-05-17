@@ -114,14 +114,20 @@ public class Project extends System implements IProject {
 		return projectTeam.getAllDevelopers();
 	}
 
-	@Override
+	/**
+     * Assign a Programmer to work on this Project.
+     * @param programmer The Programmer to assign.
+     */
 	public void addProgrammer(IUser programmer) {
 		if (!programmer.isDeveloper())
 			throw new IllegalArgumentException("Programmer should be a developer!");
 		projectTeam.addMember(programmer, Role.PROGRAMMER);
 	}
 
-	@Override
+	/**
+     * Assign a Tester to work on this Project.
+     * @param tester The Tester to assign.
+     */
 	public void addTester(IUser tester) {
 		if (!tester.isDeveloper())
 			throw new IllegalArgumentException("Tester should be a developer!");

@@ -40,7 +40,7 @@ public class ProjectTests extends BugTrapTest {
     @Test
     public void testAddProgrammer() {
         Developer dev = bugTrap.getUserManager().createDeveloper("D", "E", "V", "developer");
-        office.addProgrammer(dev);
+        ((Project) office).addProgrammer(dev);
         assertTrue(office.getProgrammers().contains(dev));
         assertFalse(office.getTesters().contains(dev));
         assertNotEquals(office.getLeadDeveloper(), dev);
@@ -49,7 +49,7 @@ public class ProjectTests extends BugTrapTest {
      @Test
     public void testAddTester() {
          Developer dev = bugTrap.getUserManager().createDeveloper("D", "E", "V", "developer");
-         office.addTester(dev);
+         ((Project) office).addTester(dev);
          assertFalse(office.getProgrammers().contains(dev));
          assertTrue(office.getTesters().contains(dev));
          assertNotEquals(office.getLeadDeveloper(), dev);

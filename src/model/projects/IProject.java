@@ -80,18 +80,6 @@ public interface IProject extends ISystem {
     public boolean isProgrammer(IUser dev);
     
     /**
-     * Assign a Programmer to work on this Project.
-     * @param programmer The Programmer to assign.
-     */
-	public void addProgrammer(IUser programmer);
-	
-    /**
-     * Assign a Tester to work on this Project.
-     * @param tester The Tester to assign.
-     */
-	public void addTester(IUser tester);
-	
-    /**
      * Get the Roles which are not assigned to the given Developer.
      * @param developer The Developer for which to return the Roles he doesn't have.
      * @return The Roles which are not assigned to the given Developer.
@@ -99,7 +87,7 @@ public interface IProject extends ISystem {
 	public List<Role> getRolesNotAssignedTo(IUser developer);
 	
 	/**
-	 * 
+	 * Returns the verison of the project
 	 * @return The Version of this Project.
 	 */
     public Version getVersion();
