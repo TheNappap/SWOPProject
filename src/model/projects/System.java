@@ -287,6 +287,18 @@ public abstract class System implements ISystem, Observable, Observer {
 	}
 
 	/**
+	 * Get all siblings of this system, including the system itself.
+	 */
+	public List<ISubsystem> getSiblings() {
+		List<ISubsystem> siblings = new ArrayList<>();
+		if (parent != null) {
+			for (ISubsystem s : parent.subsystems)
+				siblings.add(s);
+		}
+		return siblings;
+	}
+
+	/*
 	 * Creates a subsystem in the system with a given name and description
 	 * @param name			The name of the subsystem
 	 * @param description	The description of the subsystem

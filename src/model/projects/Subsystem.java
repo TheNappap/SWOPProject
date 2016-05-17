@@ -3,6 +3,7 @@ package model.projects;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.org.apache.bcel.internal.generic.ISUB;
 import model.BugTrap;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
@@ -128,6 +129,12 @@ public class Subsystem extends System implements ISubsystem {
 		this.terminate();
 	}
 	
+	@Override
+	public List<ISubsystem> mergeableWith() {
+		List<ISubsystem> merge = new ArrayList<>();
+		merge.addAll(parent.getSiblings());
+		return merge;
+	}
 
 	@Override
 	public void merge(String name, String description, ISubsystem iSubsystem){
