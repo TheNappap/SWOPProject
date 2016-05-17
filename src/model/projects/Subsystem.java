@@ -24,7 +24,6 @@ public class Subsystem extends System implements ISubsystem {
 	 * @param description Description of the Subsystem.
 	 * @param parent Parent of the Subsystem.
 	 * @param subsystems Subsystems of the Subsystems.
-	 * @param project Project of the Subsystem.
 	 * @param achievedMilestone Achieved Milestone of the Subsystem.
 	 */
 	public Subsystem(BugTrap bugTrap, String name, String description, System parent, List<Subsystem> subsystems, AchievedMilestone achievedMilestone) {
@@ -132,7 +131,10 @@ public class Subsystem extends System implements ISubsystem {
 	@Override
 	public List<ISubsystem> mergeableWith() {
 		List<ISubsystem> merge = new ArrayList<>();
-		merge.addAll(parent.getSiblings());
+		merge.addAll(parent.getSiblings(this));
+		merge.addAll(subsystems);
+		if (parent.getParent() != null) // Our parent is not a project
+			merge.add((ISubsystem)parent);
 		return merge;
 	}
 

@@ -287,14 +287,15 @@ public abstract class System implements ISystem, Observable, Observer {
 	}
 
 	/**
-	 * Get all siblings of this system, including the system itself.
+	 * Get all siblings of the given system. The given system should be a subsystem of this system.
 	 */
-	public List<ISubsystem> getSiblings() {
+	public List<ISubsystem> getSiblings(ISubsystem sub) {
+		if (!subsystems.contains(sub)) throw new IllegalArgumentException("The given subsystem should be a subsystem of this system.");
+
 		List<ISubsystem> siblings = new ArrayList<>();
-		if (parent != null) {
-			for (ISubsystem s : parent.subsystems)
+		for (ISubsystem s : subsystems)
+			if (s != sub)
 				siblings.add(s);
-		}
 		return siblings;
 	}
 
