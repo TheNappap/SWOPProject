@@ -6,7 +6,6 @@ package model.bugreports;
 public class Patch {
 
 	private final String patch; //String representation of the Patch.
-	private boolean accepted;	//Indicates if the Patch has been accepted or not.
 	
 	/**
 	 * Constructor.
@@ -14,7 +13,6 @@ public class Patch {
 	 */
 	public Patch(String patch) {
 		this.patch = patch;
-		this.accepted = false;
 	}
 	
 	/**
@@ -23,18 +21,5 @@ public class Patch {
 	public String getPatch() {
 		return patch;
 	}
-
-	/**
-	 * @return <tt>true</tt> if the Patch has been accepted.
-	 */
-	public boolean isAccepted() {
-		return accepted;
-	}
-
-	/**
-	 * Accept the Patch.
-	 */
-	public void accept() {
-		this.accepted = true;
-	}
+	
 }

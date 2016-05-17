@@ -7,9 +7,7 @@ import java.util.List;
 import model.BugTrap;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
-import model.bugreports.Patch;
 import model.bugreports.TargetMilestone;
-import model.bugreports.Test;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
 import model.notifications.observers.Observer;
@@ -43,8 +41,6 @@ public class BugReportBuilder {
 	private String stackTrace = "";
 	private String errorMessage = "";
 	private String reproduction = "";
-	private List<Test> tests = new ArrayList<Test>();
-	private List<Patch> patches = new ArrayList<Patch>();
 	private TargetMilestone milestone;
 	
 	/**  
@@ -180,16 +176,6 @@ public class BugReportBuilder {
 		this.milestone = milestone;
 		return this;
 	}
-
-	public BugReportBuilder setTests(List<Test> tests) {
-		this.tests = tests;
-		return this;
-	}
-	
-	public BugReportBuilder setPatches(List<Patch> patches) {
-		this.patches = patches;
-		return this;
-	}
 	
 	public BugReportBuilder setMilestone(List<Integer> milestone) {
 		this.milestone = new TargetMilestone(milestone);
@@ -203,7 +189,8 @@ public class BugReportBuilder {
 	 */
 	public BugReport getBugReport() {
 		validate();
-		return new BugReport(bugTrap, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, milestone, tests, patches, impactFactor);
+		BugReport bugReport = null; bugReport = new BugReport(bugTrap, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, milestone, impactFactor);
+		return bugReport;
 	}
 
 	//Assure all variables are not null.
@@ -218,8 +205,6 @@ public class BugReportBuilder {
 		if (comments == null) 		throw new NullPointerException("Comments is null");
 		if (assignees == null)		throw new NullPointerException("Assignees is null");
 		if (observers == null)		throw new NullPointerException("Observers is null");
-		if (tests == null)		throw new NullPointerException("tests is null");
-		if (patches == null)		throw new NullPointerException("patches is null");
 		if (impactFactor == 0)		throw new IllegalArgumentException("the impact factor is 0");
 	}
 
