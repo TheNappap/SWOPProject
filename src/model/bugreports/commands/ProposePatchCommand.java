@@ -3,6 +3,7 @@ package model.bugreports.commands;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.Command;
+import model.bugreports.BugReport;
 import model.bugreports.forms.ProposePatchForm;
 
 public class ProposePatchCommand extends Command {
@@ -17,6 +18,6 @@ public class ProposePatchCommand extends Command {
 
     @Override
     public void execute() throws UnauthorizedAccessException {
-        getBugTrap().getBugReportManager().proposePatch(form.getBugReport(), form.getPatch());
+        ((BugReport) form.getBugReport()).proposePatch(form.getPatch());
     }
 }

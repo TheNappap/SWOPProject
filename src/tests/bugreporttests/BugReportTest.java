@@ -162,4 +162,51 @@ public class BugReportTest extends BugTrapTest {
 		assertEquals(-1, bugReport.compareTo(clippyBug));
 		assertEquals(1, clippyBug.compareTo(bugReport));
 	}
+	
+	@Test
+	public void addComment() {
+		((BugReport) wordArtBug).addComment("Who uses WortArt or Comic Sans anyway?");
+		assertEquals(1, wordArtBug.getComments().size());
+		assertEquals("Who uses WortArt or Comic Sans anyway?", wordArtBug.getComments().get(0).getText());
+	}
+
+	@Test
+	public void proposeTest() {
+		bugTrap.getUserManager().loginAs(tester);
+		try {
+			((BugReport) wordArtBug).proposeTest("<code here>");
+		} catch (UnauthorizedAccessException e) {
+			fail("Not authorized.");
+			e.printStackTrace();
+		}
+
+		assertEquals(1, wordArtBug.getTests().size());
+		assertEquals("<code here>", wordArtBug.getTests().get(0).getTest());
+	}
+
+	@Test (expected = UnauthorizedAccessException.class)
+	public void propseTestNotAllowed() throws UnauthorizedAccessException {
+		bugTrap.getUserManager().loginAs(lead);
+		((BugReport) wordArtBug).proposeTest("test");
+	}
+
+	@Test
+	public void proposePatch() {
+		bugTrap.getUserManager().loginAs(prog);
+		try {
+			((BugReport) wordArtBug).proposePatch("<code here>");
+		} catch (UnauthorizedAccessException e) {
+			fail("Not authorized.");
+			e.printStackTrace();
+		}
+
+		assertEquals(1, wordArtBug.getPatches().size());
+		assertEquals("<code here>", wordArtBug.getPatches().get(0).getPatch());
+	}
+
+	@Test (expected = UnauthorizedAccessException.class)
+	public void proposePatchNotAllowed() throws UnauthorizedAccessException {
+		bugTrap.getUserManager().loginAs(lead);
+		((BugReport) wordArtBug).proposePatch("patch");
+	}
 }

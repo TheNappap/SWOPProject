@@ -1,13 +1,14 @@
 package tests;
 
-import controllers.exceptions.UnauthorizedAccessException;
-import model.projects.ISubsystem;
-import model.projects.forms.MergeSubsystemForm;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+import controllers.exceptions.UnauthorizedAccessException;
+import model.projects.ISubsystem;
+import model.projects.forms.MergeSubsystemForm;
 
 public class MergeSubsystemsUseCaseTest extends BugTrapTest {
     @Test

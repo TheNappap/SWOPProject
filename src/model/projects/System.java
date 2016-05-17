@@ -298,7 +298,7 @@ public abstract class System implements ISystem, Observable, Observer {
 		return siblings;
 	}
 
-	/*
+	/**
 	 * Creates a subsystem in the system with a given name and description
 	 * @param name			The name of the subsystem
 	 * @param description	The description of the subsystem

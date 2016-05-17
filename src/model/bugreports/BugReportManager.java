@@ -8,7 +8,6 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.builders.BugReportBuilder;
-import model.bugreports.comments.Commentable;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
 import model.notifications.NotificationType;
@@ -115,50 +114,5 @@ public class BugReportManager {
 		bugReportList.add(report);
 		((Subsystem)subsystem).signal(new Signalisation(NotificationType.CREATE_BUGREPORT, report));
 	}
-
-	/**
-	 * adds a comment to a commentable object
-	 * @param commentable
-	 * @param text
-	 */
-	public void addComment(Commentable commentable, String text) {
-		if (commentable == null || text == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-		
-		commentable.addComment(text);
-	}
 	
-	/**
-	 * Proposes a test to a given BugReport.
-	 * @param report given bug report
-	 * @param test Test to propose
-	 * @throws UnauthorizedAccessException if the logged in user is not a tester for this bugreport
-	 */
-	public void proposeTest(IBugReport report, String test) throws UnauthorizedAccessException {
-		if (report == null || test == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-		IUser user = bugTrap.getUserManager().getLoggedInUser();
-		BugReport bugReport = (BugReport) report;
-		if(!bugReport.getSubsystem().getProject().isTester(user))
-			throw new UnauthorizedAccessException("The logged in user needs to be a tester to propose a test");
-		
-		bugReport.addTest(test);
-	}
-	
-	/**
-	 * Proposes a patch to a given BugReport.
-	 * @param report Given bug report
-	 * @param patch The Patch to propose.
-	 * @throws UnauthorizedAccessException if the logged in user is not a programmer for this BugReport.
-	 */
-	public void proposePatch(IBugReport report, String patch) throws UnauthorizedAccessException {
-		if (report == null || patch == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-		IUser user = bugTrap.getUserManager().getLoggedInUser();
-		BugReport bugReport = (BugReport) report;
-		if(!bugReport.getSubsystem().getProject().isProgrammer(user))
-			throw new UnauthorizedAccessException("The logged in user needs to be a programmer to propose a patch");
-		
-		bugReport.addPatch(patch);
-	}
 }

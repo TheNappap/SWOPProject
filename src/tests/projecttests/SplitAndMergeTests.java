@@ -68,6 +68,7 @@ public class SplitAndMergeTests extends BugTrapTest{
 		assertEquals(4, subsystem.getSubsystems().size());
 		
 		assertEquals("OfficeParty", subsystem.getBugReports().get(0).getSubsystem().getName());
+		assertEquals("OfficeParty", subsystem.getBugReports().get(1).getSubsystem().getName());
 	}
 	
 	@Test
@@ -94,6 +95,7 @@ public class SplitAndMergeTests extends BugTrapTest{
 		assertEquals(2, subsystem.getSubsystems().size());
 		
 		assertEquals("Word+", subsystem.getBugReports().get(0).getSubsystem().getName());
+		assertEquals("Word+", subsystem.getBugReports().get(1).getSubsystem().getName());
 	}
 
 }

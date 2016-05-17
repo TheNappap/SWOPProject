@@ -3,6 +3,7 @@ package model.bugreports.commands;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.Command;
+import model.bugreports.comments.Commentable;
 import model.bugreports.forms.CommentCreationForm;
 
 public class CreateCommentCommand extends Command {
@@ -17,6 +18,6 @@ public class CreateCommentCommand extends Command {
     @Override
     public void execute() throws UnauthorizedAccessException {
         form.allVarsFilledIn();
-        getBugTrap().getBugReportManager().addComment(form.getCommentable(), form.getText());
+        ((Commentable) form.getCommentable()).addComment(form.getText());
     }
 }

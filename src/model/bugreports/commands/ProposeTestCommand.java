@@ -3,6 +3,7 @@ package model.bugreports.commands;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.Command;
+import model.bugreports.BugReport;
 import model.bugreports.forms.ProposeTestForm;
 
 public class ProposeTestCommand extends Command {
@@ -17,6 +18,6 @@ public class ProposeTestCommand extends Command {
 
     @Override
     public void execute() throws UnauthorizedAccessException {
-        getBugTrap().getBugReportManager().proposeTest(form.getBugReport(), form.getTest());
+        ((BugReport) form.getBugReport()).proposeTest(form.getTest());
     }
 }

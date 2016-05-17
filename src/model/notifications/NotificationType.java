@@ -1,7 +1,13 @@
 package model.notifications;
 
 import model.bugreports.bugtag.BugTag;
-import model.notifications.observers.*;
+import model.notifications.observers.BugReportChangeObserver;
+import model.notifications.observers.BugReportSpecificTagObserver;
+import model.notifications.observers.CreateBugReportObserver;
+import model.notifications.observers.CreateCommentObserver;
+import model.notifications.observers.MilestoneObserver;
+import model.notifications.observers.ObserverWithMailbox;
+import model.notifications.observers.SpecificMilestoneObserver;
 import model.projects.AchievedMilestone;
 
 public enum NotificationType {

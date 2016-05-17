@@ -72,51 +72,5 @@ public class BugReportManagerTest extends BugTrapTest {
 		assertTrue(filtered.getTitle().equals("WordArt is not working"));
 		assertTrue(filtered.getDescription().equals("When using Comic Sans, the Word Art does not work."));
 	}
-
-	@Test
-	public void addComment() {
-		bugTrap.getBugReportManager().addComment(wordArtBug, "Who uses WortArt or Comic Sans anyway?");
-		assertEquals(1, wordArtBug.getComments().size());
-		assertEquals("Who uses WortArt or Comic Sans anyway?", wordArtBug.getComments().get(0).getText());
-	}
-
-	@Test
-	public void proposeTest() {
-		bugTrap.getUserManager().loginAs(tester);
-		try {
-			bugTrap.getBugReportManager().proposeTest(wordArtBug, "<code here>");
-		} catch (UnauthorizedAccessException e) {
-			fail("Not authorized.");
-			e.printStackTrace();
-		}
-
-		assertEquals(1, wordArtBug.getTests().size());
-		assertEquals("<code here>", wordArtBug.getTests().get(0).getTest());
-	}
-
-	@Test (expected = UnauthorizedAccessException.class)
-	public void propseTestNotAllowed() throws UnauthorizedAccessException {
-		bugTrap.getUserManager().loginAs(lead);
-		bugTrap.getBugReportManager().proposeTest(wordArtBug, "test");
-	}
-
-	@Test
-	public void proposePatch() {
-		bugTrap.getUserManager().loginAs(prog);
-		try {
-			bugTrap.getBugReportManager().proposePatch(wordArtBug, "<code here>");
-		} catch (UnauthorizedAccessException e) {
-			fail("Not authorized.");
-			e.printStackTrace();
-		}
-
-		assertEquals(1, wordArtBug.getPatches().size());
-		assertEquals("<code here>", wordArtBug.getPatches().get(0).getPatch());
-	}
-
-	@Test (expected = UnauthorizedAccessException.class)
-	public void proposePatchNotAllowed() throws UnauthorizedAccessException {
-		bugTrap.getUserManager().loginAs(lead);
-		bugTrap.getBugReportManager().proposePatch(wordArtBug, "patch");
-	}
+	
 }

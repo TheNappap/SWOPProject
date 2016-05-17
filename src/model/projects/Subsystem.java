@@ -3,7 +3,6 @@ package model.projects;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.org.apache.bcel.internal.generic.ISUB;
 import model.BugTrap;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
@@ -65,6 +64,7 @@ public class Subsystem extends System implements ISubsystem {
 
 	public void addBugReport(BugReport report) {
 		this.bugReports.add(report);
+		report.setSubsystem(this);
 	}
 
 	public void removeBugReport(BugReport report) {
@@ -112,12 +112,12 @@ public class Subsystem extends System implements ISubsystem {
 			BugReport bugReport = this.bugReports.get(i);
 			if(bugReportsFor1.contains(bugReport)){
 				//bug report for first new subsystem
-				sub1.bugReports.add(bugReport);
+				sub1.addBugReport(bugReport);
 			}else{
 				//bug report for second new subsystem
-				sub2.bugReports.add(bugReport);
+				sub2.addBugReport(bugReport);
 			}
-			this.bugReports.remove(bugReport);
+			this.removeBugReport(bugReport);
 			i--;
 		}
 		
@@ -183,8 +183,8 @@ public class Subsystem extends System implements ISubsystem {
 		List<BugReport> reports = new ArrayList<>();
 		reports.addAll(this.bugReports);
 		for (BugReport bugReport : reports) {
-			newSubsystem.bugReports.add(bugReport);
-			this.bugReports.remove(bugReport);
+			newSubsystem.addBugReport(bugReport);
+			this.removeBugReport(bugReport);
 		}
 	}
 
