@@ -322,5 +322,6 @@ public abstract class System implements ISystem, Observable, Observer {
 	 * Returns the verison of the system
 	 * @return The Version of this system.
 	 */
+	@Override
 	public abstract Version getVersion();
 }
