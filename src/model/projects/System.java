@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.BugTrap;
+import model.Milestone;
+import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
+import model.bugreports.bugtag.BugTag;
 import model.notifications.Observable;
 import model.notifications.observers.Observer;
 import model.notifications.signalisations.Signalisation;
+import model.projects.builders.SubsystemBuilder;
 import model.projects.health.HealthCalculator;
 import model.projects.health.HealthCalculator1;
 import model.projects.health.HealthCalculator2;
@@ -133,13 +137,29 @@ public abstract class System implements ISystem, Observable, Observer {
 	 * @param numbers The numbers for the Achieved Milestone.
 	 */
 	public void declareAchievedMilestone(List<Integer> numbers) {
-		AchievedMilestone highest = highestAchievedMilestone();
+		if (numbers == null || numbers.isEmpty()) throw new IllegalArgumentException("Numbers can not be null or empty!");
+		
+		//Check if new achieved milestone is less than target milestones of bugreports in progress
+		List<IBugReport> bugreports = getAllBugReports();
 		AchievedMilestone achieved = new AchievedMilestone(numbers);
-
+		for (IBugReport bugreport : bugreports) {
+			BugTag tag = bugreport.getBugTag();
+			if(tag == BugTag.CLOSED || tag == BugTag.NOTABUG || tag == BugTag.DUPLICATE){
+				continue;
+			}
+			
+			Milestone target = ((BugReport) bugreport).getTargetMilestone();
+			if(target != null && achieved.compareTo(target) >= 0){
+				throw new IllegalArgumentException("The new declared achieved milestone should be less than a target milestone of a bugreport in progress");
+			}
+		}
+		
+		//Check if the new milestone is larger than the current AND it is equal or less than the highest milestone of the bugreports
+		AchievedMilestone highest = highestAchievedMilestone();
 		if ((highest == null) || achieved.compareTo(highest) <= 0 && (this.milestone == null || achieved.compareTo(this.milestone) >= 0)) 
 			milestone = achieved;
 		else
-			throw new IllegalArgumentException("The given milestone should be equal to or less than the higheset milestone of its (in)direct subsystems and the declared milestone must be larger than the current milestone.");
+			throw new IllegalArgumentException("The given milestone should be equal to or less than the highest milestone of its (in)direct subsystems and the declared milestone must be larger than the current milestone.");
 	}
 
 	private AchievedMilestone highestAchievedMilestone() {
@@ -276,5 +296,21 @@ public abstract class System implements ISystem, Observable, Observer {
 				siblings.add(s);
 		}
 		return siblings;
+	}
+
+	/*
+	 * Creates a subsystem in the system with a given name and description
+	 * @param name			The name of the subsystem
+	 * @param description	The description of the subsystem
+	 */
+	public void createSubsystem(String name, String description) {
+		if (name == null || description == null)
+			throw  new IllegalArgumentException("Arguments should not be null.");
+		
+		(new SubsystemBuilder(bugTrap))
+			.setDescription(description)
+			.setName(name)
+			.setParent(this)
+			.getSubsystem();
 	}
 }

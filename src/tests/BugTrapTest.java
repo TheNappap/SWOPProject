@@ -14,6 +14,8 @@ import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 import model.projects.IProject;
 import model.projects.ISubsystem;
+import model.projects.Project;
+import model.projects.Subsystem;
 import model.projects.Version;
 import model.users.Developer;
 import model.users.IUser;
@@ -74,19 +76,19 @@ public class BugTrapTest {
         office.addProgrammer(prog);
         office.addTester(tester);
         //Add Subsystem.
-        bugTrap.getProjectManager().createSubsystem("Word", "Word processor", office, office);
+        ((Project) office).createSubsystem("Word", "Word processor");
         word = bugTrap.getProjectManager().getSubsystemWithName("Word");
-        bugTrap.getProjectManager().createSubsystem("Word Art", "Beautiful creations in text documents!", office, word);
+        ((Subsystem) word).createSubsystem("Word Art", "Beautiful creations in text documents!");
         wordArt = bugTrap.getProjectManager().getSubsystemWithName("Word Art");
-        bugTrap.getProjectManager().createSubsystem("Comic Sans", "We need an amazing font everybody loves!", office, word);
+        ((Subsystem) word).createSubsystem("Comic Sans", "We need an amazing font everybody loves!");
         comicSans = bugTrap.getProjectManager().getSubsystemWithName("Comic Sans");
-        bugTrap.getProjectManager().createSubsystem("Clippy", "Annoying paperclip to make people use our software for longer periods of time", office, word);
+        ((Subsystem) word).createSubsystem("Clippy", "Annoying paperclip to make people use our software for longer periods of time");
         clippy = bugTrap.getProjectManager().getSubsystemWithName("Clippy");
-        bugTrap.getProjectManager().createSubsystem("Excel", "Excellent software", office, office);
+        ((Project) office).createSubsystem("Excel", "Excellent software");
         excel = bugTrap.getProjectManager().getSubsystemWithName("Excel");
-        bugTrap.getProjectManager().createSubsystem("ExcelTable", "Excellent Table", office, excel);
+        ((Subsystem) excel).createSubsystem("ExcelTable", "Excellent Table");
         excelTable = bugTrap.getProjectManager().getSubsystemWithName("ExcelTable");
-        bugTrap.getProjectManager().createSubsystem("PowerPoint", "Powerfully pointless", office, office);
+        ((Project) office).createSubsystem("PowerPoint", "Powerfully pointless");
         powerpoint = bugTrap.getProjectManager().getSubsystemWithName("PowerPoint");
         
         //Add BugReports.

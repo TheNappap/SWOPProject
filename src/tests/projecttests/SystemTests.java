@@ -26,7 +26,7 @@ public class SystemTests extends BugTrapTest {
 
     @Test
     public void testAddSubsystem() {
-        Subsystem s = new Subsystem(bugTrap, "sub", "descr", (Subsystem)word, new ArrayList<>(), (Project)office, null);
+        Subsystem s = new Subsystem(bugTrap, "sub", "descr", (Subsystem)word, new ArrayList<>(), null);
 
         Assert.assertEquals(s.getParent(), word);
         Assert.assertEquals(s.getSubsystems().size(), 0);
@@ -37,15 +37,15 @@ public class SystemTests extends BugTrapTest {
 
     @Test
     public void testEquals() {
-        assertTrue(powerpoint.equals(new Subsystem(bugTrap, "PowerPoint", "Powerfully pointless", (System)office, null, (Project)office, null)));
+        assertTrue(powerpoint.equals(new Subsystem(bugTrap, "PowerPoint", "Powerfully pointless", (System)office, null, null)));
         // Compare "identical" Projects but with different subs
         Project p2 = new Project(bugTrap, "Office", "This project is huge. Lots of subsystems", new ArrayList<Subsystem>(), Version.firstVersion(), new Date(1302), new Date(1302), 12345, null, null);
         assertFalse(office.equals(p2));
 
         Project projA = new Project(null, "n", "d", new ArrayList<Subsystem>(), Version.firstVersion(), null, null, 12345, null, null);
         Project projB = new Project(null, "n", "d", new ArrayList<Subsystem>(), Version.firstVersion(), null, null, 12345, null, null);
-        Subsystem subA = new Subsystem(null, "", "", projA, new ArrayList<Subsystem>(), projA, null);
-        Subsystem subB = new Subsystem(null, "", "", projB, new ArrayList<Subsystem>(), projB, null);
+        Subsystem subA = new Subsystem(null, "", "", projA, new ArrayList<Subsystem>(), null);
+        Subsystem subB = new Subsystem(null, "", "", projB, new ArrayList<Subsystem>(), null);
         assertTrue(projA.equals(projB));
         Assert.assertEquals(projA, projB);
         assertTrue(subA.equals(subB));

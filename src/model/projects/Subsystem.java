@@ -27,10 +27,14 @@ public class Subsystem extends System implements ISubsystem {
 	 * @param project Project of the Subsystem.
 	 * @param achievedMilestone Achieved Milestone of the Subsystem.
 	 */
-	public Subsystem(BugTrap bugTrap, String name, String description, System parent, List<Subsystem> subsystems, Project project, AchievedMilestone achievedMilestone) {
+	public Subsystem(BugTrap bugTrap, String name, String description, System parent, List<Subsystem> subsystems, AchievedMilestone achievedMilestone) {
 		super(bugTrap, name, description, parent, subsystems, achievedMilestone);
 		
-		this.project = project;
+		System system = parent;
+		while(system.getParent() != null){
+			system = (System) system.getParent();
+		}
+		this.project = (Project) system;
 		this.bugReports = new ArrayList<>();
 		parent.subsystems.add(this);
 	}
@@ -86,8 +90,8 @@ public class Subsystem extends System implements ISubsystem {
 	@Override
 	public void split(String nameFor1, String nameFor2, String descriptionFor1, String descriptionFor2,
 			List<IBugReport> bugReportsFor1, List<ISubsystem> subsystemsFor1){
-		Subsystem sub1 = new Subsystem(bugTrap, nameFor1, descriptionFor1, parent, null, project, getAchievedMilestone());
-		Subsystem sub2 = new Subsystem(bugTrap, nameFor2, descriptionFor2, parent, null, project, getAchievedMilestone());
+		Subsystem sub1 = new Subsystem(bugTrap, nameFor1, descriptionFor1, parent, null, getAchievedMilestone());
+		Subsystem sub2 = new Subsystem(bugTrap, nameFor2, descriptionFor2, parent, null, getAchievedMilestone());
 		
 		//split subsystems
 		for (int i = 0; i < this.subsystems.size(); i++) {
@@ -146,7 +150,7 @@ public class Subsystem extends System implements ISubsystem {
 			achievedMilestone = iSubsystem.getAchievedMilestone();
 		}
 		
-		Subsystem newSubsystem = new Subsystem(bugTrap, name, description, parent, null, project, achievedMilestone);
+		Subsystem newSubsystem = new Subsystem(bugTrap, name, description, parent, null, achievedMilestone);
 		
 		Subsystem subsystem = ((Subsystem) iSubsystem);
 		//Move all subsystems to the new merged subsystem

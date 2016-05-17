@@ -17,6 +17,7 @@ import model.bugreports.bugtag.BugTag;
 import model.projects.AchievedMilestone;
 import model.projects.IProject;
 import model.projects.ISubsystem;
+import model.projects.System;
 import model.projects.forms.DeclareAchievedMilestoneForm;
 
 public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
@@ -78,7 +79,7 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 		for (ISubsystem sub : p.getAllDirectOrIndirectSubsystems())
 			subs.push(sub);
 		while (!subs.isEmpty())
-			bugTrap.getProjectManager().declareAchievedMilestone(subs.pop(), Arrays.asList(new Integer[] {1,2,3}));
+			((System) subs.pop()).declareAchievedMilestone(Arrays.asList(new Integer[] {1,2,3}));
 
 		//Step 1. The developer indicates that he wants to declare an achieved milestone.
 		DeclareAchievedMilestoneForm form = null;
@@ -173,7 +174,7 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 		IProject p = ps.get(0);
 		List<ISubsystem> ss = p.getAllDirectOrIndirectSubsystems();
 		ISubsystem sub = ss.get(0);
-		bugTrap.getProjectManager().declareAchievedMilestone(sub, Arrays.asList(new Integer[] {0,1}));
+		((System) sub).declareAchievedMilestone(Arrays.asList(new Integer[] {0,1}));
 		bugTrap.getBugReportManager().addBugReport("title", "description", new Date(3), sub, lead, new ArrayList<>(), new ArrayList<>(), BugTag.NEW, new TargetMilestone(Arrays.asList(new Integer[] {0,2})), 3);
 		
 		

@@ -6,12 +6,7 @@ import java.util.List;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
-import model.Milestone;
-import model.bugreports.BugReport;
-import model.bugreports.IBugReport;
-import model.bugreports.bugtag.BugTag;
 import model.projects.builders.ProjectBuilder;
-import model.projects.builders.SubsystemBuilder;
 import model.users.IUser;
 
 /**
@@ -90,28 +85,6 @@ public class ProjectManager {
 	}
 
 	/**
-	 * Updates project with given name, description, budget estimate and start date
-	 * @param project			the project to update
-	 * @param name				the name of the project
-	 * @param description		the description of the project
-	 * @param budgetEstimate	the budget estimate of the project
-	 * @param startDate			the start date of the project
-	 */
-	public void updateProject(IProject project, String name, String description, double budgetEstimate, Date startDate) {
-		if (project == null || name == null || description == null || startDate == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-
-		for (Project p : projectList) {
-			if (p == project) {
-				p.setBudgetEstimate(budgetEstimate);
-				p.setDescription(description);
-				p.setName(name);
-				p.setStartDate(startDate);
-			}
-		}
-	}
-
-	/**
 	 * Deletes a project, its subsystems, the bugreports for the subsystems and the registrations
 	 * for the project, subsystems and bugreports
 	 * @param project the project to delete
@@ -125,24 +98,6 @@ public class ProjectManager {
 			if (projectList.get(i) == project) {
 				((Project) project).terminate();
 				projectList.remove(i);
-			}
-		}
-	}
-
-
-	/**
-	 * Assigns a developer to a project with a given role
-	 * @param project	The project to assign to
-	 * @param dev		The developer to be assigned
-	 * @param role		The role to be assigned
-	 */
-	public void assignToProject(IProject project, IUser dev, Role role) {
-		if (project == null || dev == null || role == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-
-		for (Project p : projectList) {
-			if (p == project) {
-				p.getTeam().addMember(dev, role);
 			}
 		}
 	}
@@ -188,37 +143,6 @@ public class ProjectManager {
 		return projects;
 	}
 
-
-	/**
-	 * Creates a subsystem in a given project and parent with a given name and description
-	 * @param name			The name of the subsystem
-	 * @param description	The description of the subsystem
-	 * @param iproject		The project of the subsystem
-	 * @param iparent		The parent of the subsystem
-	 */
-	public void createSubsystem(String name, String description, IProject iproject, ISystem iparent) {
-		if (name == null || description == null || iproject == null || iparent == null)
-			throw  new IllegalArgumentException("Arguments should not be null.");
-
-		Project project = null;
-		for (Project p : projectList)
-			if (p == iproject)
-				project = p;
-		System system = null;
-		if (iparent == project)
-			system = project;
-		for (ISystem s : project.getAllDirectOrIndirectSubsystems())
-			if (s == iparent)
-				system = (System) s;
-
-		(new SubsystemBuilder(bugTrap))
-				.setDescription(description)
-				.setName(name)
-				.setProject(project)
-				.setParent(system)
-				.getSubsystem();
-	}
-
 	/**
 	 * Method to get the subsystem in BugTrap with the given name.
 	 * @param name The name for which to search.
@@ -234,31 +158,5 @@ public class ProjectManager {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Declares achieved milestone to a system
-	 * @param system
-	 * @param numbers
-	 */
-	public void declareAchievedMilestone(ISystem system, List<Integer> numbers) {
-		if (numbers == null || numbers.isEmpty()) throw new IllegalArgumentException("Numbers can not be null or empty!");
-		if (system == null) throw new IllegalArgumentException("System can not be null!");
-		
-		List<IBugReport> bugreports = system.getAllBugReports();
-		AchievedMilestone achieved = new AchievedMilestone(numbers);
-		for (IBugReport bugreport : bugreports) {
-			BugTag tag = bugreport.getBugTag();
-			if(tag == BugTag.CLOSED || tag == BugTag.NOTABUG || tag == BugTag.DUPLICATE){
-				continue;
-			}
-			
-			Milestone target = ((BugReport) bugreport).getTargetMilestone();
-			if(target != null && achieved.compareTo(target) >= 0){
-				throw new IllegalArgumentException("The new declared achieved milestone should be less than a target milestone of a bugreport in progress");
-			}
-		}
-		
-		((System) system).declareAchievedMilestone(numbers);
 	}
 }
