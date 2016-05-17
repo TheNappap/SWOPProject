@@ -1,13 +1,7 @@
 package model.notifications;
 
 import model.bugreports.bugtag.BugTag;
-import model.notifications.observers.BugReportChangeObserver;
-import model.notifications.observers.BugReportSpecificTagObserver;
-import model.notifications.observers.CreateBugReportObserver;
-import model.notifications.observers.CreateCommentObserver;
-import model.notifications.observers.MilestoneObserver;
-import model.notifications.observers.ObserverWithMailbox;
-import model.notifications.observers.SpecificMilestoneObserver;
+import model.notifications.observers.*;
 import model.projects.AchievedMilestone;
 
 public enum NotificationType {
@@ -50,13 +44,13 @@ public enum NotificationType {
 	SYSTEM_VERSION_UPDATE {
 		@Override
 		public ObserverWithMailbox createObserver(Mailbox box, Observable observable, BugTag tag, AchievedMilestone milestone) {
-			return null;
+			return new SystemVersionUpdateObserver(box, observable);
 		}
 	},
 	PROJECT_FORK {
 		@Override
 		public ObserverWithMailbox createObserver(Mailbox box, Observable observable, BugTag tag, AchievedMilestone milestone) {
-			return null;
+			return new ProjectForkObserver(box, observable);
 		}
 	};
 

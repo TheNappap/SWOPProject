@@ -6,6 +6,8 @@ import java.util.List;
 import model.BugTrap;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
+import model.notifications.NotificationType;
+import model.notifications.signalisations.Signalisation;
 
 /**
  * This class represents a subsystem in a system.
@@ -63,6 +65,7 @@ public class Subsystem extends System implements ISubsystem {
 
 	public void addBugReport(BugReport report) {
 		this.bugReports.add(report);
+		signal(new Signalisation(NotificationType.CREATE_BUGREPORT, report));
 		report.setSubsystem(this);
 	}
 

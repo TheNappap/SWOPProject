@@ -10,11 +10,8 @@ import model.bugreports.bugtag.BugTag;
 import model.bugreports.builders.BugReportBuilder;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
-import model.notifications.NotificationType;
-import model.notifications.signalisations.Signalisation;
 import model.projects.ISubsystem;
 import model.projects.ISystem;
-import model.projects.Subsystem;
 import model.users.IUser;
 
 /**
@@ -97,7 +94,8 @@ public class BugReportManager {
 	 */
 	public void addBugReport(String title, String description, Date creationDate, ISubsystem subsystem, IUser issuer, List<IBugReport> dependencies, List<IUser> assignees, BugTag tag, TargetMilestone milestone, int impactFactor) {
 		if (milestone != null) {
-			if(milestone.compareTo(subsystem.getAchievedMilestone()) <= 0) throw new IllegalArgumentException("The target milestone should be strict higher than the achieved milestone of the subsystem");
+			if (milestone.compareTo(subsystem.getAchievedMilestone()) <= 0)
+				throw new IllegalArgumentException("The target milestone should be strict higher than the achieved milestone of the subsystem");
 		}
 
 		BugReport report = new BugReportBuilder(bugTrap).setTitle(title)
@@ -112,7 +110,5 @@ public class BugReportManager {
 				.setMilestone(milestone)
 				.getBugReport();
 		bugReportList.add(report);
-		((Subsystem)subsystem).signal(new Signalisation(NotificationType.CREATE_BUGREPORT, report));
 	}
-	
 }
