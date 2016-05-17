@@ -20,11 +20,11 @@ public class UnregisterForNotificationUseCaseTest extends BugTrapTest {
 	public void setUp()  {
 		super.setUp();
 		//Log in and register for notifications to be able to unregister
-		bugTrap.getUserManager().loginAs(issuer);
+		userController.loginAs(issuer);
 
 		RegisterNotificationForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeRegisterForNotificationForm();
+			form = notificationController.getRegisterNotificationForm();
 		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
 
 		form.setObservable(office);
@@ -40,18 +40,18 @@ public class UnregisterForNotificationUseCaseTest extends BugTrapTest {
 			e.printStackTrace();
 		}
 
-		bugTrap.getUserManager().logOff();
+		userController.logOff();
 	}
 
 	@Test
 	public void unregisterForNotificationTest() {
 		//Log in as Administrator.
-		bugTrap.getUserManager().loginAs(issuer);
+		userController.loginAs(issuer);
 		
 		//1. The issuer indicates that he wants to unregister from receiving specific notifications.
 		UnregisterNotificationForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeUnregisterFromNotificationForm();
+			form = notificationController.getUnregisterNotificationForm();
 		} catch (UnauthorizedAccessException e) { fail("Not logged in."); }
 		
 		//2. The system shows all active registrationTypes for notifications.
@@ -68,7 +68,7 @@ public class UnregisterForNotificationUseCaseTest extends BugTrapTest {
 		
 		//User is registered for one thing.
 		try {
-			assertEquals(1, bugTrap.getNotificationManager().getRegistrationsLoggedInUser().size());
+			assertEquals(1, notificationController.getRegistrations().size());
 		} catch (UnauthorizedAccessException e) {
 			fail("Not authorized.");
 			e.printStackTrace();
@@ -84,7 +84,7 @@ public class UnregisterForNotificationUseCaseTest extends BugTrapTest {
 
 		//User is registered for nothing.
 		try {
-			assertEquals(0, bugTrap.getNotificationManager().getRegistrationsLoggedInUser().size());
+			assertEquals(0, notificationController.getRegistrations().size());
 		} catch (UnauthorizedAccessException e) {
 			e.printStackTrace();
 			fail("Not authorized.");
@@ -95,7 +95,7 @@ public class UnregisterForNotificationUseCaseTest extends BugTrapTest {
 	public void authorisationTest() {
 		//Can't unregister when not logged in.
 		try {
-			bugTrap.getFormFactory().makeUnregisterFromNotificationForm();
+			notificationController.getRegisterNotificationForm();
 			fail("Can't unregister for notification when not logged in.");
 		} catch (UnauthorizedAccessException e) { }
 	}
@@ -103,10 +103,10 @@ public class UnregisterForNotificationUseCaseTest extends BugTrapTest {
 	@Test
 	public void varsNotFilledTest() {
 		//Log in as Administrator.
-		bugTrap.getUserManager().loginAs(bugTrap.getUserManager().getUser("ADMIN"));
+		userController.loginAs(admin);
 		
 		try {
-			bugTrap.getFormFactory().makeUnregisterFromNotificationForm().allVarsFilledIn();
+			notificationController.getUnregisterNotificationForm().allVarsFilledIn();
 			fail("should throw exception");
 		} 
 		catch (UnauthorizedAccessException e) 	{ fail("not authorized"); }
