@@ -8,6 +8,7 @@ import model.Milestone;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
+import model.notifications.NotificationType;
 import model.notifications.Observable;
 import model.notifications.observers.Observer;
 import model.notifications.signalisations.Signalisation;
@@ -156,6 +157,8 @@ public abstract class System implements ISystem, Observable, Observer {
 			milestone = achieved;
 		else
 			throw new IllegalArgumentException("The given milestone should be equal to or less than the highest milestone of its (in)direct subsystems and the declared milestone must be larger than the current milestone.");
+
+		notifyObservers(new Signalisation(NotificationType.ACHIEVED_MILESTONE, this));
 	}
 
 	private AchievedMilestone highestAchievedMilestone() {

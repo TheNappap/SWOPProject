@@ -6,6 +6,8 @@ import java.util.List;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
+import model.notifications.NotificationType;
+import model.notifications.signalisations.Signalisation;
 import model.projects.builders.ProjectBuilder;
 import model.users.IUser;
 
@@ -76,7 +78,8 @@ public class ProjectManager {
 				toFork = p;
 		
 		Project fork = toFork.copy();
-		
+		toFork.signal(new Signalisation(NotificationType.PROJECT_FORK, toFork));
+
 		fork.setVersion(version);
 		fork.setBudgetEstimate(budgetEstimate);
 		fork.setStartDate(startDate);

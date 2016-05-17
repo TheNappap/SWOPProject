@@ -6,6 +6,8 @@ import java.util.List;
 
 import model.BugTrap;
 import model.bugreports.IBugReport;
+import model.notifications.NotificationType;
+import model.notifications.signalisations.Signalisation;
 import model.users.IUser;
 
 /**
@@ -229,6 +231,18 @@ public class Project extends System implements IProject {
 	}
 
 	/**
+	 * Updates the project version.
+	 * @param version The new version for the project.
+	 */
+	public void updateVersion(Version version) {
+		if (this.version.compareTo(version) == 1)
+			throw new IllegalArgumentException("The new version should be at least as high as the current version.");
+	
+		setVersion(version);
+		notifyObservers(new Signalisation(NotificationType.SYSTEM_VERSION_UPDATE, this));
+	}
+
+	/**
 	 * Assigns a developer to the project with a given role
 	 * @param dev		The developer to be assigned
 	 * @param role		The role to be assigned
@@ -269,4 +283,5 @@ public class Project extends System implements IProject {
 		projectTeam.terminate();
 		projectTeam = null;
 	}
+	
 }
