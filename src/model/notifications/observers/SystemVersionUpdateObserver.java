@@ -14,7 +14,7 @@ public class SystemVersionUpdateObserver extends ObserverWithMailbox {
     @Override
     public void signal(Signalisation signalisation) {
         if (signalisation.getType() == getNotificationType()) {
-            getMailbox().addNotification("BLABLABLA"); //TODO: Write something useful here
+            getMailbox().addNotification("The system " + signalisation.getSystem().getName() + " has achieved version " + signalisation.getSystem().getVersion());
         }
     }
 

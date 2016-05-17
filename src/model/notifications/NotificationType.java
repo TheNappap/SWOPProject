@@ -44,13 +44,13 @@ public enum NotificationType {
 	SYSTEM_VERSION_UPDATE {
 		@Override
 		public ObserverWithMailbox createObserver(Mailbox box, Observable observable, BugTag tag, AchievedMilestone milestone) {
-			return null;
+			return new SystemVersionUpdateObserver(box, observable);
 		}
 	},
 	PROJECT_FORK {
 		@Override
 		public ObserverWithMailbox createObserver(Mailbox box, Observable observable, BugTag tag, AchievedMilestone milestone) {
-			return null;
+			return new ProjectForkObserver(box, observable);
 		}
 	};
 

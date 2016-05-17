@@ -13,7 +13,7 @@ public class MilestoneObserver extends ObserverWithMailbox {
 
     @Override
     public void signal(Signalisation signalisation) {
-
+        getMailbox().addNotification("The system " + signalisation.getSystem().getName() + " has achieved milestone " + signalisation.getSystem().getAchievedMilestone());
     }
 
     @Override

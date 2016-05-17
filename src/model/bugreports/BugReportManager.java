@@ -113,7 +113,6 @@ public class BugReportManager {
 				.setMilestone(milestone)
 				.getBugReport();
 		bugReportList.add(report);
-		((Subsystem)subsystem).signal(new Signalisation(NotificationType.CREATE_BUGREPORT, report));
 	}
 
 	/**

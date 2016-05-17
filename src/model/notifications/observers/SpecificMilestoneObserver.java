@@ -17,8 +17,8 @@ public class SpecificMilestoneObserver extends MilestoneObserver{
 
     @Override
     public void signal(Signalisation signalisation) {
-        if (signalisation.getType() == NotificationType.ACHIEVED_MILESTONE) {
-            getMailbox().addNotification(""); //TODO: Get the actual milestone and project and and and...
+        if (signalisation.getType() == NotificationType.ACHIEVED_MILESTONE && signalisation.getSystem().getAchievedMilestone().compareTo(milestone) == 0) {
+            getMailbox().addNotification("The system " + signalisation.getSystem().getName() + " has achieved the milestone " + milestone);
         }
     }
 

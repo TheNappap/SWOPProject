@@ -14,7 +14,7 @@ public class ProjectForkObserver extends ObserverWithMailbox {
     @Override
     public void signal(Signalisation signalisation) {
         if (signalisation.getType() == getNotificationType()) {
-            getMailbox().addNotification("BLABLABLAAAAAAAAAAAAAAA"); // TODO: Add useful text here
+            getMailbox().addNotification("The project " + signalisation.getSystem().getName() + " has been forked.");
         }
     }
 
