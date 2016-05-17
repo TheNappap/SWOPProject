@@ -1,6 +1,8 @@
 package tests.projecttests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -96,4 +98,26 @@ public class SplitAndMergeTests extends BugTrapTest{
 		assertEquals("Word+", subsystem.getBugReports().get(0).getSubsystem().getName());
 	}
 
+	@Test
+	public void mergeableWith() {
+		List<ISubsystem> excelMergesWith = excel.mergeableWith();
+		assertFalse(excelMergesWith.contains(office));
+		assertTrue(excelMergesWith.contains(word));
+		assertFalse(excelMergesWith.contains(excel));
+		assertTrue(excelMergesWith.contains(powerpoint));
+		assertTrue(excelMergesWith.contains(excelTable));
+		assertFalse(excelMergesWith.contains(clippy));
+		assertFalse(excelMergesWith.contains(comicSans));
+		assertFalse(excelMergesWith.contains(wordArt));
+
+		List<ISubsystem> clippyMergesWith = clippy.mergeableWith();
+		assertFalse(clippyMergesWith.contains(office));
+		assertTrue(clippyMergesWith.contains(word));
+		assertFalse(clippyMergesWith.contains(excel));
+		assertFalse(clippyMergesWith.contains(powerpoint));
+		assertFalse(clippyMergesWith.contains(excelTable));
+		assertFalse(clippyMergesWith.contains(clippy));
+		assertTrue(clippyMergesWith.contains(comicSans));
+		assertTrue(clippyMergesWith.contains(wordArt));
+	}
 }
