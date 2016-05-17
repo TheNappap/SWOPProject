@@ -64,5 +64,11 @@ public interface ISystem extends Observable{
      * @return the health indicators of the system with different algorithms
      */
     public List<HealthIndicator> getHealthIndicators();
+
+    /**
+     * The version of the system.
+     * @return
+     */
+    public Version getVersion();
 }
 
