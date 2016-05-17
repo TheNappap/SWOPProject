@@ -19,12 +19,12 @@ public class AssignBugReportUseCaseTest extends BugTrapTest {
 	@Test
 	public void assignBugReportAsLeadTest() throws UnauthorizedAccessException {
 		//Log in.
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 		
 		//1. The developer indicates he wants to assign a developer to a bug report.
 		BugReportAssignForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeBugReportAssignForm();
+			form = bugReportController.getBugReportAssignForm();
 		} catch (UnauthorizedAccessException e) { fail("not authorized");	}
 		
 		//2. Include use case Select Bug Report.
@@ -47,12 +47,12 @@ public class AssignBugReportUseCaseTest extends BugTrapTest {
 	@Test
 	public void assignBugReportAsTesterTest() throws UnauthorizedAccessException {
 		//Log in.
-		bugTrap.getUserManager().loginAs(tester);
+		userController.loginAs(tester);
 
 		//1. The developer indicates he wants to assign a developer to a bug report.
 		BugReportAssignForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeBugReportAssignForm();
+			form = bugReportController.getBugReportAssignForm();
 		} catch (UnauthorizedAccessException e) { fail("not authorized"); }
 		
 		//2. Include use case Select Bug Report
@@ -74,12 +74,12 @@ public class AssignBugReportUseCaseTest extends BugTrapTest {
 	@Test (expected = UnauthorizedAccessException.class)
 	public void loggedInDevIsNotLeadOrTester() throws UnauthorizedAccessException {
 		//login
-		bugTrap.getUserManager().loginAs(prog);
+		userController.loginAs(prog);
 		
 		//step 1
 		BugReportAssignForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeBugReportAssignForm();
+			form = bugReportController.getBugReportAssignForm();
 		} catch (UnauthorizedAccessException e) {
 			fail("not authorized");
 			e.printStackTrace();
@@ -95,7 +95,7 @@ public class AssignBugReportUseCaseTest extends BugTrapTest {
 		
 		//step 3a
 		IProject project =  bugReport.getSubsystem().getProject();
-		IUser loggedInUser = bugTrap.getUserManager().getLoggedInUser();
+		IUser loggedInUser = userController.getLoggedInUser();
 		form.setDeveloper(loggedInUser);
 		if(!project.isLead(loggedInUser) && !project.isTester(loggedInUser)){
 			//step 2
@@ -113,7 +113,7 @@ public class AssignBugReportUseCaseTest extends BugTrapTest {
 	@Test
 	public void notAuthorizedTest() {
 		try {
-			bugTrap.getFormFactory().makeBugReportAssignForm();
+			bugReportController.getBugReportAssignForm();
 			fail("should throw exception");
 		} catch (UnauthorizedAccessException e) {
 		}
@@ -122,18 +122,18 @@ public class AssignBugReportUseCaseTest extends BugTrapTest {
 	@Test (expected = NullPointerException.class)
 	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//login
-		IUser dev = bugTrap.getUserManager().getUser("LEAD");
-		bugTrap.getUserManager().loginAs(dev);
+		IUser dev = userController.getUser("LEAD");
+		userController.loginAs(dev);
 		
-		BugReportAssignForm form = bugTrap.getFormFactory().makeBugReportAssignForm();
+		BugReportAssignForm form = bugReportController.getBugReportAssignForm();
 		bugReportController.assignToBugReport(form);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void nullFormTest() throws UnauthorizedAccessException {
 		//login
-		IUser dev = bugTrap.getUserManager().getUser("LEAD");
-		bugTrap.getUserManager().loginAs(dev);
+		IUser dev = userController.getUser("LEAD");
+		userController.loginAs(dev);
 		bugReportController.assignToBugReport(null);
 	}
 }
