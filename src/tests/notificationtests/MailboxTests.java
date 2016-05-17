@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import model.notifications.INotification;
 import model.notifications.Mailbox;
-import model.users.Administrator;
 import tests.BugTrapTest;
 
 public class MailboxTests extends BugTrapTest {

@@ -1,21 +1,21 @@
 package tests;
 
-import java.util.Arrays;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.projects.IProject;
 import model.projects.Version;
-import model.projects.forms.DeclareAchievedMilestoneForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectForkForm;
 import model.users.IUser;
-
-import static org.junit.Assert.*;
 
 public class CreateProjectUseCaseTest extends BugTrapTest {
 
@@ -49,7 +49,6 @@ public class CreateProjectUseCaseTest extends BugTrapTest {
 		form.setLeadDeveloper(dev);
 		
 		//6. The system creates the project and shows an overview.
-		Date creationDate = new Date();
 		try {
 			projectController.createProject(form);
 			project = projectController.getProjectList().get(projectController.getProjectList().size() - 1);
@@ -87,7 +86,6 @@ public class CreateProjectUseCaseTest extends BugTrapTest {
 	@Test
 	public void createForkProjectTest() {
 		IUser admin = userController.getAdmins().get(0);
-		IUser dev = userController.getDevelopers().get(0);
 	
 		userController.loginAs(admin);
 		

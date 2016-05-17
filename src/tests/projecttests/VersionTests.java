@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import model.projects.Version;
-import tests.BugTrapTest;
 
 public class VersionTests {
 	

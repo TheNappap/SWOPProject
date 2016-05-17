@@ -1,7 +1,14 @@
 package tests.projecttests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Date;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.BugReport;
@@ -9,16 +16,11 @@ import model.bugreports.bugtag.BugTag;
 import model.notifications.Mailbox;
 import model.notifications.observers.BugReportChangeObserver;
 import model.notifications.observers.Observer;
-import org.junit.Assert;
-import org.junit.Test;
-
 import model.projects.Project;
-import model.projects.System;
 import model.projects.Subsystem;
+import model.projects.System;
 import model.projects.Version;
 import tests.BugTrapTest;
-
-import static org.junit.Assert.*;
 
 public class SystemTests extends BugTrapTest {
 

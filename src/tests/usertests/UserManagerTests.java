@@ -1,14 +1,10 @@
 package tests.usertests;
 
-import model.users.Administrator;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import model.users.Developer;
 import model.users.IUser;
-import model.users.UserManager;
 import model.users.exceptions.NoUserWithUserNameException;
 import model.users.exceptions.NotUniqueUserNameException;
 import tests.BugTrapTest;

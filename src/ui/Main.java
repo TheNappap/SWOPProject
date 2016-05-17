@@ -17,8 +17,16 @@ import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
 import model.bugreports.filters.FilterType;
-import model.bugreports.forms.*;
-import model.notifications.*;
+import model.bugreports.forms.BugReportAssignForm;
+import model.bugreports.forms.BugReportCreationForm;
+import model.bugreports.forms.BugReportUpdateForm;
+import model.bugreports.forms.CommentCreationForm;
+import model.bugreports.forms.ProposePatchForm;
+import model.bugreports.forms.ProposeTestForm;
+import model.notifications.INotification;
+import model.notifications.IRegistration;
+import model.notifications.NotificationType;
+import model.notifications.Observable;
 import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.ShowChronologicalNotificationForm;
 import model.notifications.forms.UnregisterNotificationForm;
@@ -27,11 +35,15 @@ import model.projects.ISubsystem;
 import model.projects.ISystem;
 import model.projects.Role;
 import model.projects.Version;
-import model.projects.forms.*;
+import model.projects.forms.DeclareAchievedMilestoneForm;
+import model.projects.forms.ProjectAssignForm;
+import model.projects.forms.ProjectCreationForm;
+import model.projects.forms.ProjectDeleteForm;
+import model.projects.forms.ProjectForkForm;
+import model.projects.forms.ProjectUpdateForm;
+import model.projects.forms.SubsystemCreationForm;
 import model.users.IUser;
 import model.users.Issuer;
-
-import static org.junit.Assert.fail;
 
 public class Main {
 

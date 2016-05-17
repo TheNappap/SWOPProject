@@ -2,8 +2,6 @@ package model;
 
 import controllers.exceptions.UnauthorizedAccessException;
 
-import java.util.IllegalFormatException;
-
 public abstract class Command {
 	
     private BugTrap bugTrap; //BugTrap system

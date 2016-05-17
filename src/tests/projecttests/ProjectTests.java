@@ -1,20 +1,21 @@
 package tests.projecttests;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Date;
 
-import model.users.Developer;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import model.projects.Project;
 import model.projects.ProjectTeam;
 import model.projects.Subsystem;
 import model.projects.Version;
+import model.users.Developer;
 import tests.BugTrapTest;
-
-import static org.junit.Assert.*;
 
 public class ProjectTests extends BugTrapTest {
 

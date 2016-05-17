@@ -5,25 +5,16 @@ import static org.junit.Assert.fail;
 
 import java.util.Date;
 
-import model.projects.Subsystem;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import controllers.ProjectController;
-import controllers.UserController;
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
-import model.projects.IProject;
-import model.projects.ISubsystem;
 import model.projects.Role;
 import model.projects.forms.ProjectAssignForm;
 import model.projects.forms.ProjectCreationForm;
 import model.projects.forms.ProjectUpdateForm;
 import model.projects.forms.SubsystemCreationForm;
-import model.users.Developer;
-import model.users.IUser;
-import model.users.UserManager;
 import tests.BugTrapTest;
 
 public class ProjectFormTests extends BugTrapTest {
@@ -285,8 +276,6 @@ public class ProjectFormTests extends BugTrapTest {
 			fail("not authorized");
 			e.printStackTrace();
 		}
-		
-		ISubsystem subsystem = office.getSubsystems().get(0);
 		
 		Assert.assertEquals("Sub", subSystemCreationForm.getName());
 		Assert.assertEquals("A test subsystem", subSystemCreationForm.getDescription());

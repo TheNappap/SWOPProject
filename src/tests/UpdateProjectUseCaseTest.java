@@ -6,12 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.projects.IProject;
-import model.projects.Version;
 import model.projects.forms.ProjectUpdateForm;
 
 public class UpdateProjectUseCaseTest extends BugTrapTest {

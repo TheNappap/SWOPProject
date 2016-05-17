@@ -2,9 +2,6 @@ package model.notifications.forms;
 
 import model.Form;
 import model.notifications.IRegistration;
-import model.notifications.NotificationType;
-import model.notifications.Observable;
-import model.notifications.observers.ObserverWithMailbox;
 
 public class UnregisterNotificationForm implements Form {
 

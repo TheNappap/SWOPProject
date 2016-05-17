@@ -9,23 +9,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import model.bugreports.BugReport;
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import model.bugreports.IBugReport;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.filters.FilterType;
-import model.projects.IProject;
-import model.projects.Project;
 import model.projects.Subsystem;
-import model.projects.Version;
-import model.users.Administrator;
-import model.users.Developer;
 import model.users.IUser;
-import model.users.Issuer;
 import tests.BugTrapTest;
 
 public class BugReportManagerTest extends BugTrapTest {

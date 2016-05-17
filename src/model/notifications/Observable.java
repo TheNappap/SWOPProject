@@ -3,8 +3,6 @@ package model.notifications;
 import model.notifications.observers.Observer;
 import model.notifications.signalisations.Signalisation;
 
-import java.util.List;
-
 /**
  * Interface for objects that are observable.
  */

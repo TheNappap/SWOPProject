@@ -3,7 +3,6 @@ package tests;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import model.users.IUser;
@@ -31,7 +30,7 @@ public class LoginUseCaseTest extends BugTrapTest {
 		//1. The user indicates if he wants to log in as an administrator, issuer or
 		//developer.
 		//2. The system shows an overview of the users of the selected category.
-		List<IUser> list = userController.getIssuers();
+		userController.getIssuers();
 		//3. The user selects one of the shown users.
 		IUser user = issuer;
 		//4. The system greets the user.

@@ -3,9 +3,7 @@ package model.notifications.commands;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.Command;
-import model.notifications.Observable;
 import model.notifications.forms.UnregisterNotificationForm;
-import model.notifications.observers.Observer;
 import model.notifications.observers.ObserverWithMailbox;
 
 public class UnregisterForNotificationCommand extends Command {

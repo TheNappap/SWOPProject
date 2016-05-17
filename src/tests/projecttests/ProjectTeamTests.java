@@ -13,7 +13,6 @@ import org.junit.Test;
 import model.projects.ProjectTeam;
 import model.projects.Role;
 import model.users.Developer;
-import tests.BugTrapTest;
 
 public class ProjectTeamTests {
 

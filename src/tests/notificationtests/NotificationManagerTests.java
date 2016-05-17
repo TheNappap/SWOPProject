@@ -1,16 +1,18 @@
 package tests.notificationtests;
 
-import model.notifications.INotification;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
+import model.notifications.INotification;
 import model.notifications.Mailbox;
 import tests.BugTrapTest;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class NotificationManagerTests extends BugTrapTest {
 

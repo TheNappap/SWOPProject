@@ -5,18 +5,14 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import model.projects.IProject;
 import model.projects.Role;
-import model.projects.Version;
 import model.projects.forms.ProjectAssignForm;
 import model.users.IUser;
 
@@ -41,7 +37,7 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 		form.setProject(project);
 		
 		//4. The system shows a list of other developers to assign.
-		List<IUser> devs = bugTrap.getUserManager().getDevelopers();
+		bugTrap.getUserManager().getDevelopers();
 		
 		//5. The lead developer selects one of these other developers.
 		IUser developer = tester;
@@ -127,7 +123,7 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 		form.setProject(project);
 		
 		//4. The system shows a list of other developers to assign.
-		List<IUser> devs = bugTrap.getUserManager().getDevelopers();
+		bugTrap.getUserManager().getDevelopers();
 		
 		//5. The lead developer selects one of these other developers.
 		IUser developer = prog;

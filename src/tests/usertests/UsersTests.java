@@ -1,12 +1,8 @@
 package tests.usertests;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import model.users.Administrator;
-import model.users.Developer;
-import model.users.Issuer;
 import tests.BugTrapTest;
 
 public class UsersTests extends BugTrapTest {

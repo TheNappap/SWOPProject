@@ -1,27 +1,30 @@
 package tests.bugreporttests;
 
-import controllers.exceptions.UnauthorizedAccessException;
-import model.bugreports.IBugReport;
-import model.bugreports.Patch;
-import model.bugreports.TargetMilestone;
-import model.bugreports.comments.Comment;
-import model.notifications.observers.Observer;
-import model.projects.ISubsystem;
-import model.users.IUser;
-import model.users.Issuer;
-import org.junit.Before;
-import org.junit.Test;
-
-import model.bugreports.BugReport;
-import model.bugreports.bugtag.BugTag;
-import model.bugreports.bugtag.BugTagState;
-import tests.BugTrapTest;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import controllers.exceptions.UnauthorizedAccessException;
+import model.bugreports.BugReport;
+import model.bugreports.IBugReport;
+import model.bugreports.Patch;
+import model.bugreports.TargetMilestone;
+import model.bugreports.bugtag.BugTag;
+import model.bugreports.bugtag.BugTagState;
+import model.bugreports.comments.Comment;
+import model.notifications.observers.Observer;
+import model.projects.ISubsystem;
+import model.users.IUser;
+import model.users.Issuer;
+import tests.BugTrapTest;
 
 public class BugTagTests extends BugTrapTest {
 

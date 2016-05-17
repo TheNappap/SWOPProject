@@ -7,17 +7,16 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import model.bugreports.BugReport;
-import model.notifications.NotificationType;
-import model.notifications.forms.RegisterNotificationForm;
 import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import model.FormFactory;
+import model.bugreports.BugReport;
 import model.bugreports.bugtag.BugTag;
 import model.notifications.INotification;
+import model.notifications.NotificationType;
+import model.notifications.forms.RegisterNotificationForm;
 import model.notifications.forms.ShowChronologicalNotificationForm;
 
 public class ShowNotificationsUseCaseTest extends BugTrapTest{

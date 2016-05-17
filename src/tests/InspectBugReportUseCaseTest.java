@@ -1,22 +1,17 @@
 package tests;
 
-import java.util.ArrayList;
-import java.util.Date;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.List;
 
-import controllers.exceptions.UnauthorizedAccessException;
-import org.junit.Before;
 import org.junit.Test;
 
-import model.BugTrap;
+import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.IBugReport;
-import model.bugreports.bugtag.BugTag;
 import model.bugreports.filters.FilterType;
-import model.projects.IProject;
-import model.projects.ISubsystem;
-import model.projects.Version;
-
-import static org.junit.Assert.*;
 
 public class InspectBugReportUseCaseTest extends BugTrapTest {
 

@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.IBugReport;
-import model.bugreports.filters.FilterType;
 import model.bugreports.forms.BugReportAssignForm;
 import model.projects.IProject;
 import model.users.IUser;
@@ -86,12 +85,8 @@ public class AssignBugReportUseCaseTest extends BugTrapTest {
 			e.printStackTrace();
 		}
 		//step 2 SELECT BUGREPORT USE CASE
-		FilterType[] types = null;
 		IBugReport bugReport = null;
 
-		types = bugTrap.getBugReportManager().getFilterTypes();
-		FilterType type = types[0];
-		String searchingString = "B1";
 		List<IBugReport> list = null;
 		list = bugReportController.getBugReportList();
 		bugReport = list.get(0);

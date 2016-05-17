@@ -1,6 +1,5 @@
 package model.bugreports;
 
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +12,6 @@ import model.bugreports.comments.Commentable;
 import model.bugreports.filters.BugReportFilter;
 import model.bugreports.filters.FilterType;
 import model.notifications.signalisations.BugReportCreationSignalisation;
-import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.ISystem;
 import model.projects.Subsystem;

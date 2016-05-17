@@ -9,11 +9,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
 import org.junit.Before;
 import org.junit.Test;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 import model.bugreports.Patch;
@@ -22,11 +21,6 @@ import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
 import model.notifications.observers.Observer;
 import model.projects.ISubsystem;
-import model.projects.Project;
-import model.projects.Subsystem;
-import model.projects.Version;
-import model.users.Administrator;
-import model.users.Developer;
 import model.users.IUser;
 import model.users.Issuer;
 import tests.BugTrapTest;

@@ -3,21 +3,21 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Stack;
 
-import model.bugreports.TargetMilestone;
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.BugTrap;
+import model.bugreports.TargetMilestone;
 import model.bugreports.bugtag.BugTag;
 import model.projects.AchievedMilestone;
 import model.projects.IProject;
 import model.projects.ISubsystem;
-import model.projects.Version;
 import model.projects.forms.DeclareAchievedMilestoneForm;
-import model.users.IUser;
 
 public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 
@@ -38,7 +38,7 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 		IProject project = projects.get(0);
 		
 		//Step 4. system shows a list of subsystems of the selected project.
-		List<ISubsystem> subsystems = project.getAllDirectOrIndirectSubsystems();
+		project.getAllDirectOrIndirectSubsystems();
 		
 		//Step 5. The developer selects a subsystem.
 		ISubsystem subsystem = project.getSubsystems().get(2);
