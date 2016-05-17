@@ -36,47 +36,14 @@ public class Subsystem extends System implements ISubsystem {
 		this.bugReports = new ArrayList<>();
 		parent.subsystems.add(this);
 	}
+	
+	/**********************************************
+	 * GETTERS AND SETTERS
+	 **********************************************/
 
 	@Override
 	public IProject getProject() {
 		return project;
-	}
-	
-	/**
-	 * Sets parent
-	 * @param parent
-	 */
-	private void setParent(System parent) {
-		this.parent = parent;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (!super.equals(o))
-			return false;
-
-		// System.equals compares parents until the root.
-		// If same root, then same project.
-		// No need to compare here.
-		return true;
-	}
-
-	public void addBugReport(BugReport report) {
-		this.bugReports.add(report);
-		report.setSubsystem(this);
-	}
-
-	public void removeBugReport(BugReport report) {
-		this.bugReports.remove(report);
-	}
-
-	@Override
-	public void terminate() {
-		bugTrap.getBugReportManager().deleteBugReportsForSystem(this);
-		bugTrap.getNotificationManager().removeObservable(this);
-
-		super.terminate();
-		project = null;
 	}
 	
 	@Override
@@ -85,6 +52,56 @@ public class Subsystem extends System implements ISubsystem {
 		reports.addAll(this.bugReports);
 		return reports;
 	}
+
+	@Override
+	public double getBugImpact() {
+		double bugImpact = 0;
+		
+		for (IBugReport iBugReport : bugReports) {
+			double impactProduct = ((BugReport) iBugReport).getImpactProduct();
+			bugImpact += impactProduct;
+		}
+		
+		return bugImpact;
+	}
+
+	@Override
+	public Version getVersion() {
+		return ((System) getParent()).getVersion();
+	}
+
+	/**
+	 * Sets parent
+	 * @param parent
+	 */
+	private void setParent(System parent) {
+		this.parent = parent;
+	}
+	
+	/**********************************************
+	 * BUGREPORTS
+	 **********************************************/
+
+	/**
+	 * adds a bug report to the subsystem
+	 * @param report
+	 */
+	public void addBugReport(BugReport report) {
+		this.bugReports.add(report);
+		report.setSubsystem(this);
+	}
+
+	/**
+	 * removes a bug report from the subsystem
+	 * @param report
+	 */
+	public void removeBugReport(BugReport report) {
+		this.bugReports.remove(report);
+	}
+	
+	/**********************************************
+	 * SPLIT AND MERGE
+	 **********************************************/
 
 	@Override
 	public void split(String nameFor1, String nameFor2, String descriptionFor1, String descriptionFor2,
@@ -200,21 +217,28 @@ public class Subsystem extends System implements ISubsystem {
 		this.parent.subsystems.remove(this);
 		setParent(parent);
 	}
+	
+	/**********************************************
+	 * OTHER
+	 **********************************************/
 
 	@Override
-	public double getBugImpact() {
-		double bugImpact = 0;
-		
-		for (IBugReport iBugReport : bugReports) {
-			double impactProduct = ((BugReport) iBugReport).getImpactProduct();
-			bugImpact += impactProduct;
-		}
-		
-		return bugImpact;
+	public boolean equals(Object o) {
+		if (!super.equals(o))
+			return false;
+	
+		// System.equals compares parents until the root.
+		// If same root, then same project.
+		// No need to compare here.
+		return true;
 	}
 
 	@Override
-	public Version getVersion() {
-		return ((System) getParent()).getVersion();
+	public void terminate() {
+		bugTrap.getBugReportManager().deleteBugReportsForSystem(this);
+		bugTrap.getNotificationManager().removeObservable(this);
+	
+		super.terminate();
+		project = null;
 	}
 }

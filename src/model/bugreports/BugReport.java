@@ -90,61 +90,10 @@ public class BugReport implements IBugReport, Commentable {
 		((Subsystem)subsystem).addBugReport(this);
 	}
 	
-	@Override
-	public void addComment(String commentText) {
-		if (commentText == null)
-			throw new IllegalArgumentException("Comment should not be null.");
-		
-		comments.add(new Comment(this, commentText));
-
-		notifyObservers(new Signalisation(NotificationType.CREATE_COMMENT, this));
-	}
+	/**********************************************
+	 * GETTERS
+	 **********************************************/
 	
-	/**
-	 * Adds the given Developer to the assignees list.
-	 * @param developer The developer to add.
-	 * @pre The developer is a developer.
-	 * 		| developer.isDeveloper() == true;
-	 * @post The Developer is part of the assignees list.
-	 * 		| getAssignees().contains(developer);
-	 */
-	public void assignDeveloper(IUser developer) throws UnauthorizedAccessException {
-		IProject project = subsystem.getProject();
-		IUser user = bugTrap.getUserManager().getLoggedInUser();
-		if (!project.isLead(user) && !project.isTester(user))
-			throw new UnauthorizedAccessException("A lead or tester should be logged in to assign bug report");
-
-		if (!developer.isDeveloper()) throw new IllegalArgumentException();
-		
-		assignees.add(developer);
-	}
-
-	/**
-	 * Changes the current BugTag to the given BugTag.
-	 * @param bugTag The new BugTag
-	 * @post The given BugTag will be the new BugTag.
-	 * 		| getBugTag() == bugTag
-	 */
-	public void updateBugTag(BugTag bugTag) throws UnauthorizedAccessException {
-		if (bugTag.hasToBeLeadToSet() && !(getProject().getLeadDeveloper() == bugTrap.getUserManager().getLoggedInUser()))
-			throw new UnauthorizedAccessException();
-
-		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState(this));
-		
-		notifyObservers(new Signalisation(NotificationType.BUGREPORT_CHANGE, this));
-	}
-
-	@Override
-	public int compareTo(IBugReport otherBugReport) {
-		int c = getTitle().compareTo(otherBugReport.getTitle());
-		if (c < 0)
-			return -1;
-		else if (c > 0)
-			return 1;
-		else
-			return 0;
-	}
-
 	@Override
 	public String getDescription() {
 		return description;
@@ -169,7 +118,7 @@ public class BugReport implements IBugReport, Commentable {
 	public BugTag getBugTag() {
 		return bugTag.getTag();
 	}
-	
+
 	/**
 	 * Class of the BugTag.
 	 * @return Class of BugTag
@@ -264,7 +213,18 @@ public class BugReport implements IBugReport, Commentable {
 	public double getImpactProduct() {
 		return bugTag.getMultiplier()*getImpactFactor();
 	}
+
+	@Override
+	public IProject getProject() {
+		return subsystem.getProject();
+	}
+
 	
+	
+	/**********************************************
+	 * TESTS
+	 **********************************************/
+
 	/**
 	 * Proposes a test to the BugReport.
 	 * @param test Test to propose
@@ -279,6 +239,40 @@ public class BugReport implements IBugReport, Commentable {
 		
 		addTest(test);
 	}
+
+	/**
+	 * adds a test to the bug report
+	 * @param test given test
+	 */
+	private void addTest(String test) {
+		tests.add(new Test(test));
+	}
+
+	/**
+	 * accepts a given test if its for this bug report
+	 * @param test given test
+	 */
+	public void acceptTest(Test test) {
+		if(!tests.contains(test))
+			throw new IllegalArgumentException("given test is not a test for this bugreport");
+		
+		test.accept();
+	}
+
+	/**
+	 * rejects a given test if its for this bug report
+	 * @param test given test
+	 */
+	public void rejectTest(Test test) {
+		if(!tests.contains(test))
+			throw new IllegalArgumentException("given test is not a test for this bugreport");
+		
+		tests.remove(test);
+	}
+	
+	/**********************************************
+	 * PATCHES
+	 **********************************************/
 
 	/**
 	 * Proposes a patch to the BugReport.
@@ -296,41 +290,11 @@ public class BugReport implements IBugReport, Commentable {
 	}
 
 	/**
-	 * adds a test to the bug report
-	 * @param test given test
-	 */
-	private void addTest(String test) {
-		tests.add(new Test(test));
-	}
-	
-	/**
 	 * adds a patch to the bug report
 	 * @param patch given patch
 	 */
 	private void addPatch(String patch) {
 		patches.add(new Patch(patch));
-	}
-	
-	/**
-	 * accepts a given test if its for this bug report
-	 * @param test given test
-	 */
-	public void acceptTest(Test test) {
-		if(!tests.contains(test))
-			throw new IllegalArgumentException("given test is not a test for this bugreport");
-		
-		test.accept();
-	}
-	
-	/**
-	 * rejects a given test if its for this bug report
-	 * @param test given test
-	 */
-	public void rejectTest(Test test) {
-		if(!tests.contains(test))
-			throw new IllegalArgumentException("given test is not a test for this bugreport");
-		
-		tests.remove(test);
 	}
 	
 	/**
@@ -354,6 +318,10 @@ public class BugReport implements IBugReport, Commentable {
 		
 		patches.remove(patch);
 	}
+	
+	/**********************************************
+	 * OBSERVERS
+	 **********************************************/
 
 	@Override
 	public void attach(Observer observer) {
@@ -375,9 +343,63 @@ public class BugReport implements IBugReport, Commentable {
 		 ((Subsystem)getSubsystem()).signal(s);
 	}
 	
+	/**********************************************
+	 * OTHER
+	 **********************************************/
+	
+	/**
+	 * Sets the subsystem of this bug report.
+	 * The subsystem of the bug report must contain this bug report.
+	 * @param subsystem
+	 */
+	public void setSubsystem(Subsystem subsystem) {
+		subsystem.getBugReports().contains(this);
+		
+		this.subsystem = subsystem;
+	}
+
 	@Override
-	public IProject getProject() {
-		return subsystem.getProject();
+	public void addComment(String commentText) {
+		if (commentText == null)
+			throw new IllegalArgumentException("Comment should not be null.");
+		
+		comments.add(new Comment(this, commentText));
+	
+		notifyObservers(new Signalisation(NotificationType.CREATE_COMMENT, this));
+	}
+
+	/**
+	 * Adds the given Developer to the assignees list.
+	 * @param developer The developer to add.
+	 * @pre The developer is a developer.
+	 * 		| developer.isDeveloper() == true;
+	 * @post The Developer is part of the assignees list.
+	 * 		| getAssignees().contains(developer);
+	 */
+	public void assignDeveloper(IUser developer) throws UnauthorizedAccessException {
+		IProject project = subsystem.getProject();
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if (!project.isLead(user) && !project.isTester(user))
+			throw new UnauthorizedAccessException("A lead or tester should be logged in to assign bug report");
+	
+		if (!developer.isDeveloper()) throw new IllegalArgumentException();
+		
+		assignees.add(developer);
+	}
+
+	/**
+	 * Changes the current BugTag to the given BugTag.
+	 * @param bugTag The new BugTag
+	 * @post The given BugTag will be the new BugTag.
+	 * 		| getBugTag() == bugTag
+	 */
+	public void updateBugTag(BugTag bugTag) throws UnauthorizedAccessException {
+		if (bugTag.hasToBeLeadToSet() && !(getProject().getLeadDeveloper() == bugTrap.getUserManager().getLoggedInUser()))
+			throw new UnauthorizedAccessException();
+	
+		this.bugTag = this.bugTag.confirmBugTag(bugTag.createState(this));
+		
+		notifyObservers(new Signalisation(NotificationType.BUGREPORT_CHANGE, this));
 	}
 
 	/**
@@ -386,7 +408,7 @@ public class BugReport implements IBugReport, Commentable {
 	public void terminate() {
 		((Subsystem)subsystem).removeBugReport(this);
 		bugTrap.getNotificationManager().removeObservable(this);
-
+	
 		issuedBy = null;
 		subsystem = null;
 		assignees.clear();
@@ -400,14 +422,14 @@ public class BugReport implements IBugReport, Commentable {
 		comments.clear();
 	}
 
-	/**
-	 * Sets the subsystem of this bug report.
-	 * The subsystem of the bug report must contain this bug report.
-	 * @param subsystem
-	 */
-	public void setSubsystem(Subsystem subsystem) {
-		subsystem.getBugReports().contains(this);
-		
-		this.subsystem = subsystem;
+	@Override
+	public int compareTo(IBugReport otherBugReport) {
+		int c = getTitle().compareTo(otherBugReport.getTitle());
+		if (c < 0)
+			return -1;
+		else if (c > 0)
+			return 1;
+		else
+			return 0;
 	}
 }
