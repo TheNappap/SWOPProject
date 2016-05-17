@@ -1,6 +1,7 @@
 package tests;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.junit.Before;
@@ -79,18 +80,25 @@ public class BugTrapTest {
         //Add Subsystem.
         ((Project) office).createSubsystem("Word", "Word processor");
         word = bugTrap.getProjectManager().getSubsystemWithName("Word");
+        ((Subsystem) word).declareAchievedMilestone(Arrays.asList(1, 1));
         ((Subsystem) word).createSubsystem("Word Art", "Beautiful creations in text documents!");
         wordArt = bugTrap.getProjectManager().getSubsystemWithName("Word Art");
+        ((Subsystem) wordArt).declareAchievedMilestone(Arrays.asList(1, 2));
         ((Subsystem) word).createSubsystem("Comic Sans", "We need an amazing font everybody loves!");
         comicSans = bugTrap.getProjectManager().getSubsystemWithName("Comic Sans");
+        ((Subsystem) comicSans).declareAchievedMilestone(Arrays.asList(1, 1, 1));
         ((Subsystem) word).createSubsystem("Clippy", "Annoying paperclip to make people use our software for longer periods of time");
         clippy = bugTrap.getProjectManager().getSubsystemWithName("Clippy");
+        ((Subsystem) clippy).declareAchievedMilestone(Arrays.asList(1, 2, 1));
         ((Project) office).createSubsystem("Excel", "Excellent software");
         excel = bugTrap.getProjectManager().getSubsystemWithName("Excel");
+        ((Subsystem) excel).declareAchievedMilestone(Arrays.asList(1, 0, 10));
         ((Subsystem) excel).createSubsystem("ExcelTable", "Excellent Table");
         excelTable = bugTrap.getProjectManager().getSubsystemWithName("ExcelTable");
         ((Project) office).createSubsystem("PowerPoint", "Powerfully pointless");
+        ((Subsystem) excelTable).declareAchievedMilestone(Arrays.asList(1, 1));
         powerpoint = bugTrap.getProjectManager().getSubsystemWithName("PowerPoint");
+        ((Subsystem) powerpoint).declareAchievedMilestone(Arrays.asList(1, 1));
         
         //Add BugReports.
         bugTrap.getUserManager().loginAs(lead);
