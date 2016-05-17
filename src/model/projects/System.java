@@ -52,19 +52,11 @@ public abstract class System implements ISystem, Observable, Observer {
 		this.subsystems 	= subsystems == null ? new ArrayList<>() : subsystems;
 		this.milestone 		= milestone == null ? new AchievedMilestone() : milestone;
 	}
-
-	@Override
-	public void attach(Observer observer) {
-		if (!this.observers.contains(observer))
-			this.observers.add(observer);
-	}
-
-	@Override
-	public void detach(Observer observer) {
-		if (this.observers.contains(observer))
-			this.observers.remove(observer);
-	}
 	
+	/**********************************************
+	 * GETTERS AND SETTERS
+	 **********************************************/
+
 	@Override
 	public String getName() {
 		return name;
@@ -132,6 +124,10 @@ public abstract class System implements ISystem, Observable, Observer {
 	public AchievedMilestone getAchievedMilestone() {
 		return milestone;
 	}
+	
+	/**********************************************
+	 * ACHIEVED MILESTONES
+	 **********************************************/
 
 	/**
 	 * Declare an Achieved Milestone for the System.
@@ -173,11 +169,10 @@ public abstract class System implements ISystem, Observable, Observer {
 		}
 		return highest;
 	}
-
-	@Override
-	public void signal(Signalisation signalisation) {
-		notifyObservers(signalisation);
-	}
+	
+	/**********************************************
+	 * EQUALS
+	 **********************************************/
 
 	@Override
 	public boolean equals(Object o) {
@@ -243,6 +238,22 @@ public abstract class System implements ISystem, Observable, Observer {
 		return true;
 	}
 	
+	/**********************************************
+	 * OBSERVERS
+	 **********************************************/
+	
+	@Override
+	public void attach(Observer observer) {
+		if (!this.observers.contains(observer))
+			this.observers.add(observer);
+	}
+
+	@Override
+	public void detach(Observer observer) {
+		if (this.observers.contains(observer))
+			this.observers.remove(observer);
+	}
+
 	@Override
 	public void notifyObservers(Signalisation signalisation) {
 		if (this.parent != null)
@@ -252,6 +263,15 @@ public abstract class System implements ISystem, Observable, Observer {
 			observer.signal(signalisation);
 	}
 	
+	@Override
+	public void signal(Signalisation signalisation) {
+		notifyObservers(signalisation);
+	}
+	
+	/**********************************************
+	 * HEALTH AND BUGIMPACT
+	 **********************************************/
+
 	/**
 	 * Returns the bug impact of this system.
 	 * @return a double representing the bug impact
@@ -279,16 +299,10 @@ public abstract class System implements ISystem, Observable, Observer {
 		return indicators;
 	}
 	
-	/**
-	 * Terminates this system.
-	 * Subclasses should always call the super method
-	 */
-	public void terminate() {
-		parent = null;
-		subsystems.clear();
-		observers.clear();
-	}
-
+	/**********************************************
+	 * OTHER
+	 **********************************************/
+	
 	/**
 	 * Get all siblings of the given system. The given system should be a subsystem of this system.
 	 */
@@ -324,4 +338,18 @@ public abstract class System implements ISystem, Observable, Observer {
 	 */
 	@Override
 	public abstract Version getVersion();
+
+	/**********************************************
+	 * OTHER
+	 **********************************************/
+	
+	/**
+	 * Terminates this system.
+	 * Subclasses should always call the super method
+	 */
+	public void terminate() {
+		parent = null;
+		subsystems.clear();
+		observers.clear();
+	}
 }

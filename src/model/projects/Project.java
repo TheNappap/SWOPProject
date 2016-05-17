@@ -49,7 +49,7 @@ public class Project extends System implements IProject {
 	}
 
 	//Copy constructor.
-	protected Project(Project other) {
+	private Project(Project other) {
 		super(other.bugTrap, other.name, other.description, null, other.subsystems, other.milestone);
 		
 		this.version		= other.version;
@@ -67,6 +67,10 @@ public class Project extends System implements IProject {
 	public Project copy() {
 		return new Project(this);
 	}
+	
+	/**********************************************
+	 * GETTERS
+	 **********************************************/
 	
 	@Override
 	public Date getCreationDate() {
@@ -93,6 +97,53 @@ public class Project extends System implements IProject {
 	}
 
 	@Override
+	public Version getVersion() {
+		return version;
+	}
+
+	/**
+	 * Set the version of the Project.
+	 * @param version The new version of the Project.
+	 */
+	public void setVersion(Version version) {
+		this.version = version;
+	}
+
+	/**
+	 * Set the budget estimate of the Project.
+	 * @param budgetEstimate The new budget estimate of the Project.
+	 */
+	public void setBudgetEstimate(double budgetEstimate) {
+		this.budgetEstimate = budgetEstimate;
+	}
+
+	/**
+	 * Set the start Date of the Project.
+	 * @param startDate The new start Date of the Project.
+	 */
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	@Override
+	public List<IBugReport> getAllBugReports() {
+		List<IBugReport> reports = new ArrayList<>();
+		for (ISubsystem s : subsystems)
+			reports.addAll(s.getAllBugReports());
+		return reports;
+	}
+
+	@Override
+	public List<IBugReport> getBugReports() {
+		return new ArrayList<>();
+	}
+
+	@Override
+	public double getBugImpact() {
+		return 0;
+	}
+
+	@Override
 	public void setLeadDeveloper(IUser user) {
 		if (!user.isDeveloper())
 			throw new IllegalArgumentException("Lead developer should be a developer.");
@@ -113,6 +164,10 @@ public class Project extends System implements IProject {
 	public List<IUser> getAllDevelopers() {
 		return projectTeam.getAllDevelopers();
 	}
+	
+	/**********************************************
+	 * ROLES
+	 **********************************************/
 
 	/**
      * Assign a Programmer to work on this Project.
@@ -153,34 +208,50 @@ public class Project extends System implements IProject {
 	public boolean isProgrammer(IUser dev){
 		return projectTeam.isProgrammer(dev);
 	}
-
-	@Override
-	public Version getVersion() {
-		return version;
-	}
 	
+	/**********************************************
+	 * OTHER
+	 **********************************************/
+
 	/**
-	 * Set the version of the Project.
-	 * @param version The new version of the Project.
+	 * Updates project with given name, description, budget estimate and start date
+	 * @param name				the name of the project
+	 * @param description		the description of the project
+	 * @param budgetEstimate	the budget estimate of the project
+	 * @param startDate			the start date of the project
 	 */
-	public void setVersion(Version version) {
-		this.version = version;
+	public void update(String name, String description, double budgetEstimate, Date startDate) {
+		if (name == null || description == null || startDate == null)
+			throw new IllegalArgumentException("Arguments should not be null.");
+	
+		setBudgetEstimate(budgetEstimate);
+		setDescription(description);
+		setName(name);
+		setStartDate(startDate);
 	}
 
 	/**
-	 * Set the budget estimate of the Project.
-	 * @param budgetEstimate The new budget estimate of the Project.
+	 * Updates the project version.
+	 * @param version The new version for the project.
 	 */
-	public void setBudgetEstimate(double budgetEstimate) {
-		this.budgetEstimate = budgetEstimate;
+	public void updateVersion(Version version) {
+		if (this.version.compareTo(version) == 1)
+			throw new IllegalArgumentException("The new version should be at least as high as the current version.");
+	
+		setVersion(version);
+		notifyObservers(new Signalisation(NotificationType.SYSTEM_VERSION_UPDATE, this));
 	}
 
 	/**
-	 * Set the start Date of the Project.
-	 * @param startDate The new start Date of the Project.
+	 * Assigns a developer to the project with a given role
+	 * @param dev		The developer to be assigned
+	 * @param role		The role to be assigned
 	 */
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void assignToProject(IUser dev, Role role) {
+		if (dev == null || role == null)
+			throw new IllegalArgumentException("Arguments should not be null.");
+	
+		getTeam().addMember(dev, role);
 	}
 
 	@Override
@@ -212,63 +283,5 @@ public class Project extends System implements IProject {
 		projectTeam.terminate();
 		projectTeam = null;
 	}
-
-	@Override
-	public List<IBugReport> getAllBugReports() {
-		List<IBugReport> reports = new ArrayList<>();
-		for (ISubsystem s : subsystems)
-			reports.addAll(s.getAllBugReports());
-		return reports;
-	}
-
-	@Override
-	public List<IBugReport> getBugReports() {
-		return new ArrayList<>();
-	}
-
-	@Override
-	public double getBugImpact() {
-		return 0;
-	}
 	
-	/**
-	 * Updates project with given name, description, budget estimate and start date
-	 * @param name				the name of the project
-	 * @param description		the description of the project
-	 * @param budgetEstimate	the budget estimate of the project
-	 * @param startDate			the start date of the project
-	 */
-	public void update(String name, String description, double budgetEstimate, Date startDate) {
-		if (name == null || description == null || startDate == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-
-		setBudgetEstimate(budgetEstimate);
-		setDescription(description);
-		setName(name);
-		setStartDate(startDate);
-	}
-
-	/**
-	 * Updates the project version.
-	 * @param version The new version for the project.
-     */
-	public void updateVersion(Version version) {
-		if (this.version.compareTo(version) == 1)
-			throw new IllegalArgumentException("The new version should be at least as high as the current version.");
-
-		setVersion(version);
-		notifyObservers(new Signalisation(NotificationType.SYSTEM_VERSION_UPDATE, this));
-	}
-	
-	/**
-	 * Assigns a developer to the project with a given role
-	 * @param dev		The developer to be assigned
-	 * @param role		The role to be assigned
-	 */
-	public void assignToProject(IUser dev, Role role) {
-		if (dev == null || role == null)
-			throw new IllegalArgumentException("Arguments should not be null.");
-
-		getTeam().addMember(dev, role);
-	}
 }

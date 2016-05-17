@@ -35,14 +35,29 @@ public class NotificationController extends Controller{
 		return getBugTrap().getFormFactory().makeUnregisterFromNotificationForm();
 	}
 
+	/**
+	 * Registers for notifications
+	 * @param form
+	 * @throws UnauthorizedAccessException
+	 */
 	public void registerNotification(RegisterNotificationForm form) throws UnauthorizedAccessException {
 		new RegisterForNotificationCommand(getBugTrap(), form).execute();
 	}
 
+	/**
+	 * Unregisters for notifications
+	 * @param form
+	 * @throws UnauthorizedAccessException
+	 */
 	public void unregisterNotification(UnregisterNotificationForm form) throws UnauthorizedAccessException {
 		new UnregisterForNotificationCommand(getBugTrap(), form).execute();
 	}
 
+	/**
+	 * Returns a list of registrations
+	 * @return the registrations of the logged in user
+	 * @throws UnauthorizedAccessException
+	 */
 	public List<IRegistration> getRegistrations() throws UnauthorizedAccessException {
 		return getBugTrap().getNotificationManager().getRegistrationsLoggedInUser();
 	}
