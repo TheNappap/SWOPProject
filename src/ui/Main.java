@@ -356,10 +356,7 @@ public class Main {
 		IProject project = null;
 		try {
 			project = selectProject(projectController.getProjectsForSignedInLeadDeveloper());
-		} catch (UnauthorizedAccessException e) {
-			System.out.println(e.getMessage());
-			return;
-		} catch (UnsupportedOperationException e) {
+		}catch (UnsupportedOperationException e) {
 			System.out.println("You are not leading any projects!");
 			return;
 		}

@@ -23,7 +23,7 @@ public class CreateProjectUseCaseTest extends BugTrapTest {
 	@Test
 	public void createNewProjectTest() {
 		//Log in as a administrator, they create Projects.
-		bugTrap.getUserManager().loginAs(admin);
+		userController.loginAs(admin);
 		
 		//Holds the project we're creating.
 		IProject project = null; 
@@ -168,7 +168,7 @@ public class CreateProjectUseCaseTest extends BugTrapTest {
 	@Test
 	public void invalidInputTest() {
 		//login
-		bugTrap.getUserManager().loginAs(admin);
+		userController.loginAs(admin);
 		
 		try {
 			projectController.createProject(projectController.getProjectCreationForm());

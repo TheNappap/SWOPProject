@@ -135,13 +135,10 @@ public class ProjectManager {
 
 	/**
 	 * Returns the projects where the logged in user is lead developer.
-	 * The logged in user should have at least one project where he/she is lead.
 	 * @return a list of project where the logged in user is lead
 	 */
 	public List<IProject> getProjectsForSignedInLeadDeveloper() {
 		List<IProject> projects = getProjectsForLeadDeveloper(bugTrap.getUserManager().getLoggedInUser());
-		
-		if (projects.size() == 0) throw new IllegalArgumentException("The logged in user is nowhere lead developer");
 		
 		return projects;
 	}

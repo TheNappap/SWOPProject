@@ -18,7 +18,7 @@ public class CreateCommentUseCaseTest extends BugTrapTest{
 	@Test
 	public void createCommentOnBugReportTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(issuer);
+		userController.loginAs(issuer);
 				
 		//1. The issuer indicates he wants to create a comment
 		CommentCreationForm form = null;
@@ -55,12 +55,12 @@ public class CreateCommentUseCaseTest extends BugTrapTest{
 	@Test
 	public void createCommentOnCommentTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(prog);
+		userController.loginAs(prog);
 				
 		//1. The issuer indicates he wants to create a comment.
 		CommentCreationForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeCommentCreationForm();
+			form = bugReportController.getCommentCreationForm();
 		} catch (UnauthorizedAccessException e1) { fail("not authorized"); }
 		
 		//2. Include use case Select Bug Report.
@@ -91,7 +91,7 @@ public class CreateCommentUseCaseTest extends BugTrapTest{
 	@Test
 	public void notAuthorizedTest() {
 		try {
-			bugTrap.getFormFactory().makeCommentCreationForm();
+			bugReportController.getCommentCreationForm();
 			fail("should throw exception");
 		} catch (UnauthorizedAccessException e) { }
 	}
@@ -99,16 +99,16 @@ public class CreateCommentUseCaseTest extends BugTrapTest{
 	@Test (expected = NullPointerException.class)
 	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//Log in.
-		bugTrap.getUserManager().loginAs(issuer);
+		userController.loginAs(issuer);
 
-		CommentCreationForm form = bugTrap.getFormFactory().makeCommentCreationForm();
+		CommentCreationForm form = bugReportController.getCommentCreationForm();
 		bugReportController.createComment(form);
 	}
 	
 	@Test
 	public void nullFormTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(issuer);
+		userController.loginAs(issuer);
 		
 		try {
 			bugReportController.createComment(null);

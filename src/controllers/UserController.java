@@ -63,24 +63,6 @@ public class UserController extends Controller {
 	}
 	
 	/**
-	 * Returns if the given user name already exists in the system
-	 * @param userName the given user name
-	 * @return if the given user name exists
-	 */
-	public boolean userNameExists(String userName) {
-		return getBugTrap().getUserManager().userNameExists(userName);
-	}
-	
-	/**
-	 * Returns if a given user exists in the system
-	 * @param user given user
-	 * @return if the given user exists
-	 */
-	public boolean userExists(IUser user) {
-		return getBugTrap().getUserManager().userExists(user);
-	}
-	
-	/**
 	 * Returns the currently logged in user
 	 * @return the logged in user
 	 */
@@ -95,4 +77,32 @@ public class UserController extends Controller {
 	public void logOff() {
 		getBugTrap().getUserManager().logOff();
 	}
+	
+	/**
+	 * Returns the user with the given user name
+	 * @param userName the given user name
+	 * @return the user with the given user name
+	 */
+	public IUser getUser(String userName) {
+		return getBugTrap().getUserManager().getUser(userName);
+	}
+
+	/**
+	 * Returns if the given user name already exists in the system
+	 * @param userName the given user name
+	 * @return if the given user name exists
+	 */
+	public boolean userNameExists(String userName) {
+		return getBugTrap().getUserManager().userNameExists(userName);
+	}
+
+	/**
+	 * Returns if a given user exists in the system
+	 * @param user given user
+	 * @return if the given user exists
+	 */
+	public boolean userExists(IUser user) {
+		return getBugTrap().getUserManager().userExists(user);
+	}
+
 }

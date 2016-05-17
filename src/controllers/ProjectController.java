@@ -34,11 +34,19 @@ public class ProjectController extends Controller {
 		super(bugTrap);
 	}
 
+	/**
+	 * Returns the projects
+	 * @return
+	 */
 	public List<IProject> getProjectList() {
 		return getBugTrap().getProjectManager().getProjects();
 	}
 
-	public List<IProject> getProjectsForSignedInLeadDeveloper() throws UnauthorizedAccessException {
+	/**
+	 * Returns the projects for the current lead
+	 * @return
+	 */
+	public List<IProject> getProjectsForSignedInLeadDeveloper(){
 		return getBugTrap().getProjectManager().getProjectsForSignedInLeadDeveloper();
 	}
 

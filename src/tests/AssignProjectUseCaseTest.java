@@ -21,23 +21,23 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 	@Test
 	public void assignProgrammerToProjectTest() {
 		//Log in.	
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 
 		//1. The developer indicates he wants to assign another developer.
 		ProjectAssignForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeProjectAssignForm();
+			form = projectController.getProjectAssignForm();
 		} catch (UnauthorizedAccessException e) { fail("not authorized"); }
 		
 		//2. The system shows a list of the projects in which the logged in user is assigned as lead developer.
-		List<IProject> projects = bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper();
+		List<IProject> projects = projectController.getProjectsForSignedInLeadDeveloper();
 		
 		//3. The lead developer selects one of his projects.
 		IProject project =  projects.get(0);
 		form.setProject(project);
 		
 		//4. The system shows a list of other developers to assign.
-		bugTrap.getUserManager().getDevelopers();
+		userController.getDevelopers();
 		
 		//5. The lead developer selects one of these other developers.
 		IUser developer = tester;
@@ -65,23 +65,23 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 	@Test
 	public void assignLeadToProjectTest(){
 		//Log in.
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 
 		//1. The developer indicates he wants to assign another developer.
 		ProjectAssignForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeProjectAssignForm();
+			form = projectController.getProjectAssignForm();
 		} catch (UnauthorizedAccessException e) { fail("not authorized");	}
 		
 		//2. The system shows a list of the projects in which the logged in user is assigned as lead developer.
-		List<IProject> projects = bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper();
+		List<IProject> projects = projectController.getProjectsForSignedInLeadDeveloper();
 		
 		//3. The lead developer selects one of his projects.
 		IProject project =  projects.get(0);
 		form.setProject(project);
 		
 		//4. The system shows a list of other developers to assign.
-		List<IUser> devs = bugTrap.getUserManager().getDevelopers();
+		List<IUser> devs = userController.getDevelopers();
 		
 		//5. The lead developer selects one of these other developers.
 		IUser developer = devs.get(1);
@@ -107,23 +107,23 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 	@Test 
 	public void assignTesterToProjectTest(){
 		//Log in.
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 
 		//1. The developer indicates he wants to assign another developer.
 		ProjectAssignForm form = null;
 		try {
-			form = bugTrap.getFormFactory().makeProjectAssignForm();
+			form = projectController.getProjectAssignForm();
 		} catch (UnauthorizedAccessException e) { fail ("Not authorised"); }
 		
 		//2. The system shows a list of the projects in which the logged in user is assigned as lead developer.
-		List<IProject> projects = bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper();
+		List<IProject> projects = projectController.getProjectsForSignedInLeadDeveloper();
 		
 		//3. The lead developer selects one of his projects.
 		IProject project =  projects.get(0);
 		form.setProject(project);
 		
 		//4. The system shows a list of other developers to assign.
-		bugTrap.getUserManager().getDevelopers();
+		userController.getDevelopers();
 		
 		//5. The lead developer selects one of these other developers.
 		IUser developer = prog;
@@ -151,21 +151,21 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 	@Test (expected = IllegalArgumentException.class)
 	public void developerIsNowhereLeadTest() {
 		//Log in.
-		bugTrap.getUserManager().loginAs(tester);
+		userController.loginAs(tester);
 		
 		//1. The developer indicates he wants to assign another developer.
 		try {
-			bugTrap.getFormFactory().makeProjectAssignForm();
+			projectController.getProjectAssignForm();
 		} catch (UnauthorizedAccessException e) { fail ("Not authorised"); }
 		
 		//2. The system shows a list of the projects in which the logged in user is assigned as lead developer.
-		bugTrap.getProjectManager().getProjectsForSignedInLeadDeveloper();
+		projectController.getProjectsForSignedInLeadDeveloper();
 	}
 	
 	@Test
 	public void notAuthorizedTest() {
 		try {
-			bugTrap.getFormFactory().makeProjectAssignForm();
+			projectController.getProjectAssignForm();
 			fail("not authorised");
 		} catch (UnauthorizedAccessException e) { }
 	}
@@ -173,16 +173,16 @@ public class AssignProjectUseCaseTest extends BugTrapTest {
 	@Test (expected = NullPointerException.class)
 	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//login
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 		
-		ProjectAssignForm form = bugTrap.getFormFactory().makeProjectAssignForm();
+		ProjectAssignForm form = projectController.getProjectAssignForm();
 		projectController.assignToProject(form);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void nullFormTest() {
 		//login
-		bugTrap.getUserManager().loginAs(lead);
+		userController.loginAs(lead);
 
 		try {
 			projectController.assignToProject(null);
