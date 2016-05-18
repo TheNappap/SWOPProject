@@ -86,7 +86,7 @@ public class TestSection {
 	public List<ITest> getTestsAsList() {
 		List<ITest> returnTests = new ArrayList<>();
 		
-		returnTests.addAll(returnTests);
+		returnTests.addAll(tests);
 			
 		return returnTests;
 	}

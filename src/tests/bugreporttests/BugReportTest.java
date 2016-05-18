@@ -183,7 +183,7 @@ public class BugReportTest extends BugTrapTest {
 		}
 
 		assertEquals(1, wordArtBug.getTests().size());
-		assertEquals("<code here>", wordArtBug.getTests().get(0));
+		assertEquals("<code here>", wordArtBug.getTests().get(0).getTest());
 	}
 
 	@Test (expected = UnauthorizedAccessException.class)
