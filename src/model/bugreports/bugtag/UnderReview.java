@@ -26,7 +26,16 @@ public class UnderReview extends InProgress {
 		return bugTagState;
 	}
 
-
+	@Override
+	public boolean canAddPatches() {
+		return true;
+	}
+	
+	@Override
+	public boolean canRevert() {
+		return true;
+	}
+	
 	@Override
     public BugTag getTag() {
         return BugTag.UNDERREVIEW;

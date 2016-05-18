@@ -39,11 +39,13 @@ public class BugReport implements IBugReport, Commentable {
 	private final String errorMessage;
 	private final String reproduction;
 	private final List<Observer> observers; //list of observers.
-	private final List<Test> tests; //list of tests.
-	private final List<Patch> patches; //list of patches.
+	
+	private final TestSection testSection;
+	private final PatchSection patchSection; //list of patches.
 	
 	//Mutable
 	private BugTagState bugTag;			//BugTag that is attached to this BugReport.
+	
 	private double impactFactor; 		//Impact Factor of the bug report
 	
 	/**
@@ -67,7 +69,7 @@ public class BugReport implements IBugReport, Commentable {
 	 */
 	public BugReport(BugTrap bugTrap, String title, String description, ISubsystem subsystem, List<IBugReport> dependsOn, List<IUser> assignees, List<Comment> comments,
 						IUser issuedBy, Date creationDate, List<Observer> observers, BugTag bugTag, String stackTrace, String errorMessage, String reproduction,
-						TargetMilestone milestone, List<Test> tests, List<Patch> patches, int impactFactor) {
+						TargetMilestone milestone, int impactFactor, TestSection testSection, PatchSection patchSection) {
 		this.bugTrap 		= bugTrap;
 		this.dependsOn 		= dependsOn;
 		this.issuedBy 		= issuedBy;
@@ -83,9 +85,10 @@ public class BugReport implements IBugReport, Commentable {
 		this.stackTrace 	= stackTrace;
 		this.reproduction	= reproduction;
 		this.milestone		= milestone;
-		this.tests 			= tests;
-		this.patches		= patches;
-		this.impactFactor 	= impactFactor;
+		this.testSection 	= testSection;
+		this.patchSection	= patchSection;
+		
+		setImpactFactor(impactFactor);
 
 		((Subsystem)subsystem).addBugReport(this);
 	}
@@ -165,21 +168,13 @@ public class BugReport implements IBugReport, Commentable {
 	}
 
 	@Override
-	public List<Test> getTests() {
-		List<Test> returnList = new ArrayList<Test>(); 
-		
-		returnList.addAll(tests);
-		
-		return returnList;
+	public List<ITest> getTests() {
+		return testSection.getTestsAsList();
 	}
 
 	@Override
-	public List<Patch> getPatches() {
-		List<Patch> returnList = new ArrayList<Patch>(); 
-		
-		returnList.addAll(patches);
-		
-		return returnList;
+	public List<IPatch> getPatches() {
+		return patchSection.getPatchesAsList();
 	}
 
 	@Override
@@ -197,6 +192,12 @@ public class BugReport implements IBugReport, Commentable {
 		return errorMessage;
 	}
 
+	private void setImpactFactor(int impactFactor) {
+		if (impactFactor <= 0 && impactFactor > 10) throw new IllegalArgumentException("Impact factor out of bounds (1-10)");
+
+		this.impactFactor = impactFactor;
+	}
+	
 	/**
 	 * Returns the impact factor of the bug report
 	 * @return the impact factor of the bug report
@@ -226,48 +227,54 @@ public class BugReport implements IBugReport, Commentable {
 	 **********************************************/
 
 	/**
-	 * Proposes a test to the BugReport.
-	 * @param test Test to propose
-	 * @throws UnauthorizedAccessException if the logged in user is not a tester for this bugreport
+	 * adds a test to the bug report
+	 * @param test given test
+	 * @throws UnauthorizedAccessException 
 	 */
-	public void proposeTest(String test) throws UnauthorizedAccessException {
+	public  void addTest(String test) throws UnauthorizedAccessException {
 		if (test == null)
 			throw new IllegalArgumentException("Test should not be null.");
-		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		
+		IUser user = bugTrap.getLoggedInUser();
 		if(!this.getSubsystem().getProject().isTester(user))
 			throw new UnauthorizedAccessException("The logged in user needs to be a tester to propose a test");
 		
-		addTest(test);
-	}
-
-	/**
-	 * adds a test to the bug report
-	 * @param test given test
-	 */
-	private void addTest(String test) {
-		tests.add(new Test(test));
+		if (!bugTag.canAddTests())
+			throw new IllegalArgumentException("Can only add Tests when ASSIGNED");
+		
+		testSection.addTest(test);
 	}
 
 	/**
 	 * accepts a given test if its for this bug report
 	 * @param test given test
+	 * @throws UnauthorizedAccessException 
 	 */
-	public void acceptTest(Test test) {
-		if(!tests.contains(test))
-			throw new IllegalArgumentException("given test is not a test for this bugreport");
+	public void acceptTest(String test) throws UnauthorizedAccessException {
+		if (test == null)
+			throw new IllegalArgumentException("Test should not be null.");
+			
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if (!this.getSubsystem().getProject().isLead(user))
+			throw new UnauthorizedAccessException("Only lead Developer can accept Tests.");
 		
-		test.accept();
+		testSection.acceptTest(test);
 	}
 
 	/**
 	 * rejects a given test if its for this bug report
 	 * @param test given test
+	 * @throws UnauthorizedAccessException 
 	 */
-	public void rejectTest(Test test) {
-		if(!tests.contains(test))
-			throw new IllegalArgumentException("given test is not a test for this bugreport");
+	public void rejectTest(String test) throws UnauthorizedAccessException {
+		if (test == null)
+			throw new IllegalArgumentException("Test should not be null");
 		
-		tests.remove(test);
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if (!this.getSubsystem().getProject().isLead(user))
+			throw new UnauthorizedAccessException("Only lead Developer can accept Tests.");
+		
+		testSection.removeTest(test);
 	}
 	
 	/**********************************************
@@ -282,41 +289,77 @@ public class BugReport implements IBugReport, Commentable {
 	public void proposePatch(String patch) throws UnauthorizedAccessException {
 		if (patch == null)
 			throw new IllegalArgumentException("Patch should not be null.");
+
+		if (testSection.noTestsSubmitted())
+			throw new IllegalArgumentException("Can't propose patches when there are no tests.");
+		
 		IUser user = bugTrap.getUserManager().getLoggedInUser();
 		if(!this.getSubsystem().getProject().isProgrammer(user))
 			throw new UnauthorizedAccessException("The logged in user needs to be a programmer to propose a patch");
 		
-		addPatch(patch);
+		if (!bugTag.canAddPatches())
+			throw new IllegalArgumentException("Can only propose patches when ASSIGNED or UNDERREVIEW");
+		
+		
+		patchSection.addPatch(patch);
+		
+		updateBugTag(BugTag.UNDERREVIEW);
 	}
-
-	/**
-	 * adds a patch to the bug report
-	 * @param patch given patch
-	 */
-	private void addPatch(String patch) {
-		patches.add(new Patch(patch));
+	
+	public void revertTestsAndPatches() throws UnauthorizedAccessException {
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if(!this.getSubsystem().getProject().isLead(user))
+			throw new UnauthorizedAccessException("Only Lead can revert tests and patches");
+		
+		if (!bugTag.canRevert())
+			throw new IllegalArgumentException("Must be ASSIGNED or UNDERREVIEW to revert.");
+		
+		testSection.clear();
+		patchSection.clear();
+		
+		updateBugTag(BugTag.ASSIGNED);
 	}
 	
 	/**
 	 * accepts a given patch if its for this bug report
 	 * @param patch given patch
+	 * @throws UnauthorizedAccessException 
 	 */
-	public void acceptPatch(Test patch) {
-		if(!patches.contains(patch))
-			throw new IllegalArgumentException("given test is not a test for this bugreport");
+	public void acceptPatch(String patch) throws UnauthorizedAccessException {
+		if (patch == null)
+			throw new IllegalArgumentException("Patch should not be null");
 		
-		patch.accept();
+		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		if(!this.getSubsystem().getProject().isLead(user))
+			throw new UnauthorizedAccessException("Only Lead can accept Patches.");
+		
+		patchSection.acceptPatch(patch);
+		updateBugTag(BugTag.RESOLVED);
 	}
 	
 	/**
 	 * rejects a given patch if its for this bug report
 	 * @param patch given patch
+	 * @throws UnauthorizedAccessException 
 	 */
-	public void rejectPatch(Test patch) {
-		if(!patches.contains(patch))
-			throw new IllegalArgumentException("given test is not a test for this bugreport");
+	public void rejectPatch(String patch) throws UnauthorizedAccessException {
+		if (patch == null)
+			throw new IllegalArgumentException("Patch should not be null");
 		
-		patches.remove(patch);
+		IUser user = bugTrap.getLoggedInUser();
+		if(!this.getSubsystem().getProject().isLead(user))
+			throw new UnauthorizedAccessException("Only Lead can reject Patches.");
+		
+		patchSection.removePatch(patch);	
+	}
+	
+	public void close(int satisfaction) throws UnauthorizedAccessException {
+		IUser user = bugTrap.getLoggedInUser();
+		if(user != issuedBy)
+			throw new UnauthorizedAccessException("Only the Issuer who created this BugReport can close it.");
+		
+		patchSection.updateSatisfaction(satisfaction);
+		updateBugTag(BugTag.CLOSED);
 	}
 	
 	/**********************************************
@@ -368,6 +411,8 @@ public class BugReport implements IBugReport, Commentable {
 		notifyObservers(new Signalisation(NotificationType.CREATE_COMMENT, this));
 	}
 
+	
+
 	/**
 	 * Adds the given Developer to the assignees list.
 	 * @param developer The developer to add.
@@ -378,13 +423,15 @@ public class BugReport implements IBugReport, Commentable {
 	 */
 	public void assignDeveloper(IUser developer) throws UnauthorizedAccessException {
 		IProject project = subsystem.getProject();
-		IUser user = bugTrap.getUserManager().getLoggedInUser();
+		
+		IUser user = bugTrap.getLoggedInUser();
 		if (!project.isLead(user) && !project.isTester(user))
 			throw new UnauthorizedAccessException("A lead or tester should be logged in to assign bug report");
 	
 		if (!developer.isDeveloper()) throw new IllegalArgumentException();
 		
 		assignees.add(developer);
+		updateBugTag(BugTag.ASSIGNED);
 	}
 
 	/**
@@ -414,8 +461,8 @@ public class BugReport implements IBugReport, Commentable {
 		assignees.clear();
 		dependsOn.clear();
 		observers.clear();
-		tests.clear();
-		patches.clear();
+		testSection.clear();
+		patchSection.clear();
 		for (Comment comment : comments) {
 			comment.terminate();
 		}
