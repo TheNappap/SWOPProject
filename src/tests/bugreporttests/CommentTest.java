@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class CommentTest extends BugTrapTest {
 	String text = "This is a comment.";
 
 	@Before
-	public void setUp() {
+	public void setUp() throws UnauthorizedAccessException {
 		super.setUp();
 		comment = new Comment((BugReport) wordArtBug, text);
 		comment.terminate();

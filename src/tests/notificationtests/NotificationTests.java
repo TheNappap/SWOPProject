@@ -32,7 +32,7 @@ public class NotificationTests extends BugTrapTest {
 	private Notification not;
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws UnauthorizedAccessException {
 		super.setUp();
 		not = new Notification("not");
 	}

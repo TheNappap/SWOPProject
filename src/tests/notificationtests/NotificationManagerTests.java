@@ -17,7 +17,7 @@ import tests.BugTrapTest;
 public class NotificationManagerTests extends BugTrapTest {
 
 	@Before
-	public void setUp() {
+	public void setUp() throws UnauthorizedAccessException {
 		super.setUp();
 
 		// Drop some notifications in the admin's mailbox
@@ -56,4 +56,9 @@ public class NotificationManagerTests extends BugTrapTest {
 		 notificationList = bugTrap.getNotificationManager().getNotifications(1);
 		 assertTrue(notificationList.get(0).isRead());
 	 }
+
+	@Test (expected = UnauthorizedAccessException.class)
+	public void getNotificationsNotLoggedIn() throws UnauthorizedAccessException {
+		bugTrap.getNotificationManager().getNotifications(2);
+	}
 }

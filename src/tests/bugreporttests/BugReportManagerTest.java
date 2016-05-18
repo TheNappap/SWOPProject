@@ -52,15 +52,10 @@ public class BugReportManagerTest extends BugTrapTest {
 	}
 	
 	@Test
-	public void getOrderedListTest() {
+	public void getOrderedListTest() throws UnauthorizedAccessException {
 		bugTrap.getUserManager().loginAs(issuer);
 		List<IBugReport> ordered = null;
-		try {
-			ordered = bugTrap.getBugReportManager().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING, FilterType.FILED_BY_USER}, new String[]{"Word", issuer.getUserName()});
-		} catch (UnauthorizedAccessException e) {
-			fail("Unauthorized.");
-			e.printStackTrace();
-		}
+		ordered = bugTrap.getBugReportManager().getOrderedList(new FilterType[]{FilterType.CONTAINS_STRING, FilterType.FILED_BY_USER}, new String[]{"Word", issuer.getUserName()});
 
 		//Correct list returned.
 		//Filters themselves are tested in BugReportFilterTest.
@@ -72,5 +67,4 @@ public class BugReportManagerTest extends BugTrapTest {
 		assertTrue(filtered.getTitle().equals("WordArt is not working"));
 		assertTrue(filtered.getDescription().equals("When using Comic Sans, the Word Art does not work."));
 	}
-	
 }
