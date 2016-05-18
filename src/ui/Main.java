@@ -881,7 +881,7 @@ public class Main {
 		form.setSubsystem1(sub);
 
 		System.out.println("Select a subsystem to merge with: ");
-		form.setSubsystem2(selectSubsystem(sub.mergeableWith()));
+		form.setSubsystem2(selectSubsystem(sub.getMergeableWith()));
 
 		System.out.println("Enter the name of the new subsystem:");
 		form.setName(input.nextLine());

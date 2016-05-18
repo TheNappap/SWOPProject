@@ -141,15 +141,12 @@ public class Subsystem extends System implements ISubsystem {
 		}
 		
 		//add new subsystems
-		parent.subsystems.add(sub1);
-		parent.subsystems.add(sub2);
-		
 		parent.subsystems.remove(this);
 		this.terminate();
 	}
 	
 	@Override
-	public List<ISubsystem> mergeableWith() {
+	public List<ISubsystem> getMergeableWith() {
 		List<ISubsystem> merge = new ArrayList<>();
 		merge.addAll(parent.getSiblings(this));
 		merge.addAll(subsystems);

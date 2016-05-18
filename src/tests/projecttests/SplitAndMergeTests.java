@@ -24,27 +24,33 @@ public class SplitAndMergeTests extends BugTrapTest{
 		word.split("Text", "Annoying Tools", "TextInWord", "Tools can annoying", Arrays.asList(new IBugReport[] { wordBug }), Arrays.asList(new ISubsystem[] { wordArt, comicSans }));
 		
 		List<ISubsystem> subsystems = office.getSubsystems();
+		assertEquals(4, subsystems.size());
+		assertEquals(8, office.getAllDirectOrIndirectSubsystems().size());
 		
 		Subsystem subsystem = (Subsystem) subsystems.get(0);
 		assertEquals("Excel", subsystem.getName());
 		subsystem =  (Subsystem) subsystems.get(1);
 		assertEquals("PowerPoint", subsystem.getName());
 		
-		//first part of split subsystem
+		//first part of the split subsystem
 		subsystem =  (Subsystem) subsystems.get(2);
 		assertEquals("Text", subsystem.getName());
 		assertEquals("TextInWord", subsystem.getDescription());
 		assertEquals(1, subsystem.getBugReports().size());
+		assertEquals(wordBug, subsystem.getBugReports().get(0));
 		assertEquals(2, subsystem.getSubsystems().size());
+		assertEquals(wordArt, subsystem.getSubsystems().get(0));
+		assertEquals(comicSans, subsystem.getSubsystems().get(1));
 		
 		assertEquals("Text", subsystem.getBugReports().get(0).getSubsystem().getName());
 		
-		//second part of split subsystem
+		//second part of the split subsystem
 		subsystem =  (Subsystem) subsystems.get(3);
 		assertEquals("Annoying Tools", subsystem.getName());
 		assertEquals("Tools can annoying", subsystem.getDescription());
 		assertEquals(0, subsystem.getBugReports().size());
 		assertEquals(1, subsystem.getSubsystems().size());
+		assertEquals(clippy, subsystem.getSubsystems().get(0));
 		
 	}
 	
@@ -58,6 +64,8 @@ public class SplitAndMergeTests extends BugTrapTest{
 		word.merge("OfficeParty", "A combination of word and excel", excel);
 		
 		List<ISubsystem> subsystems = office.getSubsystems();
+		assertEquals(2, subsystems.size());
+		assertEquals(6, office.getAllDirectOrIndirectSubsystems().size());
 		
 		Subsystem subsystem = (Subsystem) subsystems.get(0);
 		assertEquals("PowerPoint", subsystem.getName());
@@ -67,7 +75,13 @@ public class SplitAndMergeTests extends BugTrapTest{
 		assertEquals("OfficeParty", subsystem.getName());
 		assertEquals("A combination of word and excel", subsystem.getDescription());
 		assertEquals(2, subsystem.getBugReports().size());
+		assertEquals(wordBug, subsystem.getBugReports().get(0));
+		assertEquals(excelBug, subsystem.getBugReports().get(1));
 		assertEquals(4, subsystem.getSubsystems().size());
+		assertEquals(wordArt, subsystem.getSubsystems().get(0));
+		assertEquals(comicSans, subsystem.getSubsystems().get(1));
+		assertEquals(clippy, subsystem.getSubsystems().get(2));
+		assertEquals(excelTable, subsystem.getSubsystems().get(3));
 		
 		assertEquals("OfficeParty", subsystem.getBugReports().get(0).getSubsystem().getName());
 		assertEquals("OfficeParty", subsystem.getBugReports().get(1).getSubsystem().getName());
@@ -83,6 +97,8 @@ public class SplitAndMergeTests extends BugTrapTest{
 		word.merge("Word+", "Word with embedded clippy", clippy);
 		
 		List<ISubsystem> subsystems = office.getSubsystems();
+		assertEquals(3, subsystems.size());
+		assertEquals(6, office.getAllDirectOrIndirectSubsystems().size());
 		
 		Subsystem subsystem = (Subsystem) subsystems.get(0);
 		assertEquals("Excel", subsystem.getName());
@@ -94,15 +110,19 @@ public class SplitAndMergeTests extends BugTrapTest{
 		assertEquals("Word+", subsystem.getName());
 		assertEquals("Word with embedded clippy", subsystem.getDescription());
 		assertEquals(2, subsystem.getBugReports().size());
+		assertEquals(wordBug, subsystem.getBugReports().get(0));
+		assertEquals(clippyBug, subsystem.getBugReports().get(1));
 		assertEquals(2, subsystem.getSubsystems().size());
+		assertEquals(wordArt, subsystem.getSubsystems().get(0));
+		assertEquals(comicSans, subsystem.getSubsystems().get(1));
 		
 		assertEquals("Word+", subsystem.getBugReports().get(0).getSubsystem().getName());
 		assertEquals("Word+", subsystem.getBugReports().get(1).getSubsystem().getName());
 	}
 
 	@Test
-	public void mergeableWith() {
-		List<ISubsystem> excelMergesWith = excel.mergeableWith();
+	public void getMergeableWithTest() {
+		List<ISubsystem> excelMergesWith = excel.getMergeableWith();
 		assertFalse(excelMergesWith.contains(office));
 		assertTrue(excelMergesWith.contains(word));
 		assertFalse(excelMergesWith.contains(excel));
@@ -112,7 +132,7 @@ public class SplitAndMergeTests extends BugTrapTest{
 		assertFalse(excelMergesWith.contains(comicSans));
 		assertFalse(excelMergesWith.contains(wordArt));
 
-		List<ISubsystem> clippyMergesWith = clippy.mergeableWith();
+		List<ISubsystem> clippyMergesWith = clippy.getMergeableWith();
 		assertFalse(clippyMergesWith.contains(office));
 		assertTrue(clippyMergesWith.contains(word));
 		assertFalse(clippyMergesWith.contains(excel));

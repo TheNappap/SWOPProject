@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import model.bugreports.bugtag.BugTag;
 import model.notifications.Mailbox;
 import model.notifications.observers.BugReportChangeObserver;
 import model.notifications.observers.Observer;
+import model.projects.ISubsystem;
 import model.projects.Project;
 import model.projects.Subsystem;
 import model.projects.System;
@@ -33,6 +35,13 @@ public class SystemTests extends BugTrapTest {
         Assert.assertFalse(office.getSubsystems().contains(s));
         assertTrue(office.getAllDirectOrIndirectSubsystems().contains(s));
         assertTrue(word.getSubsystems().contains(s));
+    }
+    
+    @Test
+    public void testGetAllDirectOrIndirectSubsystems() {
+        List<ISubsystem> subs = office.getAllDirectOrIndirectSubsystems();
+
+        Assert.assertEquals(7, subs.size());
     }
 
     @Test

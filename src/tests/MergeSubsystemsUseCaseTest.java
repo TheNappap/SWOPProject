@@ -27,7 +27,7 @@ public class MergeSubsystemsUseCaseTest extends BugTrapTest {
         // Step 5. The admin selects the first subsystem.
         form.setSubsystem1(word);
         // Step 6. The system shows a list of compatible systems to merge the selected system with
-        word.mergeableWith();
+        word.getMergeableWith();
         // Step 7. The admin selects a second subsystem
         form.setSubsystem2(excel);
         // Step 8. The system asks for a name and description for the new subsystem
@@ -74,7 +74,7 @@ public class MergeSubsystemsUseCaseTest extends BugTrapTest {
         // Step 5. The admin selects the first subsystem.
         form.setSubsystem1(word);
         // Step 6. The system shows a list of compatible systems to merge the selected system with
-        word.mergeableWith();
+        word.getMergeableWith();
         // Step 7. The admin selects a second subsystem
         form.setSubsystem2(comicSans);
         // Step 8. The system asks for a name and description for the new subsystem
