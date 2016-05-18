@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class MailboxTests extends BugTrapTest {
 	private Mailbox mailbox;
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws UnauthorizedAccessException {
 		super.setUp();
 		mailbox = new Mailbox(admin);
 		

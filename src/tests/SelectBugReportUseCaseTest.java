@@ -15,7 +15,7 @@ import model.users.IUser;
 public class SelectBugReportUseCaseTest extends BugTrapTest {
 
 	@Test
-	public void selectBugReportTest() {
+	public void selectBugReportTest() throws UnauthorizedAccessException {
 		IUser[] users = new IUser[]{issuer, lead, prog, tester};
 		
 		//Log in.
@@ -31,10 +31,8 @@ public class SelectBugReportUseCaseTest extends BugTrapTest {
 			
 			//3. The system shows an ordered list of bug reports that matched the search query.
 			List<IBugReport> list = null;
-			try {
-				list = bugReportController.getOrderedList(new FilterType[] { type }, new String[] { searchingString });
-			} catch (UnauthorizedAccessException e) { fail("not authorised"); }
-	
+			list = bugReportController.getOrderedList(new FilterType[] { type }, new String[] { searchingString });
+
 			//4. The issuer selects a bug report from the ordered list.
 			IBugReport bugReport = list.get(0);
 			
@@ -42,19 +40,15 @@ public class SelectBugReportUseCaseTest extends BugTrapTest {
 			assertEquals("Clippy bug!", bugReport.getTitle());
 		}
 	}
-	
-	@Test
-	public void unauthorisedTest() {
-		try {
-			bugReportController.getOrderedList(new FilterType[]{}, new String[]{});
-			fail("Must be logged in.");
-		} catch (UnauthorizedAccessException e) { }
-		
-		userController.loginAs(admin);
-		try {
-			bugReportController.getOrderedList(null, null);
-			fail("Can't be an admin.");
-		} catch (UnauthorizedAccessException e) { }
-	}
 
+	@Test (expected = UnauthorizedAccessException.class)
+	public void notLoggedIn() throws UnauthorizedAccessException {
+		bugReportController.getOrderedList(new FilterType[]{}, new String[]{});
+	}
+	
+	@Test (expected = UnauthorizedAccessException.class)
+	public void unauthorisedTest() throws UnauthorizedAccessException {
+		userController.loginAs(admin);
+		bugReportController.getOrderedList(null, null);
+	}
 }

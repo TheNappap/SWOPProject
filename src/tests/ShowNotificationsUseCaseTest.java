@@ -21,20 +21,16 @@ import model.notifications.forms.ShowChronologicalNotificationForm;
 public class ShowNotificationsUseCaseTest extends BugTrapTest{
 
 	@Before
-	public void setUp() {
+	public void setUp() throws UnauthorizedAccessException {
 		//Setup BugTrap
 		super.setUp();
 
 		//Log in as an Issuer, register for notification and log off.
 		userController.loginAs(issuer);
-		try {
-			RegisterNotificationForm form = notificationController.getRegisterNotificationForm();
-			form.setObservable(office);
-			form.setNotificationType(NotificationType.BUGREPORT_CHANGE);
-			notificationController.registerNotification(form);
-		} catch (UnauthorizedAccessException e) {
-			fail(e.getMessage());
-		}
+		RegisterNotificationForm form = notificationController.getRegisterNotificationForm();
+		form.setObservable(office);
+		form.setNotificationType(NotificationType.BUGREPORT_CHANGE);
+		notificationController.registerNotification(form);
 
 		//Initially, no notifications.
 		// Using BugTrap to shortcut, as it's just the set up.
@@ -43,12 +39,8 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 		BugReport report = (BugReport) bugReportController.getBugReportList().get(0);
 
 		//Update project with 2 new values.
-		try {
-			report.updateBugTag(BugTag.ASSIGNED);
-			report.updateBugTag(BugTag.UNDERREVIEW);
-		} catch (UnauthorizedAccessException e) {
-			fail(e.getMessage());
-		}
+		report.updateBugTag(BugTag.ASSIGNED);
+		report.updateBugTag(BugTag.UNDERREVIEW);
 
 		//2 new tags, 2 new notifications.
 		assertEquals(2, bugTrap.getNotificationManager().getMailboxForUser(issuer).getNotifications().size());
@@ -56,11 +48,8 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 		//Update Bug Report with new tag..
 		//Log in as Lead to update bug report.
 		userController.loginAs(lead);
-		try {
-			report.updateBugTag(BugTag.RESOLVED);
-		} catch (UnauthorizedAccessException e) {
-			fail(e.getMessage());
-		}
+		report.updateBugTag(BugTag.RESOLVED);
+
 		//Log back in as issuer.
 		userController.loginAs(issuer);
 		//After this, 2+1=3 notifications.
@@ -74,24 +63,16 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 		userController.loginAs(issuer);
 
 		//1. The issuer indicates he wants to view his notifications
-		ShowChronologicalNotificationForm form = null;
-		try {
-			form = notificationController.getShowChronologicalNotificationForm();
-		} catch (UnauthorizedAccessException e) { fail("Must be logged in."); } 
-		
+		ShowChronologicalNotificationForm form = notificationController.getShowChronologicalNotificationForm();
+
 		//2. The system asks how many notifications the issuer wants to see.
 		//3. The issuer specifies the number of notifications.
 		form.setNbOfNotifications(2);
 	
 		//4. The system shows the requested number of received notifications in chronological order with the most recent notification first.
 		List<INotification> reqNotifications = null;
-		try {
-			reqNotifications = notificationController.showNotifications(form);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		
+		reqNotifications = notificationController.showNotifications(form);
+
 		//Confirm.
 		//-2 Notifications requested.
 		assertEquals(2,		reqNotifications.size());
@@ -109,9 +90,7 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 
 		//1. The issuer indicates he wants to view his notifications
 		ShowChronologicalNotificationForm form = null;
-		try {
-			form = notificationController.getShowChronologicalNotificationForm();
-		} catch (UnauthorizedAccessException e) { fail("Must be logged in."); }
+		form = notificationController.getShowChronologicalNotificationForm();
 
 		//2. The system asks how many notifications the issuer wants to see.
 		//3. The issuer specifies the number of notifications.
@@ -119,12 +98,7 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 
 		//4. The system shows the requested number of received notifications in chronological order with the most recent notification first.
 		List<INotification> reqNotifications = null;
-		try {
-			reqNotifications = notificationController.showNotifications(form);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		reqNotifications = notificationController.showNotifications(form);
 
 		//Confirm.
 		//-20 Notifications requested, only 3 available.

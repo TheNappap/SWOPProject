@@ -1,9 +1,5 @@
 package tests.projecttests;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -20,6 +16,8 @@ import model.users.IUser;
 import model.users.UserManager;
 import tests.BugTrapTest;
 
+import static org.junit.Assert.*;
+
 public class ProjectTests extends BugTrapTest {
 
     @SuppressWarnings("deprecation")
@@ -28,13 +26,13 @@ public class ProjectTests extends BugTrapTest {
         ProjectTeam team = new ProjectTeam();
         Project p = new Project(null, "name", "descr", new ArrayList<Subsystem>(), Version.firstVersion(), new Date(2012, 7, 28), new Date(2013, 1, 1), 12345, team, null);
 
-        Assert.assertEquals(p.getName(), "name");
-        Assert.assertEquals(p.getDescription(), "descr");
-        Assert.assertEquals(p.getSubsystems(), new ArrayList<Subsystem>());
-        Assert.assertEquals(p.getVersion(), Version.firstVersion());
-        Assert.assertEquals(p.getCreationDate(), new Date(2012, 7, 28));
-        Assert.assertEquals(p.getStartDate(), new Date(2013, 1, 1));
-        Assert.assertEquals(p.getBudgetEstimate(), 12345, 0.0000001);
+        assertEquals(p.getName(), "name");
+        assertEquals(p.getDescription(), "descr");
+        assertEquals(p.getSubsystems(), new ArrayList<Subsystem>());
+        assertEquals(p.getVersion(), Version.firstVersion());
+        assertEquals(p.getCreationDate(), new Date(2012, 7, 28));
+        assertEquals(p.getStartDate(), new Date(2013, 1, 1));
+        assertEquals(p.getBudgetEstimate(), 12345, 0.0000001);
     }
 
     @Test
@@ -60,11 +58,11 @@ public class ProjectTests extends BugTrapTest {
      public void testUpdateProject() {
          ((Project)office).update("nn", "dd", 3883, new Date(2015, 11, 1), new Version(6, 3, 2));
 
-         Assert.assertEquals(office.getName(), "nn");
-         Assert.assertEquals(office.getDescription(), "dd");
-         Assert.assertEquals(office.getStartDate(), new Date(2015, 11, 1));
-         Assert.assertEquals(office.getBudgetEstimate(), 3883, 0.0001);
-         Assert.assertEquals(office.getVersion(), new Version(6, 3, 2));
+         assertEquals(office.getName(), "nn");
+         assertEquals(office.getDescription(), "dd");
+         assertEquals(office.getStartDate(), new Date(2015, 11, 1));
+         assertEquals(office.getBudgetEstimate(), 3883, 0.0001);
+         assertEquals(office.getVersion(), new Version(6, 3, 2));
      }
      
      @SuppressWarnings("deprecation")
@@ -85,13 +83,13 @@ public class ProjectTests extends BugTrapTest {
          IUser d2 = um.getDevelopers().get(2);
 
          project.assignToProject(d0, Role.PROGRAMMER);
- 		 Assert.assertTrue(office.getProgrammers().contains(d0));
-         Assert.assertFalse(office.getProgrammers().contains(d1));
-         Assert.assertFalse(office.getProgrammers().contains(d2));
+ 		 assertTrue(office.getProgrammers().contains(d0));
+         assertFalse(office.getProgrammers().contains(d1));
+         assertFalse(office.getProgrammers().contains(d2));
 
          project.assignToProject(d1, Role.TESTER);
- 		 Assert.assertFalse(office.getTesters().contains(d0));
-         Assert.assertTrue(office.getTesters().contains(d1));
-         Assert.assertFalse(office.getTesters().contains(d2));
+ 		 assertFalse(office.getTesters().contains(d0));
+         assertTrue(office.getTesters().contains(d1));
+         assertFalse(office.getTesters().contains(d2));
      }
 }

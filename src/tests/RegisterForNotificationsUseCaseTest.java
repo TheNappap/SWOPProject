@@ -23,11 +23,8 @@ public class RegisterForNotificationsUseCaseTest extends BugTrapTest {
 		userController.loginAs(lead);
 		
 		//1. The issuer indicates that he wants to register for receiving notifications.
-		RegisterNotificationForm form = null;
-		try {
-			form = notificationController.getRegisterNotificationForm();
-		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
-		
+		RegisterNotificationForm form = notificationController.getRegisterNotificationForm();
+
 		//2. The system asks if he wants to register for a Project, Subsystem or BugReport.
 		//3. The issuer indicates he wants to register for a project.
 		//4/5. (...)
@@ -40,13 +37,7 @@ public class RegisterForNotificationsUseCaseTest extends BugTrapTest {
 		form.setNotificationType(NotificationType.BUGREPORT_SPECIFIC_TAG);
 		form.setTag(BugTag.NOTABUG);
 		//8. The system registers this issuer to receive notifications about the selected object of interest for the specified changes
-		try {
-			notificationController.registerNotification(form);
-			
-		} catch (UnauthorizedAccessException e) {
-			fail("Not authorized.");
-			e.printStackTrace();
-		}
+		notificationController.registerNotification(form);
 
 		// Get access to the mailbox via BugTrap to check if notifications are dropped
 		Mailbox box = bugTrap.getNotificationManager().getMailboxForUser(userController.getLoggedInUser());
@@ -63,16 +54,13 @@ public class RegisterForNotificationsUseCaseTest extends BugTrapTest {
 	}
 	
 	@Test
-	public void registerForNotificationSubsystemTest() {
+	public void registerForNotificationSubsystemTest() throws UnauthorizedAccessException {
 		//Log in.
 		userController.loginAs(prog);
 		
 		//1. The issuer indicates that he wants to register for receiving notifications.
-		RegisterNotificationForm form = null;
-		try {
-			form = notificationController.getRegisterNotificationForm();
-		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
-		
+		RegisterNotificationForm form = notificationController.getRegisterNotificationForm();
+
 		//2. The system asks if he wants to register for a Project, Subsystem or BugReport.
 		//3a. The issuer indicates he wants to register for a bug report.
 			//1/2
@@ -93,12 +81,7 @@ public class RegisterForNotificationsUseCaseTest extends BugTrapTest {
 
 		// Get access to the mailbox via BugTrap to check if notifications are dropped
 		Mailbox box = bugTrap.getNotificationManager().getMailboxForUser(userController.getLoggedInUser());
-		try {
-			notificationController.registerNotification(form);
-		} catch (UnauthorizedAccessException e) {
-			fail("Not authorized.");
-			e.printStackTrace();
-		}
+		notificationController.registerNotification(form);
 
 		userController.logOff();
 		userController.loginAs(lead); // Lead changes some tags
@@ -107,16 +90,12 @@ public class RegisterForNotificationsUseCaseTest extends BugTrapTest {
 		//Confirm
 		//Initially no notifications.
 		assertEquals(0, box.getNotifications().size());
-		try {
-			bugReport.updateBugTag(BugTag.UNDERREVIEW);
-		} catch (UnauthorizedAccessException e) { fail(e.getMessage()); }
+		bugReport.updateBugTag(BugTag.UNDERREVIEW);
 		//Not requested tag, still no notification.
 		assertEquals(0, box.getNotifications().size());
 		
-		try {
-			bugReport.updateBugTag(BugTag.NOTABUG);
-		} catch (UnauthorizedAccessException e) { fail(); }
-		
+		bugReport.updateBugTag(BugTag.NOTABUG);
+
 		//Requested tag, so notification.
 		assertEquals(1, box.getNotifications().size());
 	}
@@ -127,11 +106,8 @@ public class RegisterForNotificationsUseCaseTest extends BugTrapTest {
 		userController.loginAs(issuer);
 		
 		//1. The issuer indicates that he wants to register for receiving notifications.
-		RegisterNotificationForm form = null;
-		try {
-			form = notificationController.getRegisterNotificationForm();
-		} catch (UnauthorizedAccessException e) { fail("Not authorised."); }
-		
+		RegisterNotificationForm form = notificationController.getRegisterNotificationForm();
+
 		//2. The system asks if he wants to register for a Project, Subsystem or BugReport.
 		//3b. The issuer indicates he wants to register for a bug report.
 		IBugReport bugReport = bugReportController.getBugReportList().get(0);
@@ -145,12 +121,7 @@ public class RegisterForNotificationsUseCaseTest extends BugTrapTest {
 		form.setNotificationType(NotificationType.BUGREPORT_SPECIFIC_TAG);
 
 		Mailbox box = bugTrap.getNotificationManager().getMailboxForUser(userController.getLoggedInUser());
-		try {
-			notificationController.registerNotification(form);
-		} catch (UnauthorizedAccessException e) {
-			fail("Not authorized.");
-			e.printStackTrace();
-		}
+		notificationController.registerNotification(form);
 
 		userController.logOff();
 		userController.loginAs(lead); // Lead changes some tags
@@ -177,6 +148,5 @@ public class RegisterForNotificationsUseCaseTest extends BugTrapTest {
 		//Log in as Administrator.
 		userController.loginAs(admin);
 		bugTrap.getFormFactory().makeRegisterForNotificationForm().allVarsFilledIn();
-	}	
-
+	}
 }

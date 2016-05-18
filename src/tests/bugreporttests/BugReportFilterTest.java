@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,11 +20,10 @@ public class BugReportFilterTest extends BugTrapTest {
 	BugReportFilter bugReportFilter;
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws UnauthorizedAccessException {
 		super.setUp();
 
 		// Add some additional bug reports
-
 		this.bugReportFilter = new BugReportFilter(this.bugReportController.getBugReportList());
 	}
 

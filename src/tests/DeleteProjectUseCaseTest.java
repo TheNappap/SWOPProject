@@ -24,7 +24,7 @@ import model.projects.forms.ProjectDeleteForm;
 public class DeleteProjectUseCaseTest extends BugTrapTest {
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws UnauthorizedAccessException {
 		//Setup BugTrap
 		super.setUp();
 

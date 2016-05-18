@@ -16,16 +16,13 @@ import model.projects.forms.ProjectUpdateForm;
 public class UpdateProjectUseCaseTest extends BugTrapTest {
 
 	@Test
-	public void updateProjectTest() {
+	public void updateProjectTest() throws UnauthorizedAccessException {
 		//login
 		userController.loginAs(admin);
 
 		//1. The administrator indicates he wants to update a project.
-		ProjectUpdateForm form = null;
-		try {
-			form = projectController.getProjectUpdateForm();
-		} catch (UnauthorizedAccessException e) { fail("not authorized"); }
-		
+		ProjectUpdateForm form = projectController.getProjectUpdateForm();
+
 		//2. The system shows a list of all projects.
 		List<IProject> list = projectController.getProjectList();
 		
@@ -41,11 +38,9 @@ public class UpdateProjectUseCaseTest extends BugTrapTest {
 		form.setVersion(new Version(9,9,9));
 		
 		//6. The system updates the project.
-		try {
-			projectController.updateProject(form);
-			project = projectController.getProjectList().get(0);
-		} catch (UnauthorizedAccessException e) { fail("not authorised."); }
-		
+		projectController.updateProject(form);
+		project = projectController.getProjectList().get(0);
+
 		//Confirm modifications.
 		Assert.assertEquals("Project S", 	project.getName());
 		Assert.assertEquals("project", 		project.getDescription());
@@ -53,41 +48,29 @@ public class UpdateProjectUseCaseTest extends BugTrapTest {
 		Assert.assertEquals(10000, 			project.getBudgetEstimate(), 0.001);
 	}
 
-	@Test
-	public void notAuthorizedTest() {
-		//Must be logged in to Update.
-		try {
-			projectController.getProjectUpdateForm();
-			fail("Can't update when no-one logged in.");
-		} catch (UnauthorizedAccessException e) { }
-		
-		//Developer can't update.
+	@Test (expected = UnauthorizedAccessException.class)
+	public void notLoggedInTest() throws UnauthorizedAccessException {
+		projectController.getProjectUpdateForm();
+	}
+
+	@Test (expected = UnauthorizedAccessException.class)
+	public void developerNotAllowedTest() throws UnauthorizedAccessException {
 		userController.loginAs(lead);
-		try {
-			projectController.getProjectUpdateForm();
-			fail("Can't update as Developer.");
-		} catch (UnauthorizedAccessException e) { }
-		
-		//Issuer can't update.
+		projectController.getProjectUpdateForm();
+	}
+
+	@Test (expected = UnauthorizedAccessException.class)
+	public void issuerNotAllowedTest() throws UnauthorizedAccessException {
 		userController.loginAs(issuer);
-		try {
-			projectController.getProjectUpdateForm();
-			fail("Can't update as issuer");
-		} catch (UnauthorizedAccessException e) { }
+		projectController.getProjectUpdateForm();
 	}
 	
-	@Test
-	public void varsNotFilledTest() {
+	@Test (expected = NullPointerException.class)
+	public void varsNotFilledTest() throws UnauthorizedAccessException {
 		//login
 		userController.loginAs(admin);
 		
-		try {
-			ProjectUpdateForm form = projectController.getProjectUpdateForm();
-			projectController.updateProject(form);
-			fail("Can't update Project with null values.");
-		} 
-		catch (UnauthorizedAccessException e) { fail("not authorized"); }
-		catch (IllegalArgumentException e) { }
-		catch (NullPointerException e) { }
+		ProjectUpdateForm form = projectController.getProjectUpdateForm();
+		projectController.updateProject(form);
 	}
 }
