@@ -4,6 +4,7 @@ import java.util.Date;
 
 import model.Form;
 import model.projects.IProject;
+import model.projects.Version;
 
 /**
  * Form used to store temporary data to update a project.
@@ -14,6 +15,7 @@ public class ProjectUpdateForm implements Form {
 	private String description;
 	private double budgetEstimate;
 	private Date startDate;
+	private Version version;
 	
 	private IProject project;
 
@@ -60,7 +62,15 @@ public class ProjectUpdateForm implements Form {
 		
 		this.startDate = startDate;
 	}
-	
+
+	public Version getVersion() {
+		return version;
+	}
+
+	public void setVersion(Version version) {
+		this.version = version;
+	}
+
 	public IProject getProject() {
 		return project;
 	}
@@ -78,5 +88,6 @@ public class ProjectUpdateForm implements Form {
 		if (getBudgetEstimate() <= 0) throw new IllegalArgumentException("Budget estimate is null");
 		if (getStartDate() == null) throw new NullPointerException("Start Date is null");
 		if (getProject() == null) throw new NullPointerException("Project is null");
+		if (getVersion() == null) throw new NullPointerException("Version is null");
 	}
 }

@@ -41,7 +41,7 @@ public enum NotificationType {
 			return new SpecificMilestoneObserver(box, observable, milestone);
 		}
 	},
-	SYSTEM_VERSION_UPDATE {
+	PROJECT_VERSION_UPDATE {
 		@Override
 		public ObserverWithMailbox createObserver(Mailbox box, Observable observable, BugTag tag, AchievedMilestone milestone) {
 			return new SystemVersionUpdateObserver(box, observable);

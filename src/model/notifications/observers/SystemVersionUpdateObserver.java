@@ -20,6 +20,6 @@ public class SystemVersionUpdateObserver extends ObserverWithMailbox {
 
     @Override
     public NotificationType getNotificationType() {
-        return NotificationType.SYSTEM_VERSION_UPDATE;
+        return NotificationType.PROJECT_VERSION_UPDATE;
     }
 }
