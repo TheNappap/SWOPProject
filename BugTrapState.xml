@@ -29,7 +29,7 @@
 							<subsystems>
 							</subsystems>
 						</subsystem>
-						<subsystem name="SubsystemA3.1" description="Sub A3.2" milestone="M2.9">
+						<subsystem name="SubsystemA3.2" description="Sub A3.2" milestone="M2.9">
 							<subsystems>
 							</subsystems>
 						</subsystem>
