@@ -320,6 +320,11 @@ public class BugReport implements IBugReport, Commentable {
 		updateBugTag(BugTag.ASSIGNED);
 	}
 	
+	@Override
+	public IPatch getAcceptedPatch() {
+		return patchSection.getAcceptedPatch();
+	}
+	
 	/**
 	 * accepts a given patch if its for this bug report
 	 * @param patch given patch

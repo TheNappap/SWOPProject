@@ -70,6 +70,12 @@ public interface IBugReport extends Comparable<IBugReport>, ICommentable, Observ
 	
 	/**
 	 * 
+	 * @return The Patch that was acccepted, if any.
+	 */
+	IPatch getAcceptedPatch();
+	
+	/**
+	 * 
 	 * @return Patches of the BugReport.
 	 */
 	List<IPatch> getPatches();

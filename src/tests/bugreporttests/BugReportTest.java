@@ -15,7 +15,9 @@ import org.junit.Test;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
+import model.bugreports.PatchSection;
 import model.bugreports.TargetMilestone;
+import model.bugreports.TestSection;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.comments.Comment;
 import model.notifications.observers.Observer;
@@ -44,12 +46,15 @@ public class BugReportTest extends BugTrapTest {
 	private TargetMilestone targetMilestone = new TargetMilestone();
 	private int impactFactor = 3;
 	
+	private TestSection testSection = new TestSection();
+	private PatchSection patchSection = new PatchSection();
+	
 	
 	@Before
 	public void setUp() {
 		super.setUp();
 		subsystem = excel;
-		bugReport = new BugReport(bugTrap, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, targetMilestone, impactFactor);
+		bugReport = new BugReport(bugTrap, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, targetMilestone, impactFactor, testSection, patchSection);
 	}
 
 	@Test
@@ -171,7 +176,7 @@ public class BugReportTest extends BugTrapTest {
 	public void proposeTest() {
 		bugTrap.getUserManager().loginAs(tester);
 		try {
-			((BugReport) wordArtBug).proposeTest("<code here>");
+			((BugReport) wordArtBug).addTest("<code here>");
 		} catch (UnauthorizedAccessException e) {
 			fail("Not authorized.");
 			e.printStackTrace();
@@ -184,26 +189,45 @@ public class BugReportTest extends BugTrapTest {
 	@Test (expected = UnauthorizedAccessException.class)
 	public void propseTestNotAllowed() throws UnauthorizedAccessException {
 		bugTrap.getUserManager().loginAs(lead);
-		((BugReport) wordArtBug).proposeTest("test");
+		((BugReport) wordArtBug).addTest("test");
 	}
 
 	@Test
 	public void proposePatch() {
-		bugTrap.getUserManager().loginAs(prog);
+		bugTrap.getUserManager().loginAs(tester);
+		
 		try {
-			((BugReport) wordArtBug).proposePatch("<code here>");
-		} catch (UnauthorizedAccessException e) {
-			fail("Not authorized.");
-			e.printStackTrace();
+			((BugReport) wordArtBug).updateBugTag(BugTag.ASSIGNED);
+		} catch (UnauthorizedAccessException e2) {
+			fail();
 		}
+		
+		try {
+			((BugReport) wordArtBug).addTest("test");
+		} catch (UnauthorizedAccessException e1) { fail(); }
+		
+		try {
+			bugTrap.getUserManager().loginAs(prog);
+			((BugReport) wordArtBug).proposePatch("<code here>");
+		} catch (UnauthorizedAccessException e) { fail("Not authorized."); }
 
 		assertEquals(1, wordArtBug.getPatches().size());
-		assertEquals("<code here>", wordArtBug.getPatches().get(0));
+		assertEquals("<code here>", wordArtBug.getPatches().get(0).getPatch());
 	}
 
-	@Test (expected = UnauthorizedAccessException.class)
-	public void proposePatchNotAllowed() throws UnauthorizedAccessException {
+	@Test
+	public void proposePatchNotAllowed()  {
+		bugTrap.getUserManager().loginAs(tester);
+		
+		try {
+			((BugReport) wordArtBug).addTest("test");
+		} catch (UnauthorizedAccessException e) { fail("must be tester"); }
+		
 		bugTrap.getUserManager().loginAs(lead);
-		((BugReport) wordArtBug).proposePatch("patch");
+		
+		try {
+			((BugReport) wordArtBug).proposePatch("patch");
+			fail("can't be tester");
+		} catch (UnauthorizedAccessException e) { }
 	}
 }
