@@ -18,6 +18,6 @@ public class ProposeTestCommand extends Command {
 
     @Override
     public void execute() throws UnauthorizedAccessException {
-        ((BugReport) form.getBugReport()).proposeTest(form.getTest());
+        ((BugReport) form.getBugReport()).addTest(form.getTest());
     }
 }

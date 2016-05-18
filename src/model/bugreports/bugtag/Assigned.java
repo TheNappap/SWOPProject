@@ -19,6 +19,21 @@ public class Assigned extends InProgress {
     }
 
 	@Override
+	public boolean canRevert() {
+		return true;
+	}
+	
+	@Override
+	public boolean canAddTests() {
+		return true;
+	}
+	
+	@Override
+	public boolean canAddPatches() {
+		return true;
+	}
+	
+	@Override
 	public double getMultiplier() {
 		return 2;
 	}

@@ -3,6 +3,7 @@ package model;
 import model.bugreports.BugReportManager;
 import model.notifications.NotificationManager;
 import model.projects.ProjectManager;
+import model.users.IUser;
 import model.users.UserManager;
 
 /**
@@ -77,6 +78,10 @@ public class BugTrap {
 			return false;
 		else
 			return true;
+	}
+	
+	public IUser getLoggedInUser() {
+		return getUserManager().getLoggedInUser();
 	}
 	
 	/**
