@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Date;
 
+import model.projects.Version;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -136,6 +137,7 @@ public class ProjectFormTests extends BugTrapTest {
 			updateForm.setDescription("Updated!");
 			updateForm.setName("Project Y");
 			updateForm.setStartDate(d);
+			updateForm.setVersion(new Version(5, 5, 5));
 
 			projectController.updateProject(updateForm);
 			
