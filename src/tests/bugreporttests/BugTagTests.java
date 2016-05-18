@@ -15,7 +15,6 @@ import org.junit.Test;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
-import model.bugreports.Patch;
 import model.bugreports.TargetMilestone;
 import model.bugreports.bugtag.BugTag;
 import model.bugreports.bugtag.BugTagState;
@@ -47,10 +46,8 @@ public class BugTagTests extends BugTrapTest {
         String errorMessage = "error";
         String reproduction = "reproduction";
         TargetMilestone targetMilestone = new TargetMilestone();
-        List<model.bugreports.Test> tests = new ArrayList<>();
-        List<Patch> patches = new ArrayList<Patch>();
         int impactFactor = 3;
-        bugReport = new BugReport(bugTrap, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, targetMilestone, tests, patches, impactFactor);
+        bugReport = new BugReport(bugTrap, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, targetMilestone, impactFactor);
     }
 
     public void setInitialTag(BugTag tag) {
