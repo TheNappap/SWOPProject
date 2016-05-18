@@ -52,7 +52,6 @@ public class ProposePatchUseCaseTest extends BugTrapTest {
 
 		//confirm
 		assertEquals("patching for life", bugReport.getPatches().get(0).getPatch());
-		assertFalse(bugReport.getPatches().get(0).isAccepted());
 	}
 	
 	@Test (expected =  UnauthorizedAccessException.class)
