@@ -43,6 +43,12 @@ public interface ISystem extends Observable{
     
     /**
      * 
+     * @return The Achieved Milestones of the System.
+     */
+    public List<AchievedMilestone> getAllAchievedMilestones();
+    
+    /**
+     * 
      * @return All direct or indirect Subsystems of the System.
      */
     public List<ISubsystem> getAllDirectOrIndirectSubsystems();

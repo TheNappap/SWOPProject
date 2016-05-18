@@ -14,7 +14,6 @@ import org.junit.Test;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.TargetMilestone;
 import model.bugreports.bugtag.BugTag;
-import model.projects.AchievedMilestone;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.System;
@@ -46,10 +45,7 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 		form.setSystem(subsystem);
 		
 		//Step 6. The system shows the currently achieved milestones and asks for a new one.
-		List<AchievedMilestone> stones = new ArrayList<>();
-		stones.add(subsystem.getAchievedMilestone());
-		for (ISubsystem s : subsystem.getAllDirectOrIndirectSubsystems())
-			stones.add(s.getAchievedMilestone());
+		subsystem.getAllAchievedMilestones();
 		
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
@@ -100,10 +96,7 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 		form.setSystem(project);
 		
 		//Step 6. The system shows the currently achieved milestones and asks for a new one.
-		List<AchievedMilestone> stones = new ArrayList<>();
-		stones.add(project.getAchievedMilestone());
-		for (ISubsystem s : project.getAllDirectOrIndirectSubsystems())
-			stones.add(s.getAchievedMilestone());
+		project.getAllAchievedMilestones();
 
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
@@ -145,11 +138,7 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 		form.setSystem(project);
 		
 		//Step 6. The system shows the currently achieved milestones and asks for a new one.
-		List<AchievedMilestone> stones = new ArrayList<>();
-		stones.add(project.getAchievedMilestone());
-		for (ISubsystem s : project.getAllDirectOrIndirectSubsystems())
-			stones.add(s.getAchievedMilestone());
-
+		project.getAllAchievedMilestones();
 		
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});
@@ -198,11 +187,7 @@ public class DeclaredAchievedMilestoneUseCaseTest extends BugTrapTest {
 		form.setSystem(project);
 		
 		//Step 6. The system shows the currently achieved milestones and asks for a new one.
-		List<AchievedMilestone> stones = new ArrayList<>();
-		stones.add(project.getAchievedMilestone());
-		for (ISubsystem s : project.getAllDirectOrIndirectSubsystems())
-			stones.add(s.getAchievedMilestone());
-
+		project.getAllAchievedMilestones();
 		
 		//Step 7. The developer proposes a new achieved milestone.
 		List<Integer> numbers = Arrays.asList(new Integer[] {1,2,3});

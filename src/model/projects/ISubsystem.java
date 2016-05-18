@@ -28,7 +28,7 @@ public interface ISubsystem extends ISystem {
 	 * Returns a list of all subsystems this subsystem can merge with.
 	 * @return
      */
-	public List<ISubsystem> mergeableWith();
+	public List<ISubsystem> mergeableWith();//TODO mss een betere naam
 
     /**
 	 * Splits a subsystem into two new subsystems with given names and descriptions.
