@@ -139,4 +139,44 @@ public class ShowNotificationsUseCaseTest extends BugTrapTest{
 		assertTrue(reqNotifications.get(1).getText().contains("UNDERREVIEW"));
 		assertTrue(reqNotifications.get(2).getText().contains("ASSIGNED"));
 	}
+
+	@Test
+	public void bugReportChangeNotification() {
+
+	}
+
+	@Test
+	public void bugReportSpecificChangeNotification() {
+
+	}
+
+	@Test
+	public void createCommentNotification() {
+
+	}
+
+	@Test
+	public void createBugReportNotification() {
+
+	}
+
+	@Test
+	public void achievedMilestoneNotification() {
+
+	}
+
+	@Test
+	public void achievedSpecificMilestoneNotification() {
+
+	}
+
+	@Test
+	public void systemVersionChangedNotification() {
+
+	}
+
+	@Test
+	public void projectForkNotification() {
+
+	}
 }
