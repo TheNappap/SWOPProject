@@ -18,6 +18,7 @@ public abstract class ObserverWithMailbox implements Observer, IRegistration {
 	public ObserverWithMailbox(Mailbox mailbox, Observable observes) {
 		this.mailbox = mailbox;
 		this.observes = observes;
+		observes.attach(this);
 	}
 	
 	public abstract void signal(Signalisation signalisation);

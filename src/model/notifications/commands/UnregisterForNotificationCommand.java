@@ -18,7 +18,6 @@ public class UnregisterForNotificationCommand extends Command {
     @Override
     public void execute() throws UnauthorizedAccessException {
         ObserverWithMailbox observer = (ObserverWithMailbox)form.getRegistration();
-        observer.getObserves().detach(observer);
         getBugTrap().getNotificationManager().removeObserver(observer);
     }
 }
