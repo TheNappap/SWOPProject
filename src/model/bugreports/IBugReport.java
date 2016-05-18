@@ -66,13 +66,13 @@ public interface IBugReport extends Comparable<IBugReport>, ICommentable, Observ
      * 
      * @return Tests of the BugReport.
      */
-	List<String> getTests();
+	List<ITest> getTests();
 	
 	/**
 	 * 
 	 * @return Patches of the BugReport.
 	 */
-	List<String> getPatches();
+	List<IPatch> getPatches();
 	
 	/**
 	 * 

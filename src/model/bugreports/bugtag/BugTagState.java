@@ -32,6 +32,18 @@ public abstract class BugTagState {
 		throw new IllegalStateException();
 	}
 	
+	public boolean canAddTests() {
+		return false;
+	}
+	
+	public boolean canAddPatches() {
+		return false;
+	}
+	
+	public boolean canRevert() {
+		return false;
+	}
+	
 	/**
 	 * Returns the multiplier of the bug tag state
 	 * @return the multiplier of the bug tag state

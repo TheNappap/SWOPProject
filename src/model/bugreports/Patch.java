@@ -3,7 +3,7 @@ package model.bugreports;
 /**
  * This class represents a Patch in BugTrap.
  */
-public class Patch {
+public class Patch implements IPatch {
 
 	private final String patch; //String representation of the Patch.
 	
@@ -18,6 +18,7 @@ public class Patch {
 	/**
 	 * @return The String representation of the Patch.
 	 */
+	@Override
 	public String getPatch() {
 		return patch;
 	}

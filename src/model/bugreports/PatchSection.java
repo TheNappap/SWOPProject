@@ -17,8 +17,9 @@ public class PatchSection {
 	}
 	
 	public void acceptPatch(String patch) throws UnauthorizedAccessException {
+		if (patch == null) throw new IllegalArgumentException("Patch is null");
 		if (!contains(patch)) throw new IllegalArgumentException("Patch not found.");
-		
+			
 		this.acceptedPatch = getPatchByString(patch);
 	}
 	
@@ -26,7 +27,7 @@ public class PatchSection {
 		patches.add(new Patch(patch));
 	}
 	
-	public void clear() {
+	public void clear(){
 		patches.clear();
 		acceptedPatch = null;
 		satisfaction = -1;
@@ -38,10 +39,10 @@ public class PatchSection {
 		patches.remove(getPatchByString(patch));
 	}
 
-	public String getAcceptedPatch() {
+	public IPatch getAcceptedPatch() {
 		if (acceptedPatch == null) throw new IllegalArgumentException("No Patch yet accepted");
 		
-		return acceptedPatch.getPatch();
+		return acceptedPatch;
 	}
 	
 	public void updateSatisfaction(int satisfaction) {
@@ -57,11 +58,10 @@ public class PatchSection {
 		return satisfaction;
 	}
 	
-	public List<String> getPatchesAsList() {
-		List<String> returnPatches = new ArrayList<String>();
+	public List<IPatch> getPatchesAsList() {
+		List<IPatch> returnPatches = new ArrayList<>();
 		
-		for (Patch patch : patches)
-			returnPatches.add(patch.getPatch());
+		returnPatches.addAll(patches);
 			
 		return returnPatches;
 	}
@@ -70,6 +70,13 @@ public class PatchSection {
 		for (Patch patch : patches)
 			if (patch.getPatch().equals(containsPatch))
 				return true;
+		return false;
+	}
+	
+	public boolean contains(IPatch containsPatch) {
+		for (Patch patch : patches)
+			if (containsPatch == patch) return true;
+		
 		return false;
 	}
 

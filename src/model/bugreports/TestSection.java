@@ -77,11 +77,16 @@ public class TestSection {
 		return false;
 	}
 	
-	public List<String> getTestsAsList() {
-		List<String> returnTests = new ArrayList<String>();
-		
+	public boolean contains(ITest containsTest) {
 		for (Test test : tests)
-			returnTests.add(test.getTest());
+			if (test == containsTest) return true;
+		return false;
+	}
+	
+	public List<ITest> getTestsAsList() {
+		List<ITest> returnTests = new ArrayList<>();
+		
+		returnTests.addAll(returnTests);
 			
 		return returnTests;
 	}
