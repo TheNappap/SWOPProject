@@ -321,6 +321,9 @@ public class Main {
 		form.setDescription(input.nextLine());
 		System.out.println("Enter the budget estimate for the project:");
 		form.setBudgetEstimate(input.nextDouble());
+		input.nextLine();
+		System.out.println("Enter the new version for the project:");
+		form.setVersion(selectVersion());
 		
 		boolean valid = false;
 		while (!valid) {
@@ -1129,6 +1132,22 @@ public class Main {
 		if (numbers == null || numbers.size() == 0)
 			return null;
 		return new TargetMilestone(numbers);
+	}
+
+	private static Version selectVersion() {
+		while (true) {
+			try {
+				System.out.println("Version number format: X.Y.Z");
+				String raw = input.nextLine();
+				System.out.println(raw);
+				int major = Integer.parseInt(raw.split("\\.")[0]);
+				int minor = Integer.parseInt(raw.split("\\.")[1]);
+				int revise = Integer.parseInt(raw.split("\\.")[2]);
+				return new Version(major, minor, revise);
+			} catch (Exception e) {
+
+			}
+		}
 	}
 
 	private static List<Integer> enterMilestoneNumbers() {

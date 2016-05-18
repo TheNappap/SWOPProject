@@ -58,12 +58,13 @@ public class ProjectTests extends BugTrapTest {
      @SuppressWarnings("deprecation")
      @Test
      public void testUpdateProject() {
-         ((Project)office).update("nn", "dd", 3883, new Date(2015, 11, 1));
+         ((Project)office).update("nn", "dd", 3883, new Date(2015, 11, 1), new Version(6, 3, 2));
 
          Assert.assertEquals(office.getName(), "nn");
          Assert.assertEquals(office.getDescription(), "dd");
          Assert.assertEquals(office.getStartDate(), new Date(2015, 11, 1));
          Assert.assertEquals(office.getBudgetEstimate(), 3883, 0.0001);
+         Assert.assertEquals(office.getVersion(), new Version(6, 3, 2));
      }
      
      @SuppressWarnings("deprecation")
