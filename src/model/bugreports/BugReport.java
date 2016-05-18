@@ -294,12 +294,15 @@ public class BugReport implements IBugReport, Commentable {
 			throw new IllegalArgumentException("Can't propose patches when there are no tests.");
 		
 		IUser user = bugTrap.getUserManager().getLoggedInUser();
-		if(!this.getSubsystem().getProject().isProgrammer(user))
-			throw new UnauthorizedAccessException("The logged in user needs to be a programmer to propose a patch");
 		
 		if (!bugTag.canAddPatches())
 			throw new IllegalArgumentException("Can only propose patches when ASSIGNED or UNDERREVIEW");
 		
+		if(!this.getSubsystem().getProject().isProgrammer(user))
+			throw new UnauthorizedAccessException("The logged in user needs to be a programmer to propose a patch");
+		
+		if (!assignees.contains(user))
+			throw new UnauthorizedAccessException("Must be assigned to BugReport to propose patch");
 		
 		patchSection.addPatch(patch);
 		
@@ -468,9 +471,8 @@ public class BugReport implements IBugReport, Commentable {
 		observers.clear();
 		testSection.clear();
 		patchSection.clear();
-		for (Comment comment : comments) {
+		for (Comment comment : comments) 
 			comment.terminate();
-		}
 		comments.clear();
 	}
 
