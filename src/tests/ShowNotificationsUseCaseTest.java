@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
-import model.FormFactory;
 import model.bugreports.BugReport;
 import model.bugreports.bugtag.BugTag;
 import model.notifications.INotification;
