@@ -1,6 +1,6 @@
 package tests;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class ProposePatchUseCaseTest extends BugTrapTest {
 			form = bugReportController.getProposeTestForm();
 		} catch (UnauthorizedAccessException e) { fail("Must be tester"); }
 
-		form.setTest("Tekst");
+		form.setTest("<code>");
 		form.setBugReport(clippyBug);
 	
 		try {
@@ -70,6 +70,9 @@ public class ProposePatchUseCaseTest extends BugTrapTest {
 		try {
 			bugReportController.proposePatch(form);
 		} catch (UnauthorizedAccessException e) { fail(e.getMessage()); }
+		
+		assertEquals(1, clippyBug.getPatches().size());
+		assertEquals("This is a fix", clippyBug.getPatches().get(0).getPatch());
 	}
 	
 	@Test

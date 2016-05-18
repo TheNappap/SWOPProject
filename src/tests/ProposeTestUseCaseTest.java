@@ -1,6 +1,6 @@
 package tests;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -49,13 +49,16 @@ public class ProposeTestUseCaseTest extends BugTrapTest {
 		
 //		3. The system shows the form for uploading the patch.
 //		4. The developer provides the details for uploading the patch.
-		form.setTest("Tekst");
+		form.setTest("<code>");
 		form.setBugReport(bugReport);
 	
 //		5. The system attaches the patch to the bug report.
 		try {
 			bugReportController.proposeTest(form);
 		} catch (UnauthorizedAccessException e) { fail("Must be tester"); }
+		
+		assertEquals(1, bugReport.getTests().size());
+		assertEquals("<code>", bugReport.getTests().get(0).getTest());
 	}
 	
 	@Test
