@@ -125,6 +125,15 @@ public abstract class System implements ISystem, Observable, Observer {
 		return milestone;
 	}
 	
+	@Override
+	public List<AchievedMilestone> getAllAchievedMilestones() {
+		List<AchievedMilestone> stones = new ArrayList<>();
+		stones.add(getAchievedMilestone());
+		for (ISubsystem s : getAllDirectOrIndirectSubsystems())
+			stones.add(s.getAchievedMilestone());
+		return stones;
+	}
+	
 	/**********************************************
 	 * ACHIEVED MILESTONES
 	 **********************************************/

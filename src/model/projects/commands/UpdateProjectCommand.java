@@ -22,6 +22,6 @@ public class UpdateProjectCommand extends Command {
     @Override
     public void execute() throws UnauthorizedAccessException {
         form.allVarsFilledIn();
-        ((Project) form.getProject()).update(form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate());
+        ((Project) form.getProject()).update(form.getName(), form.getDescription(), form.getBudgetEstimate(), form.getStartDate(), form.getVersion());
     }
 }

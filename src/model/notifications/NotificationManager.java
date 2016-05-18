@@ -81,13 +81,14 @@ public class NotificationManager {
 
     public void removeObserver(ObserverWithMailbox observerWithMailbox) {
         observers.remove(observerWithMailbox);
+        observerWithMailbox.terminate();
     }
 
     public void removeObservable(Observable observable) {
         for (int i = 0; i < observers.size(); i++) {
             ObserverWithMailbox o = observers.get(i);
             if (o.getObserves() == observable) {
-                observers.remove(o);
+            	removeObserver(o);
                 i--;
             }
         }

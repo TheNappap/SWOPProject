@@ -35,13 +35,7 @@ import model.projects.ISubsystem;
 import model.projects.ISystem;
 import model.projects.Role;
 import model.projects.Version;
-import model.projects.forms.DeclareAchievedMilestoneForm;
-import model.projects.forms.ProjectAssignForm;
-import model.projects.forms.ProjectCreationForm;
-import model.projects.forms.ProjectDeleteForm;
-import model.projects.forms.ProjectForkForm;
-import model.projects.forms.ProjectUpdateForm;
-import model.projects.forms.SubsystemCreationForm;
+import model.projects.forms.*;
 import model.users.IUser;
 import model.users.Issuer;
 
@@ -327,6 +321,9 @@ public class Main {
 		form.setDescription(input.nextLine());
 		System.out.println("Enter the budget estimate for the project:");
 		form.setBudgetEstimate(input.nextDouble());
+		input.nextLine();
+		System.out.println("Enter the new version for the project:");
+		form.setVersion(selectVersion());
 		
 		boolean valid = false;
 		while (!valid) {
@@ -464,6 +461,8 @@ public class Main {
 			form.setTitle(input.nextLine());
 			System.out.println("Enter a description:");
 			form.setDescription(input.nextLine());
+			System.out.println("Enter the impact factor (1 to 10):");
+			form.setImpactFactor(selectImpactFactor());
 
 			System.out.println("Enter a stack trace: (optional, press enter to skip)");
 			form.setStackTrace(input.nextLine());
@@ -790,11 +789,123 @@ public class Main {
 	}
 
 	public static void split() {
-		// TODO: Implement this
+		SplitSubsystemForm form;
+		try {
+			form  = projectController.getSplitSubsystemForm();
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		System.out.println("Select a project: ");
+		IProject project = selectProject(projectController.getProjectList());
+
+		System.out.println("Select a subsystem to split: ");
+		ISubsystem sub = selectSubsystem(project.getAllDirectOrIndirectSubsystems());
+		form.setSubsystem(sub);
+
+		System.out.println("Enter the name of the first new subsystem: ");
+		form.setName1(input.nextLine());
+		System.out.println("Enter the name of the second new subsystem: ");
+		form.setName2(input.nextLine());
+
+		System.out.println("Enter the description of the first subsystem: ");
+		form.setDescription1(input.nextLine());
+		System.out.println("Enter the description of the second subsystem: ");
+		form.setDescription2(input.nextLine());
+
+		List<IBugReport> bugReportsSub1 = new ArrayList<>();
+		for (IBugReport bug : sub.getBugReports()) {
+			boolean valid = false;
+			int selected = 1;
+			while (!valid) {
+				System.out.println("Please select the subsystem to which you want to add the bug report '" + bug.getTitle() + "'");
+				System.out.println(" 1. " + form.getName1());
+				System.out.println(" 2. " + form.getName2());
+
+				try {
+					selected = input.nextInt();
+					input.nextLine();
+					if (selected < 1 || selected > 2)
+						continue;
+					valid = true;
+				} catch (Exception e) {
+					input.nextLine();
+				}
+			}
+
+			if (selected == 1)
+				bugReportsSub1.add(bug);
+		}
+		form.setBugReports1(bugReportsSub1);
+
+		List<ISubsystem> subsystemsSub1 = new ArrayList<>();
+		for (ISubsystem s : sub.getSubsystems()) {
+			boolean valid = false;
+			int selected = 1;
+			while (!valid) {
+				System.out.println("Please select the subsystem to which you want to add the subsystem '" + s.getName() + "'");
+				System.out.println(" 1. " + form.getName1());
+				System.out.println(" 2. " + form.getName2());
+
+				try {
+					selected = input.nextInt();
+					input.nextLine();
+					if (selected < 1 || selected > 2)
+						continue;
+					valid = true;
+				} catch (Exception e) {
+					input.nextLine();
+				}
+			}
+
+			if (selected == 1)
+				subsystemsSub1.add(s);
+		}
+		form.setSubsystems1(subsystemsSub1);
+
+		try {
+			projectController.splitSubsystem(form);
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		System.out.println("The subsystem was split successfully.");
 	}
 
 	public static void merge() {
-		// TODO: Implement this as well!
+		MergeSubsystemForm form;
+		try {
+			form = projectController.getMergeSubsystemForm();
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		System.out.println("Select a project: ");
+		IProject project = selectProject(projectController.getProjectList());
+
+		System.out.println("Select a subsystem to merge: ");
+		ISubsystem sub = selectSubsystem(project.getAllDirectOrIndirectSubsystems());
+		form.setSubsystem1(sub);
+
+		System.out.println("Select a subsystem to merge with: ");
+		form.setSubsystem2(selectSubsystem(sub.mergeableWith()));
+
+		System.out.println("Enter the name of the new subsystem:");
+		form.setName(input.nextLine());
+		System.out.println("Enter the description of the new subsystem:");
+		form.setDescription(input.nextLine());
+
+		try {
+			projectController.mergeSubsystem(form);
+		} catch (UnauthorizedAccessException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		System.out.println("The subsystem was merged successfully.");
 	}
 
 	// -- Printing --
@@ -1018,7 +1129,25 @@ public class Main {
 
 	private static TargetMilestone selectTargetMilestone() {
 		List<Integer> numbers = enterMilestoneNumbers();
+		if (numbers == null || numbers.size() == 0)
+			return null;
 		return new TargetMilestone(numbers);
+	}
+
+	private static Version selectVersion() {
+		while (true) {
+			try {
+				System.out.println("Version number format: X.Y.Z");
+				String raw = input.nextLine();
+				System.out.println(raw);
+				int major = Integer.parseInt(raw.split("\\.")[0]);
+				int minor = Integer.parseInt(raw.split("\\.")[1]);
+				int revise = Integer.parseInt(raw.split("\\.")[2]);
+				return new Version(major, minor, revise);
+			} catch (Exception e) {
+
+			}
+		}
 	}
 
 	private static List<Integer> enterMilestoneNumbers() {
@@ -1070,6 +1199,23 @@ public class Main {
 					return registrations.get(selected - 1);
 			} catch (Exception e) {
 				System.out.println("Invalid input.");
+			}
+		}
+	}
+
+	private static int selectImpactFactor() {
+		while (true) {
+			try {
+				int impactFactor = input.nextInt();
+				input.nextLine();
+				if (impactFactor < 1 || impactFactor > 10) {
+					System.out.println("Impact factor should be between 1 and 10. Enter the impact factor: ");
+					continue;
+				}
+				return impactFactor;
+			} catch (Exception e) {
+				System.out.println("Impact factor should be between 1 and 10. Enter the impact factor: ");
+				input.nextLine();
 			}
 		}
 	}

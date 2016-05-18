@@ -220,7 +220,7 @@ public class Project extends System implements IProject {
 	 * @param budgetEstimate	the budget estimate of the project
 	 * @param startDate			the start date of the project
 	 */
-	public void update(String name, String description, double budgetEstimate, Date startDate) {
+	public void update(String name, String description, double budgetEstimate, Date startDate, Version version) {
 		if (name == null || description == null || startDate == null)
 			throw new IllegalArgumentException("Arguments should not be null.");
 	
@@ -228,6 +228,7 @@ public class Project extends System implements IProject {
 		setDescription(description);
 		setName(name);
 		setStartDate(startDate);
+		updateVersion(version);
 	}
 
 	/**
@@ -239,7 +240,7 @@ public class Project extends System implements IProject {
 			throw new IllegalArgumentException("The new version should be at least as high as the current version.");
 	
 		setVersion(version);
-		notifyObservers(new Signalisation(NotificationType.SYSTEM_VERSION_UPDATE, this));
+		notifyObservers(new Signalisation(NotificationType.PROJECT_VERSION_UPDATE, this));
 	}
 
 	/**
