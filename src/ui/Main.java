@@ -239,18 +239,8 @@ public class Main {
 			} catch (Exception e) { }
 		}
 
-		valid = false;
-		while (!valid) {
-			try {
-				System.out.println("Enter the version number for the project:");
-				String vNumber = input.nextLine();
-				int major = Integer.parseInt(vNumber.split(".")[0]);
-				int minor = Integer.parseInt(vNumber.split(".")[1]);
-				int revision = Integer.parseInt(vNumber.split(".")[2]);
-				form.setVersion(new Version(major, minor, revision));
-			} catch (IllegalArgumentException ie) { System.out.println(ie.getMessage()); }
-			catch (Exception e) { }
-		}
+		System.out.println("Enter the version number for the forked project:");
+		form.setVersion(selectVersion());
 
 		try {
 			projectController.forkProject(form);
@@ -1139,11 +1129,16 @@ public class Main {
 			try {
 				System.out.println("Version number format: X.Y.Z");
 				String raw = input.nextLine();
-				System.out.println(raw);
-				int major = Integer.parseInt(raw.split("\\.")[0]);
-				int minor = Integer.parseInt(raw.split("\\.")[1]);
-				int revise = Integer.parseInt(raw.split("\\.")[2]);
-				return new Version(major, minor, revise);
+				String[] splitted = raw.split("\\.");
+				int major = Integer.parseInt(splitted[0]);
+				int minor = 0;
+				if (splitted.length > 1)
+					minor = Integer.parseInt(splitted[1]);
+				int review = 0;
+				if (splitted.length > 2)
+					review = Integer.parseInt(splitted[2]);
+
+				return new Version(major, minor, review);
 			} catch (Exception e) {
 
 			}
