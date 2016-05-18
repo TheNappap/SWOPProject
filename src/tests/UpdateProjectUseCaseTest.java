@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import controllers.exceptions.UnauthorizedAccessException;
 import model.projects.IProject;
+import model.projects.Version;
 import model.projects.forms.ProjectUpdateForm;
 
 public class UpdateProjectUseCaseTest extends BugTrapTest {
@@ -37,6 +38,7 @@ public class UpdateProjectUseCaseTest extends BugTrapTest {
 		form.setDescription("project");
 		form.setName("Project S");
 		form.setStartDate(new Date(3000));
+		form.setVersion(new Version(9,9,9));
 		
 		//6. The system updates the project.
 		try {
