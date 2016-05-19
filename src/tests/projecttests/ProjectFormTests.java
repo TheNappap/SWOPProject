@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Date;
 
+import model.projects.Version;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,44 +26,35 @@ public class ProjectFormTests extends BugTrapTest {
 	SubsystemCreationForm subSystemCreationForm;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws UnauthorizedAccessException {
 		super.setUp();
 
 		userController.loginAs(admin);
-
-		try {
-			creationForm = projectController.getProjectCreationForm();
-			updateForm = projectController.getProjectUpdateForm();
-			subSystemCreationForm = projectController.getSubsystemCreationForm();
-			userController.loginAs(lead);
-			assignForm = projectController.getProjectAssignForm();
-			userController.loginAs(admin);
-		} catch(UnauthorizedAccessException e) {
-			fail("Not authorized.");
-		}
+		creationForm = projectController.getProjectCreationForm();
+		updateForm = projectController.getProjectUpdateForm();
+		subSystemCreationForm = projectController.getSubsystemCreationForm();
+		userController.loginAs(lead);
+		assignForm = projectController.getProjectAssignForm();
+		userController.loginAs(admin);
 	}
 	
 	@Test
-	public void projectCreationFormSuccesTest() {
+	public void projectCreationFormSuccesTest() throws UnauthorizedAccessException {
 	 	ProjectCreationForm form;
-		try {
-			form = projectController.getProjectCreationForm();
-			form.setBudgetEstimate(5000);
-			form.setDescription("This is a very descriptive description!");
-			form.setLeadDeveloper(lead);
-			form.setName("Project X");
-			form.setStartDate(new Date(1302));
-			
-			projectController.createProject(form);
-			
-			Assert.assertEquals("Project X", form.getName());
-			Assert.assertEquals("This is a very descriptive description!", form.getDescription());
-			Assert.assertEquals(5000, form.getBudgetEstimate(), 0.001);
-			Assert.assertEquals(new Date(1302), form.getStartDate());
-			Assert.assertEquals(lead, form.getLeadDeveloper());
-		} catch (UnauthorizedAccessException e) {
-			fail("admin not logged in");
-		}
+		form = projectController.getProjectCreationForm();
+		form.setBudgetEstimate(5000);
+		form.setDescription("This is a very descriptive description!");
+		form.setLeadDeveloper(lead);
+		form.setName("Project X");
+		form.setStartDate(new Date(1302));
+
+		projectController.createProject(form);
+
+		Assert.assertEquals("Project X", form.getName());
+		Assert.assertEquals("This is a very descriptive description!", form.getDescription());
+		Assert.assertEquals(5000, form.getBudgetEstimate(), 0.001);
+		Assert.assertEquals(new Date(1302), form.getStartDate());
+		Assert.assertEquals(lead, form.getLeadDeveloper());
 	}
 	
 	@Test (expected = NullPointerException.class)
@@ -126,26 +118,23 @@ public class ProjectFormTests extends BugTrapTest {
 	}
 	
 	@Test
-	public void updateFormSuccesTest() {
+	public void updateFormSuccesTest() throws UnauthorizedAccessException {
 		Date d = new Date();
-		
-		try {
-			updateForm = projectController.getProjectUpdateForm();
-			updateForm.setProject(office);
-			updateForm.setBudgetEstimate(10000);
-			updateForm.setDescription("Updated!");
-			updateForm.setName("Project Y");
-			updateForm.setStartDate(d);
 
-			projectController.updateProject(updateForm);
-			
-			Assert.assertEquals("Project Y", updateForm.getName());
-			Assert.assertEquals("Updated!", updateForm.getDescription());
-			Assert.assertEquals(10000, updateForm.getBudgetEstimate(), 0.001);
-			Assert.assertEquals(d, updateForm.getStartDate());
-		} catch (UnauthorizedAccessException e) {
-			fail("admin not logged in");
-		}
+		updateForm = projectController.getProjectUpdateForm();
+		updateForm.setProject(office);
+		updateForm.setBudgetEstimate(10000);
+		updateForm.setDescription("Updated!");
+		updateForm.setName("Project Y");
+		updateForm.setStartDate(d);
+		updateForm.setVersion(new Version(5, 5, 5));
+
+		projectController.updateProject(updateForm);
+
+		Assert.assertEquals("Project Y", updateForm.getName());
+		Assert.assertEquals("Updated!", updateForm.getDescription());
+		Assert.assertEquals(10000, updateForm.getBudgetEstimate(), 0.001);
+		Assert.assertEquals(d, updateForm.getStartDate());
 	}
 	
 	@Test (expected = NullPointerException.class)
@@ -261,22 +250,14 @@ public class ProjectFormTests extends BugTrapTest {
 	}
 	
 	@Test
-	public void subSystemCreationFormSuccesTest() {
-		try {
-			subSystemCreationForm = projectController.getSubsystemCreationForm();
-		} catch (UnauthorizedAccessException e) {
-			fail("not logged in as admin");
-		}
+	public void subSystemCreationFormSuccesTest() throws UnauthorizedAccessException {
+		subSystemCreationForm = projectController.getSubsystemCreationForm();
 		subSystemCreationForm.setName("Sub");
 		subSystemCreationForm.setDescription("A test subsystem");
 		subSystemCreationForm.setParent(office);
-		try {
-			projectController.createSubsystem(subSystemCreationForm);
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
-		
+
+		projectController.createSubsystem(subSystemCreationForm);
+
 		Assert.assertEquals("Sub", subSystemCreationForm.getName());
 		Assert.assertEquals("A test subsystem", subSystemCreationForm.getDescription());
 		Assert.assertEquals(office, subSystemCreationForm.getParent());

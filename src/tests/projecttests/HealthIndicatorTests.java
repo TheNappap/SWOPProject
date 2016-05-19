@@ -76,8 +76,7 @@ public class HealthIndicatorTests extends BugTrapTest{
 
 	    //Log off.
 	    bugTrap.getUserManager().logOff();
-		
-	    
+
 		IProject project = bugTrap.getProjectManager().getProjects().get(0);
 		List<HealthIndicator> indicators = project.getHealthIndicators();
 		
@@ -106,5 +105,4 @@ public class HealthIndicatorTests extends BugTrapTest{
 		assertEquals(HealthIndicator.STABLE,indicators.get(1));
 		assertEquals(HealthIndicator.SERIOUS,indicators.get(2));
 	}
-
 }

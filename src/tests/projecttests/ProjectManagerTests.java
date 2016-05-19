@@ -64,6 +64,16 @@ public class ProjectManagerTests extends BugTrapTest {
         Assert.assertTrue(office.equals(fork));
     }
 
+    @Test (expected = IllegalArgumentException.class)
+    public void testCreateForkVersionTooLow() {
+        bugTrap.getProjectManager().createFork(office, 123592929, new Version(0, 9, 0), new Date(2016, 1 , 1));
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testCreateForkVersionEqual() {
+        bugTrap.getProjectManager().createFork(office, 123592929, new Version(1, 0, 0), new Date(2016, 1 , 1));
+    }
+
     @SuppressWarnings("deprecation")
     @Test
     public void testDeleteProject() throws UnauthorizedAccessException {

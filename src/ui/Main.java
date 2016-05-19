@@ -242,6 +242,9 @@ public class Main {
 		System.out.println("Enter the version number for the forked project:");
 		form.setVersion(selectVersion());
 
+		System.out.println("Select the lead developer:");
+		form.setLeadDeveloper(selectUser(userController.getDevelopers()));
+
 		try {
 			projectController.forkProject(form);
 			System.out.println("Project is forked.");			
@@ -276,14 +279,9 @@ public class Main {
 			} catch (Exception e) { }
 		}
 
-		valid = false;
-		while (!valid) {
-			try {
-				IUser lead = selectUser(userController.getDevelopers());
-				form.setLeadDeveloper(lead);
-			} catch (IllegalArgumentException e) { }
-		}
-		
+		System.out.println("Select the lead developer:");
+		form.setLeadDeveloper(selectUser(userController.getDevelopers()));
+
 		try {
 			projectController.createProject(form);
 			System.out.println("Project is created.");
@@ -1067,21 +1065,17 @@ public class Main {
 	
 	private static IProject selectProject(List<IProject> projects) {
 		while (true) {
-			try {
-				System.out.println("Select a project by entering its number: ");
-				int number = 1;
-				for (IProject project : projects) {
-					System.out.println(number + ". " + project.getName());
-					number++;
-				}
-
-				int selected = input.nextInt();
-				input.nextLine();
-				if (selected <= projects.size())
-					return projects.get(selected - 1);
-			} catch (Exception e) {
-				System.out.println("Invalid input.");
+			System.out.println("Select a project by entering its number: ");
+			int number = 1;
+			for (IProject project : projects) {
+				System.out.println(number + ". " + project.getName());
+				number++;
 			}
+
+			int selected = input.nextInt();
+			input.nextLine();
+			if (selected <= projects.size())
+				return projects.get(selected - 1);
 		}
 	}
 

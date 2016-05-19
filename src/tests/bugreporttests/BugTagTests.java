@@ -32,7 +32,7 @@ public class BugTagTests extends BugTrapTest {
 	private BugReport bugReport;
 
     @Before
-    public void setUp() {
+    public void setUp() throws UnauthorizedAccessException {
         super.setUp();
         String title = "BugReport";
         String description = "Awesome BugReport";
@@ -54,17 +54,13 @@ public class BugTagTests extends BugTrapTest {
         bugReport = new BugReport(bugTrap, title, description, subsystem, dependsOn, assignees, comments, issuedBy, creationDate, observers, bugTag, stackTrace, errorMessage, reproduction, targetMilestone, impactFactor, testSection, patchSection);
     }
 
-    public void setInitialTag(BugTag tag) {
+    public void setInitialTag(BugTag tag) throws UnauthorizedAccessException {
         bugTrap.getUserManager().loginAs(lead);
-        try {
-            bugReport.updateBugTag(tag);
-        } catch (UnauthorizedAccessException e) {
-            fail();
-        }
+        bugReport.updateBugTag(tag);
     }
 
     @Test
-    public void newTest() {
+    public void newTest() throws UnauthorizedAccessException {
         setInitialTag(BugTag.NEW);
     	BugTagState tag = bugReport.getBugTagState();
         assertTrue(tag.isNew());
@@ -74,7 +70,7 @@ public class BugTagTests extends BugTrapTest {
     }
 
     @Test
-    public void assignedTest() {
+    public void assignedTest() throws UnauthorizedAccessException {
         setInitialTag(BugTag.ASSIGNED);
     	BugTagState tag = bugReport.getBugTagState();
         assertFalse(tag.isNew());
@@ -84,7 +80,7 @@ public class BugTagTests extends BugTrapTest {
     }
 
     @Test
-    public void closedTest() {
+    public void closedTest() throws UnauthorizedAccessException {
         setInitialTag(BugTag.CLOSED);
     	BugTagState tag = bugReport.getBugTagState();
         assertTrue(tag.isClosed());
@@ -94,7 +90,7 @@ public class BugTagTests extends BugTrapTest {
     }
 
     @Test
-    public void duplicateTest() {
+    public void duplicateTest() throws UnauthorizedAccessException {
         setInitialTag(BugTag.DUPLICATE);
     	BugTagState tag = bugReport.getBugTagState();
         assertTrue(tag.isClosed());
@@ -104,7 +100,7 @@ public class BugTagTests extends BugTrapTest {
     }
 
     @Test
-    public void notABugTest() {
+    public void notABugTest() throws UnauthorizedAccessException {
         setInitialTag(BugTag.NOTABUG);
     	BugTagState tag = bugReport.getBugTagState();
         assertFalse(tag.isNew());
@@ -114,7 +110,7 @@ public class BugTagTests extends BugTrapTest {
     }
 
     @Test
-    public void resolvedTest() {
+    public void resolvedTest() throws UnauthorizedAccessException {
         setInitialTag(BugTag.RESOLVED);
     	BugTagState tag = bugReport.getBugTagState();
         assertFalse(tag.isNew());
@@ -124,7 +120,7 @@ public class BugTagTests extends BugTrapTest {
     }
 
     @Test
-    public void underReviewTest() {
+    public void underReviewTest() throws UnauthorizedAccessException {
         setInitialTag(BugTag.UNDERREVIEW);
     	BugTagState tag = bugReport.getBugTagState();
         assertFalse(tag.isNew());

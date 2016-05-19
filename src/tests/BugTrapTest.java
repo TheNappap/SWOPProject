@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import controllers.exceptions.UnauthorizedAccessException;
 import org.junit.Before;
 
 import controllers.BugReportController;
@@ -56,7 +57,7 @@ public class BugTrapTest {
     protected IBugReport excelBug;
 
     @Before
-    public void setUp() {
+    public void setUp() throws UnauthorizedAccessException {
         //Make System.
         bugTrap = new BugTrap();
         bugReportController = new BugReportController(bugTrap);

@@ -22,13 +22,8 @@ public class UpdateBugReportUseCaseTest extends BugTrapTest {
 		userController.loginAs(lead);
 		
 		//1.
-		BugReportUpdateForm form = null;
-		try {
-			form = bugReportController.getBugReportUpdateForm();
-		} catch (UnauthorizedAccessException e) {
-			fail("not authorized");
-			e.printStackTrace();
-		}
+		BugReportUpdateForm form = bugReportController.getBugReportUpdateForm();
+
 		//step 2 SELECT BUGREPORT USE CASE
 		IBugReport bugReport = null;
 		String searchingString = "Clippy";
