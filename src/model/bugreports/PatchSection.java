@@ -58,7 +58,7 @@ public class PatchSection {
 		return satisfaction;
 	}
 	
-	public List<IPatch> getPatchesAsList() {
+	public List<IPatch> getPatches() {
 		List<IPatch> returnPatches = new ArrayList<>();
 		
 		returnPatches.addAll(patches);

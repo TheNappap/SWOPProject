@@ -5,9 +5,9 @@ import model.notifications.NotificationType;
 import model.notifications.Observable;
 import model.notifications.Signalisation;
 
-public class SystemVersionUpdateObserver extends ObserverWithMailbox {
+public class ProjectVersionUpdateObserver extends ObserverWithMailbox {
 
-    public SystemVersionUpdateObserver(Mailbox mailbox, Observable observes) {
+    public ProjectVersionUpdateObserver(Mailbox mailbox, Observable observes) {
         super(mailbox, observes);
     }
 

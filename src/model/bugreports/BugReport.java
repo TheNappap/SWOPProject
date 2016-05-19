@@ -169,12 +169,12 @@ public class BugReport implements IBugReport, Commentable {
 
 	@Override
 	public List<ITest> getTests() {
-		return testSection.getTestsAsList();
+		return testSection.getTests();
 	}
 
 	@Override
 	public List<IPatch> getPatches() {
-		return patchSection.getPatchesAsList();
+		return patchSection.getPatches();
 	}
 
 	@Override

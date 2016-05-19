@@ -83,7 +83,7 @@ public class TestSection {
 		return false;
 	}
 	
-	public List<ITest> getTestsAsList() {
+	public List<ITest> getTests() {
 		List<ITest> returnTests = new ArrayList<>();
 		
 		returnTests.addAll(tests);
