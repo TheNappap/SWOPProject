@@ -16,11 +16,11 @@ public class PatchSection {
 		this.patches = new ArrayList<Patch>();
 	}
 	
-	public void acceptPatch(String patch) throws UnauthorizedAccessException {
+	public void acceptPatch(IPatch patch) throws UnauthorizedAccessException {
 		if (patch == null) throw new IllegalArgumentException("Patch is null");
 		if (!contains(patch)) throw new IllegalArgumentException("Patch not found.");
 			
-		this.acceptedPatch = getPatchByString(patch);
+		this.acceptedPatch = (Patch)patch;
 	}
 	
 	public void addPatch(String patch) {
@@ -33,10 +33,10 @@ public class PatchSection {
 		satisfaction = -1;
 	}
 	
-	public void removePatch(String patch) {
+	public void removePatch(IPatch patch) {
 		if (!contains(patch)) throw new IllegalArgumentException("No such Patch");
 		
-		patches.remove(getPatchByString(patch));
+		patches.remove(patch);
 	}
 
 	public IPatch getAcceptedPatch() {

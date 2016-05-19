@@ -46,10 +46,10 @@ public class TestSection {
 	 * @post The test will be accepted.
 	 * 		| test.isAccepted()
 	 */
-	public void acceptTest(String test) {
+	public void acceptTest(ITest test) {
 		if (!contains(test)) throw new IllegalArgumentException("No such test.");
 		
-		getTestByString(test).accept();
+		((Test)test).accept();
 	}
 	
 	/**
@@ -58,10 +58,10 @@ public class TestSection {
 	 * @post The given test will be removed from this TestSection.
 	 * 		| !contains(test)
 	 */
-	public void removeTest(String test) {
+	public void removeTest(ITest test) {
 		if (!contains(test)) throw new IllegalArgumentException("No such test.");
 		
-		tests.remove(getTestByString(test));
+		tests.remove(test);
 	}
 	
 	/**
@@ -93,13 +93,5 @@ public class TestSection {
 	
 	public void clear() {
 		tests.clear();
-	}
-	
-	private Test getTestByString(String string) {
-		for (Test test : tests) 
-			if (test.getTest().equals(string))
-				return test;
-		
-		throw new IllegalArgumentException("Given String doesn't represent a Test.");
 	}
 }

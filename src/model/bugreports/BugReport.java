@@ -250,7 +250,7 @@ public class BugReport implements IBugReport, Commentable {
 	 * @param test given test
 	 * @throws UnauthorizedAccessException 
 	 */
-	public void acceptTest(String test) throws UnauthorizedAccessException {
+	public void acceptTest(ITest test) throws UnauthorizedAccessException {
 		if (test == null)
 			throw new IllegalArgumentException("Test should not be null.");
 			
@@ -266,7 +266,7 @@ public class BugReport implements IBugReport, Commentable {
 	 * @param test given test
 	 * @throws UnauthorizedAccessException 
 	 */
-	public void rejectTest(String test) throws UnauthorizedAccessException {
+	public void rejectTest(ITest test) throws UnauthorizedAccessException {
 		if (test == null)
 			throw new IllegalArgumentException("Test should not be null");
 		
@@ -333,7 +333,7 @@ public class BugReport implements IBugReport, Commentable {
 	 * @param patch given patch
 	 * @throws UnauthorizedAccessException 
 	 */
-	public void acceptPatch(String patch) throws UnauthorizedAccessException {
+	public void acceptPatch(IPatch patch) throws UnauthorizedAccessException {
 		if (patch == null)
 			throw new IllegalArgumentException("Patch should not be null");
 		
@@ -350,7 +350,7 @@ public class BugReport implements IBugReport, Commentable {
 	 * @param patch given patch
 	 * @throws UnauthorizedAccessException 
 	 */
-	public void rejectPatch(String patch) throws UnauthorizedAccessException {
+	public void rejectPatch(IPatch patch) throws UnauthorizedAccessException {
 		if (patch == null)
 			throw new IllegalArgumentException("Patch should not be null");
 		
