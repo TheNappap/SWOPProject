@@ -1,6 +1,6 @@
 package model.notifications.observers;
 
-import model.notifications.signalisations.Signalisation;
+import model.notifications.Signalisation;
 
 /**
  * Observer

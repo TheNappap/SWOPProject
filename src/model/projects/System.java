@@ -11,7 +11,7 @@ import model.bugreports.bugtag.BugTag;
 import model.notifications.NotificationType;
 import model.notifications.Observable;
 import model.notifications.observers.Observer;
-import model.notifications.signalisations.Signalisation;
+import model.notifications.Signalisation;
 import model.projects.builders.SubsystemBuilder;
 import model.projects.health.HealthCalculator;
 import model.projects.health.HealthCalculator1;

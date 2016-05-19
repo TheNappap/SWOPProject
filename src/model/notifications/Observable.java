@@ -1,7 +1,6 @@
 package model.notifications;
 
 import model.notifications.observers.Observer;
-import model.notifications.signalisations.Signalisation;
 
 /**
  * Interface for objects that are observable.

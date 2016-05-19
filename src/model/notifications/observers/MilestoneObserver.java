@@ -3,7 +3,7 @@ package model.notifications.observers;
 import model.notifications.Mailbox;
 import model.notifications.NotificationType;
 import model.notifications.Observable;
-import model.notifications.signalisations.Signalisation;
+import model.notifications.Signalisation;
 
 public class MilestoneObserver extends ObserverWithMailbox {
 

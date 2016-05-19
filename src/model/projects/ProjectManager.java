@@ -7,7 +7,7 @@ import java.util.List;
 import controllers.exceptions.UnauthorizedAccessException;
 import model.BugTrap;
 import model.notifications.NotificationType;
-import model.notifications.signalisations.Signalisation;
+import model.notifications.Signalisation;
 import model.projects.builders.ProjectBuilder;
 import model.users.IUser;
 

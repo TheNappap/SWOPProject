@@ -4,7 +4,7 @@ import model.bugreports.bugtag.BugTag;
 import model.notifications.Mailbox;
 import model.notifications.NotificationType;
 import model.notifications.Observable;
-import model.notifications.signalisations.Signalisation;
+import model.notifications.Signalisation;
 
 public class BugReportSpecificTagObserver extends BugReportChangeObserver {
 
