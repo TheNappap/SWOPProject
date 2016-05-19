@@ -12,7 +12,7 @@ import model.bugreports.comments.Comment;
 import model.bugreports.comments.Commentable;
 import model.notifications.NotificationType;
 import model.notifications.observers.Observer;
-import model.notifications.signalisations.Signalisation;
+import model.notifications.Signalisation;
 import model.projects.IProject;
 import model.projects.ISubsystem;
 import model.projects.Subsystem;
@@ -169,12 +169,12 @@ public class BugReport implements IBugReport, Commentable {
 
 	@Override
 	public List<ITest> getTests() {
-		return testSection.getTestsAsList();
+		return testSection.getTests();
 	}
 
 	@Override
 	public List<IPatch> getPatches() {
-		return patchSection.getPatchesAsList();
+		return patchSection.getPatches();
 	}
 
 	@Override

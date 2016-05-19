@@ -1,4 +1,4 @@
-package model.notifications.signalisations;
+package model.notifications;
 
 import model.bugreports.IBugReport;
 import model.notifications.NotificationType;

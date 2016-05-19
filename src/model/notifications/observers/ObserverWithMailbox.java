@@ -4,7 +4,7 @@ import model.notifications.IRegistration;
 import model.notifications.Mailbox;
 import model.notifications.NotificationType;
 import model.notifications.Observable;
-import model.notifications.signalisations.Signalisation;
+import model.notifications.Signalisation;
 import model.users.IUser;
 
 /**

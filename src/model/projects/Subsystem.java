@@ -7,7 +7,7 @@ import model.BugTrap;
 import model.bugreports.BugReport;
 import model.bugreports.IBugReport;
 import model.notifications.NotificationType;
-import model.notifications.signalisations.Signalisation;
+import model.notifications.Signalisation;
 
 /**
  * This class represents a subsystem in a system.
