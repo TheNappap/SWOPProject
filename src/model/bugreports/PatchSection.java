@@ -80,7 +80,7 @@ public class PatchSection {
 		return false;
 	}
 
-	private Patch getPatchByString(String string) {
+	public IPatch getPatchByString(String string) {
 		for (Patch patch : patches)
 			if (patch.getPatch().equals(string))
 				return patch;

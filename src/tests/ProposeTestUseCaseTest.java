@@ -1,6 +1,7 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -11,7 +12,6 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.IBugReport;
 import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.ProposeTestForm;
-import model.users.IUser;
 
 public class ProposeTestUseCaseTest extends BugTrapTest {
 

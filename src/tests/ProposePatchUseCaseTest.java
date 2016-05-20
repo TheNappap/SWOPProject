@@ -1,6 +1,6 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import controllers.exceptions.UnauthorizedAccessException;
 import model.bugreports.forms.BugReportAssignForm;
 import model.bugreports.forms.ProposePatchForm;
 import model.bugreports.forms.ProposeTestForm;
-import model.users.IUser;
 
 public class ProposePatchUseCaseTest extends BugTrapTest {
 

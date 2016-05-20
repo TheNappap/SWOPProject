@@ -441,7 +441,7 @@ public class Main {
 		try {
 			form = bugReportController.getBugReportCreationForm();
 			IProject chosenProject = selectProject(projectController.getProjectList());
-			ISubsystem chosenSubsystem = selectSubsystem(chosenProject.getSubsystems());
+			ISubsystem chosenSubsystem = selectSubsystem(chosenProject.getAllDirectOrIndirectSubsystems());
 			
 			form.setIssuer((Issuer) userController.getLoggedInUser());
 			form.setSubsystem(chosenSubsystem);
